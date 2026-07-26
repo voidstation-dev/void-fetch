@@ -88,52 +88,46 @@ export function AppTopBar({
           </div>
 
           <div className="flex items-center gap-1 shrink-0">
-            <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
-              <Link
-                href={feedbackHref}
-                aria-label={dict.feedback.triggerButton}
-              >
-                <MessageSquare className="h-4 w-4" />
-                <span className="sr-only">{dict.feedback.triggerButton}</span>
-              </Link>
-            </Button>
             <DeferredLanguageSwitcher iconOnly />
+            <ThemeSwitcher />
             <DeferredMobileNavMenu />
           </div>
         </div>
       </div>
 
       {/* Desktop Navigation */}
-      <div className="hidden md:block px-3 sm:px-4 md:px-6">
-        <div className="max-w-7xl mx-auto py-2.5 flex items-center justify-between gap-4">
+      <div className="hidden md:block px-4 sm:px-6 md:px-8">
+        <div className="max-w-7xl mx-auto h-16 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            {/* VoidFetch Glowing Logo Badge (Desktop) */}
+            {/* VoidFetch Brand Logo */}
             <Link
               href={`/${locale}`}
-              className="flex items-center gap-2.5 mr-3 group cursor-pointer"
+              className="flex items-center gap-2.5 group cursor-pointer"
             >
-              <div className="relative flex items-center justify-center p-2 rounded-xl bg-gradient-to-br from-primary/25 via-primary/10 to-transparent border border-primary/40 shadow-md group-hover:border-primary/70 group-hover:shadow-primary/20 transition-all duration-300">
-                <Zap className="h-4.5 w-4.5 text-primary animate-pulse" />
-                <span className="absolute -top-1 -right-1 flex h-2 w-2">
+              <div className="relative flex items-center justify-center p-2 rounded-xl bg-gradient-to-br from-primary/20 via-primary/10 to-transparent border border-primary/30 shadow-md group-hover:border-primary/60 transition-colors">
+                <Zap className="h-5 w-5 text-primary animate-pulse" />
+                <span className="absolute -top-0.5 -right-0.5 flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                 </span>
               </div>
               <div className="flex flex-col">
                 <div className="flex items-center gap-1.5">
-                  <span className="font-black text-sm tracking-wider text-foreground group-hover:text-primary transition-colors">
+                  <span className="font-extrabold text-sm tracking-wider text-foreground">
                     VOIDFETCH
                   </span>
-                  <span className="text-[9px] font-mono px-1.5 py-0.2 rounded-md bg-primary/10 text-primary border border-primary/20 font-bold">
-                    v1.0.0
+                  <span className="text-[9px] font-mono px-1.5 py-0.2 rounded-full bg-primary/10 text-primary border border-primary/20 font-bold">
+                    v2.0
                   </span>
                 </div>
-                <span className="text-[9px] text-muted-foreground tracking-tight font-medium">
-                  Batch Media Engine
+                <span className="text-[10px] text-muted-foreground font-medium">
+                  Universal Batch Downloader
                 </span>
               </div>
             </Link>
+          </div>
 
+          <div className="flex items-center gap-2">
             {shouldShowHomeButton && (
               <Button
                 variant="ghost"
@@ -172,12 +166,6 @@ export function AppTopBar({
           </div>
 
           <div className="flex items-center gap-1.5">
-            <Button variant="ghost" size="sm" className="rounded-xl" asChild>
-              <Link href={feedbackHref} className="flex items-center gap-1.5">
-                <MessageSquare className="h-4 w-4" />
-                <span>{dict.feedback.triggerButton}</span>
-              </Link>
-            </Button>
             <ThemeSwitcher />
             <DeferredLanguageSwitcher />
           </div>
