@@ -88,6 +88,17 @@ export function AppTopBar({
           </div>
 
           <div className="flex items-center gap-1 shrink-0">
+            {/* Feedback button (hidden/commented out)
+            <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
+              <Link
+                href={feedbackHref}
+                aria-label={dict.feedback.triggerButton}
+              >
+                <MessageSquare className="h-4 w-4" />
+                <span className="sr-only">{dict.feedback.triggerButton}</span>
+              </Link>
+            </Button>
+            */}
             <DeferredLanguageSwitcher iconOnly />
             <ThemeSwitcher />
             <DeferredMobileNavMenu />
@@ -166,6 +177,14 @@ export function AppTopBar({
           </div>
 
           <div className="flex items-center gap-1.5">
+            {/* Feedback button (hidden/commented out)
+            <Button variant="ghost" size="sm" className="rounded-xl" asChild>
+              <Link href={feedbackHref} className="flex items-center gap-1.5">
+                <MessageSquare className="h-4 w-4" />
+                <span>{dict.feedback.triggerButton}</span>
+              </Link>
+            </Button>
+            */}
             <ThemeSwitcher />
             <DeferredLanguageSwitcher />
           </div>
