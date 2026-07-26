@@ -1,0 +1,958 @@
+{
+    "home": {
+        "title": "Chọn Dịch Vụ",
+        "description": "Chọn nền tảng bạn muốn tải xuống phương tiện.",
+        "bilibiliButton": "Trình tải Bilibili",
+        "douyinButton": "Trình tải Douyin"
+    },
+    "unified": {
+        "pageTitle": "Trình Tải Phương Tiện Đa Năng",
+        "pageDescription": "Dán liên kết để tự động phát hiện và tải nhanh video, âm thanh, nhạc, ảnh, hoặc luồng HLS/M3U8.",
+        "placeholder": "Dán liên kết hoặc mã chia sẻ vào đây...",
+        "newBadge": "Mới: Tải ảnh Douyin",
+        "exampleLabel": "Dán ví dụ",
+        "exampleUrl": "https://www.bilibili.com/video/BV1Wv3ez2Ex8/"
+    },
+    "page": {
+        "feedback": "Có phản hồi hoặc góp ý? Nhấp vào nút \"Phản hồi\" ở góc trên bên phải.",
+        "feedbackLinkText": "",
+        "openMenuLabel": "Mở menu",
+        "switchLanguageLabel": "Chuyển ngôn ngữ",
+        "copyrightVideo": "Lưu ý bản quyền: Bản quyền video thuộc về các trang web và tác giả tương ứng",
+        "copyrightStorage": "Trang web này không lưu trữ bất kỳ video hoặc hình ảnh nào",
+        "copyrightYear": "Bản quyền © {year}",
+        "copyrightBilibiliRestriction": "⚠️ Không hỗ trợ nội dung có bản quyền, trả phí hoặc dành riêng cho hội viên."
+    },
+    "form": {
+        "pasteButton": "Dán",
+        "downloadButton": "Phân tích",
+        "downloading": "Đang phân tích..."
+    },
+    "errors": {
+        "emptyUrl": "Liên kết không được để trống.",
+        "downloadError": "Đã có lỗi không xác định xảy ra trong quá trình xử lý.",
+        "downloadFailed": "Phân tích thất bại",
+        "getVideoInfoFailed": "Lấy thông tin video thất bại, vui lòng thử lại sau.",
+        "clipboardFailed": "Không thể đọc bộ nhớ tạm.",
+        "clipboardPermission": "Vui lòng kiểm tra quyền truy cập bộ nhớ tạm của trình duyệt.",
+        "allImagesLoadFailed": "Tải toàn bộ hình ảnh thất bại, không thể đóng gói tải xuống.",
+        "packageFailed": "Đóng gói tải xuống thất bại, vui lòng thử lại.",
+        "confirmPartialDownload": "{failCount} ảnh tải lỗi. Bạn có muốn tải {successCount} ảnh còn lại?",
+        "continue": "Tiếp tục",
+        "cancel": "Hủy",
+        "fileTooLarge": "Tệp quá lớn, hỗ trợ tối đa 500MB",
+        "videoFileTooLarge": "Tệp video quá lớn, hỗ trợ tối đa 500MB",
+        "audioFileTooLarge": "Tệp âm thanh quá lớn, hỗ trợ tối đa 100MB",
+        "totalSizeTooLarge": "Tổng kích thước các tệp vượt quá 800MB",
+        "fileEmpty": "Tệp trống, vui lòng chọn tệp hợp lệ",
+        "fileFormatNotSupported": "Định dạng tệp không được hỗ trợ, vui lòng tải lên video MP4/WebM/MOV/MKV/AVI/MPEG",
+        "audioFormatNotSupported": "Định dạng âm thanh không được hỗ trợ, vui lòng tải lên âm thanh MP3/AAC/WAV/OGG/FLAC/M4A",
+        "fileReadFailed": "Đọc tệp thất bại, vui lòng thử lại",
+        "noVideoSelected": "Vui lòng chọn tệp video",
+        "noAudioSelected": "Vui lòng chọn tệp âm thanh",
+        "api": {
+            "BAD_REQUEST": "Tham số yêu cầu không hợp lệ.",
+            "INVALID_JSON": "Định dạng yêu cầu không hợp lệ.",
+            "UNSUPPORTED_PLATFORM": "Nền tảng này hiện chưa được hỗ trợ.",
+            "PLATFORM_MISMATCH": "Liên kết không khớp với giao diện tải đã chọn.",
+            "INVALID_DOWNLOAD_TYPE": "Loại tải xuống không hợp lệ.",
+            "INVALID_QUALITY": "Chất lượng đã chọn không hợp lệ.",
+            "NOT_FOUND": "Tài nguyên không tồn tại hoặc không còn khả dụng.",
+            "DOWNLOAD_URL_NOT_FOUND": "Không tìm thấy liên kết tải xuống phương tiện.",
+            "RATE_LIMITED": "Yêu cầu quá nhanh. Vui lòng thử lại sau.",
+            "UPSTREAM_ERROR": "Yêu cầu đến nền tảng gốc thất bại. Vui lòng thử lại sau.",
+            "SERVICE_UNAVAILABLE": "Dịch vụ tạm thời không khả dụng.",
+            "INTERNAL_ERROR": "Đã xảy ra lỗi máy chủ nội bộ.",
+            "FEEDBACK_SUBMIT_FAILED": "Gửi phản hồi thất bại.",
+            "MEDIA_PROCESSOR_INIT_FAILED": "Khởi tạo bộ xử lý phương tiện thất bại.",
+            "PARSE_FAILED": "Phân tích liên kết thất bại. Vui lòng kiểm tra lại liên kết."
+        }
+    },
+    "history": {
+        "title": "Lịch Sử",
+        "description": "Lịch sử tải xuống của bạn",
+        "clear": "Xóa tất cả",
+        "cleared": "Đã xóa lịch sử thành công",
+        "searchPlaceholder": "Tìm kiếm tiêu đề...",
+        "noSearchResults": "Không tìm thấy bản ghi lịch sử phù hợp",
+        "viewSource": "Xem liên kết gốc",
+        "redownload": "Phân tích lại",
+        "linkFilled": "Đã dán liên kết",
+        "clickToRedownload": "Nhấp vào nút phân tích để bắt đầu phân tích lại",
+        "unknownTitle": "Tiêu đề không xác định",
+        "platforms": {
+            "bilibili": "Bilibili",
+            "bilibiliTv": "Bilibili TV",
+            "douyin": "Douyin",
+            "kuaishou": "Kuaishou",
+            "youtube": "YouTube",
+            "telegram": "Telegram",
+            "wechat": "WeChat",
+            "niconico": "Niconico",
+            "xiaohongshu": "Xiaohongshu",
+            "tiktok": "TikTok",
+            "generic": "Video Web",
+            "unknown": "Không xác định",
+            "instagram": "Instagram",
+            "x": "X",
+            "threads": "Threads",
+            "weibo": "Weibo",
+            "dailymotion": "Dailymotion",
+            "newgrounds": "Newgrounds",
+            "okru": "OK.ru",
+            "pinterest": "Pinterest",
+            "reddit": "Reddit",
+            "soundcloud": "SoundCloud",
+            "streamable": "Streamable",
+            "twitch": "Twitch",
+            "tumblr": "Tumblr",
+            "vk": "VK",
+            "vimeo": "Vimeo"
+        }
+    },
+    "toast": {
+        "linkFilled": "Đã dán liên kết từ bộ nhớ tạm.",
+        "douyinParseSuccess": "Phân tích Douyin thành công",
+        "linkFilledForRedownload": "Đã điền liên kết",
+        "clickToRedownloadDesc": "Nhấp vào nút phân tích để bắt đầu phân tích lại",
+        "installTitle": "Thêm vào Màn Hình Chính",
+        "installDescription": "Cài đặt ứng dụng trên thiết bị của bạn để truy cập nhanh bằng một chạm",
+        "installAction": "Cài đặt"
+    },
+    "metadata": {
+        "title": "VoidFetch | Trình tải Video, Audio, Ảnh, HLS trực tuyến",
+        "description": "Trình tải phương tiện trực tuyến miễn phí cho Bilibili, Douyin, Telegram, Threads, WeChat, Weibo, Niconico, Instagram, Xiaohongshu, TikTok, X, Reddit, Streamable, SoundCloud, Twitch, VK, OK.ru, Pinterest, Tumblr, Newgrounds và các luồng HLS/M3U8.",
+        "ogTitle": "VoidFetch | Trình tải phương tiện trực tuyến miễn phí",
+        "ogDescription": "Tự động nhận diện liên kết từ các nguồn video, âm thanh, hình ảnh và HLS/M3U8 được hỗ trợ, tải về trực tuyến không cần đăng ký.",
+        "siteName": "VoidFetch"
+    },
+    "common": {
+        "home": "Trang chủ",
+        "backToTop": "Lên đầu trang",
+        "relatedPages": "Trang liên quan",
+        "privacy": "Chính sách bảo mật",
+        "terms": "Điều khoản sử dụng",
+        "contact": "Liên hệ",
+        "trustAndPolicies": "Chính sách & Tin cậy"
+    },
+    "contactPage": {
+        "metaTitle": "Liên hệ | VoidFetch",
+        "metaDescription": "Liên hệ với VoidFetch để được hỗ trợ báo cáo lỗi, gửi yêu cầu tính năng hoặc đóng góp ý kiến.",
+        "title": "Liên hệ",
+        "intro": "Vui lòng sử dụng các kênh liên hệ bên dưới để gửi phản hồi lỗi hoặc đề xuất cải tiến tính năng.",
+        "feedback": "Mở trang thảo luận phản hồi",
+        "feedbackHint": "Tốt nhất cho ý tưởng tính năng công khai, yêu cầu nền tảng mới và câu hỏi chung.",
+        "github": "Mở Issue trên GitHub",
+        "githubHint": "Tốt nhất để báo cáo lỗi lập trình hoặc theo dõi tiến trình sửa lỗi."
+    },
+    "feedbackPage": {
+        "metaTitle": "Phản hồi | VoidFetch",
+        "metaDescription": "Gửi ý kiến phản hồi công khai và đề xuất tính năng mới cho dự án VoidFetch.",
+        "title": "Phản hồi ý kiến",
+        "privateFeedbackTitle": "Gửi phản hồi riêng tư qua Email",
+        "privateFeedbackDescription": "Bạn cũng có thể lựa chọn gửi phản hồi riêng tư bằng cách gửi email cho chúng tôi. Để hỗ trợ chẩn đoán lỗi nhanh hơn, bạn nên đính kèm liên kết video lỗi, thông tin trình duyệt/hệ điều hành hoặc ảnh chụp màn hình lỗi.",
+        "emailAction": "Gửi Email",
+        "emailTemplateBody": "[Mô tả lỗi hoặc góp ý]\nVui lòng viết mô tả ngắn gọn tại đây:\n\n[Liên kết bị lỗi]\n(Dán link video/bài viết bị lỗi tải tại đây)\n\n[Thông tin môi trường]\n(Ví dụ: Windows 11 / Chrome 120 / iOS 17)\n"
+    },
+    "privacyPage": {
+        "metaTitle": "Chính sách bảo mật | VoidFetch",
+        "metaDescription": "Chính sách bảo mật dữ liệu, lưu trữ cục bộ trên trình duyệt và phân tích của VoidFetch.",
+        "title": "Chính sách bảo mật",
+        "intro": "Trang này giải thích cách dữ liệu của bạn được xử lý khi sử dụng dịch vụ của chúng tôi.",
+        "points": [
+            "Không yêu cầu đăng ký tài khoản hay cung cấp thông tin cá nhân.",
+            "Lịch sử tải xuống của bạn được lưu trữ cục bộ hoàn toàn trên trình duyệt của bạn (Local Storage).",
+            "Hệ thống không lưu trữ tệp tin tải về của bạn trên máy chủ của chúng tôi.",
+            "Các dịch vụ bên thứ ba (như phân tích hoặc quảng cáo) có thể thu thập dữ liệu sử dụng ẩn danh theo chính sách của họ."
+        ],
+        "updated": "Cập nhật lần cuối: Ngày 18 tháng 2 năm 2026"
+    },
+    "termsPage": {
+        "metaTitle": "Điều khoản sử dụng | VoidFetch",
+        "metaDescription": "Điều khoản dịch vụ, giới hạn trách nhiệm pháp lý và trách nhiệm của người dùng VoidFetch.",
+        "title": "Điều khoản sử dụng",
+        "intro": "Bằng việc truy cập và sử dụng dịch vụ này, bạn đồng ý tuân thủ các quy định bản quyền và điều khoản sử dụng tương ứng.",
+        "points": [
+            "Chỉ sử dụng công cụ cho mục đích hợp pháp và tải các nội dung bạn có quyền truy cập.",
+            "Không sử dụng dịch vụ để vượt qua các biện pháp bảo vệ bản quyền, hội viên hoặc trả phí.",
+            "Bạn chịu hoàn toàn trách nhiệm đối với cách thức sử dụng các tệp tin media sau khi tải về máy.",
+            "Dịch vụ có thể thay đổi hoặc ngừng cung cấp một phần tính năng bất cứ lúc nào mà không cần thông báo trước."
+        ],
+        "updated": "Cập nhật lần cuối: Ngày 18 tháng 2 năm 2026"
+    },
+    "languages": {
+        "zh": "简体中文",
+        "zh-tw": "繁體中文",
+        "en": "English",
+        "ja": "日本語",
+        "es": "Español",
+        "ru": "Русский",
+        "vi": "Tiếng Việt"
+    },
+    "douyin": {
+        "apiLimitDownload": "Nếu tính năng tự động tải về bị chặn, vui lòng nhấp vào liên kết để tải xuống thủ công (nút tải nằm ở góc dưới bên phải của trình phát video gốc)."
+    },
+    "extractAudio": {
+        "button": "Trích xuất âm thanh",
+        "loading": "Đang tải công cụ...",
+        "downloading": "Đ Đang tải {progress}%",
+        "downloadingWithSize": "Đang tải {progress}% ({loaded} / {total})",
+        "converting": "Đang chuyển đổi âm thanh {progress}%",
+        "completed": "Hoàn thành trích xuất",
+        "retry": "Thử lại",
+        "errorLoad": "Không thể tải bộ xử lý FFmpeg, vui lòng tải lại trang và thử lại.",
+        "errorDownload": "Tải video gốc thất bại, vui lòng dùng link dự phòng hoặc công cụ khác.",
+        "errorConvert": "Chuyển đổi âm thanh thất bại, định dạng video có thể không tương thích.",
+        "errorMemory": "Tệp quá lớn vượt quá giới hạn bộ nhớ của trình duyệt, vui lòng sử dụng ứng dụng cài trên máy tính."
+    },
+    "audioTool": {
+        "triggerButton": "Công cụ",
+        "title": "Công cụ phương tiện",
+        "description": "Sử dụng các công cụ Client-side để tách nhạc hoặc gộp video và âm thanh. Quá trình tải về máy sẽ tự động bắt đầu sau khi hoàn tất xử lý.",
+        "extractDescription": "Tách âm thanh từ file video cục bộ trên máy và xuất ra tệp định dạng MP3.",
+        "mediaActions": "Thao tác",
+        "mergeDescription": "Chọn một tệp video và một tệp âm thanh trên máy, gộp lại thành một tệp video MP4 hoàn chỉnh.",
+        "placeholder": "Dán liên kết video hoặc bài viết vào đây...",
+        "strategyHint": "Hệ thống ưu tiên tải nhạc trực tiếp từ nền tảng; nếu không hỗ trợ mới sử dụng tính năng giải mã âm thanh trên trình duyệt.",
+        "pasteButton": "Dán",
+        "submitButton": "Bắt đầu trích xuất",
+        "processingButton": "Đang xử lý...",
+        "statusIdle": "Chọn một tệp video trên máy để bắt đầu trích xuất âm thanh",
+        "statusMergeIdle": "Chọn cả tệp video và âm thanh trên máy để bắt đầu gộp",
+        "statusParsing": "Đang phân tích dữ liệu...",
+        "statusPreparingMerge": "Đang tải nguồn video và âm thanh...",
+        "statusDirectDownloading": "Phát hiện nhạc gốc, đang trực tiếp tải về...",
+        "statusFallbackExtracting": "Không có nhạc gốc, đang chuẩn bị tách nhạc trên trình duyệt...",
+        "statusCompleted": "Hoàn tất! Tệp tin đang được tải xuống thiết bị của bạn",
+        "noAudioSource": "Phân tích thành công nhưng không tìm thấy nguồn âm thanh hoặc video khả dụng.",
+        "noMergeSource": "Phân tích thành công nhưng không có sẵn video hoặc âm thanh để gộp.",
+        "urlTab": "Từ liên kết",
+        "fileTab": "Tách nhạc từ máy",
+        "mergeTab": "Gộp Video + Audio",
+        "videoFile": "Tệp Video",
+        "audioFile": "Tệp Âm thanh",
+        "dropHint": "Kéo thả tệp vào đây, hoặc click để chọn tệp từ máy",
+        "fileSizeLimit": "Hỗ trợ tối đa 500MB",
+        "fileSelected": "Đã chọn: {name} ({size})",
+        "selectFileButton": "Chọn video",
+        "changeFileButton": "Thay đổi video",
+        "selectVideoButton": "Chọn video",
+        "selectAudioButton": "Chọn âm thanh",
+        "videoSizeLimit": "Hỗ trợ tối đa 500MB",
+        "audioSizeLimit": "Hỗ trợ tối đa 100MB",
+        "videoSelected": "Đã chọn: {name} ({size})",
+        "audioSelected": "Đã chọn: {name} ({size})",
+        "mergeButton": "Bắt đầu gộp",
+        "changeVideoButton": "Thay đổi video",
+        "changeAudioButton": "Thay đổi âm thanh",
+        "closeButton": "Đóng",
+        "statusReadingFile": "Đang đọc tệp video...",
+        "statusFileReady": "Video đã sẵn sàng. Bạn có thể bắt đầu trích xuất",
+        "statusReadingVideo": "Đang đọc tệp video...",
+        "statusReadingAudio": "Đang đọc tệp âm thanh...",
+        "statusMerging": "Đang gộp video và âm thanh..."
+    },
+    "hlsDownload": {
+        "description": "Hệ thống sẽ thử tải trực tiếp các phân đoạn HLS trên trình duyệt. Chỉ những yêu cầu bị chặn mới đi qua Proxy cùng nguồn.",
+        "outputTitle": "Tên tệp đầu ra",
+        "outputPlaceholder": "Tiền tố tên tệp tùy chọn",
+        "sourceUrl": "Trang nguồn hoặc URL m3u8",
+        "sourcePlaceholder": "Dán đường dẫn trang chứa luồng phát HLS",
+        "refererUrl": "Giá trị Referer tùy chọn",
+        "refererPlaceholder": "Cần thiết khi liên kết nhập vào đã là playlist m3u8 trực tiếp",
+        "segmentCount": "Số lượng phân đoạn",
+        "segmentCountPlaceholder": "Để trống để tải toàn bộ video",
+        "resolveButton": "Phân tích Playlist",
+        "resolvingButton": "Đang phân tích...",
+        "downloadButton": "Tải trên trình duyệt",
+        "downloadingButton": "Đang tải...",
+        "statusLabel": "Trạng thái",
+        "idleStatus": "Sẵn sàng. Hãy phân tích playlist để bắt đầu.",
+        "resolvingStatus": "Đang phân tích trang nguồn và playlist m3u8...",
+        "resolvedStatus": "Phân tích playlist thành công. Sẵn sàng tải xuống.",
+        "resolveFailedStatus": "Phân tích playlist thất bại.",
+        "downloadingStatus": "Đang tải xuống {count} phân đoạn HLS trên trình duyệt...",
+        "downloadCompletedStatus": "Tải xuống hoàn tất. Bạn có thể đóng hộp thoại này.",
+        "downloadFailedStatus": "Tải xuống trên trình duyệt thất bại.",
+        "largeVideoBrowserLimitedStatus": "Trình duyệt hiện tại bị giới hạn bộ nhớ khi tải video lớn. Vui lòng dùng Chrome hoặc Edge.",
+        "progressLabel": "Tiến độ",
+        "speedLabel": "Tốc độ",
+        "etaLabel": "Thời gian còn lại",
+        "calculatingLabel": "Đang tính toán",
+        "confirmCloseTitle": "Hủy quá trình tải xuống?",
+        "confirmCloseDescription": "Đóng hộp thoại này sẽ dừng ngay lập tức công việc tải hiện tại.",
+        "confirmCloseAction": "Đóng",
+        "resolvedPlaylist": "Playlist đã giải mã",
+        "totalSegments": "Tổng số phân đoạn: {count}",
+        "selectedSegments": "Đang chọn tải: {count}",
+        "encryptedLabel": "Mã hóa AES-128",
+        "encryptedYes": "có",
+        "encryptedNo": "không",
+        "encryptedHint": "Phát hiện luồng phát HLS được mã hóa AES-128. Trình duyệt sẽ tự động lấy khóa giải mã, giải mã các phân đoạn và gộp lại trước khi lưu.",
+        "previewSegmentUrls": "Xem trước URL các phân đoạn"
+    },
+    "guide": {
+        "quickStart": {
+            "title": "3 Bước Tải Xuống Dễ Dàng",
+            "steps": [
+                {
+                    "title": "Sao chép liên kết",
+                    "description": "Sao chép liên kết video/bài viết từ các nền tảng được hỗ trợ"
+                },
+                {
+                    "title": "Dán và phân tích",
+                    "description": "Dán liên kết vào ô nhập liệu, nhấp nút Phân tích"
+                },
+                {
+                    "title": "Tải xuống phương tiện",
+                    "description": "Chọn định dạng video, âm thanh hoặc hình ảnh để tải về thiết bị"
+                }
+            ]
+        },
+        "platformSupport": {
+            "title": "Nền tảng hỗ trợ",
+            "bilibili": {
+                "name": "Bilibili",
+                "summary": "Video / Audio / Mã chia sẻ",
+                "features": [
+                    "Tải Video",
+                    "Tải Audio",
+                    "Mã chia sẻ"
+                ]
+            },
+            "bilibiliTv": {
+                "name": "Bilibili TV",
+                "summary": "Video / Audio",
+                "features": [
+                    "Tải Video",
+                    "Tải Audio"
+                ]
+            },
+            "douyin": {
+                "name": "Douyin",
+                "summary": "Video / Bài viết ảnh / Audio",
+                "features": [
+                    "Tải Video",
+                    "Bài viết ảnh",
+                    "Tải Audio"
+                ]
+            },
+            "hls": {
+                "name": "Trang Web HLS",
+                "summary": "Truyền trực tiếp / Phát lại",
+                "features": [
+                    "Phát trực tuyến",
+                    "Tải xuống"
+                ]
+            },
+            "youtube": {
+                "name": "YouTube",
+                "summary": "Video / Audio",
+                "features": [
+                    "Tải Video",
+                    "Tải Audio"
+                ]
+            },
+            "telegram": {
+                "name": "Telegram",
+                "summary": "Video / Tin nhắn công khai",
+                "features": [
+                    "Tải Video",
+                    "Tin nhắn công khai"
+                ]
+            },
+            "wechat": {
+                "name": "WeChat",
+                "summary": "Video bài viết / Nhiều video",
+                "features": [
+                    "Video bài viết",
+                    "Nhiều video"
+                ]
+            },
+            "niconico": {
+                "name": "Niconico",
+                "summary": "Video / Audio",
+                "features": [
+                    "Tải Video",
+                    "Tải Audio"
+                ]
+            },
+            "xiaohongshu": {
+                "name": "Xiaohongshu",
+                "summary": "Video / Bài viết ảnh",
+                "features": [
+                    "Tải Video",
+                    "Bài viết ảnh"
+                ]
+            },
+            "tiktok": {
+                "name": "TikTok",
+                "summary": "Video / Audio",
+                "features": [
+                    "Tải Video",
+                    "Tải Audio"
+                ]
+            },
+            "comingSoon": "Nhiều nền tảng hơn sắp ra mắt",
+            "instagram": {
+                "name": "Instagram",
+                "summary": "Reels / Bài đăng ảnh / Slide",
+                "features": [
+                    "Tải Reels",
+                    "Bài đăng ảnh",
+                    "Slide ảnh"
+                ]
+            },
+            "x": {
+                "name": "X (Twitter)",
+                "summary": "Video / Audio",
+                "features": [
+                    "Tải Video",
+                    "Tải Audio"
+                ]
+            },
+            "threads": {
+                "name": "Threads",
+                "summary": "Video / Bài đăng ảnh",
+                "features": [
+                    "Tải Video",
+                    "Bài đăng ảnh"
+                ]
+            },
+            "weibo": {
+                "name": "Weibo",
+                "summary": "Video / Ảnh / Hỗn hợp",
+                "features": [
+                    "Tải Video",
+                    "Bài đăng ảnh",
+                    "Hỗn hợp"
+                ]
+            },
+            "vimeo": {
+                "name": "Vimeo",
+                "summary": "Tải xuống nội dung",
+                "features": [
+                    "Tải xuống video"
+                ]
+            },
+            "dailymotion": {
+                "name": "Dailymotion",
+                "summary": "Tải xuống nội dung",
+                "features": [
+                    "Tải xuống video"
+                ]
+            },
+            "streamable": {
+                "name": "Streamable",
+                "summary": "Tải xuống nội dung",
+                "features": [
+                    "Tải xuống video"
+                ]
+            },
+            "reddit": {
+                "name": "Reddit",
+                "summary": "Tải xuống nội dung",
+                "features": [
+                    "Tải xuống video"
+                ]
+            },
+            "newgrounds": {
+                "name": "Newgrounds",
+                "summary": "Tải xuống nội dung",
+                "features": [
+                    "Tải xuống phương tiện"
+                ]
+            },
+            "tumblr": {
+                "name": "Tumblr",
+                "summary": "Tải xuống nội dung",
+                "features": [
+                    "Tải xuống phương tiện"
+                ]
+            },
+            "pinterest": {
+                "name": "Pinterest",
+                "summary": "Tải xuống nội dung",
+                "features": [
+                    "Tải ảnh/video"
+                ]
+            },
+            "vk": {
+                "name": "VK",
+                "summary": "Tải xuống nội dung",
+                "features": [
+                    "Tải xuống video"
+                ]
+            },
+            "okru": {
+                "name": "OK.ru",
+                "summary": "Tải xuống nội dung",
+                "features": [
+                    "Tải xuống video"
+                ]
+            },
+            "twitch": {
+                "name": "Twitch",
+                "summary": "Tải xuống nội dung",
+                "features": [
+                    "Tải xuống stream/clip"
+                ]
+            },
+            "soundcloud": {
+                "name": "SoundCloud",
+                "summary": "Tải nhạc bài hát",
+                "features": [
+                    "Tải xuống nhạc"
+                ]
+            },
+            "applePodcasts": {
+                "name": "Apple Podcasts",
+                "summary": "Podcast âm thanh công khai / Phát và tải tập",
+                "features": [
+                    "Audio công khai",
+                    "Phát trực tuyến tập",
+                    "Tải xuống tập"
+                ]
+            }
+        },
+        "linkFormats": {
+            "title": "Định dạng liên kết được hỗ trợ",
+            "bilibili": {
+                "title": "🔗 Ví dụ liên kết Bilibili:",
+                "examples": [
+                    "https://www.bilibili.com/video/BV1xx411c7mD",
+                    "https://b23.tv/BV1xx411c7mD"
+                ]
+            },
+            "douyin": {
+                "title": "🔗 Ví dụ liên kết Douyin:",
+                "examples": [
+                    "https://www.douyin.com/video/7491698414288260387",
+                    "https://v.douyin.com/fiU6t9rA3QU"
+                ]
+            },
+            "telegram": {
+                "title": "🔗 Ví dụ liên kết Telegram:",
+                "examples": [
+                    "https://t.me/zhijiang/8187",
+                    "https://t.me/europa_press/613"
+                ]
+            },
+            "tip": "Mẹo: Chỉ cần sao chép liên kết chia sẻ trực tiếp từ ứng dụng, không cần chỉnh sửa thủ công."
+        }
+    },
+    "freeSupport": {
+        "title": "Dịch Vụ Miễn Phí Vĩnh Viễn",
+        "features": {
+            "freeToUse": "Sử dụng hoàn toàn miễn phí",
+            "noRegistration": "Không yêu cầu đăng ký tài khoản",
+            "unlimitedDownloads": "Không giới hạn lượt tải xuống"
+        },
+        "privacy": {
+            "title": "Cam Kết Bảo Vệ Quyền Riêng Tư",
+            "noUserRecords": "Máy chủ không lưu trữ lịch sử của bạn",
+            "localStorage": "Lịch sử chỉ lưu tại trình duyệt máy khách"
+        },
+        "revenue": {
+            "adsSupport": "Dịch vụ duy trì thông qua quảng cáo",
+            "serverCosts": "Để bù đắp chi phí máy chủ và băng thông"
+        }
+    },
+    "seo": {
+        "features": {
+            "en": [
+                "Extract MP3 audio from Bilibili videos",
+                "Download Douyin videos without watermark",
+                "Download Telegram public video posts",
+                "Download WeChat article videos",
+                "Download Niconico videos",
+                "Download Niconico audio",
+                "Download Instagram reels and posts",
+                "Download Instagram image posts",
+                "Extract audio from Instagram videos",
+                "Download Xiaohongshu image notes",
+                "Download Xiaohongshu videos",
+                "Extract audio from Xiaohongshu videos",
+                "Download TikTok videos without watermark",
+                "Download X videos",
+                "Extract audio from X videos",
+                "Auto-detect supported platforms",
+                "High-quality media downloads",
+                "Free online tool",
+                "No registration required",
+                "Support multiple media formats",
+                "Browser-based processing",
+                "Download Threads videos and image posts",
+                "Download Weibo videos and mixed-media posts"
+            ],
+            "zh": [
+                "提取哔哩哔哩视频MP3音频",
+                "下载抖音无水印视频",
+                "下载 Telegram 公开视频消息",
+                "下载Instagram Reels和帖子",
+                "下载Instagram图文帖子",
+                "提取Instagram视频音频",
+                "下载小红书图文笔记",
+                "下载小红书无水印视频",
+                "提取小红书视频音频",
+                "下载TikTok无水印视频",
+                "下载X视频",
+                "提取X视频音频",
+                "自动识别支持的平台",
+                "高清媒体内容下载",
+                "免费在线工具",
+                "无需注册",
+                "支持多种媒体格式",
+                "浏览器内处理",
+                "下载 Threads 视频和图文帖子",
+                "下载微博视频、图文与混合媒体帖子"
+            ],
+            "zh-tw": [
+                "提取影片MP3音訊",
+                "下載抖音無浮水印影片",
+                "下載 Telegram 公開影片訊息",
+                "下載Instagram Reels與貼文",
+                "下載Instagram圖文貼文",
+                "提取Instagram影片音訊",
+                "下載小紅書圖文筆記",
+                "下載小紅書無浮水印影片",
+                "提取小紅書影片音訊",
+                "下載TikTok無浮水印影片",
+                "下載X影片",
+                "提取X影片音訊",
+                "自動識別支援的平台",
+                "高清媒體內容下載",
+                "免費線上工具",
+                "無需註冊",
+                "支援多種媒體格式",
+                "瀏覽器內處理",
+                "下載 Threads 影片與圖文貼文",
+                "下載微博影片、圖文與混合媒體貼文"
+            ],
+            "ja": [
+                "Bilibili動画からMP3音声を抽出",
+                "Douyin動画をダウンロード",
+                "Telegramの公開動画メッセージをダウンロード",
+                "InstagramのReelsと投稿をダウンロード",
+                "Instagramの画像投稿をダウンロード",
+                "Instagram動画から音声を抽出",
+                "Xiaohongshuの画像ノートをダウンロード",
+                "Xiaohongshu動画をダウンロード",
+                "Xiaohongshu動画から音声を抽出",
+                "TikTok動画をダウンロード",
+                "X動画をダウンロード",
+                "X動画から音声を抽出",
+                "対応プラットフォームを自動判別",
+                "高品質なメディアダウンロード",
+                "無料のオンラインツール",
+                "登録不要",
+                "複数のメディア形式に対応",
+                "ブラウザ内で処理",
+                "Threads の動画と画像投稿をダウンロード",
+                "Weibo の動画・画像・混合メディア投稿をダウンロード"
+            ],
+            "es": [
+                "Extract MP3 audio from Bilibili videos",
+                "Download Douyin videos without watermark",
+                "Download Telegram public video posts",
+                "Download WeChat article videos",
+                "Download Niconico videos",
+                "Download Niconico audio",
+                "Download Instagram reels and posts",
+                "Download Instagram image posts",
+                "Extract audio from Instagram videos",
+                "Download Xiaohongshu image notes",
+                "Download Xiaohongshu videos",
+                "Extract audio from Xiaohongshu videos",
+                "Download TikTok videos without watermark",
+                "Download X videos",
+                "Extract audio from X videos",
+                "Auto-detect supported platforms",
+                "High-quality media downloads",
+                "Free online tool",
+                "No registration required",
+                "Support multiple media formats",
+                "Browser-based processing",
+                "Download Threads videos and image posts",
+                "Download Weibo videos and mixed-media posts"
+            ],
+            "ru": [
+                "Extract MP3 audio from Bilibili videos",
+                "Download Douyin videos without watermark",
+                "Download Telegram public video posts",
+                "Download WeChat article videos",
+                "Download Niconico videos",
+                "Download Niconico audio",
+                "Download Instagram reels and posts",
+                "Download Instagram image posts",
+                "Extract audio from Instagram videos",
+                "Download Xiaohongshu image notes",
+                "Download Xiaohongshu videos",
+                "Extract audio from Xiaohongshu videos",
+                "Download TikTok videos without watermark",
+                "Download X videos",
+                "Extract audio from X videos",
+                "Auto-detect supported platforms",
+                "High-quality media downloads",
+                "Free online tool",
+                "No registration required",
+                "Support multiple media formats",
+                "Browser-based processing",
+                "Download Threads videos and image posts",
+                "Download Weibo videos and mixed-media posts"
+            ],
+            "vi": [
+                "Tách nhạc MP3 từ video Bilibili trực tuyến",
+                "Tải video Douyin không logo, không hình mờ",
+                "Tải video tin nhắn công khai Telegram",
+                "Tải video từ bài viết WeChat bài đăng",
+                "Tải video Niconico",
+                "Tải âm thanh nhạc từ Niconico",
+                "Tải Reels và bài đăng từ Instagram",
+                "Tải ảnh từ bài đăng Instagram",
+                "Tách âm thanh từ video Instagram",
+                "Tải ảnh từ ghi chú Tiểu Hồng Thư Xiaohongshu",
+                "Tải video Xiaohongshu không logo",
+                "Tách nhạc từ video Xiaohongshu",
+                "Tải video TikTok không watermark không logo",
+                "Tải video X (Twitter) trực tuyến",
+                "Tách nhạc từ video X Twitter",
+                "Tự động nhận diện nền tảng nguồn video",
+                "Tải xuống phương tiện chất lượng cao nhất",
+                "Công cụ trực tuyến hoàn toàn miễn phí",
+                "Không cần đăng ký hoặc đăng nhập",
+                "Hỗ trợ đa dạng định dạng phương tiện",
+                "Xử lý trực tiếp trên trình duyệt web",
+                "Tải video và ảnh từ Threads trực tuyến",
+                "Tải video và bài viết đa phương tiện từ Weibo"
+            ]
+        },
+        "howTo": {
+            "title": {
+                "en": "How to download content from Bilibili, Douyin, Telegram, Threads, WeChat, Weibo, Niconico, Instagram, Xiaohongshu, TikTok, and X",
+                "zh": "如何下载哔哩哔哩、抖音、Telegram、Threads、微信公众号、微博、Niconico、Instagram、小红书、TikTok 和 X 内容",
+                "zh-tw": "如何下載嗶哩嗶哩、抖音、Telegram、Threads、微信公眾號、微博、Niconico、Instagram、小紅書、TikTok 與 X 內容",
+                "ja": "Bilibili・Douyin・Telegram・Threads・WeChat・Weibo・Niconico・Instagram・Xiaohongshu・TikTok・X のコンテンツをダウンロードする方法",
+                "es": "How to download content from Bilibili, Douyin, Telegram, Threads, WeChat, Weibo, Niconico, Instagram, Xiaohongshu, TikTok, and X",
+                "ru": "How to download content from Bilibili, Douyin, Telegram, Threads, WeChat, Weibo, Niconico, Instagram, Xiaohongshu, TikTok, and X",
+                "vi": "Cách tải video và hình ảnh từ Bilibili, Douyin, Telegram, Threads, WeChat, Weibo, Niconico, Instagram, Xiaohongshu, TikTok và X"
+            },
+            "steps": {
+                "en": [
+                    {
+                        "name": "Copy link",
+                        "text": "Copy the video, post, image-post, mixed-media post, or article link from Bilibili, Douyin, Telegram, Threads, WeChat, Weibo, Niconico, Instagram, Xiaohongshu, TikTok, or X"
+                    },
+                    {
+                        "name": "Paste link",
+                        "text": "Paste the link into the input field on our website"
+                    },
+                    {
+                        "name": "Auto-detect",
+                        "text": "The tool will automatically detect the platform (Bilibili/Douyin/Telegram/Threads/WeChat/Weibo/Niconico/Instagram/Xiaohongshu/TikTok/X)"
+                    },
+                    {
+                        "name": "Download",
+                        "text": "Choose video, audio, or image download options to get your media content"
+                    }
+                ],
+                "zh": [
+                    {
+                        "name": "复制链接",
+                        "text": "从浏览器复制哔哩哔哩、抖音、Telegram、Threads、微信公众号、微博、Niconico、Instagram、小红书、TikTok 或 X 的视频、帖子、图文、混合媒体或文章链接"
+                    },
+                    {
+                        "name": "粘贴链接",
+                        "text": "将链接粘贴到网站的输入框中"
+                    },
+                    {
+                        "name": "自动识别",
+                        "text": "工具会自动识别平台（哔哩哔哩/抖音/Telegram/Threads/微信公众号/微博/Niconico/Instagram/小红书/TikTok/X）"
+                    },
+                    {
+                        "name": "下载",
+                        "text": "选择视频、音频或图片下载选项，获取对应内容"
+                    }
+                ],
+                "zh-tw": [
+                    {
+                        "name": "複製連結",
+                        "text": "從瀏覽器複製嗶哩嗶哩、抖音、Telegram、Threads、微信公眾號、微博、Niconico、Instagram、小紅書、TikTok 或 X 的影片、貼文、圖文、混合媒體或文章連結"
+                    },
+                    {
+                        "name": "貼上連結",
+                        "text": "將連結貼上到網站的輸入框中"
+                    },
+                    {
+                        "name": "自動識別",
+                        "text": "工具會自動識別平台（嗶哩嗶哩/抖音/Telegram/Threads/微信公眾號/微博/Niconico/Instagram/小紅書/TikTok/X）"
+                    },
+                    {
+                        "name": "下載",
+                        "text": "選擇影片、音訊或圖片下載選項，取得對應內容"
+                    }
+                ],
+                "ja": [
+                    {
+                        "name": "リンクをコピー",
+                        "text": "Bilibili、Douyin、Telegram、Threads、WeChat、Weibo、Niconico、Instagram、Xiaohongshu、TikTok、または X の動画・投稿・画像投稿・混合メディア投稿・記事リンクをコピーします"
+                    },
+                    {
+                        "name": "リンクを貼り付け",
+                        "text": "サイト上の入力欄にリンクを貼り付けます"
+                    },
+                    {
+                        "name": "自動判別",
+                        "text": "ツールがプラットフォームを自動で判別します（Bilibili / Douyin / Telegram / Threads / WeChat / Weibo / Niconico / Instagram / Xiaohongshu / TikTok / X）"
+                    },
+                    {
+                        "name": "ダウンロード",
+                        "text": "動画・音声・画像のダウンロード方法を選択してコンテンツを取得します"
+                    }
+                ],
+                "es": [
+                    {
+                        "name": "Copy link",
+                        "text": "Copy the video, post, image-post, mixed-media post, or article link from Bilibili, Douyin, Telegram, Threads, WeChat, Weibo, Niconico, Instagram, Xiaohongshu, TikTok, or X"
+                    },
+                    {
+                        "name": "Paste link",
+                        "text": "Paste the link into the input field on our website"
+                    },
+                    {
+                        "name": "Auto-detect",
+                        "text": "The tool will automatically detect the platform (Bilibili/Douyin/Telegram/Threads/WeChat/Weibo/Niconico/Instagram/Xiaohongshu/TikTok/X)"
+                    },
+                    {
+                        "name": "Download",
+                        "text": "Choose video, audio, or image download options to get your media content"
+                    }
+                ],
+                "ru": [
+                    {
+                        "name": "Copy link",
+                        "text": "Copy the video, post, image-post, mixed-media post, or article link from Bilibili, Douyin, Telegram, Threads, WeChat, Weibo, Niconico, Instagram, Xiaohongshu, TikTok, or X"
+                    },
+                    {
+                        "name": "Paste link",
+                        "text": "Paste the link into the input field on our website"
+                    },
+                    {
+                        "name": "Auto-detect",
+                        "text": "The tool will automatically detect the platform (Bilibili/Douyin/Telegram/Threads/WeChat/Weibo/Niconico/Instagram/Xiaohongshu/TikTok/X)"
+                    },
+                    {
+                        "name": "Download",
+                        "text": "Choose video, audio, or image download options to get your media content"
+                    }
+                ],
+                "vi": [
+                    {
+                        "name": "Sao chép liên kết",
+                        "text": "Sao chép liên kết video, bài viết, ảnh hoặc bài đăng từ Bilibili, Douyin, Telegram, Threads, WeChat, Weibo, Niconico, Instagram, Xiaohongshu, TikTok hoặc X"
+                    },
+                    {
+                        "name": "Dán liên kết",
+                        "text": "Dán liên kết vừa sao chép vào ô nhập liệu trên website của chúng tôi"
+                    },
+                    {
+                        "name": "Tự động nhận diện",
+                        "text": "Hệ thống sẽ tự động phân tích và nhận diện đúng nền tảng nguồn video"
+                    },
+                    {
+                        "name": "Tải xuống phương tiện",
+                        "text": "Chọn định dạng tải video, tải nhạc hoặc ảnh để lưu về máy điện thoại hoặc máy tính"
+                    }
+                ]
+            }
+        }
+    },
+    "result": {
+        "title": "Kết Quả Phân Tích",
+        "downloadVideo": "Tải Video (MP4)",
+        "browserDownloadVideo": "Trình duyệt HLS",
+        "mergeDownloadVideo": "Tải Video Hoàn Chỉnh",
+        "mergeDownloadVideoHint": "Video và âm thanh sẽ được ghép lại trước khi tải xuống máy.",
+        "downloadAudio": "Tải Âm thanh",
+        "playVideo": "Xem thử Video",
+        "playAudio": "Nghe thử Audio",
+        "sharePlayLink": "Chia sẻ để phát",
+        "sharePlayLinkCopied": "Đã sao chép liên kết chia sẻ trình phát",
+        "previewPlayerTitle": "Xem thử nhanh",
+        "previewPlayerClose": "Đóng trình phát",
+        "sharePlayPlayerTitle": "Phát video chia sẻ",
+        "sharePlayUnavailable": "Video này không hỗ trợ phát trực tuyến. Vui lòng chọn tải xuống trực tiếp.",
+        "originDownloadVideo": "Link Video gốc",
+        "originDownloadAudio": "Link Audio gốc",
+        "totalParts": "Tổng cộng {count} phần",
+        "showAllParts": "Hiển thị tất cả ({count} phần khác)",
+        "collapseParts": "Thu gọn còn {count} phần",
+        "loadMoreItems": "Tải thêm (+{count})",
+        "shownItems": "Đang hiển thị {shown}/{total}",
+        "collectionSearchPlaceholder": "Tìm kiếm tiêu đề...",
+        "collectionNoSearchResults": "Không tìm thấy video phù hợp trong danh sách",
+        "articleVideoList": "Danh sách video bài viết",
+        "articleVideoCount": "Tổng cộng {count} video",
+        "articleVideoUntitled": "Video #{index}",
+        "downloadImage": "Tải Ảnh về máy",
+        "downloadCover": "Tải Ảnh bìa",
+        "coverLabel": "Ảnh bìa",
+        "imageIndexLabel": "Hình ảnh #{index}",
+        "imageAlt": "Ảnh #{index}",
+        "imageNote": "Mô tả ảnh",
+        "imageCount": "Tổng cộng {count} ảnh",
+        "packaging": "Đang nén zip...",
+        "packageDownload": "Tải gói ZIP",
+        "loading": "Đang tải...",
+        "loadFailed": "Tải dữ liệu thất bại",
+        "viewLargeImage": "Xem ảnh lớn",
+        "imageLoadingProgress": "Đang tải {loaded}/{total}",
+        "imageAutoLoadedTip": "💡 Ảnh đã được tải tự động, bạn có thể click tải xuống nhanh",
+        "packagingProgress": "Đang nén ảnh {current}/{total}",
+        "videoList": "Danh sách Video",
+        "videoCount": "{count} video",
+        "pureMusicHint": "Nội dung này thuần túy là nhạc hoặc âm thanh. Vui lòng tải trực tiếp tệp âm thanh."
+    },
+    "changelog": {
+        "title": "Lịch Sử Cập Nhật"
+    },
+    "feedback": {
+        "title": "Phản hồi & Gợi ý",
+        "triggerButton": "Phản hồi",
+        "typeLabel": "Loại phản hồi",
+        "typeRequired": "Vui lòng chọn loại phản hồi ý kiến",
+        "types": {
+            "bug": "🐛 Báo cáo lỗi",
+            "feature": "💡 Đề xuất tính năng",
+            "other": "💬 Ý kiến khác"
+        },
+        "contentLabel": "Chi tiết phản hồi",
+        "contentRequired": "Vui lòng cung cấp chi tiết (tối thiểu 10 ký tự)",
+        "contentTooShort": "Nội dung phản hồi cần tối thiểu {min} ký tự",
+        "contentPlaceholder": {
+            "bug": "Vui lòng mô tả chi tiết lỗi, các bước tái hiện lỗi, và kết quả mong muốn...",
+            "feature": "Vui lòng mô tả chi tiết về tính năng bạn muốn có trên hệ thống...",
+            "other": "Hãy chia sẻ suy nghĩ và đóng góp ý kiến của bạn tại đây..."
+        },
+        "contentCounter": "{current} / {max} ký tự",
+        "emailLabel": "Email liên hệ",
+        "emailPlaceholder": "example@email.com",
+        "emailInvalid": "Định dạng email không hợp lệ",
+        "emailRequired": "Không bắt buộc. Hãy để lại email nếu bạn muốn nhận phản hồi từ chúng tôi",
+        "emailHint": "Chúng tôi sẽ gửi phản hồi giải đáp qua địa chỉ email này của bạn",
+        "diagnosticInfoHint": "Thông tin về trình duyệt và hệ điều hành sẽ được gửi kèm tự động để giúp chẩn đoán lỗi tốt hơn.",
+        "cancelButton": "Hủy bỏ",
+        "submitButton": "Gửi phản hồi",
+        "submittingButton": "Đang gửi đi...",
+        "closeButton": "Đóng lại",
+        "successTitle": "Gửi phản hồi thành công!",
+        "successMessage": "Cảm ơn bạn đã phản hồi góp ý! Chúng tôi sẽ xem xét cẩn thận ý kiến của bạn.",
+        "successNote": "Nếu bạn có cung cấp email, chúng tôi có thể liên hệ để làm rõ thêm thông tin.",
+        "errorTitle": "Gửi phản hồi thất bại",
+        "errorMessage": "Không thể gửi dữ liệu đi. Vui lòng kiểm tra lại kết nối mạng và thử lại.",
+        "errorFallback": "Bạn cũng có thể liên hệ trực tiếp qua:",
+        "retryButton": "Thử lại",
+        "toastSuccess": "Gửi phản hồi thành công!",
+        "toastError": "Gửi phản hồi thất bại, vui lòng thử lại sau"
+    }
+}

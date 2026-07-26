@@ -1,0 +1,175 @@
+/**
+ * 统一接口类型定义
+ */
+
+export const API_ERROR_CODES = [
+    'BAD_REQUEST',
+    'INVALID_JSON',
+    'UNSUPPORTED_PLATFORM',
+    'PLATFORM_MISMATCH',
+    'INVALID_DOWNLOAD_TYPE',
+    'INVALID_QUALITY',
+    'NOT_FOUND',
+    'DOWNLOAD_URL_NOT_FOUND',
+    'RATE_LIMITED',
+    'UPSTREAM_ERROR',
+    'SERVICE_UNAVAILABLE',
+    'INTERNAL_ERROR',
+    'FEEDBACK_SUBMIT_FAILED',
+    'MEDIA_PROCESSOR_INIT_FAILED',
+    'PARSE_FAILED',
+] as const
+
+export type ApiErrorCode = (typeof API_ERROR_CODES)[number]
+export type ApiErrorDetails = Record<string, unknown>
+export type VideoAudioMode = 'muxed' | 'separate' | 'pure_music' | 'not_applicable'
+export type ResultKind = 'video' | 'audio' | 'picker' | 'image'
+
+export interface PodcastEpisodeInfo {
+    id: string;
+    title: string;
+    cover?: string | null;
+    duration?: number;
+    releaseDate?: string;
+    downloadAudioUrl?: string | null;
+    originDownloadAudioUrl?: string | null;
+}
+export type VideoMediaAction = 'direct-download' | 'merge-then-download' | 'browser-hls-download' | 'hide'
+export type AudioMediaAction = 'direct-download' | 'extract-audio' | 'hide'
+
+export interface MediaActions {
+    video: VideoMediaAction;
+    audio: AudioMediaAction;
+}
+
+/**
+ * 多P视频的单个分P信息
+ */
+export interface PageInfo {
+    page: number;
+    cid: string;
+    part: string;
+    duration: number;
+    downloadAudioUrl: string | null;
+    downloadVideoUrl: string | null;
+    videoAudioMode?: VideoAudioMode;
+}
+
+export interface VideoQualityOption {
+    quality: string;
+    label?: string;
+    width?: number;
+    height?: number;
+    formatId?: number;
+}
+
+export interface EmbeddedVideoInfo {
+    id: string;
+    title: string;
+    cover?: string | null;
+    duration?: number;
+    qualityOptions?: VideoQualityOption[];
+    downloadVideoUrl?: string | null;
+    downloadAudioUrl?: string | null;
+    originDownloadVideoUrl?: string | null;
+    originDownloadAudioUrl?: string | null;
+    videoAudioMode?: VideoAudioMode;
+    mediaActions?: MediaActions;
+}
+
+export interface UnifiedParseResultImage {
+    index?: number;
+    url?: string | null;
+    downloadUrl?: string | null;
+}
+
+export interface UnifiedParseResult {
+    success: boolean;
+    code?: ApiErrorCode | string;
+    status?: number;
+    requestId?: string;
+    details?: ApiErrorDetails;
+    data?: {
+        title: string;
+        desc?: string;
+        cover?: string | null;
+        platform: string;
+        downloadAudioUrl: string | null;
+        downloadVideoUrl: string | null;
+        originDownloadAudioUrl?: string | null;
+        originDownloadVideoUrl: string | null;
+        videoAudioMode?: VideoAudioMode;
+        mediaActions?: MediaActions;
+        url: string;
+        // Duration in seconds
+        duration?: number;
+        // Multi-part video fields
+        isMultiPart?: boolean;
+        currentPage?: number;
+        currentItemId?: string;
+        pages?: PageInfo[];
+        // Xiaohongshu specific fields
+        noteType?: 'video' | 'image' | 'audio';
+        images?: Array<string | UnifiedParseResultImage>;
+        // WeChat official account article videos
+        videos?: EmbeddedVideoInfo[];
+        // Result kind (picker = multi-episode selector, e.g., Apple Podcasts show page)
+        kind?: ResultKind;
+        // Apple Podcasts episode list
+        episodes?: PodcastEpisodeInfo[];
+        currentEpisodeId?: string;
+    };
+    error?: string;
+    message?: string;
+    url?: string; // May contain original URL on error
+}
+
+export interface UnifiedDownloadOptions {
+    format: 'audio' | 'video';
+    quality?: string;
+}
+
+export interface UnifiedApiResponse<T = unknown> {
+    success: boolean;
+    data?: T;
+    code?: ApiErrorCode | string;
+    status?: number;
+    requestId?: string;
+    details?: ApiErrorDetails;
+    error?: string;
+    message?: string;
+}
+
+
+export type Platform =
+    | 'bili'
+    | 'bilibili'
+    | 'bilibili_tv'
+    | 'dailymotion'
+    | 'douyin'
+    | 'kuaishou'
+    | 'newgrounds'
+    | 'okru'
+    | 'pinterest'
+    | 'reddit'
+    | 'soundcloud'
+    | 'streamable'
+    | 'twitch'
+    | 'tumblr'
+    | 'youtube'
+    | 'telegram'
+    | 'threads'
+    | 'vk'
+    | 'vimeo'
+    | 'wechat'
+    | 'nico'
+    | 'niconico'
+    | 'weibo'
+    | 'xiaohongshu'
+    | 'tiktok'
+    | 'instagram'
+    | 'ins'
+    | 'x'
+    | 'twitter'
+    | 'apple_podcasts'
+    | 'unknown';
