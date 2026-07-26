@@ -18,7 +18,7 @@ export function Footer({ locale, dict }: FooterProps) {
             <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
                 <div className="flex items-center gap-2">
                     <span className="font-bold text-xs tracking-wider text-foreground uppercase">VOIDFETCH</span>
-                    <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-semibold">v2.0.0</span>
+                    <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-semibold">v1.0.0</span>
                     <span className="text-xs text-muted-foreground">© {currentYear} VoidStation</span>
                 </div>
 

@@ -1,6 +1,6 @@
 {
-  "name": "bilibili-audio-downloader",
-  "version": "2.0.0",
+  "name": "void-fetch",
+  "version": "1.0.0",
   "scripts": {
     "dev": "vinext dev --port 3010",
     "build": "vinext build",

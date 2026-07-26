@@ -128,7 +128,7 @@ export function AppTopBar({
                     VOIDFETCH
                   </span>
                   <span className="text-[9px] font-mono px-1.5 py-0.2 rounded-full bg-primary/10 text-primary border border-primary/20 font-bold">
-                    v2.0
+                    v1.0.0
                   </span>
                 </div>
                 <span className="text-[10px] text-muted-foreground font-medium">
