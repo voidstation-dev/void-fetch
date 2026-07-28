@@ -66,8 +66,10 @@ const insertToken = (
 };
 
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 export function JobConfigDrawer() {
+  const t = useTranslations("batchWorkspace.configDrawer");
   const store = useBatchStore();
   const activeJobId = store.activeJobDrawerId;
   const isBulk = activeJobId === "bulk";
@@ -213,8 +215,8 @@ export function JobConfigDrawer() {
   return (
     <Dialog open={Boolean(activeJobId)} onOpenChange={(open) => !open && handleCloseDrawer()}>
       <DialogContent showCloseButton={false} className="sm:max-w-[560px] bg-card/95 border border-border/80 rounded-2xl shadow-2xl flex flex-col p-6 text-foreground max-h-[90vh] overflow-hidden backdrop-blur-2xl">
-        <DialogTitle className="sr-only">{isBulk ? "BULK CONFIGURATION" : "CONFIGURE DOWNLOAD"}</DialogTitle>
-        <DialogDescription className="sr-only">Download settings and parameters</DialogDescription>
+        <DialogTitle className="sr-only">{isBulk ? t("titleBulk") : t("titleSingle")}</DialogTitle>
+        <DialogDescription className="sr-only">{t("subtitle")}</DialogDescription>
         {/* Glow Ambient Line Top */}
         <div className="absolute -top-px inset-x-8 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
 
@@ -226,11 +228,10 @@ export function JobConfigDrawer() {
             </div>
             <div>
               <span className="font-bold text-sm tracking-wide text-foreground">
-                {isBulk ? "BULK CONFIGURATION" : "CONFIGURE DOWNLOAD"}
+                {isBulk ? t("titleBulk") : t("titleSingle")}
               </span>
               <p className="text-[10px] text-muted-foreground">
-                Customize output format, quality stream, and metadata
-                preferences
+                {t("subtitle")}
               </p>
             </div>
           </div>
@@ -312,7 +313,7 @@ export function JobConfigDrawer() {
           <div className="flex flex-col gap-2">
             <Label className="text-[11px] font-bold text-foreground/80 uppercase tracking-wider flex items-center gap-1.5">
               <Sliders className="h-3.5 w-3.5 text-primary" />
-              Output Format
+              {t("outputFormat")}
             </Label>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -350,11 +351,11 @@ export function JobConfigDrawer() {
             <div className="flex flex-col gap-2">
               <Label className="text-[11px] font-bold text-foreground/80 uppercase tracking-wider flex items-center gap-1.5">
                 <Sparkles className="h-3.5 w-3.5 text-amber-500" />
-                Video Quality Stream
+                {t("videoQuality")}
               </Label>
               <Select value={quality} onValueChange={(val) => setQuality(val)}>
                 <SelectTrigger className="h-9 text-xs">
-                  <SelectValue placeholder="Select video quality" />
+                  <SelectValue placeholder={t("selectVideoQuality")} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="best">Best Available</SelectItem>
@@ -370,8 +371,7 @@ export function JobConfigDrawer() {
                 <div className="flex items-center gap-1.5 p-2 rounded-lg bg-amber-500/10 border border-amber-500/20 text-[10px] text-amber-500 font-medium">
                   <Info className="h-3.5 w-3.5 shrink-0" />
                   <span>
-                    Note: If the source video does not support 4K/2K, system
-                    will automatically download the highest quality available.
+                    {t("qualityNote")}
                   </span>
                 </div>
               )}
@@ -382,7 +382,7 @@ export function JobConfigDrawer() {
             <div className="flex flex-col gap-2">
               <Label className="text-[11px] font-bold text-foreground/80 uppercase tracking-wider flex items-center gap-1.5">
                 <Music className="h-3.5 w-3.5 text-emerald-500" />
-                Audio Bitrate Quality
+                {t("audioQuality")}
               </Label>
               <Select
                 value={
@@ -395,7 +395,7 @@ export function JobConfigDrawer() {
                 onValueChange={(val) => setQuality(val)}
               >
                 <SelectTrigger className="h-9 text-xs">
-                  <SelectValue placeholder="Select audio quality" />
+                  <SelectValue placeholder={t("selectAudioQuality")} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="best">
@@ -421,10 +421,10 @@ export function JobConfigDrawer() {
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
               <Label className="text-[11px] font-bold text-foreground/80 uppercase tracking-wider">
-                {isBulk ? "Filename Template" : "Output Filename"}
+                {isBulk ? t("filenameTemplate") : t("outputFilename")}
               </Label>
               <span className="text-[9px] text-muted-foreground">
-                Click variable token to insert
+                {t("clickTokenHint")}
               </span>
             </div>
             <Input
@@ -454,7 +454,7 @@ export function JobConfigDrawer() {
           {outputType === "mp4" && (
             <div className="flex flex-col gap-1.5">
               <Label className="text-[11px] font-bold text-foreground/80 uppercase tracking-wider">
-                HLS Segment Concurrency
+                {t("hlsConcurrency")}
               </Label>
               <Select
                 value={segmentConcurrency}
@@ -480,7 +480,7 @@ export function JobConfigDrawer() {
           {/* Sleek Toggle Switch Cards (Advanced Options) */}
           <div className="flex flex-col gap-2.5 pt-2 border-t border-border/40">
             <Label className="text-[11px] font-bold text-foreground/80 uppercase tracking-wider">
-              Advanced Options
+              {t("advancedOptions")}
             </Label>
 
             <div className="flex flex-col gap-2">
@@ -488,7 +488,7 @@ export function JobConfigDrawer() {
                 <div className="flex items-center gap-2">
                   <ImageIcon className="h-3.5 w-3.5 text-amber-500" />
                   <span className="text-xs font-medium text-foreground">
-                    Download thumbnail / cover image
+                    {t("downloadThumbnail")}
                   </span>
                 </div>
                 <input
@@ -503,7 +503,7 @@ export function JobConfigDrawer() {
                 <div className="flex items-center gap-2">
                   <FileCode className="h-3.5 w-3.5 text-emerald-500" />
                   <span className="text-xs font-medium text-foreground">
-                    Save metadata JSON alongside media
+                    {t("saveMetadataJson")}
                   </span>
                 </div>
                 <input
@@ -519,7 +519,7 @@ export function JobConfigDrawer() {
                   <div className="flex items-center gap-2">
                     <Music className="h-3.5 w-3.5 text-primary" />
                     <span className="text-xs font-medium text-foreground">
-                      Force audio extraction (MP3)
+                      {t("forceAudioExtraction")}
                     </span>
                   </div>
                   <input
@@ -545,7 +545,7 @@ export function JobConfigDrawer() {
                 className="h-10 text-xs font-bold gap-1.5 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 shadow-md shadow-primary/20"
               >
                 <CheckSquare className="h-4 w-4" />
-                Apply Checked ({store.selectedJobIds.length})
+                {t("applyChecked", { count: store.selectedJobIds.length })}
               </Button>
               <Button
                 type="button"
@@ -553,7 +553,7 @@ export function JobConfigDrawer() {
                 onClick={handleApplyToAll}
                 className="h-10 text-xs font-semibold rounded-xl"
               >
-                Apply All ({store.jobs.length})
+                {t("applyAll", { count: store.jobs.length })}
               </Button>
             </div>
           ) : (
@@ -562,7 +562,7 @@ export function JobConfigDrawer() {
               onClick={handleSave}
               className="h-10 text-xs font-bold rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/25 transition-all duration-300 transform active:scale-98"
             >
-              Save Configuration
+              {t("saveConfig")}
             </Button>
           )}
         </div>

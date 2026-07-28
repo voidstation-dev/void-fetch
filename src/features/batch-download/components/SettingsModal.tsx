@@ -40,15 +40,15 @@ import {
   clearActiveDirectoryHandle,
 } from "@/lib/directory-picker";
 
-import { cn } from "@/lib/utils";
 import type { OutputType } from "../types/batch-download";
+import { useTranslations } from "next-intl";
 
 export function SettingsModal() {
+  const t = useTranslations("batchWorkspace.settingsModal");
   const store = useBatchStore();
   const isOpen = store.isSettingsOpen;
   const settings = store.settings;
 
-  const [isClosing, setIsClosing] = React.useState(false);
   const [customDirName, setCustomDirName] = React.useState<string | null>(
     getActiveDirectoryName(),
   );
@@ -56,11 +56,7 @@ export function SettingsModal() {
   if (!isOpen) return null;
 
   const handleClose = () => {
-    setIsClosing(true);
-    setTimeout(() => {
-      store.setIsSettingsOpen(false);
-      setIsClosing(false);
-    }, 200);
+    store.setIsSettingsOpen(false);
   };
 
   const handleUpdate = (newSettings: Partial<typeof settings>) => {
@@ -91,8 +87,8 @@ export function SettingsModal() {
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
       <DialogContent showCloseButton={false} className="sm:max-w-xl w-[calc(100vw-2rem)] max-h-[85vh] overflow-x-hidden overflow-y-auto p-6 rounded-2xl border border-border/80 bg-card shadow-2xl backdrop-blur-xl transition-all duration-200">
-        <DialogTitle className="sr-only">Workspace Preferences</DialogTitle>
-        <DialogDescription className="sr-only">Configure global download defaults and network concurrency</DialogDescription>
+        <DialogTitle className="sr-only">{t("title")}</DialogTitle>
+        <DialogDescription className="sr-only">{t("description")}</DialogDescription>
         {/* Glow Ambient Line Top */}
         <div className="absolute -top-px inset-x-8 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
 
@@ -104,10 +100,10 @@ export function SettingsModal() {
             </div>
             <div>
               <h2 className="text-base font-bold text-foreground">
-                Workspace Preferences
+                {t("title")}
               </h2>
               <p className="text-[11px] text-muted-foreground">
-                Configure global download defaults & network concurrency
+                {t("description")}
               </p>
             </div>
           </div>
@@ -127,13 +123,13 @@ export function SettingsModal() {
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground/90 uppercase tracking-wider">
               <Sliders className="h-3.5 w-3.5 text-primary" />
-              <span>Default Output & Quality</span>
+              <span>{t("defaultOutputAndQuality")}</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="flex flex-col gap-1.5">
                 <Label className="text-[11px] text-muted-foreground">
-                  Default Format
+                  {t("defaultFormat")}
                 </Label>
                 <Select
                   value={settings.defaultOutputType}
@@ -157,7 +153,7 @@ export function SettingsModal() {
 
               <div className="flex flex-col gap-1.5">
                 <Label className="text-[11px] text-muted-foreground">
-                  Default Quality
+                  {t("defaultQuality")}
                 </Label>
                 <Select
                   value={settings.defaultQuality}
@@ -182,7 +178,7 @@ export function SettingsModal() {
           <div className="flex flex-col gap-3 pt-2 border-t border-border/40">
             <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground/90 uppercase tracking-wider">
               <Folder className="h-3.5 w-3.5 text-primary" />
-              <span>Download Directory Path</span>
+              <span>{t("downloadDirectoryPath")}</span>
             </div>
 
             <div className="flex flex-col gap-2 p-3.5 rounded-xl border border-border/60 bg-muted/20 backdrop-blur-md">
@@ -194,13 +190,13 @@ export function SettingsModal() {
                   <div className="flex flex-col min-w-0">
                     <span className="text-xs font-bold text-foreground truncate">
                       {customDirName
-                        ? `📁 Custom: ${customDirName}`
-                        : "Browser Default (Downloads Folder)"}
+                        ? t("customFolder", { name: customDirName })
+                        : t("browserDefault")}
                     </span>
                     <span className="text-[10px] text-muted-foreground truncate">
                       {customDirName
-                        ? "Files will be saved directly into this folder handle"
-                        : "Files are automatically saved directly to your Downloads folder"}
+                        ? t("customFolderDesc")
+                        : t("browserDefaultDesc")}
                     </span>
                   </div>
                 </div>
@@ -214,7 +210,7 @@ export function SettingsModal() {
                       className="h-8 text-xs px-2.5 rounded-lg text-muted-foreground hover:text-destructive"
                       title="Reset to default Downloads folder"
                     >
-                      Reset Default
+                      {t("resetDefault")}
                     </Button>
                   ) : null}
                   <Button
@@ -224,19 +220,13 @@ export function SettingsModal() {
                     className="h-8 text-xs gap-1.5 px-3 rounded-lg border-primary/40 bg-primary/10 text-primary font-bold hover:bg-primary/20"
                   >
                     <FolderSync className="h-3.5 w-3.5" />
-                    {customDirName ? "Change Folder" : "Select Custom Folder"}
+                    {customDirName ? t("changeFolder") : t("selectCustomFolder")}
                   </Button>
                 </div>
               </div>
 
               <span className="text-[10px] text-muted-foreground/80 leading-tight pt-1 border-t border-border/30">
-                💡 <strong>Tip:</strong> Browser security blocks picking the
-                root Downloads folder directly. To organize inside Downloads,
-                create or pick a subfolder (e.g.{" "}
-                <code className="bg-background px-1 py-0.5 rounded text-primary font-mono">
-                  Downloads/VoidFetch
-                </code>
-                ).
+                {t("directoryTip")}
               </span>
             </div>
           </div>
@@ -245,13 +235,13 @@ export function SettingsModal() {
           <div className="flex flex-col gap-3 pt-2 border-t border-border/40">
             <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground/90 uppercase tracking-wider">
               <Sparkles className="h-3.5 w-3.5 text-amber-500" />
-              <span>Network Concurrency</span>
+              <span>{t("networkConcurrency")}</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="flex flex-col gap-1.5">
                 <Label className="text-[11px] text-muted-foreground">
-                  Concurrent Jobs
+                  {t("concurrentJobs")}
                 </Label>
                 <Select
                   value={String(settings.downloadConcurrency)}
@@ -275,7 +265,7 @@ export function SettingsModal() {
 
               <div className="flex flex-col gap-1.5">
                 <Label className="text-[11px] text-muted-foreground">
-                  HLS Segment Concurrency
+                  {t("hlsSegmentConcurrency")}
                 </Label>
                 <Select
                   value={String(settings.globalNetworkBudget)}
@@ -335,7 +325,7 @@ export function SettingsModal() {
             onClick={handleClose}
             className="h-9 px-5 text-xs font-semibold rounded-xl bg-primary text-primary-foreground hover:bg-primary/90"
           >
-            Done
+            {t("savePreferences")}
           </Button>
         </div>
       </DialogContent>

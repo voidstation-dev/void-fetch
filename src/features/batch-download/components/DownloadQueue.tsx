@@ -23,8 +23,10 @@ import type { DownloadJob } from "../types/batch-download";
 import { downloadScheduler } from "../services/download-scheduler";
 import { formatBytes } from "@/lib/utils";
 import { ExpandableJobCard } from "./ExpandableJobCard";
+import { useTranslations } from "next-intl";
 
 export function DownloadQueue() {
+  const t = useTranslations("batchWorkspace.queue");
   const jobs = useBatchStore((s) => s.jobs);
   const searchQuery = useBatchStore((s) => s.searchQuery);
   const statusFilter = useBatchStore((s) => s.statusFilter);
@@ -103,33 +105,26 @@ export function DownloadQueue() {
         {/* Text Area */}
         <div className="flex flex-col items-center gap-2 max-w-md z-10">
           <h3 className="text-base font-extrabold text-foreground tracking-wide flex items-center gap-2">
-            <span>Empty Downloader Workspace</span>
+            <span>{t("emptyTitle")}</span>
             <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-bold uppercase">
-              Ready
+              {t("emptyBadge")}
             </span>
           </h3>
           <p className="text-xs text-muted-foreground leading-relaxed">
-            Paste video URLs (
-            <span className="text-foreground font-medium">
-              YouTube, TikTok, Douyin, SoundCloud...
-            </span>
-            ) or import a text file above to start batch downloading.
+            {t("emptyDescription")}
           </p>
         </div>
 
         {/* Feature Highlights Pills */}
         <div className="flex flex-wrap items-center justify-center gap-2 z-10 pt-2 border-t border-border/40">
           <span className="px-3 py-1 rounded-full bg-muted/30 border border-border/60 text-[10px] font-medium text-muted-foreground flex items-center gap-1.5 shadow-2xs">
-            <Sparkles className="h-3 w-3 text-emerald-500" /> Multi-Threaded
-            Engine
+            <Sparkles className="h-3 w-3 text-emerald-500" /> {t("multiThreaded")}
           </span>
           <span className="px-3 py-1 rounded-full bg-muted/30 border border-border/60 text-[10px] font-medium text-muted-foreground flex items-center gap-1.5 shadow-2xs">
-            <Sparkles className="h-3 w-3 text-cyan-400" /> Audio Stream
-            Extraction
+            <Sparkles className="h-3 w-3 text-cyan-400" /> {t("audioExtraction")}
           </span>
           <span className="px-3 py-1 rounded-full bg-muted/30 border border-border/60 text-[10px] font-medium text-muted-foreground flex items-center gap-1.5 shadow-2xs">
-            <Sparkles className="h-3 w-3 text-purple-400" /> Up to 4K / 60FPS
-            Video
+            <Sparkles className="h-3 w-3 text-purple-400" /> {t("upTo4k")}
           </span>
         </div>
       </div>
@@ -142,8 +137,9 @@ export function DownloadQueue() {
       {selectedJobIds.length > 0 && (
         <div className="flex items-center justify-between p-3.5 border rounded-2xl bg-primary/10 border-primary/25 backdrop-blur-md animate-in fade-in duration-200 shadow-md">
           <span className="text-xs font-bold text-primary">
-            {selectedJobIds.length} item
-            {selectedJobIds.length > 1 ? "s" : ""} selected
+            {selectedJobIds.length > 1
+              ? t("itemsSelectedPlural", { count: selectedJobIds.length })
+              : t("itemsSelectedSingle", { count: selectedJobIds.length })}
           </span>
           <div className="flex gap-2">
             <Button
@@ -154,7 +150,7 @@ export function DownloadQueue() {
               className="h-8 text-xs gap-1.5 px-3 rounded-xl bg-card border-primary/30 text-primary font-semibold hover:bg-primary/10"
             >
               <Settings className="h-3.5 w-3.5" />
-              Bulk Configure
+              {t("bulkConfigure")}
             </Button>
             <Button
               type="button"
@@ -164,7 +160,7 @@ export function DownloadQueue() {
               className="h-8 text-xs gap-1.5 px-3 rounded-xl bg-card text-destructive border-destructive/30 hover:bg-destructive/10 hover:text-destructive"
             >
               <Trash2 className="h-3.5 w-3.5" />
-              Remove Selected
+              {t("removeSelected")}
             </Button>
           </div>
         </div>
@@ -180,9 +176,9 @@ export function DownloadQueue() {
             className="h-4 w-4 rounded border-borderAccent text-primary focus:ring-0 cursor-pointer"
           />
           <span className="text-xs font-bold text-foreground flex items-center gap-1.5">
-            <span>Select All Queue Items</span>
+            <span>{t("selectAll")}</span>
             <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-bold">
-              {filteredJobs.length} Items
+              {t("itemsCount", { count: filteredJobs.length })}
             </span>
           </span>
         </div>
@@ -197,7 +193,7 @@ export function DownloadQueue() {
               className="h-7 text-xs gap-1.5 px-3 rounded-xl bg-card border-primary/30 text-primary font-semibold hover:bg-primary/10 shadow-2xs"
             >
               <Settings className="h-3.5 w-3.5" />
-              Bulk Configure ({selectedJobIds.length})
+              {t("bulkConfigureCount", { count: selectedJobIds.length })}
             </Button>
             <Button
               type="button"
@@ -207,7 +203,7 @@ export function DownloadQueue() {
               className="h-7 text-xs gap-1.5 px-3 rounded-xl bg-card text-destructive border-destructive/30 hover:bg-destructive/10 hover:text-destructive shadow-2xs"
             >
               <Trash2 className="h-3.5 w-3.5" />
-              Remove Selected
+              {t("removeSelected")}
             </Button>
           </div>
         )}
@@ -226,7 +222,7 @@ export function DownloadQueue() {
           ))
         ) : (
           <div className="p-8 text-center text-xs text-muted-foreground border border-dashed rounded-2xl border-border/70 bg-card/40">
-            No jobs match the active search or filters.
+            {t("noMatchingJobs")}
           </div>
         )}
       </div>

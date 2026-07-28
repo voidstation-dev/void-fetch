@@ -26,8 +26,10 @@ import { useBatchStore } from '../store/batch-store';
 import { parseJobs } from '../services/parse-worker-pool';
 
 import { SpotlightCard } from '@/components/ui/spotlight-card';
+import { useTranslations } from 'next-intl';
 
 export function BatchToolbar() {
+  const t = useTranslations('batchWorkspace.toolbar');
   const store = useBatchStore();
   
   // Extract unique platforms from active jobs
@@ -54,7 +56,7 @@ export function BatchToolbar() {
         <div className="relative w-full md:w-80">
           <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search title or URL..."
+            placeholder={t('searchPlaceholder')}
             value={store.searchQuery}
             onChange={(e) => store.setSearchQuery(e.target.value)}
             className="pl-9 h-9 text-xs rounded-xl bg-background/50 border-border/80 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all shadow-inner"
@@ -68,21 +70,21 @@ export function BatchToolbar() {
             onValueChange={(val) => store.setStatusFilter(val)}
           >
             <SelectTrigger className="w-full md:w-[140px] h-9 text-xs rounded-xl bg-background/50 border-border/80 shadow-2xs">
-              <SelectValue placeholder="All Status" />
+              <SelectValue placeholder={t('allStatus')} />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
-              <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="draft">Draft</SelectItem>
-              <SelectItem value="parsing">Parsing</SelectItem>
-              <SelectItem value="ready">Ready</SelectItem>
-              <SelectItem value="queued">Queued</SelectItem>
-              <SelectItem value="downloading">Downloading</SelectItem>
-              <SelectItem value="processing">Processing</SelectItem>
-              <SelectItem value="saving">Saving</SelectItem>
-              <SelectItem value="paused">Paused</SelectItem>
-              <SelectItem value="completed">Completed</SelectItem>
-              <SelectItem value="failed">Failed</SelectItem>
-              <SelectItem value="cancelled">Cancelled</SelectItem>
+              <SelectItem value="all">{t('status.all')}</SelectItem>
+              <SelectItem value="draft">{t('status.draft')}</SelectItem>
+              <SelectItem value="parsing">{t('status.parsing')}</SelectItem>
+              <SelectItem value="ready">{t('status.ready')}</SelectItem>
+              <SelectItem value="queued">{t('status.queued')}</SelectItem>
+              <SelectItem value="downloading">{t('status.downloading')}</SelectItem>
+              <SelectItem value="processing">{t('status.processing')}</SelectItem>
+              <SelectItem value="saving">{t('status.saving')}</SelectItem>
+              <SelectItem value="paused">{t('status.paused')}</SelectItem>
+              <SelectItem value="completed">{t('status.completed')}</SelectItem>
+              <SelectItem value="failed">{t('status.failed')}</SelectItem>
+              <SelectItem value="cancelled">{t('status.cancelled')}</SelectItem>
             </SelectContent>
           </Select>
 
@@ -92,10 +94,10 @@ export function BatchToolbar() {
             onValueChange={(val) => store.setPlatformFilter(val)}
           >
             <SelectTrigger className="w-full md:w-[140px] h-9 text-xs capitalize rounded-xl bg-background/50 border-border/80 shadow-2xs">
-              <SelectValue placeholder="All Platforms" />
+              <SelectValue placeholder={t('allPlatforms')} />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
-              <SelectItem value="all">All Platforms</SelectItem>
+              <SelectItem value="all">{t('allPlatforms')}</SelectItem>
               {platforms.map((p) => (
                 <SelectItem key={p} value={p} className="capitalize">
                   {p}
@@ -117,7 +119,7 @@ export function BatchToolbar() {
           className="h-9 text-xs gap-1.5 px-3.5 rounded-xl border-border/60 bg-muted/30 hover:bg-muted/80 shadow-2xs"
         >
           <RefreshCw className="h-3.5 w-3.5 text-primary" />
-          Parse All ({draftOrFailedCount})
+          {t('parseAll', { count: draftOrFailedCount })}
         </Button>
 
         <div className="h-4 w-[1px] bg-border/80 mx-1 hidden sm:block" />
@@ -131,7 +133,7 @@ export function BatchToolbar() {
             className="h-9 text-xs gap-1.5 px-4 rounded-xl border-amber-500/40 text-amber-600 dark:text-amber-400 bg-amber-500/5 hover:bg-amber-500/15 font-semibold transition-all"
           >
             <Pause className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
-            Pause Queue
+            {t('pauseQueue')}
           </Button>
         ) : (
           <Button
@@ -142,7 +144,7 @@ export function BatchToolbar() {
             className="h-9 text-xs gap-1.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl shadow-md shadow-emerald-600/25 hover:shadow-lg hover:shadow-emerald-500/40 border-0 transition-all duration-200 transform active:scale-98 cursor-pointer disabled:opacity-50"
           >
             <Play className="h-3.5 w-3.5 text-white fill-white" />
-            Start Queue
+            {t('startQueue')}
           </Button>
         )}
 
@@ -155,7 +157,7 @@ export function BatchToolbar() {
           className="h-9 text-xs gap-1.5 px-3.5 rounded-xl border-amber-500/40 text-amber-600 dark:text-amber-400 bg-amber-500/5 hover:bg-amber-500/15 font-medium transition-all"
         >
           <RotateCcw className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
-          Retry Failed
+          {t('retryFailed')}
         </Button>
 
         <Button
@@ -167,7 +169,7 @@ export function BatchToolbar() {
           className="h-9 text-xs gap-1.5 px-3.5 rounded-xl ml-auto text-rose-600 dark:text-rose-400 border-rose-500/30 bg-rose-500/5 hover:bg-rose-500/15 hover:border-rose-500/50 transition-all"
         >
           <Trash2 className="h-3.5 w-3.5" />
-          Clear Completed ({completedCount})
+          {t('clearCompleted', { count: completedCount })}
         </Button>
       </div>
     </SpotlightCard>

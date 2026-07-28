@@ -9,8 +9,10 @@ import { useBatchStore } from '../store/batch-store';
 import { Progress } from '@/components/ui/progress';
 import { formatBytes } from '@/lib/utils';
 import { Layers, Activity, CheckCircle2, AlertTriangle, Clock } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export function BatchProgressBar() {
+  const t = useTranslations('batchWorkspace.progress');
   const store = useBatchStore();
   const jobs = store.jobs;
   
@@ -71,24 +73,24 @@ export function BatchProgressBar() {
         <div className="flex flex-wrap gap-2.5 items-center justify-center md:justify-start">
           <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-muted/40 border border-border/50 text-foreground font-semibold" title="Total jobs">
             <Layers className="h-3.5 w-3.5 text-muted-foreground" />
-            <span>{total} items</span>
+            <span>{t('totalItems', { count: total })}</span>
           </div>
           <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-primary/10 border border-primary/20 text-primary font-semibold" title="Active downloads">
             <Activity className="h-3.5 w-3.5 animate-pulse" />
-            <span>{downloading} running</span>
+            <span>{t('running', { count: downloading })}</span>
           </div>
           <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-500 font-semibold" title="Queued downloads">
             <Clock className="h-3.5 w-3.5" />
-            <span>{queued} queued</span>
+            <span>{t('queued', { count: queued })}</span>
           </div>
           <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 font-semibold" title="Completed downloads">
             <CheckCircle2 className="h-3.5 w-3.5" />
-            <span>{completed} completed</span>
+            <span>{t('completed', { count: completed })}</span>
           </div>
           {failed > 0 && (
             <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive font-semibold" title="Failed downloads">
               <AlertTriangle className="h-3.5 w-3.5 animate-bounce-slow" />
-              <span>{failed} failed</span>
+              <span>{t('failed', { count: failed })}</span>
             </div>
           )}
         </div>
@@ -104,19 +106,19 @@ export function BatchProgressBar() {
           {totalSpeed > 0 ? (
             <>
               <div className="flex flex-col items-end">
-                <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-wider">Speed</span>
+                <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-wider">{t('speed')}</span>
                 <span className="font-bold text-primary font-mono text-xs">{formatSpeed(totalSpeed)}</span>
               </div>
               {totalEtaSeconds ? (
                 <div className="flex flex-col items-end border-l pl-3 border-border/60">
-                  <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-wider">ETA</span>
+                  <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-wider">{t('eta')}</span>
                   <span className="font-bold text-foreground font-mono text-xs">{formatEta(totalEtaSeconds)}</span>
                 </div>
               ) : null}
             </>
           ) : (
             <div className="px-3 py-1 rounded-xl bg-muted/30 border border-border/50 text-[10px] uppercase font-bold text-muted-foreground tracking-wider">
-              {downloading > 0 ? 'QUEUE ACTIVE' : 'QUEUE IDLE'}
+              {downloading > 0 ? t('queueActive') : t('queueIdle')}
             </div>
           )}
         </div>

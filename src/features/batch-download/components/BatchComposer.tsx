@@ -16,7 +16,10 @@ import { PlatformMarquee } from "@/components/downloader/PlatformMarquee";
 import { SpotlightCard } from "@/components/ui/spotlight-card";
 import { SupportedPlatformsModal } from "@/components/downloader/SupportedPlatformsModal";
 
+import { useTranslations } from "next-intl";
+
 export function BatchComposer() {
+  const t = useTranslations("batchWorkspace.composer");
   const [inputText, setInputText] = useState("");
   const [dragActive, setDragActive] = useState(false);
   const [platformsModalOpen, setPlatformsModalOpen] = useState(false);
@@ -176,18 +179,18 @@ export function BatchComposer() {
             </div>
             <div>
               <label className="text-xs font-bold text-foreground/90 tracking-wider uppercase block">
-                BATCH URL COMPOSER
+                {t("title")}
               </label>
               <span className="text-[10px] text-muted-foreground">
-                Paste video links from{' '}
+                {t("subtitlePrefix")}{' '}
                 <button
                   type="button"
                   onClick={() => setPlatformsModalOpen(true)}
                   className="inline-flex items-center gap-0.5 text-primary hover:underline font-semibold cursor-pointer"
                 >
-                  25+ supported platforms
+                  {t("platformsLink")}
                 </button>{' '}
-                or import a file
+                {t("subtitleSuffix")}
               </span>
             </div>
           </div>
@@ -201,7 +204,7 @@ export function BatchComposer() {
               onClick={handlePaste}
             >
               <Clipboard className="h-3.5 w-3.5 text-primary" />
-              Paste Clipboard
+              {t("pasteClipboard")}
             </Button>
             <Button
               type="button"
@@ -211,7 +214,7 @@ export function BatchComposer() {
               onClick={() => fileInputRef.current?.click()}
             >
               <Upload className="h-3.5 w-3.5 text-emerald-500" />
-              Import File
+              {t("importFile")}
             </Button>
             <input
               type="file"
@@ -228,7 +231,7 @@ export function BatchComposer() {
           <Textarea
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
-            placeholder="Paste multiple URLs here (one per line, or raw text with embedded links)..."
+            placeholder={t("placeholder")}
             className="min-h-[110px] max-h-[300px] font-mono text-xs resize-y bg-background/50 border-border/80 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all rounded-xl p-3 shadow-inner"
           />
 
@@ -236,8 +239,8 @@ export function BatchComposer() {
           {validDetectedCount > 0 && (
             <div className="absolute bottom-2.5 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 text-[10px] font-semibold backdrop-blur-md animate-in fade-in duration-200">
               <CheckCircle2 className="h-3 w-3" />
-              <span>{validDetectedCount} New Link{validDetectedCount > 1 ? 's' : ''} Detected</span>
-              {duplicateCount > 0 && <span className="opacity-75 font-normal">({duplicateCount} dupes)</span>}
+              <span>{validDetectedCount > 1 ? t("detectedPlural", { count: validDetectedCount }) : t("detectedSingle", { count: validDetectedCount })}</span>
+              {duplicateCount > 0 && <span className="opacity-75 font-normal">{t("dupesCount", { count: duplicateCount })}</span>}
             </div>
           )}
 
@@ -245,7 +248,7 @@ export function BatchComposer() {
             <div className="absolute inset-0 rounded-xl bg-background/90 backdrop-blur-md flex flex-col items-center justify-center border-2 border-dashed border-primary gap-2 z-20">
               <FileText className="h-8 w-8 text-primary animate-pulse" />
               <span className="text-sm font-bold text-primary">
-                Drop text or CSV file here to import links
+                {t("dropFileHint")}
               </span>
             </div>
           )}
@@ -258,11 +261,11 @@ export function BatchComposer() {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-2 py-2 px-3.5 rounded-xl border border-amber-500/25 bg-amber-500/5 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 text-[11px] font-medium shadow-2xs">
           <div className="flex items-center gap-2">
             <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-amber-500" />
-            <span>Copyrighted, paid, or member-only restricted content is not supported.</span>
+            <span>{t("copyrightWarning")}</span>
           </div>
           <div className="flex items-center gap-1.5 text-muted-foreground/80 text-[10px] shrink-0">
             <MessageSquare className="h-3 w-3 text-muted-foreground/60" />
-            <span>Feedback? Click &quot;Feedback&quot; in top-right.</span>
+            <span>{t("feedbackHint")}</span>
           </div>
         </div>
 
@@ -270,7 +273,7 @@ export function BatchComposer() {
         <div className="flex items-center justify-between pt-1 border-t border-border/40">
           <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
             <Link2 className="h-3 w-3 text-muted-foreground/60" />
-            <span>Supported: YouTube, TikTok, Douyin, Bilibili, SoundCloud & 20+ more</span>
+            <span>{t("supportedPlatformsBar")}</span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -283,7 +286,7 @@ export function BatchComposer() {
                 className="h-9 px-3 text-xs gap-1.5 rounded-xl text-muted-foreground hover:text-foreground"
               >
                 <Trash2 className="h-3.5 w-3.5" />
-                Clear
+                {t("clear")}
               </Button>
             )}
             <Button
@@ -293,7 +296,7 @@ export function BatchComposer() {
               className="h-10 px-5 text-xs font-bold gap-2 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 transition-all duration-300 transform active:scale-98 border-0"
             >
               <Plus className="h-4 w-4" />
-              {validDetectedCount > 0 ? `Add ${validDetectedCount} URLs to Queue` : 'Add URLs to Queue'}
+              {validDetectedCount > 0 ? t("addUrlsCount", { count: validDetectedCount }) : t("addUrls")}
             </Button>
           </div>
         </div>
