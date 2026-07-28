@@ -7,13 +7,22 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import dynamic from "next/dynamic";
 import { BatchComposer } from "./BatchComposer";
 import { BatchToolbar } from "./BatchToolbar";
 import { DownloadQueue } from "./DownloadQueue";
-import { JobConfigDrawer } from "./JobConfigDrawer";
 import { BatchProgressBar } from "./BatchProgressBar";
-import { SettingsModal } from "./SettingsModal";
 import { QueuePreferencesButton } from "./QueuePreferencesButton";
+
+const JobConfigDrawer = dynamic(
+  () => import("./JobConfigDrawer").then((m) => m.JobConfigDrawer),
+  { ssr: false }
+);
+
+const SettingsModal = dynamic(
+  () => import("./SettingsModal").then((m) => m.SettingsModal),
+  { ssr: false }
+);
 
 const emptySubscribe = () => () => { };
 

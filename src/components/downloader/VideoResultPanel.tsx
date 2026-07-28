@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 
 import type { AudioExtractTask } from '@/components/audio-tool/types';
 import { DeferredHlsDownloadDialog } from '@/components/deferred-hls-download-dialog';
@@ -129,27 +129,67 @@ export function VideoResultPanel({
         setActiveBiliListState({ key: activeListKey, value });
     };
 
-    const displayImages = resolveResultDisplayImages({
-        noteType: result.noteType,
-        images: result.images,
-        coverUrl: result.cover,
-    });
-    const isMultiPart = result.isMultiPart && result.pages && result.pages.length > 1;
-    const isImageNote = result.noteType === 'image' && displayImages.length > 0;
-    const hasEmbeddedVideos = !!result.videos?.length;
-    const hasSeasonAlternative = (result.videos?.length || 0) > 1;
-    const hasBilibiliSourceSwitch =
-        (result.platform === 'bili' || result.platform === 'bilibili') &&
-        Boolean(isMultiPart) &&
-        hasSeasonAlternative;
-    const pageTabLabel = tResult('totalParts', { count: result.pages?.length || 0 });
-    const seasonTabLabel = tResult('videoCount', { count: result.videos?.length || 0 });
-    const showMultiPartList = Boolean(isMultiPart) && (!hasBilibiliSourceSwitch || activeBiliList === 'pages');
-    const showSeasonList = hasEmbeddedVideos && (!isMultiPart || (hasBilibiliSourceSwitch && activeBiliList === 'season'));
-    const hasSupplementalImages = !isImageNote && displayImages.length > 0;
-    const coverUrl = typeof result.cover === 'string' ? result.cover.trim() : '';
-    const shareSourceUrl = typeof result.url === 'string' ? result.url.trim() : '';
-    const canSharePlayLink = shareSourceUrl.length > 0 && canSharePlayResult(result);
+    const derived = useMemo(() => {
+        const displayImages = resolveResultDisplayImages({
+            noteType: result.noteType,
+            images: result.images,
+            coverUrl: result.cover,
+        });
+        const isMultiPart = Boolean(result.isMultiPart && result.pages && result.pages.length > 1);
+        const isImageNote = result.noteType === 'image' && displayImages.length > 0;
+        const hasEmbeddedVideos = Boolean(result.videos?.length);
+        const hasSeasonAlternative = (result.videos?.length || 0) > 1;
+        const hasBilibiliSourceSwitch =
+            (result.platform === 'bili' || result.platform === 'bilibili') &&
+            isMultiPart &&
+            hasSeasonAlternative;
+        const pageTabLabel = tResult('totalParts', { count: result.pages?.length || 0 });
+        const seasonTabLabel = tResult('videoCount', { count: result.videos?.length || 0 });
+        const showMultiPartList = isMultiPart && (!hasBilibiliSourceSwitch || activeBiliList === 'pages');
+        const showSeasonList = hasEmbeddedVideos && (!isMultiPart || (hasBilibiliSourceSwitch && activeBiliList === 'season'));
+        const hasSupplementalImages = !isImageNote && displayImages.length > 0;
+        const coverUrl = typeof result.cover === 'string' ? result.cover.trim() : '';
+        const shareSourceUrl = typeof result.url === 'string' ? result.url.trim() : '';
+        const canSharePlayLink = shareSourceUrl.length > 0 && canSharePlayResult(result);
+
+        return {
+            displayImages,
+            isMultiPart,
+            isImageNote,
+            hasEmbeddedVideos,
+            hasSeasonAlternative,
+            hasBilibiliSourceSwitch,
+            pageTabLabel,
+            seasonTabLabel,
+            showMultiPartList,
+            showSeasonList,
+            hasSupplementalImages,
+            coverUrl,
+            shareSourceUrl,
+            canSharePlayLink,
+        };
+    }, [
+        result,
+        activeBiliList,
+        tResult,
+    ]);
+
+    const {
+        displayImages,
+        isMultiPart,
+        isImageNote,
+        hasEmbeddedVideos,
+        hasSeasonAlternative,
+        hasBilibiliSourceSwitch,
+        pageTabLabel,
+        seasonTabLabel,
+        showMultiPartList,
+        showSeasonList,
+        hasSupplementalImages,
+        coverUrl,
+        shareSourceUrl,
+        canSharePlayLink,
+    } = derived;
     const selectedPageNumber = selectionState.key === activeListKey ? selectionState.currentPage : result.currentPage;
     const selectedItemId = selectionState.key === activeListKey ? selectionState.currentItemId : result.currentItemId;
     const currentPage = resolveSelectedPage(result, selectedPageNumber);

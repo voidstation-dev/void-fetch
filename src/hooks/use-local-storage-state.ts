@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useSyncExternalStore } from 'react';
 
 type SetValue<T> = T | ((prev: T) => T);
 
@@ -8,44 +8,56 @@ interface UseLocalStorageStateOptions<T> {
   defaultValue: T;
 }
 
+function subscribe(callback: () => void) {
+  window.addEventListener('storage', callback);
+  return () => window.removeEventListener('storage', callback);
+}
+
 export function useLocalStorageState<T>(
   key: string,
   options: UseLocalStorageStateOptions<T>
 ) {
-  const defaultValueRef = useRef(options.defaultValue);
-  const [isHydrated, setIsHydrated] = useState(false);
+  const { defaultValue } = options;
 
-  const [value, setValue] = useState<T>(() => options.defaultValue);
-
-  useEffect(() => {
+  const getSnapshot = useCallback(() => {
     try {
-      const raw = window.localStorage.getItem(key);
-      const nextValue =
-        raw === null ? defaultValueRef.current : (JSON.parse(raw) as T);
-      setValue(nextValue);
+      const item = window.localStorage.getItem(key);
+      return item !== null ? item : JSON.stringify(defaultValue);
     } catch {
-      setValue(defaultValueRef.current);
-    } finally {
-      setIsHydrated(true);
+      return JSON.stringify(defaultValue);
     }
-  }, [key]);
+  }, [key, defaultValue]);
 
-  useEffect(() => {
-    if (!isHydrated) {
-      return;
-    }
+  const getServerSnapshot = useCallback(
+    () => JSON.stringify(defaultValue),
+    [defaultValue]
+  );
+
+  const storeString = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+
+  const value: T = useMemo(() => {
     try {
-      window.localStorage.setItem(key, JSON.stringify(value));
+      return JSON.parse(storeString);
     } catch {
-      // Ignore storage quota and serialization errors.
+      return defaultValue;
     }
-  }, [isHydrated, key, value]);
+  }, [storeString, defaultValue]);
 
-  const updateValue = useCallback((next: SetValue<T>) => {
-    setValue((prev) =>
-      typeof next === 'function' ? (next as (prev: T) => T)(prev) : next
-    );
-  }, []);
+  const updateValue = useCallback(
+    (next: SetValue<T>) => {
+      try {
+        const raw = window.localStorage.getItem(key);
+        const current: T = raw !== null ? (JSON.parse(raw) as T) : defaultValue;
+        const nextValue =
+          typeof next === 'function' ? (next as (prev: T) => T)(current) : next;
+        window.localStorage.setItem(key, JSON.stringify(nextValue));
+        window.dispatchEvent(new Event('storage'));
+      } catch {
+        // Ignore quota/serialization errors
+      }
+    },
+    [key, defaultValue]
+  );
 
-  return [value, updateValue, isHydrated] as const;
+  return [value, updateValue, true] as const;
 }

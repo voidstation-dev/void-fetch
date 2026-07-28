@@ -11,7 +11,7 @@ import { PlatformBadge } from '@/components/platform-badge'
 import { ViewportSideRailAd } from '@/components/ads/viewport-side-rail-ad'
 import { buildMediaPreviewUrl, canSharePlayResult } from '@/components/downloader/media-preview'
 import { useLocale, useTranslations } from 'next-intl'
-import { isApiRequestError, resolveApiErrorMessage } from '@/lib/api-errors'
+import { isApiRequestError, notifyApiErrorToast, resolveApiErrorMessage } from '@/lib/api-errors'
 import { buildHlsPlayProxyUrl, HLS_PLAYLIST_ACCEPT, isHlsPlaylistUrl } from '@/lib/hls-playback'
 import { UnifiedParseReloadError, requestUnifiedParse } from '@/lib/unified-parse'
 import type { UnifiedParseResult } from '@/lib/types'
@@ -63,6 +63,11 @@ export function PlayPageClient() {
                 }
 
                 if (err instanceof UnifiedParseReloadError) {
+                    return
+                }
+
+                if (notifyApiErrorToast(err)) {
+                    setError('Server unavailable or rate limited')
                     return
                 }
 

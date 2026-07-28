@@ -7,6 +7,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import { useBatchStore } from "@/features/batch-download/store/batch-store";
 import { WorkspaceLayout } from "@/features/batch-download/components/WorkspaceLayout";
 import { ExpandableJobCard } from "@/features/batch-download/components/ExpandableJobCard";
@@ -31,6 +32,7 @@ import type { DownloadJob, OutputType } from "@/features/batch-download/types/ba
 import { getPlatformBadgeStyle } from "@/lib/platforms";
 import { LoadingScreen } from "@/components/ui/LoadingScreen";
 import { useTranslations } from "next-intl";
+import { motion } from "framer-motion";
 
 interface HistoryCardRowProps {
   job: DownloadJob;
@@ -61,19 +63,23 @@ function HistoryCardRow({
     (Boolean(images && images.length > 0) && !videoUrl && !audioUrl);
 
   return (
-    <div className="group relative flex flex-col md:flex-row items-start md:items-center justify-between p-4 rounded-2xl bg-card/90 backdrop-blur-2xl border border-border/80 hover:border-primary/50 shadow-md hover:shadow-xl transition-all duration-300 gap-4">
+    <motion.div
+      className="group relative flex flex-col md:flex-row items-start md:items-center justify-between p-4 rounded-2xl bg-card/90 backdrop-blur-2xl border border-border/80 hover:border-primary/50 shadow-md hover:shadow-xl transition-all duration-300 gap-4"
+    >
       {/* Left: Thumbnail Cover & Title Info */}
       <div className="flex items-center gap-3.5 min-w-0 flex-1 w-full md:w-auto">
         {/* Media Thumbnail */}
-        <div
+        <motion.div
           onClick={() => onExpand(job)}
           className="relative w-13 h-13 sm:w-14 sm:h-14 shrink-0 bg-muted rounded-xl border border-border/60 flex items-center justify-center overflow-hidden shadow-md cursor-pointer group/thumb hover:border-primary/80 transition-all duration-300"
         >
           {job.metadata?.cover ? (
-            /* eslint-disable-next-line @next/next/no-img-element */
-            <img
+            <Image
               src={job.metadata.cover}
               alt=""
+              width={56}
+              height={56}
+              unoptimized
               className="w-full h-full object-cover group-hover/thumb:scale-110 transition-transform duration-300"
             />
           ) : (
@@ -82,11 +88,13 @@ function HistoryCardRow({
           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center">
             <Maximize2 className="h-4 w-4 text-white" />
           </div>
-        </div>
+        </motion.div>
 
         {/* Info Column */}
         <div className="flex flex-col min-w-0 gap-1 flex-1">
-          <div className="flex items-center gap-2 flex-wrap">
+          <motion.div
+            className="flex items-center gap-2 flex-wrap"
+          >
             <Badge
               variant="outline"
               className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded-md uppercase tracking-wider ${getPlatformBadgeStyle(
@@ -107,15 +115,15 @@ function HistoryCardRow({
             <span className="text-[9px] font-mono text-muted-foreground/70">
               Completed: {completedDate}
             </span>
-          </div>
+          </motion.div>
 
-          <h4
+          <motion.h4
             onClick={() => onExpand(job)}
             className="text-sm font-bold text-foreground hover:text-primary transition-colors cursor-pointer line-clamp-1 leading-snug tracking-tight"
             title={job.metadata?.title || job.sourceUrl}
           >
             {job.metadata?.title || job.sourceUrl}
-          </h4>
+          </motion.h4>
 
           <a
             href={job.sourceUrl}
@@ -211,7 +219,7 @@ function HistoryCardRow({
           </Button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -326,14 +334,12 @@ export default function HistoryPage() {
         </div>
       )}
 
-      {/* Expandable Detail Modal */}
-      {expandedJob && (
-        <ExpandableJobCard
-          job={expandedJob}
-          onClose={() => setExpandedJob(null)}
-          onOpenConfig={(j) => store.setActiveJobDrawerId(j.id)}
-        />
-      )}
+      {/* Aceternity Expandable Detail Modal */}
+      <ExpandableJobCard
+        job={expandedJob}
+        onClose={() => setExpandedJob(null)}
+        onOpenConfig={(j) => store.setActiveJobDrawerId(j.id)}
+      />
     </>
   );
 }
