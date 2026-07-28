@@ -4,8 +4,8 @@ import { DeferredRuntimeServices } from "@/components/deferred-runtime-services"
 import { ThemeProvider } from "@/components/theme-provider";
 import { DeferredToaster } from "@/components/deferred-toaster"
 import { hasLocale } from "next-intl";
-import { getMessages, setRequestLocale } from "next-intl/server";
-import { AppI18nProvider } from "@/i18n/client";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { AppTopBar } from "@/components/layout/app-top-bar";
 import { TopBarActionsProvider } from "@/components/layout/top-bar-actions";
 import { WorkspaceLayout } from "@/features/batch-download/components/WorkspaceLayout";
@@ -37,17 +37,17 @@ export async function generateMetadata({
     params: Promise<{ locale: Locale }>
 }): Promise<Metadata> {
     const { locale } = await params
-    const dict = await getMessages({ locale }) as Dictionary
+    const t = await getTranslations({ locale, namespace: 'metadata' })
     const localeUrl = buildLocaleUrl(locale)
     const publicDescription = resolvePublicMetadataDescription(locale)
 
     return {
-        title: dict.metadata.title,
+        title: t('title'),
         description: publicDescription,
-        authors: [{ name: dict.metadata.siteName }],
-        creator: dict.metadata.siteName,
-        publisher: dict.metadata.siteName,
-        applicationName: dict.metadata.siteName,
+        authors: [{ name: t('siteName') }],
+        creator: t('siteName'),
+        publisher: t('siteName'),
+        applicationName: t('siteName'),
         generator: 'Next.js',
         referrer: 'origin-when-cross-origin',
         formatDetection: {
@@ -72,10 +72,10 @@ export async function generateMetadata({
             ],
         },
         openGraph: {
-            title: dict.metadata.ogTitle,
-            description: dict.metadata.ogDescription,
+            title: t('ogTitle'),
+            description: t('ogDescription'),
             url: localeUrl,
-            siteName: dict.metadata.siteName,
+            siteName: t('siteName'),
             locale: localeToOpenGraphLocale(locale),
             alternateLocale: buildOpenGraphLocaleAlternates(locale),
             type: 'website',
@@ -84,14 +84,14 @@ export async function generateMetadata({
                     url: '/og/home.png',
                     width: 1200,
                     height: 630,
-                    alt: dict.metadata.siteName,
+                    alt: t('siteName'),
                 }
             ],
         },
         twitter: {
             card: 'summary_large_image',
-            title: dict.metadata.ogTitle,
-            description: dict.metadata.ogDescription,
+            title: t('ogTitle'),
+            description: t('ogDescription'),
             images: ['/og/home.png'],
         },
         robots: {
@@ -113,7 +113,7 @@ export async function generateMetadata({
         appleWebApp: {
             capable: true,
             statusBarStyle: 'black-translucent',
-            title: dict.metadata.siteName,
+            title: t('siteName'),
         },
     }
 }
@@ -140,7 +140,7 @@ export default async function RootLayout({
     return (
         <html lang={htmlLang} className="dark" suppressHydrationWarning>
             <body className="antialiased bg-background text-foreground selection:bg-primary/20 selection:text-primary min-h-screen">
-                <AppI18nProvider locale={locale} dictionary={dict}>
+                <NextIntlClientProvider locale={locale} messages={dict}>
                     <DeferredRuntimeServices />
                     <ThemeProvider
                         attribute="class"
@@ -156,7 +156,7 @@ export default async function RootLayout({
                         </TopBarActionsProvider>
                         <DeferredToaster />
                     </ThemeProvider>
-                </AppI18nProvider>
+                </NextIntlClientProvider>
             </body>
         </html>
     )

@@ -2,7 +2,7 @@ import { Share2, X } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { CardHeader, CardTitle } from '@/components/ui/card';
-import { useDictionary } from '@/i18n/client';
+import { useTranslations } from 'next-intl';
 import { formatDuration } from '@/lib/utils';
 
 interface ResultCardHeaderProps {
@@ -20,12 +20,12 @@ export function ResultCardHeader({
     onCopyShareLink,
     onClose,
 }: ResultCardHeaderProps) {
-    const dict = useDictionary();
+    const tResult = useTranslations('result');
 
     return (
         <CardHeader className="p-3 pb-2">
             <div className="flex items-center justify-between gap-2">
-                <CardTitle className="text-base">{dict.result.title}</CardTitle>
+                <CardTitle className="text-base">{tResult('title')}</CardTitle>
                 <div className="flex items-center gap-1.5">
                     {canSharePlayLink && (
                         <Button
@@ -33,10 +33,10 @@ export function ResultCardHeader({
                             size="sm"
                             className="h-8 gap-1.5 text-xs"
                             onClick={onCopyShareLink}
-                            title={dict.result.sharePlayLink}
+                            title={tResult('sharePlayLink')}
                         >
                             <Share2 className="h-4 w-4" />
-                            <span>{dict.result.sharePlayLink}</span>
+                            <span>{tResult('sharePlayLink')}</span>
                         </Button>
                     )}
                     <Button variant="ghost" size="sm" className="h-8 w-8 px-0" onClick={onClose}>

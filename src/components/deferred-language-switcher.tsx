@@ -5,7 +5,8 @@ import { LanguageSwitcher } from '@/components/language-switcher'
 import { Globe, ChevronDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { useAppLocale, useDictionary } from '@/i18n/client'
+import { useLocale, useTranslations } from 'next-intl'
+import type { Locale } from '@/lib/i18n/config'
 import { getLocaleLabel } from '@/lib/i18n/locale-meta'
 
 interface DeferredLanguageSwitcherProps {
@@ -19,8 +20,8 @@ export function DeferredLanguageSwitcher({
     fullWidth = false,
     iconOnly = false,
 }: DeferredLanguageSwitcherProps) {
-    const currentLocale = useAppLocale()
-    const dict = useDictionary()
+    const currentLocale = useLocale() as Locale
+    const t = useTranslations('page')
     const [mounted, setMounted] = useState(false)
 
     if (mounted) {
@@ -45,11 +46,11 @@ export function DeferredLanguageSwitcher({
                 iconOnly && 'h-8 w-8 p-0',
                 fullWidth && 'w-full justify-between'
             )}
-            aria-label={iconOnly ? dict.page.switchLanguageLabel : getLocaleLabel(currentLocale)}
+            aria-label={iconOnly ? t('switchLanguageLabel') : getLocaleLabel(currentLocale)}
         >
             <Globe className="h-4 w-4" />
             {iconOnly ? (
-                <span className="sr-only">{dict.page.switchLanguageLabel}</span>
+                <span className="sr-only">{t('switchLanguageLabel')}</span>
             ) : compact ? (
                 <span className="max-w-[5.5rem] truncate">{getLocaleLabel(currentLocale)}</span>
             ) : (

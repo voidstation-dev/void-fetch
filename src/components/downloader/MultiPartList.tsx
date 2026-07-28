@@ -1,11 +1,10 @@
 import { Button } from '@/components/ui/button';
-import { useDictionary } from '@/i18n/client';
+import { useTranslations } from 'next-intl';
 import type { PageInfo } from '@/lib/types';
 import { formatDuration } from '@/lib/utils';
 
 import { MediaActionIconButton } from './MediaActionIconButton';
 import { LOAD_MORE_BATCH, useChunkedMobileList } from './use-chunked-mobile-list';
-import { replaceTemplate } from './result-card-utils';
 import { useTemporaryDownloadKeys } from './use-temporary-download-keys';
 import { VideoDownloadIcon, AudioDownloadIcon } from './CustomIcons';
 
@@ -20,7 +19,7 @@ export function MultiPartList({
     currentPage?: number;
     onSelectPage?: (page: number) => void;
 }) {
-    const dict = useDictionary();
+    const tResult = useTranslations('result');
     const { loadingKeys, triggerDownload } = useTemporaryDownloadKeys();
     const {
         canCollapseMobile,
@@ -36,7 +35,7 @@ export function MultiPartList({
         <div className="space-y-2">
             <div className="flex items-center justify-between gap-2 text-xs text-foreground/75">
                 <span>
-                    {replaceTemplate(dict.result.totalParts, '{count}', String(pages.length))}
+                    {tResult('totalParts', { count: pages.length })}
                 </span>
             </div>
             <div className="max-h-[min(56vh,26rem)] md:max-h-[min(60vh,32rem)] overflow-y-auto overscroll-contain pr-1">
@@ -78,7 +77,7 @@ export function MultiPartList({
                             >
                                 {page.downloadVideoUrl && (
                                     <MediaActionIconButton
-                                        label={dict.result.downloadVideo}
+                                        label={tResult('downloadVideo')}
                                         icon={VideoDownloadIcon}
                                         variant="default"
                                         className="w-full"
@@ -89,7 +88,7 @@ export function MultiPartList({
                                 )}
                                 {page.downloadAudioUrl && (
                                     <MediaActionIconButton
-                                        label={dict.result.downloadAudio}
+                                        label={tResult('downloadAudio')}
                                         icon={AudioDownloadIcon}
                                         variant="default"
                                         className="w-full"
@@ -110,11 +109,9 @@ export function MultiPartList({
                                     className="h-8 w-full text-xs"
                                     onClick={loadMore}
                                 >
-                                    {replaceTemplate(
-                                        dict.result.loadMoreItems,
-                                        '{count}',
-                                        String(Math.min(LOAD_MORE_BATCH, remainingCount))
-                                    )}
+                                    {tResult('loadMoreItems', {
+                                        count: Math.min(LOAD_MORE_BATCH, remainingCount)
+                                    })}
                                 </Button>
                             ) : (
                                 <Button
@@ -123,7 +120,7 @@ export function MultiPartList({
                                     className="h-8 w-full text-xs"
                                     onClick={collapse}
                                 >
-                                    {replaceTemplate(dict.result.collapseParts, '{count}', String(minimumVisibleCount))}
+                                    {tResult('collapseParts', { count: minimumVisibleCount })}
                                 </Button>
                             )}
                         </div>

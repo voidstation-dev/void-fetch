@@ -80,6 +80,25 @@
         "linkFilled": "リンクを入力しました",
         "clickToRedownload": "解析ボタンを押して再解析を開始してください",
         "unknownTitle": "不明なタイトル",
+        "pageTitle": "ダウンロード履歴",
+        "logsCount": "完了したダウンロードログ ({count} 件)",
+        "clearHistory": "履歴を消去",
+        "noRecordsTitle": "履歴レコードが見つかりません",
+        "cleanBadge": "クリーン",
+        "noRecordsDesc": "完了したダウンロードは自動的にここに表示され、詳細情報や再ダウンロードへのショートカットが利用できます。",
+        "autoPersisted": "自動保存",
+        "instantRedownloads": "高速再ダウンロード",
+        "completed": "完了",
+        "details": "詳細",
+        "detailsTitle": "詳細情報とメディアプレビューを開く",
+        "redownloadZip": "ZIP（画像）を再ダウンロード",
+        "redownloadSingleImage": "画像を再ダウンロード",
+        "redownloadMp4": "MP4を再ダウンロード",
+        "redownloadMp3": "MP3を再ダウンロード",
+        "removeFromHistory": "履歴から削除",
+        "queuedForRedownload": "{title} を再ダウンロードキューに追加しました",
+        "removedJobRecord": "履歴レコードを削除しました",
+        "clearedAllHistory": "すべての履歴を消去しました",
         "platforms": {
             "bilibili": "Bilibili",
             "bilibiliTv": "Bilibili TV",
@@ -144,6 +163,28 @@
         "feedbackHint": "公開の機能提案、対応プラットフォームの要望、一般的な質問に適しています。",
         "github": "GitHub Issue を開く",
         "githubHint": "不具合報告や機能要望に最適です。"
+    },
+    "aboutPage": {
+        "metaTitle": "VoidFetchについて | VoidFetch",
+        "metaDescription": "VoidFetchの詳細、VoidStation製品仕様、著作権情報、プライバシーポリシー、利用規約について。",
+        "title": "VoidFetchについて",
+        "subtitle": "VoidStation製品情報",
+        "productInfo": "製品情報",
+        "productName": "製品名",
+        "publisher": "発行元",
+        "appVersion": "アプリケーションバージョン",
+        "targetRuntime": "ターゲットランタイム",
+        "compilationBuild": "ビルド構成",
+        "thirdPartyLibraries": "サードパーティライブラリと感謝",
+        "thirdPartyDesc": "VoidFetchは、Next.js、React 19、Tailwind CSS、Radix UI、Zustand、IndexedDB、FFmpeg.wasm (GPL/LGPL v3+)、JSZip、browser-fs-access などのオープンソースプロジェクトに支えられています。",
+        "copyrightNotice": "著作権情報",
+        "copyrightTitle": "VoidFetch © 2026 VoidStation.",
+        "copyrightSub": "All rights reserved.",
+        "copyrightDesc": "メディアコンテンツ（動画、音声、画像）の権利は、各プラットフォームの所有者およびコンテンツ制作者に帰属します。",
+        "privacyPolicy": "プライバシーポリシー",
+        "privacyDesc": "VoidFetchはユーザーのプライバシーを最優先しています。すべてのダウンロード、復号化、バッファ作成処理はブラウザのサンドボックス内で完結し、サーバー上に保存されません。",
+        "responsibleUse": "利用規範ポリシー",
+        "responsibleUseDesc": "VoidFetchは公開メディアのアーカイブ用ツールです。ユーザーは入力するコンテンツのダウンロード権限を所有している必要があります。"
     },
     "feedbackPage": {
         "metaTitle": "フィードバック | VoidFetch",
@@ -578,6 +619,9 @@
                 "Support multiple media formats",
                 "Browser-based processing",
                 "Download Threads videos and image posts",
+                "Download Weibo videos and mixed-media posts",
+                "Browser-based processing",
+                "Download Threads videos and image posts",
                 "Download Weibo videos and mixed-media posts"
             ],
             "zh": [
@@ -646,10 +690,7 @@
                 "高品質なメディアダウンロード",
                 "無料のオンラインツール",
                 "登録不要",
-                "複数のメディア形式に対応",
-                "ブラウザ内で処理",
-                "Threads の動画と画像投稿をダウンロード",
-                "Weibo の動画・画像・混合メディア投稿をダウンロード"
+                "複数のメディア形式に対応"
             ],
             "es": [
                 "Extract MP3 audio from Bilibili videos",
@@ -669,6 +710,9 @@
                 "Free online tool",
                 "No registration required",
                 "Support multiple media formats",
+                "Browser-based processing",
+                "Download Threads videos and image posts",
+                "Download Weibo videos and mixed-media posts",
                 "Browser-based processing",
                 "Download Threads videos and image posts",
                 "Download Weibo videos and mixed-media posts"
@@ -691,6 +735,9 @@
                 "Free online tool",
                 "No registration required",
                 "Support multiple media formats",
+                "Browser-based processing",
+                "Download Threads videos and image posts",
+                "Download Weibo videos and mixed-media posts",
                 "Browser-based processing",
                 "Download Threads videos and image posts",
                 "Download Weibo videos and mixed-media posts"
@@ -904,5 +951,21 @@
         "retryButton": "再試行",
         "toastSuccess": "フィードバックを送信しました！",
         "toastError": "送信に失敗しました。もう一度お試しください"
+    },
+    "supportedPlatformsModal": {
+        "title": "対応メディアプラットフォーム",
+        "badge": "25+ 稼働中",
+        "description": "VoidFetchは、動画、音声、画像、HLS/M3U8ストリームの高速抽出に対応しています。",
+        "searchPlaceholder": "プラットフォームを検索 (例: YouTube, Douyin, TikTok, Pinterest, SoundCloud...)",
+        "noSearchResults": "「{query}」に一致するプラットフォームが見つかりません",
+        "activeStreamer": "アクティブ配信",
+        "active": "稼働中",
+        "fastExtract": "高速抽出",
+        "autoDetect": "自動判別",
+        "showingCount": "{total} 件中 {count} 件の対応プラットフォームを表示",
+        "close": "閉じる",
+        "clickDetails": "クリックして詳細を表示",
+        "clickTitle": "クリックして対応する全25以上のプラットフォームを表示",
+        "universalSub": "万能一括ダウンローダー"
     }
 }

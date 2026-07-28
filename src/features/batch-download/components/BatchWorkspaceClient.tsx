@@ -15,7 +15,7 @@ import { BatchProgressBar } from "./BatchProgressBar";
 import { SettingsModal } from "./SettingsModal";
 import { QueuePreferencesButton } from "./QueuePreferencesButton";
 
-const emptySubscribe = () => () => {};
+const emptySubscribe = () => () => { };
 
 export function BatchWorkspaceClient() {
   const isMounted = useSyncExternalStore(

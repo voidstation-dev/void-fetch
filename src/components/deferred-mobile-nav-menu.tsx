@@ -4,7 +4,7 @@ import { useState } from 'react'
 import dynamic from 'next/dynamic'
 import { Menu } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { useDictionary } from '@/i18n/client'
+import { useTranslations } from 'next-intl'
 
 const MobileNavMenu = dynamic(
     () => import('@/components/mobile-nav-menu').then((m) => m.MobileNavMenu),
@@ -12,7 +12,7 @@ const MobileNavMenu = dynamic(
 )
 
 export function DeferredMobileNavMenu() {
-    const dict = useDictionary()
+    const tPage = useTranslations('page')
     const [mounted, setMounted] = useState(false)
 
     if (mounted) {
@@ -24,7 +24,7 @@ export function DeferredMobileNavMenu() {
             variant="ghost"
             size="icon"
             onClick={() => setMounted(true)}
-            aria-label={dict.page.openMenuLabel}
+            aria-label={tPage('openMenuLabel')}
         >
             <Menu className="h-5 w-5" />
         </Button>

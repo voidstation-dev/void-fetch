@@ -3,14 +3,13 @@ import { Play } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useDictionary } from '@/i18n/client';
+import { useTranslations } from 'next-intl';
 import type { EmbeddedVideoInfo } from '@/lib/types';
 import { formatDuration } from '@/lib/utils';
 
 import { MediaActionIconButton } from './MediaActionIconButton';
 import { shouldShowVideoDownloadButton } from './result-card-visibility';
 import { LOAD_MORE_BATCH, useChunkedMobileList } from './use-chunked-mobile-list';
-import { replaceTemplate } from './result-card-utils';
 import { useTemporaryDownloadKeys } from './use-temporary-download-keys';
 import { VideoDownloadIcon, AudioDownloadIcon } from './CustomIcons';
 
@@ -41,7 +40,7 @@ export function EmbeddedVideoList({
     autoScrollItemId?: string;
     onSelectItem?: (itemId: string) => void;
 }) {
-    const dict = useDictionary();
+    const tResult = useTranslations('result');
     const { loadingKeys, triggerDownload } = useTemporaryDownloadKeys();
     const [searchQuery, setSearchQuery] = useState('');
     const containerRef = useRef<HTMLDivElement | null>(null);
@@ -104,9 +103,9 @@ export function EmbeddedVideoList({
         <div className="space-y-2">
             <div className="flex items-center justify-between gap-2 text-xs text-foreground/75">
                 <span className="min-w-0">
-                    <span>{dict.result.videoList}</span>
+                    <span>{tResult('videoList')}</span>
                     <span className="ml-2">
-                        {replaceTemplate(dict.result.videoCount, '{count}', String(filteredVideos.length))}
+                        {tResult('videoCount', { count: filteredVideos.length })}
                     </span>
                 </span>
                 <div className="flex items-center gap-2 shrink-0">
@@ -116,8 +115,8 @@ export function EmbeddedVideoList({
                             setSearchQuery(event.target.value);
                             setMobileVisibleCount(minimumVisibleCount);
                         }}
-                        placeholder={dict.result.collectionSearchPlaceholder}
-                        aria-label={dict.result.collectionSearchPlaceholder}
+                        placeholder={tResult('collectionSearchPlaceholder')}
+                        aria-label={tResult('collectionSearchPlaceholder')}
                         className="w-32 sm:w-56 h-8"
                     />
                 </div>
@@ -129,14 +128,14 @@ export function EmbeddedVideoList({
                 <div className="space-y-2 pr-2">
                     {filteredVideos.length === 0 && (
                         <p className="py-6 text-center text-sm text-muted-foreground">
-                            {dict.result.collectionNoSearchResults}
+                            {tResult('collectionNoSearchResults')}
                         </p>
                     )}
                     {visibleVideos.map((video, index) => {
                         const videoDownloadUrl = video.downloadVideoUrl || video.originDownloadVideoUrl || null;
                         const audioDownloadUrl = video.downloadAudioUrl || video.originDownloadAudioUrl || null;
                         const displayTitle = video.title?.trim()
-                            || replaceTemplate(dict.result.articleVideoUntitled, '{index}', String(index + 1));
+                            || tResult('articleVideoUntitled', { index: index + 1 });
                         const videoKey = `${video.id || index}-video`;
                         const audioKey = `${video.id || index}-audio`;
                         const isCurrentItem = Boolean(currentItemId) && video.id === currentItemId;
@@ -180,8 +179,8 @@ export function EmbeddedVideoList({
                                 <div className="w-full space-y-2 md:min-w-[11rem] md:shrink-0">
                                     <div className="grid grid-cols-1 gap-2">
                                         <MediaActionIconButton
-                                            label={`${dict.result.playVideo}: ${displayTitle}`}
-                                            text={dict.result.playVideo}
+                                            label={`${tResult('playVideo')}: ${displayTitle}`}
+                                            text={tResult('playVideo')}
                                             icon={Play}
                                             variant="secondary"
                                             disabled={isCurrentItem}
@@ -193,7 +192,7 @@ export function EmbeddedVideoList({
                                         <div className={`grid ${getActionRowClass(downloadActionCount)} gap-2`}>
                                             {shouldShowVideoDownloadButton(videoDownloadUrl) && (
                                                 <MediaActionIconButton
-                                                    label={dict.result.downloadVideo}
+                                                    label={tResult('downloadVideo')}
                                                     icon={VideoDownloadIcon}
                                                     variant="default"
                                                     disabled={loadingKeys.has(videoKey)}
@@ -204,7 +203,7 @@ export function EmbeddedVideoList({
                                             )}
                                             {audioDownloadUrl && (
                                                 <MediaActionIconButton
-                                                    label={dict.result.downloadAudio}
+                                                    label={tResult('downloadAudio')}
                                                     icon={AudioDownloadIcon}
                                                     variant="default"
                                                     disabled={loadingKeys.has(audioKey)}
@@ -228,11 +227,9 @@ export function EmbeddedVideoList({
                                     className="h-8 w-full text-xs"
                                     onClick={loadMore}
                                 >
-                                    {replaceTemplate(
-                                        dict.result.loadMoreItems,
-                                        '{count}',
-                                        String(Math.min(LOAD_MORE_BATCH, remainingCount))
-                                    )}
+                                    {tResult('loadMoreItems', {
+                                        count: Math.min(LOAD_MORE_BATCH, remainingCount)
+                                    })}
                                 </Button>
                             ) : (
                                 <Button
@@ -241,7 +238,7 @@ export function EmbeddedVideoList({
                                     className="h-8 w-full text-xs"
                                     onClick={collapse}
                                 >
-                                    {replaceTemplate(dict.result.collapseParts, '{count}', String(minimumVisibleCount))}
+                                    {tResult('collapseParts', { count: minimumVisibleCount })}
                                 </Button>
                             )}
                         </div>

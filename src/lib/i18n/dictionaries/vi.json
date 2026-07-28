@@ -80,6 +80,25 @@
         "linkFilled": "Đã dán liên kết",
         "clickToRedownload": "Nhấp vào nút phân tích để bắt đầu phân tích lại",
         "unknownTitle": "Tiêu đề không xác định",
+        "pageTitle": "Lịch sử tải xuống",
+        "logsCount": "Nhật ký tác vụ đã hoàn thành ({count} mục)",
+        "clearHistory": "Xóa lịch sử",
+        "noRecordsTitle": "Không tìm thấy lịch sử tải xuống",
+        "cleanBadge": "Sạch",
+        "noRecordsDesc": "Các tệp đã tải xuống thành công sẽ tự động xuất hiện tại đây kèm chi tiết phương tiện và lối tắt tải lại.",
+        "autoPersisted": "Tự động lưu",
+        "instantRedownloads": "Tải lại nhanh",
+        "completed": "Đã hoàn thành",
+        "details": "Chi tiết",
+        "detailsTitle": "Mở cửa sổ chi tiết và xem trước phương tiện",
+        "redownloadZip": "Tải lại ZIP (Ảnh)",
+        "redownloadSingleImage": "Tải lại Ảnh",
+        "redownloadMp4": "Tải lại MP4",
+        "redownloadMp3": "Tải lại MP3",
+        "removeFromHistory": "Xóa khỏi lịch sử",
+        "queuedForRedownload": "Đã đưa {title} vào hàng chờ tải lại",
+        "removedJobRecord": "Đã xóa bản ghi lịch sử",
+        "clearedAllHistory": "Đã xóa toàn bộ lịch sử hoàn thành",
         "platforms": {
             "bilibili": "Bilibili",
             "bilibiliTv": "Bilibili TV",
@@ -139,11 +158,33 @@
         "metaTitle": "Liên hệ | VoidFetch",
         "metaDescription": "Liên hệ với VoidFetch để được hỗ trợ báo cáo lỗi, gửi yêu cầu tính năng hoặc đóng góp ý kiến.",
         "title": "Liên hệ",
-        "intro": "Vui lòng sử dụng các kênh liên hệ bên dưới để gửi phản hồi lỗi hoặc đề xuất cải tiến tính năng.",
-        "feedback": "Mở trang thảo luận phản hồi",
-        "feedbackHint": "Tốt nhất cho ý tưởng tính năng công khai, yêu cầu nền tảng mới và câu hỏi chung.",
-        "github": "Mở Issue trên GitHub",
-        "githubHint": "Tốt nhất để báo cáo lỗi lập trình hoặc theo dõi tiến trình sửa lỗi."
+        "intro": "Sử dụng các kênh dưới đây để báo cáo sự cố hoặc gửi yêu cầu tính năng.",
+        "feedback": "Mở Thảo luận Góp ý",
+        "feedbackHint": "Phù hợp nhất cho ý tưởng tính năng công khai, yêu cầu nền tảng và câu hỏi chung.",
+        "github": "Mở một Issue trên GitHub",
+        "githubHint": "Phù hợp nhất cho báo cáo lỗi và yêu cầu tính năng."
+    },
+    "aboutPage": {
+        "metaTitle": "Giới thiệu | VoidFetch",
+        "metaDescription": "Tìm hiểu thêm về VoidFetch, thông số sản phẩm VoidStation, thông báo bản quyền, chính sách bảo mật và chính sách sử dụng có trách nhiệm.",
+        "title": "Về VoidFetch",
+        "subtitle": "Thông tin sản phẩm VoidStation",
+        "productInfo": "Thông tin sản phẩm",
+        "productName": "Tên sản phẩm",
+        "publisher": "Nhà phát hành",
+        "appVersion": "Phiên bản ứng dụng",
+        "targetRuntime": "Môi trường thực thi",
+        "compilationBuild": "Bản mã biên dịch",
+        "thirdPartyLibraries": "Thư viện bên thứ ba & Lời cảm ơn",
+        "thirdPartyDesc": "VoidFetch được xây dựng với sự trân trọng đóng góp từ cộng đồng mã nguồn mở: Next.js, React 19, Tailwind CSS, Radix UI, Zustand, IndexedDB, FFmpeg.wasm, JSZip và browser-fs-access APIs.",
+        "copyrightNotice": "Thông báo bản quyền",
+        "copyrightTitle": "VoidFetch © 2026 VoidStation.",
+        "copyrightSub": "Giữ toàn bộ bản quyền.",
+        "copyrightDesc": "Quyền sở hữu phương tiện (luồng video, tệp âm thanh, hình ảnh) hoàn toàn thuộc về tác giả và nền tảng gốc. Thông tin trích dẫn được giữ nguyên trong dữ liệu tải về.",
+        "privacyPolicy": "Chính sách bảo mật",
+        "privacyDesc": "VoidFetch đặt tính bảo mật cá nhân lên hàng đầu. Tất cả yêu cầu phân tích liên kết được gửi đến API hợp nhất để lấy thông tin. Tải xuống, giải mã và tổng hợp dữ liệu diễn ra hoàn toàn trong trình duyệt của bạn.",
+        "responsibleUse": "Chính sách sử dụng có trách nhiệm",
+        "responsibleUseDesc": "VoidFetch là công cụ tải xuống được thiết kế để lưu trữ phương tiện công khai. Người dùng phải có quyền hợp pháp đối với nội dung tải về. VoidFetch không phá khóa DRM hay tải các luồng bị chặn địa lý."
     },
     "feedbackPage": {
         "metaTitle": "Phản hồi | VoidFetch",
@@ -186,8 +227,7 @@
         "en": "English",
         "ja": "日本語",
         "es": "Español",
-        "ru": "Русский",
-        "vi": "Tiếng Việt"
+        "ru": "Русский"
     },
     "douyin": {
         "apiLimitDownload": "Nếu tính năng tự động tải về bị chặn, vui lòng nhấp vào liên kết để tải xuống thủ công (nút tải nằm ở góc dưới bên phải của trình phát video gốc)."
@@ -210,7 +250,6 @@
         "title": "Công cụ phương tiện",
         "description": "Sử dụng các công cụ Client-side để tách nhạc hoặc gộp video và âm thanh. Quá trình tải về máy sẽ tự động bắt đầu sau khi hoàn tất xử lý.",
         "extractDescription": "Tách âm thanh từ file video cục bộ trên máy và xuất ra tệp định dạng MP3.",
-        "mediaActions": "Thao tác",
         "mergeDescription": "Chọn một tệp video và một tệp âm thanh trên máy, gộp lại thành một tệp video MP4 hoàn chỉnh.",
         "placeholder": "Dán liên kết video hoặc bài viết vào đây...",
         "strategyHint": "Hệ thống ưu tiên tải nhạc trực tiếp từ nền tảng; nếu không hỗ trợ mới sử dụng tính năng giải mã âm thanh trên trình duyệt.",
@@ -605,6 +644,7 @@
                 "支持多种媒体格式",
                 "浏览器内处理",
                 "下载 Threads 视频和图文帖子",
+                "下载微博视频、图文与混合媒体帖子",
                 "下载微博视频、图文与混合媒体帖子"
             ],
             "zh-tw": [
@@ -627,6 +667,7 @@
                 "支援多種媒體格式",
                 "瀏覽器內處理",
                 "下載 Threads 影片與圖文貼文",
+                "下載微博影片、圖文與混合媒體貼文",
                 "下載微博影片、圖文與混合媒體貼文"
             ],
             "ja": [
@@ -700,31 +741,6 @@
                 "Browser-based processing",
                 "Download Threads videos and image posts",
                 "Download Weibo videos and mixed-media posts"
-            ],
-            "vi": [
-                "Tách nhạc MP3 từ video Bilibili trực tuyến",
-                "Tải video Douyin không logo, không hình mờ",
-                "Tải video tin nhắn công khai Telegram",
-                "Tải video từ bài viết WeChat bài đăng",
-                "Tải video Niconico",
-                "Tải âm thanh nhạc từ Niconico",
-                "Tải Reels và bài đăng từ Instagram",
-                "Tải ảnh từ bài đăng Instagram",
-                "Tách âm thanh từ video Instagram",
-                "Tải ảnh từ ghi chú Tiểu Hồng Thư Xiaohongshu",
-                "Tải video Xiaohongshu không logo",
-                "Tách nhạc từ video Xiaohongshu",
-                "Tải video TikTok không watermark không logo",
-                "Tải video X (Twitter) trực tuyến",
-                "Tách nhạc từ video X Twitter",
-                "Tự động nhận diện nền tảng nguồn video",
-                "Tải xuống phương tiện chất lượng cao nhất",
-                "Công cụ trực tuyến hoàn toàn miễn phí",
-                "Không cần đăng ký hoặc đăng nhập",
-                "Hỗ trợ đa dạng định dạng phương tiện",
-                "Xử lý trực tiếp trên trình duyệt web",
-                "Tải video và ảnh từ Threads trực tuyến",
-                "Tải video và bài viết đa phương tiện từ Weibo"
             ]
         },
         "howTo": {
@@ -734,8 +750,7 @@
                 "zh-tw": "如何下載嗶哩嗶哩、抖音、Telegram、Threads、微信公眾號、微博、Niconico、Instagram、小紅書、TikTok 與 X 內容",
                 "ja": "Bilibili・Douyin・Telegram・Threads・WeChat・Weibo・Niconico・Instagram・Xiaohongshu・TikTok・X のコンテンツをダウンロードする方法",
                 "es": "How to download content from Bilibili, Douyin, Telegram, Threads, WeChat, Weibo, Niconico, Instagram, Xiaohongshu, TikTok, and X",
-                "ru": "How to download content from Bilibili, Douyin, Telegram, Threads, WeChat, Weibo, Niconico, Instagram, Xiaohongshu, TikTok, and X",
-                "vi": "Cách tải video và hình ảnh từ Bilibili, Douyin, Telegram, Threads, WeChat, Weibo, Niconico, Instagram, Xiaohongshu, TikTok và X"
+                "ru": "How to download content from Bilibili, Douyin, Telegram, Threads, WeChat, Weibo, Niconico, Instagram, Xiaohongshu, TikTok, and X"
             },
             "steps": {
                 "en": [
@@ -845,24 +860,6 @@
                         "name": "Download",
                         "text": "Choose video, audio, or image download options to get your media content"
                     }
-                ],
-                "vi": [
-                    {
-                        "name": "Sao chép liên kết",
-                        "text": "Sao chép liên kết video, bài viết, ảnh hoặc bài đăng từ Bilibili, Douyin, Telegram, Threads, WeChat, Weibo, Niconico, Instagram, Xiaohongshu, TikTok hoặc X"
-                    },
-                    {
-                        "name": "Dán liên kết",
-                        "text": "Dán liên kết vừa sao chép vào ô nhập liệu trên website của chúng tôi"
-                    },
-                    {
-                        "name": "Tự động nhận diện",
-                        "text": "Hệ thống sẽ tự động phân tích và nhận diện đúng nền tảng nguồn video"
-                    },
-                    {
-                        "name": "Tải xuống phương tiện",
-                        "text": "Chọn định dạng tải video, tải nhạc hoặc ảnh để lưu về máy điện thoại hoặc máy tính"
-                    }
                 ]
             }
         }
@@ -954,5 +951,21 @@
         "retryButton": "Thử lại",
         "toastSuccess": "Gửi phản hồi thành công!",
         "toastError": "Gửi phản hồi thất bại, vui lòng thử lại sau"
+    },
+    "supportedPlatformsModal": {
+        "title": "Nền tảng truyền thông được hỗ trợ",
+        "badge": "25+ Đang hoạt động",
+        "description": "VoidFetch hỗ trợ trích xuất video, âm thanh, hình ảnh và luồng HLS/M3U8 tốc độ cao trên các trang web toàn cầu.",
+        "searchPlaceholder": "Tìm kiếm nền tảng (ví dụ: YouTube, Douyin, TikTok, Pinterest, SoundCloud...)",
+        "noSearchResults": "Không tìm thấy nền tảng phù hợp với \"{query}\"",
+        "activeStreamer": "Máy chủ hoạt động",
+        "active": "Hoạt động",
+        "fastExtract": "Trích xuất nhanh",
+        "autoDetect": "Tự động nhận diện",
+        "showingCount": "Hiển thị {count} trên {total} nền tảng được hỗ trợ",
+        "close": "Đóng",
+        "clickDetails": "Nhấp để xem chi tiết",
+        "clickTitle": "Nhấp để xem tất cả hơn 25 nền tảng được hỗ trợ",
+        "universalSub": "Trình tải hàng loạt đa năng"
     }
 }

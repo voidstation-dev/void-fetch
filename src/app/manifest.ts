@@ -1,18 +1,18 @@
 import type { MetadataRoute } from "next";
-import { getMessages } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
 import { i18n } from "@/lib/i18n/config";
-import type { Dictionary } from "@/lib/i18n/types";
 import { localeToHtmlLang } from "@/lib/seo";
 
 export default async function manifest(): Promise<MetadataRoute.Manifest> {
-  const dict = await getMessages({locale: i18n.defaultLocale}) as Dictionary;
+  const tMeta = await getTranslations({ locale: i18n.defaultLocale, namespace: "metadata" });
+  const tUnified = await getTranslations({ locale: i18n.defaultLocale, namespace: "unified" });
 
   return {
     id: "/",
-    name: dict.metadata.siteName,
+    name: tMeta("siteName"),
     short_name: "UM Downloader",
-    description: dict.unified.pageDescription,
+    description: tUnified("pageDescription"),
     lang: localeToHtmlLang(i18n.defaultLocale),
     start_url: "/",
     scope: "/",

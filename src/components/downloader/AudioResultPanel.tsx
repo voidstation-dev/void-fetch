@@ -1,6 +1,6 @@
 import type { AudioExtractTask } from '@/components/audio-tool/types';
 import { Card, CardContent } from '@/components/ui/card';
-import { useDictionary } from '@/i18n/client';
+import { useTranslations } from 'next-intl';
 import { toast } from '@/lib/deferred-toast';
 import type { UnifiedParseResult } from '@/lib/types';
 
@@ -32,7 +32,8 @@ export function AudioResultPanel({
     onRequestPreview,
     activePreview,
 }: AudioResultPanelProps) {
-    const dict = useDictionary();
+    const tResult = useTranslations('result');
+    const tErrors = useTranslations('errors');
     const shareSourceUrl = typeof result.url === 'string' ? result.url.trim() : '';
     const canSharePlayLink = shareSourceUrl.length > 0 && canSharePlayResult(result);
     const primaryPreview = buildPrimaryResultPreview(result, { autoplay: false, preferAudio: true });
@@ -59,10 +60,10 @@ export function AudioResultPanel({
             shareUrl.searchParams.set('play', shareSourceUrl);
             shareUrl.searchParams.set('autoplay', '1');
             await navigator.clipboard.writeText(shareUrl.toString());
-            toast.success(dict.result.sharePlayLinkCopied);
+            toast.success(tResult('sharePlayLinkCopied'));
         } catch (error) {
             console.error('Failed to copy share-play link:', error);
-            toast.error(dict.errors.clipboardFailed, { description: dict.errors.clipboardPermission });
+            toast.error(tErrors('clipboardFailed'), { description: tErrors('clipboardPermission') });
         }
     };
 
