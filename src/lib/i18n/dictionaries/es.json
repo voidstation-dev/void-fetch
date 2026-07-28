@@ -193,7 +193,10 @@
         "privateFeedbackTitle": "Comentarios por correo electrónico",
         "privateFeedbackDescription": "También puede optar por enviar sus comentarios por correo electrónico. Para ayudarnos a localizar el problema más rápido, recomendamos incluir la URL de destino, los detalles de su dispositivo o capturas de pantalla relevantes.",
         "emailAction": "Enviar Correo",
-        "emailTemplateBody": "[Descripción]\nDescriba brevemente el problema o sugerencia:\n\n[URL de Destino]\n(Si aplica, proporcione el enlace que intenta descargar)\n\n[Entorno]\n(ej. Win 11 / Chrome 120 / iOS 17)\n"
+        "emailTemplateBody": "[Descripción]\nDescriba brevemente el problema o sugerencia:\n\n[URL de Destino]\n(Si aplica, proporcione el enlace que intenta descargar)\n\n[Entorno]\n(ej. Win 11 / Chrome 120 / iOS 17)\n",
+        "communityDiscussionsTitle": "Discusiones de la Comunidad",
+        "communityDiscussionsSubtitle": "Inicia sesión con GitHub para enviar comentarios públicos, reportar errores o solicitar nuevas funciones.",
+        "poweredByGiscus": "Impulsado por Giscus"
     },
     "privacyPage": {
         "metaTitle": "Política de privacidad | VoidFetch",

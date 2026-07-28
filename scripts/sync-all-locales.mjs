@@ -1241,6 +1241,44 @@ const SETTINGS_PAGE = {
   }
 };
 
+const FEEDBACK_PAGE = {
+  en: {
+    communityDiscussionsTitle: "Community Discussions",
+    communityDiscussionsSubtitle: "Sign in with GitHub to post public feedback, report bugs, or request new features.",
+    poweredByGiscus: "Powered by Giscus"
+  },
+  vi: {
+    communityDiscussionsTitle: "Thảo luận & Góp ý cộng đồng",
+    communityDiscussionsSubtitle: "Đăng nhập bằng GitHub để gửi phản hồi công khai, báo lỗi hoặc đề xuất tính năng mới.",
+    poweredByGiscus: "Hỗ trợ bởi Giscus"
+  },
+  es: {
+    communityDiscussionsTitle: "Discusiones de la Comunidad",
+    communityDiscussionsSubtitle: "Inicia sesión con GitHub para enviar comentarios públicos, reportar errores o solicitar nuevas funciones.",
+    poweredByGiscus: "Impulsado por Giscus"
+  },
+  ja: {
+    communityDiscussionsTitle: "コミュニティディスカッション",
+    communityDiscussionsSubtitle: "GitHubでサインインして、公開フィードバック、バグ報告、新機能のリクエストを投稿します。",
+    poweredByGiscus: "Giscus を使用"
+  },
+  ru: {
+    communityDiscussionsTitle: "Обсуждения сообщества",
+    communityDiscussionsSubtitle: "Войдите через GitHub, чтобы оставить публичный отзыв, сообщить об ошибке или предложить новую функцию.",
+    poweredByGiscus: "На базе Giscus"
+  },
+  zh: {
+    communityDiscussionsTitle: "社区讨论与反馈",
+    communityDiscussionsSubtitle: "使用 GitHub 登录以发布公开反馈、报告 Bug 或提出新功能需求。",
+    poweredByGiscus: "由 Giscus 提供支持"
+  },
+  "zh-tw": {
+    communityDiscussionsTitle: "社群討論與回饋",
+    communityDiscussionsSubtitle: "使用 GitHub 登入以發布公開回饋、回報 Bug 或提出新功能需求。",
+    poweredByGiscus: "由 Giscus 提供支援"
+  }
+};
+
 function copyStructure(canonical, target, locale) {
   if (canonical === null || typeof canonical !== 'object') {
     return target !== undefined ? target : canonical;
@@ -1281,6 +1319,10 @@ async function main() {
   en.supportedPlatformsModal = SUPPORTED_PLATFORMS_MODAL.en;
   en.batchWorkspace = BATCH_WORKSPACE.en;
   en.settingsPage = SETTINGS_PAGE.en;
+  en.feedbackPage = {
+    ...en.feedbackPage,
+    ...FEEDBACK_PAGE.en
+  };
   await writeFile(join(DICT_DIR, 'en.json'), JSON.stringify(en, null, 4) + '\n', 'utf8');
 
   for (const file of jsonFiles) {
@@ -1292,6 +1334,10 @@ async function main() {
     dict.supportedPlatformsModal = SUPPORTED_PLATFORMS_MODAL[locale] || SUPPORTED_PLATFORMS_MODAL.en;
     dict.batchWorkspace = BATCH_WORKSPACE[locale] || BATCH_WORKSPACE.en;
     dict.settingsPage = SETTINGS_PAGE[locale] || SETTINGS_PAGE.en;
+    dict.feedbackPage = {
+      ...dict.feedbackPage,
+      ...(FEEDBACK_PAGE[locale] || FEEDBACK_PAGE.en)
+    };
     if (locale === 'ja' && !dict.aboutPage) {
       dict.aboutPage = JAPANESE_ABOUT_PAGE;
     }

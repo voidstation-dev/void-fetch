@@ -193,7 +193,10 @@
         "privateFeedbackTitle": "Feedback via Email",
         "privateFeedbackDescription": "You can also choose to submit your feedback by sending an email. To help us locate the issue faster, we recommend including the target URL, your device details, or relevant screenshots in your email.",
         "emailAction": "Send Email",
-        "emailTemplateBody": "[Description]\nPlease briefly describe the issue or suggestion:\n\n[Target URL]\n(If applicable, provide the link you are trying to download)\n\n[Environment]\n(e.g., Win 11 / Chrome 120 / iOS 17)\n"
+        "emailTemplateBody": "[Description]\nPlease briefly describe the issue or suggestion:\n\n[Target URL]\n(If applicable, provide the link you are trying to download)\n\n[Environment]\n(e.g., Win 11 / Chrome 120 / iOS 17)\n",
+        "communityDiscussionsTitle": "Community Discussions",
+        "communityDiscussionsSubtitle": "Sign in with GitHub to post public feedback, report bugs, or request new features.",
+        "poweredByGiscus": "Powered by Giscus"
     },
     "privacyPage": {
         "metaTitle": "Privacy Policy | VoidFetch",

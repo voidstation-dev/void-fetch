@@ -193,7 +193,10 @@
         "privateFeedbackTitle": "Gửi phản hồi riêng tư qua Email",
         "privateFeedbackDescription": "Bạn cũng có thể lựa chọn gửi phản hồi riêng tư bằng cách gửi email cho chúng tôi. Để hỗ trợ chẩn đoán lỗi nhanh hơn, bạn nên đính kèm liên kết video lỗi, thông tin trình duyệt/hệ điều hành hoặc ảnh chụp màn hình lỗi.",
         "emailAction": "Gửi Email",
-        "emailTemplateBody": "[Mô tả lỗi hoặc góp ý]\nVui lòng viết mô tả ngắn gọn tại đây:\n\n[Liên kết bị lỗi]\n(Dán link video/bài viết bị lỗi tải tại đây)\n\n[Thông tin môi trường]\n(Ví dụ: Windows 11 / Chrome 120 / iOS 17)\n"
+        "emailTemplateBody": "[Mô tả lỗi hoặc góp ý]\nVui lòng viết mô tả ngắn gọn tại đây:\n\n[Liên kết bị lỗi]\n(Dán link video/bài viết bị lỗi tải tại đây)\n\n[Thông tin môi trường]\n(Ví dụ: Windows 11 / Chrome 120 / iOS 17)\n",
+        "communityDiscussionsTitle": "Thảo luận & Góp ý cộng đồng",
+        "communityDiscussionsSubtitle": "Đăng nhập bằng GitHub để gửi phản hồi công khai, báo lỗi hoặc đề xuất tính năng mới.",
+        "poweredByGiscus": "Hỗ trợ bởi Giscus"
     },
     "privacyPage": {
         "metaTitle": "Chính sách bảo mật | VoidFetch",

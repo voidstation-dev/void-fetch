@@ -193,7 +193,10 @@
         "privateFeedbackTitle": "透過郵件回饋",
         "privateFeedbackDescription": "您也可以選擇透過發送郵件來提交您的回饋。為了讓我們更快定位問題，建議在郵件中提供遇到問題的目標連結、設備資訊或相關截圖。",
         "emailAction": "發送郵件",
-        "emailTemplateBody": "【問題描述】\n請簡要描述遇到的問題或建議：\n\n【目標連結】\n(如涉及解析失敗，請提供原連結)\n\n【設備與環境】\n(例：Win 11 / Chrome 120 / iOS 17)\n"
+        "emailTemplateBody": "【問題描述】\n請簡要描述遇到的問題或建議：\n\n【目標連結】\n(如涉及解析失敗，請提供原連結)\n\n【設備與環境】\n(例：Win 11 / Chrome 120 / iOS 17)\n",
+        "communityDiscussionsTitle": "社群討論與回饋",
+        "communityDiscussionsSubtitle": "使用 GitHub 登入以發布公開回饋、回報 Bug 或提出新功能需求。",
+        "poweredByGiscus": "由 Giscus 提供支援"
     },
     "privacyPage": {
         "metaTitle": "隱私政策｜VoidFetch",

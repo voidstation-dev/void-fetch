@@ -193,7 +193,10 @@
         "privateFeedbackTitle": "メールでのフィードバック",
         "privateFeedbackDescription": "メールでフィードバックを送信することもできます。問題の早期解決のため、メールには対象のURL、デバイス情報、または関連するスクリーンショットを含めることをお勧めします。",
         "emailAction": "メールを送信",
-        "emailTemplateBody": "【問題の概要】\n問題または提案を簡潔に説明してください：\n\n【対象URL】\n(該当する場合はリンクを記載してください)\n\n【利用環境】\n(例：Win 11 / Chrome 120 / iOS 17)\n"
+        "emailTemplateBody": "【問題の概要】\n問題または提案を簡潔に説明してください：\n\n【対象URL】\n(該当する場合はリンクを記載してください)\n\n【利用環境】\n(例：Win 11 / Chrome 120 / iOS 17)\n",
+        "communityDiscussionsTitle": "コミュニティディスカッション",
+        "communityDiscussionsSubtitle": "GitHubでサインインして、公開フィードバック、バグ報告、新機能のリクエストを投稿します。",
+        "poweredByGiscus": "Giscus を使用"
     },
     "privacyPage": {
         "metaTitle": "プライバシーポリシー | VoidFetch",

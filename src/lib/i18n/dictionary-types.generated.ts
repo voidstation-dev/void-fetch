@@ -198,6 +198,9 @@ export interface Dictionary {
     privateFeedbackDescription: string;
     emailAction: string;
     emailTemplateBody: string;
+    communityDiscussionsTitle: string;
+    communityDiscussionsSubtitle: string;
+    poweredByGiscus: string;
   };
   privacyPage: {
     metaTitle: string;
