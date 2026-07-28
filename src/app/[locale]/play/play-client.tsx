@@ -10,8 +10,8 @@ import { Button } from '@/components/ui/button'
 import { PlatformBadge } from '@/components/platform-badge'
 import { ViewportSideRailAd } from '@/components/ads/viewport-side-rail-ad'
 import { buildMediaPreviewUrl, canSharePlayResult } from '@/components/downloader/media-preview'
-import { useAppLocale, useDictionary } from '@/i18n/client'
-import { isApiRequestError, resolveApiErrorMessage } from '@/lib/api-errors'
+import { useLocale, useTranslations } from 'next-intl'
+import { isApiRequestError, notifyApiErrorToast, resolveApiErrorMessage } from '@/lib/api-errors'
 import { buildHlsPlayProxyUrl, HLS_PLAYLIST_ACCEPT, isHlsPlaylistUrl } from '@/lib/hls-playback'
 import { UnifiedParseReloadError, requestUnifiedParse } from '@/lib/unified-parse'
 import type { UnifiedParseResult } from '@/lib/types'
@@ -20,8 +20,12 @@ import { normalizePlatform } from '@/lib/platforms'
 type ParsedResultData = NonNullable<UnifiedParseResult['data']>
 
 export function PlayPageClient() {
-    const dict = useDictionary()
-    const locale = useAppLocale()
+    const locale = useLocale()
+    const tErrors = useTranslations('errors')
+    const tForm = useTranslations('form')
+    const tResult = useTranslations('result')
+    const tCommon = useTranslations('common')
+    const tHistory = useTranslations('history')
     const searchParams = useSearchParams()
 
     const sourceUrl = (searchParams.get('url') || searchParams.get('play') || '').trim()
@@ -62,6 +66,11 @@ export function PlayPageClient() {
                     return
                 }
 
+                if (notifyApiErrorToast(err)) {
+                    setError('Server unavailable or rate limited')
+                    return
+                }
+
                 if (isApiRequestError(err)) {
                     console.error('Shared playback parse failed', {
                         code: err.code,
@@ -71,7 +80,10 @@ export function PlayPageClient() {
                     })
                 }
 
-                setError(resolveApiErrorMessage(err, dict))
+                setError(resolveApiErrorMessage(err, {
+                    api: tErrors.raw('api') as Record<string, string>,
+                    downloadError: tErrors('downloadError'),
+                }))
             } finally {
                 if (!cancelled) {
                     setLoading(false)
@@ -84,10 +96,10 @@ export function PlayPageClient() {
         return () => {
             cancelled = true
         }
-    }, [dict, sourceUrl])
+    }, [tErrors, sourceUrl])
 
     const visibleParseResult = sourceUrl ? parseResult : null
-    const displayError = sourceUrl ? error : dict.errors.emptyUrl
+    const displayError = sourceUrl ? error : tErrors('emptyUrl')
     const canonicalSourceUrl = (visibleParseResult?.url || sourceUrl).trim()
     const hlsPlaybackUrl = useMemo(() => {
         const playlistUrl = visibleParseResult?.originDownloadVideoUrl?.trim()
@@ -127,7 +139,7 @@ export function PlayPageClient() {
                         <div className="aspect-video max-h-[74dvh] md:max-h-[72vh] lg:max-h-[68vh] flex items-center justify-center text-sm text-muted-foreground">
                             <div className="flex items-center gap-2">
                                 <Loader2 className="h-4 w-4 animate-spin" />
-                                <span>{dict.form.downloading}</span>
+                                <span>{tForm('downloading')}</span>
                             </div>
                         </div>
                     ) : (canPlay && playbackUrl) ? (
@@ -152,7 +164,7 @@ export function PlayPageClient() {
                         )
                     ) : visibleParseResult ? (
                         <div className="aspect-video max-h-[74dvh] md:max-h-[72vh] lg:max-h-[68vh] flex items-center justify-center px-4 text-sm text-muted-foreground bg-black">
-                            {dict.result.sharePlayUnavailable}
+                            {tResult('sharePlayUnavailable')}
                         </div>
                     ) : null}
                 </section>
@@ -164,7 +176,7 @@ export function PlayPageClient() {
                                 <CardContent className="p-6 space-y-4">
                                     <p className="text-sm text-destructive">{displayError}</p>
                                     <Button asChild size="sm" variant="outline">
-                                        <Link href={`/${locale}`}>{dict.common.home}</Link>
+                                        <Link href={`/${locale}`}>{tCommon('home')}</Link>
                                     </Button>
                                 </CardContent>
                             </Card>
@@ -183,7 +195,7 @@ export function PlayPageClient() {
                                             className="inline-flex items-center gap-1 underline"
                                         >
                                             <ExternalLink className="h-3.5 w-3.5" />
-                                            <span>{dict.history.viewSource}</span>
+                                            <span>{tHistory('viewSource')}</span>
                                         </a>
                                     ) : null}
                                 </div>

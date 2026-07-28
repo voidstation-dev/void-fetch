@@ -37,15 +37,16 @@ const TRACKING_PARAMS = [
  */
 export function normalizeUrl(rawUrl: string): string {
   try {
-    const urlObj = new URL(rawUrl.trim());
+    let cleaned = rawUrl.trim();
+    cleaned = cleaned.replace(/[.,!?;:)\]}"'，。！？；：）】》]+$/g, '');
+    cleaned = cleaned.replace(/([\x20-\x7E]+)[^\x20-\x7E]+$/g, '$1');
+
+    const urlObj = new URL(cleaned);
     
     // Remove common tracking search params
     TRACKING_PARAMS.forEach((param) => {
       urlObj.searchParams.delete(param);
     });
-
-    // Specific platform normalization can be added here if needed
-    // E.g., tiktok, youtube short links, etc.
 
     return urlObj.toString();
   } catch {
@@ -64,10 +65,10 @@ export function detectPlatform(urlStr: string): string {
     if (host.includes('youtube.com') || host.includes('youtu.be')) return 'youtube';
     if (host.includes('tiktok.com')) return 'tiktok';
     if (host.includes('douyin.com')) return 'douyin';
-    if (host.includes('kuaishou.com') || host.includes('gifshow.com')) return 'kuaishou';
+    if (host.includes('kuaishou.com') || host.includes('gifshow.com') || host.includes('kuaishouapp.com')) return 'kuaishou';
     if (host.includes('xiaohongshu.com') || host.includes('xhslink.com')) return 'xiaohongshu';
-    if (host.includes('reddit.com')) return 'reddit';
-    if (host.includes('instagram.com')) return 'instagram';
+    if (host.includes('reddit.com') || host.includes('redd.it')) return 'reddit';
+    if (host.includes('instagram.com') || host.includes('instagr.am')) return 'instagram';
     if (host.includes('twitter.com') || host.includes('x.com')) return 'x';
     if (host.includes('apple.com') || host.includes('podcasts.apple.com')) return 'apple_podcasts';
     if (host.includes('pinterest.com') || host.includes('pin.it')) return 'pinterest';
@@ -75,9 +76,11 @@ export function detectPlatform(urlStr: string): string {
     if (host.includes('vimeo.com')) return 'vimeo';
     if (host.includes('twitch.tv')) return 'twitch';
     if (host.includes('tumblr.com')) return 'tumblr';
-    if (host.includes('vk.com')) return 'vk';
-    if (host.includes('dailymotion.com')) return 'dailymotion';
+    if (host.includes('vk.com') || host.includes('vk.video')) return 'vk';
+    if (host.includes('dailymotion.com') || host.includes('dai.ly')) return 'dailymotion';
     if (host.includes('weibo.com') || host.includes('weibo.cn')) return 'weibo';
+    if (host.includes('threads.com') || host.includes('threads.net')) return 'threads';
+    if (host.includes('telegram.org') || host.includes('t.me')) return 'telegram';
     
     return 'generic'; // fallback to generic or unknown
   } catch {

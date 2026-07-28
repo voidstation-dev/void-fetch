@@ -66,3 +66,30 @@ export function formatBytes(bytes: number, decimals: number = 1): string {
 
   return `${(bytes / Math.pow(k, i)).toFixed(decimals)} ${sizes[i]}`;
 }
+
+/**
+ * 格式化传输速度
+ * @param bytesPerSec 字节/秒
+ */
+export function formatSpeed(bytesPerSec?: number): string {
+  if (!bytesPerSec || bytesPerSec <= 0) return '0 KB/s';
+  if (bytesPerSec < 1024 * 1024) return `${(bytesPerSec / 1024).toFixed(1)} KB/s`;
+  return `${(bytesPerSec / (1024 * 1024)).toFixed(1)} MB/s`;
+}
+
+/**
+ * 格式化预计剩余时间 (ETA)
+ * @param seconds 秒数
+ */
+export function formatEta(seconds?: number): string {
+  if (!seconds || seconds <= 0 || !Number.isFinite(seconds)) return '';
+  const totalSeconds = Math.max(1, Math.round(seconds));
+  const hours = Math.floor(totalSeconds / 3600);
+  const mins = Math.floor((totalSeconds % 3600) / 60);
+  const secs = totalSeconds % 60;
+
+  if (hours > 0) {
+    return `${hours}h ${mins}m ${secs}s`;
+  }
+  return mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
+}

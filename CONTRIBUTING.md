@@ -25,13 +25,17 @@ We welcome feature requests and new platform parsing additions:
 - Provide example public links or platform documentation if requesting a new platform media extractor.
 
 ### 3. Submitting Pull Requests (PRs)
-1. **Fork the Repository**: Create a fork under your personal GitHub account.
-2. **Clone your fork**:
+1. **Clone or Fork the Repository**:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/void-fetch.git
+   git clone https://github.com/voidstation-dev/void-fetch.git
    cd void-fetch
    ```
-3. **Create a Feature Branch**:
+2. **Checkout the `dev` branch and pull latest changes**:
+   ```bash
+   git checkout dev
+   git pull origin dev
+   ```
+3. **Create a Feature/Bugfix Branch from `dev`**:
    ```bash
    git checkout -b feat/your-feature-name
    ```
@@ -52,7 +56,7 @@ We welcome feature requests and new platform parsing additions:
    - `fix: resolve hydration warning on batch composer`
    - `docs: update setup instructions`
    - `style: refine failed status badge contrast`
-8. **Push to your fork and open a Pull Request**: Submit your PR targeting the `main` branch of `voidstation-dev/void-fetch`.
+8. **Push to your feature branch and open a Pull Request**: Submit your PR targeting `dev` for review before merging into `main`.
 
 ---
 

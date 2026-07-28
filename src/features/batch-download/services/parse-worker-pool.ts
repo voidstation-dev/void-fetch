@@ -16,7 +16,7 @@ import type {
   DownloadError,
   DownloadErrorCode,
 } from "../types/batch-download";
-import { isApiRequestError } from "@/lib/api-errors";
+import { isApiRequestError, notifyApiErrorToast } from "@/lib/api-errors";
 import { normalizePlatform } from "@/lib/platforms";
 import type { PodcastEpisodeInfo } from "@/lib/types";
 import { parseMediaDuration } from "../utils/duration-helper";
@@ -75,7 +75,7 @@ async function requestWithRetry(
  * Helper to resolve the correct file extension based on OutputType and platform
  */
 function inferExtension(outputType: string, platform: string): string {
-  if (outputType === "audio") return "mp3";
+  if (outputType === "audio" || platform === "soundcloud" || platform === "apple_podcasts") return "mp3";
   if (outputType === "zip_images" || outputType === "images") return "zip";
   return "mp4"; // default to mp4
 }
@@ -243,22 +243,34 @@ async function parseJob(jobId: string): Promise<void> {
       isValidStreamUrl(rawParsedData?.downloadVideoUrl) ||
       isValidStreamUrl(rawParsedData?.downloadAudioUrl)
     );
-    const isExplicitVideo = parseRecord.type === "video" || parseData.kind === "video";
-    const isImageOnlyPost =
-      parseRecord.type === "image" ||
-      parseRecord.type === "images" ||
-      (metadata.platform === "pinterest" && !isExplicitVideo) ||
-      (Boolean(metadata.images && metadata.images.length > 0) && !hasStream);
-
-    const isAudioPlatform =
+    const isAudioItem =
+      metadata.platform === "soundcloud" ||
       metadata.platform === "apple_podcasts" ||
-      settings.defaultOutputType === "audio";
+      parseRecord.type === "audio" ||
+      parseData.kind === "audio";
+
+    const isExplicitVideo =
+      parseRecord.type === "video" ||
+      parseData.kind === "video" ||
+      Boolean(parseData.downloadVideoUrl && !isAudioItem);
+
+    const isImageOnlyPost =
+      !isAudioItem &&
+      !isExplicitVideo &&
+      (
+        parseRecord.type === "image" ||
+        parseRecord.type === "images" ||
+        (metadata.platform === "pinterest" && !isExplicitVideo) ||
+        (Boolean(metadata.images && metadata.images.length > 0) && !hasStream)
+      );
+
+    const isAudioMode = isAudioItem || settings.defaultOutputType === "audio";
 
     const effectiveOutputType = isImageOnlyPost
       ? metadata.images && metadata.images.length > 1
         ? "zip_images"
         : "images"
-      : isAudioPlatform
+      : isAudioMode
       ? "audio"
       : settings.defaultOutputType;
 
@@ -331,6 +343,8 @@ async function parseJob(jobId: string): Promise<void> {
       message: errorMessage,
       error,
     });
+
+    notifyApiErrorToast(downloadError);
 
     await store.updateJobError(jobId, downloadError);
   }

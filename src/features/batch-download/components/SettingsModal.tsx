@@ -48,19 +48,12 @@ export function SettingsModal() {
   const isOpen = store.isSettingsOpen;
   const settings = store.settings;
 
-  const [isClosing, setIsClosing] = React.useState(false);
   const [customDirName, setCustomDirName] = React.useState<string | null>(
     getActiveDirectoryName(),
   );
 
-  if (!isOpen) return null;
-
   const handleClose = () => {
-    setIsClosing(true);
-    setTimeout(() => {
-      store.setIsSettingsOpen(false);
-      setIsClosing(false);
-    }, 200);
+    store.setIsSettingsOpen(false);
   };
 
   const handleUpdate = (newSettings: Partial<typeof settings>) => {
@@ -90,7 +83,7 @@ export function SettingsModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
-      <DialogContent showCloseButton={false} className="sm:max-w-lg p-6 rounded-2xl border border-border/80 bg-card shadow-2xl backdrop-blur-xl transition-all duration-200">
+      <DialogContent showCloseButton={false} className="sm:max-w-xl w-[calc(100vw-2rem)] max-h-[85vh] overflow-x-hidden overflow-y-auto p-6 rounded-2xl border border-border/80 bg-card shadow-2xl backdrop-blur-xl transition-all duration-200">
         <DialogTitle className="sr-only">Workspace Preferences</DialogTitle>
         <DialogDescription className="sr-only">Configure global download defaults and network concurrency</DialogDescription>
         {/* Glow Ambient Line Top */}
@@ -112,12 +105,13 @@ export function SettingsModal() {
             </div>
           </div>
           <Button
+            aria-label="Close workspace preferences"
             variant="ghost"
             size="icon"
             onClick={handleClose}
             className="h-8 w-8 rounded-full text-muted-foreground hover:text-foreground"
           >
-            <X className="h-4 w-4" />
+            <X className="h-4 w-4" aria-hidden="true" />
           </Button>
         </div>
 
@@ -130,9 +124,9 @@ export function SettingsModal() {
               <span>Default Output & Quality</span>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="flex flex-col gap-1.5">
-                <Label className="text-[11px] text-muted-foreground">
+                <Label htmlFor="default-format-select" className="text-[11px] text-muted-foreground">
                   Default Format
                 </Label>
                 <Select
@@ -141,7 +135,7 @@ export function SettingsModal() {
                     handleUpdate({ defaultOutputType: val as OutputType })
                   }
                 >
-                  <SelectTrigger className="h-9 text-xs">
+                  <SelectTrigger id="default-format-select" aria-label="Default Format" className="h-9 text-xs">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -156,14 +150,14 @@ export function SettingsModal() {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <Label className="text-[11px] text-muted-foreground">
+                <Label htmlFor="default-quality-select" className="text-[11px] text-muted-foreground">
                   Default Quality
                 </Label>
                 <Select
                   value={settings.defaultQuality}
                   onValueChange={(val) => handleUpdate({ defaultQuality: val })}
                 >
-                  <SelectTrigger className="h-9 text-xs">
+                  <SelectTrigger id="default-quality-select" aria-label="Default Quality" className="h-9 text-xs">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -186,8 +180,8 @@ export function SettingsModal() {
             </div>
 
             <div className="flex flex-col gap-2 p-3.5 rounded-xl border border-border/60 bg-muted/20 backdrop-blur-md">
-              <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2 overflow-hidden">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-2 overflow-hidden min-w-0">
                   <div className="p-2 rounded-lg bg-primary/10 border border-primary/20 text-primary shrink-0">
                     <FolderCheck className="h-4 w-4" />
                   </div>
@@ -205,7 +199,7 @@ export function SettingsModal() {
                   </div>
                 </div>
 
-                <div className="flex gap-1.5 shrink-0">
+                <div className="flex flex-wrap gap-1.5 shrink-0">
                   {customDirName ? (
                     <Button
                       variant="outline"
@@ -248,9 +242,9 @@ export function SettingsModal() {
               <span>Network Concurrency</span>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="flex flex-col gap-1.5">
-                <Label className="text-[11px] text-muted-foreground">
+                <Label htmlFor="concurrent-jobs-select" className="text-[11px] text-muted-foreground">
                   Concurrent Jobs
                 </Label>
                 <Select
@@ -259,7 +253,7 @@ export function SettingsModal() {
                     handleUpdate({ downloadConcurrency: Number(val) })
                   }
                 >
-                  <SelectTrigger className="h-9 text-xs">
+                  <SelectTrigger id="concurrent-jobs-select" aria-label="Concurrent Jobs" className="h-9 text-xs">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -274,7 +268,7 @@ export function SettingsModal() {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <Label className="text-[11px] text-muted-foreground">
+                <Label htmlFor="hls-concurrency-select" className="text-[11px] text-muted-foreground">
                   HLS Segment Concurrency
                 </Label>
                 <Select
@@ -283,7 +277,7 @@ export function SettingsModal() {
                     handleUpdate({ globalNetworkBudget: Number(val) })
                   }
                 >
-                  <SelectTrigger className="h-9 text-xs">
+                  <SelectTrigger id="hls-concurrency-select" aria-label="HLS Segment Concurrency" className="h-9 text-xs">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -303,7 +297,7 @@ export function SettingsModal() {
               <span>Queue Behavior</span>
             </div>
 
-            <div className="flex items-center justify-between p-2.5 rounded-xl bg-muted/40 border border-border/60">
+            <label className="flex items-center justify-between p-2.5 rounded-xl bg-muted/40 border border-border/60 cursor-pointer hover:bg-muted/60 transition-colors">
               <div className="flex flex-col gap-0.5">
                 <span className="text-xs font-medium text-foreground">
                   Continue Queue on Error
@@ -318,9 +312,9 @@ export function SettingsModal() {
                 onChange={(e) =>
                   handleUpdate({ continueOnError: e.target.checked })
                 }
-                className="h-4 w-4 rounded border-borderAccent text-primary focus:ring-0 cursor-pointer"
+                className="h-4 w-4 rounded border-borderAccent text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 cursor-pointer"
               />
-            </div>
+            </label>
           </div>
         </div>
 

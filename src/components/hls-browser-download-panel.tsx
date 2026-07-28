@@ -7,7 +7,7 @@ import pRetry from 'p-retry'
 
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
-import { useDictionary } from '@/i18n/client'
+import { useTranslations } from 'next-intl'
 import type { ByteRange, HlsSegment } from '@/lib/hls-browser-download'
 import {
     buildHlsHostProbeTargets,
@@ -22,7 +22,7 @@ import {
 } from '@/lib/hls-browser-download'
 import { HLS_PLAYLIST_ACCEPT } from '@/lib/hls-playback'
 import { requestUnifiedParse } from '@/lib/unified-parse'
-import { sanitizeFilename } from '@/lib/utils'
+import { sanitizeFilename, formatEta } from '@/lib/utils'
 
 const DOWNLOAD_CONCURRENCY = 8
 const SEGMENT_DOWNLOAD_RETRIES = 3
@@ -547,23 +547,6 @@ function formatSpeed(bytesPerSecond: number): string {
     return `${(bytesPerSecond / (1024 * 1024)).toFixed(1)} mb/s`
 }
 
-function formatEta(seconds: number): string {
-    if (!Number.isFinite(seconds) || seconds <= 0) {
-        return '00:00'
-    }
-
-    const totalSeconds = Math.max(1, Math.round(seconds))
-    const hours = Math.floor(totalSeconds / 3600)
-    const minutes = Math.floor((totalSeconds % 3600) / 60)
-    const remainingSeconds = totalSeconds % 60
-
-    if (hours > 0) {
-        return [hours, minutes, remainingSeconds].map((value) => String(value).padStart(2, '0')).join(':')
-    }
-
-    return [minutes, remainingSeconds].map((value) => String(value).padStart(2, '0')).join(':')
-}
-
 export function HlsBrowserDownloadPanel({
     initialSourceUrl,
     initialRefererUrl,
@@ -572,8 +555,9 @@ export function HlsBrowserDownloadPanel({
     onBusyChange,
     onCancelReady,
 }: HlsBrowserDownloadPanelProps) {
-    const dict = useDictionary()
-    const [status, setStatus] = useState(dict.hlsDownload.idleStatus)
+    const tHls = useTranslations('hlsDownload')
+    const tHistory = useTranslations('history')
+    const [status, setStatus] = useState(tHls('idleStatus'))
     const [resolveLoading, setResolveLoading] = useState(false)
     const [downloadLoading, setDownloadLoading] = useState(false)
     const [progress, setProgress] = useState(0)
@@ -633,7 +617,7 @@ export function HlsBrowserDownloadPanel({
         setSpeedBytesPerSecond(null)
         setEtaSeconds(null)
         downloadSamplesRef.current = []
-        setStatus(dict.hlsDownload.resolvingStatus)
+        setStatus(tHls('resolvingStatus'))
 
         try {
             const resolution = await resolvePlaylist(
@@ -652,7 +636,7 @@ export function HlsBrowserDownloadPanel({
                 resolution.selectedSegments.length,
                 supportsStreamingFileSave
             )) {
-                setStatus(dict.hlsDownload.largeVideoBrowserLimitedStatus)
+                setStatus(tHls('largeVideoBrowserLimitedStatus'))
                 setFailed(true)
                 return
             }
@@ -661,7 +645,7 @@ export function HlsBrowserDownloadPanel({
 
             setResolveLoading(false)
             setDownloadLoading(true)
-            setStatus(dict.hlsDownload.downloadingStatus)
+            setStatus(tHls('downloadingStatus'))
 
             const targets = [
                 ...(resolution.mapUrl
@@ -675,7 +659,7 @@ export function HlsBrowserDownloadPanel({
             let completed = 0
             let downloadedBytes = 0
             const extension = inferHlsOutputExtension(resolution.mapUrl, resolution.selectedSegments)
-            const baseTitle = sanitizeFilename(initialTitle || resolution.title || dict.history.unknownTitle)
+            const baseTitle = sanitizeFilename(initialTitle || resolution.title || tHistory('unknownTitle'))
             const outputName = `${baseTitle || 'hls-browser-download'}-${resolution.selectedSegments.length}-segments.${extension}`
             const mimeType = extension === 'mp4' ? 'video/mp4' : 'video/mp2t'
 
@@ -735,18 +719,18 @@ export function HlsBrowserDownloadPanel({
 
             setProgress(100)
             setEtaSeconds(0)
-            setStatus(dict.hlsDownload.downloadCompletedStatus)
+            setStatus(tHls('downloadCompletedStatus'))
         } catch (error) {
             if (!mountedRef.current) {
                 return
             }
 
             if (isAbortError(error)) {
-                setStatus(dict.hlsDownload.idleStatus)
+                setStatus(tHls('idleStatus'))
                 return
             }
 
-            setStatus(dict.hlsDownload.downloadFailedStatus)
+            setStatus(tHls('downloadFailedStatus'))
             setFailed(true)
             console.error('Browser HLS download failed:', error)
         } finally {
@@ -756,7 +740,7 @@ export function HlsBrowserDownloadPanel({
                 setDownloadLoading(false)
             }
         }
-    }, [dict.history.unknownTitle, dict.hlsDownload.downloadCompletedStatus, dict.hlsDownload.downloadFailedStatus, dict.hlsDownload.downloadingStatus, dict.hlsDownload.idleStatus, dict.hlsDownload.largeVideoBrowserLimitedStatus, dict.hlsDownload.resolvingStatus, finishTask, initialRefererUrl, initialSourceUrl, initialTitle, startTask])
+    }, [tHistory, tHls, finishTask, initialRefererUrl, initialSourceUrl, initialTitle, startTask])
 
     useEffect(() => {
         if (autorun && initialSourceUrl && !autorunTriggeredRef.current) {
@@ -781,29 +765,29 @@ export function HlsBrowserDownloadPanel({
                         <ListVideo className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
                     )}
                     <div className="min-w-0 space-y-1">
-                        <div className="font-medium">{dict.hlsDownload.statusLabel}</div>
+                        <div className="font-medium">{tHls('statusLabel')}</div>
                         <p className="break-words text-muted-foreground">{status}</p>
                     </div>
                 </div>
                 <Progress value={progress} />
                 <div className="grid grid-cols-3 gap-3 text-xs text-muted-foreground sm:text-sm">
                     <div className="rounded-md bg-background/60 px-3 py-2">
-                        <div>{dict.hlsDownload.progressLabel}</div>
+                        <div>{tHls('progressLabel')}</div>
                         <div className="mt-1 font-medium text-foreground">{progress}%</div>
                     </div>
                     <div className="rounded-md bg-background/60 px-3 py-2">
-                        <div>{dict.hlsDownload.speedLabel}</div>
+                        <div>{tHls('speedLabel')}</div>
                         <div className="mt-1 font-medium text-foreground">
                             {speedBytesPerSecond
                                 ? formatSpeed(speedBytesPerSecond)
-                                : dict.hlsDownload.calculatingLabel}
+                                : tHls('calculatingLabel')}
                         </div>
                     </div>
                     <div className="rounded-md bg-background/60 px-3 py-2">
-                        <div>{dict.hlsDownload.etaLabel}</div>
+                        <div>{tHls('etaLabel')}</div>
                         <div className="mt-1 font-medium text-foreground">
                             {etaSeconds == null
-                                ? dict.hlsDownload.calculatingLabel
+                                ? tHls('calculatingLabel')
                                 : formatEta(etaSeconds)}
                         </div>
                     </div>
@@ -813,7 +797,7 @@ export function HlsBrowserDownloadPanel({
             {failed || (!autorun && !isBusy && progress === 0) ? (
                 <div className="flex justify-end">
                     <Button onClick={() => void handleStart()} disabled={isBusy}>
-                        {isBusy ? dict.hlsDownload.downloadingButton : dict.hlsDownload.downloadButton}
+                        {isBusy ? tHls('downloadingButton') : tHls('downloadButton')}
                     </Button>
                 </div>
             ) : null}

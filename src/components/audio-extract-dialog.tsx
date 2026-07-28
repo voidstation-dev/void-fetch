@@ -20,8 +20,8 @@ import {
 } from '@/components/ui/dialog'
 import { Progress } from '@/components/ui/progress'
 import { useFFmpeg, type FFmpegStatus } from '@/hooks/use-ffmpeg'
-import { useDictionary } from '@/i18n/client'
-import { isApiRequestError, resolveApiErrorMessage } from '@/lib/api-errors'
+import { useTranslations } from 'next-intl'
+import { isApiRequestError, notifyApiErrorToast, resolveApiErrorMessage } from '@/lib/api-errors'
 import { toast } from '@/lib/deferred-toast'
 import { UnifiedParseReloadError, requestUnifiedParse } from '@/lib/unified-parse'
 import { cn, downloadFile, formatBytes, sanitizeFilename } from '@/lib/utils'
@@ -166,7 +166,11 @@ export function AudioExtractDialog({
     entry = 'toolbar',
     autoExtractTask = null,
 }: AudioExtractDialogProps) {
-    const dict = useDictionary()
+    const tAudioTool = useTranslations('audioTool')
+    const tExtractAudio = useTranslations('extractAudio')
+    const tErrors = useTranslations('errors')
+    const tHistory = useTranslations('history')
+    const tResult = useTranslations('result')
     const extractFileInputId = useId()
     const mergeVideoInputId = useId()
     const mergeAudioInputId = useId()
@@ -186,8 +190,8 @@ export function AudioExtractDialog({
     const showProgress = ffmpegProcessing
     const isBusy = stage === 'parsing' || stage === 'preparing-merge' || stage === 'direct-downloading' || stage === 'reading-file' || ffmpegProcessing
     const toolbarDescription = mode === 'merge'
-        ? dict.audioTool.mergeDescription
-        : dict.audioTool.extractDescription
+        ? tAudioTool('mergeDescription')
+        : tAudioTool('extractDescription')
 
     const setValidationError = useCallback((message: string) => {
         setStage('error')
@@ -198,69 +202,69 @@ export function AudioExtractDialog({
     const validateMergeTotalSize = useCallback((videoFile: File | null, audioFile: File | null): boolean => {
         const totalSize = (videoFile?.size ?? 0) + (audioFile?.size ?? 0)
         if (totalSize > MAX_TOTAL_MERGE_SIZE) {
-            setValidationError(dict.errors.totalSizeTooLarge)
+            setValidationError(tErrors('totalSizeTooLarge'))
             return false
         }
 
         return true
-    }, [dict.errors.totalSizeTooLarge, setValidationError])
+    }, [tErrors, setValidationError])
 
     const validateExtractVideoFile = useCallback((file: File): boolean => {
         if (file.size > MAX_VIDEO_FILE_SIZE) {
-            setValidationError(dict.errors.fileTooLarge)
+            setValidationError(tErrors('fileTooLarge'))
             return false
         }
 
         if (file.size === 0) {
-            setValidationError(dict.errors.fileEmpty)
+            setValidationError(tErrors('fileEmpty'))
             return false
         }
 
         if (!isSupportedVideoFile(file)) {
-            setValidationError(dict.errors.fileFormatNotSupported)
+            setValidationError(tErrors('fileFormatNotSupported'))
             return false
         }
 
         return true
-    }, [dict.errors.fileEmpty, dict.errors.fileFormatNotSupported, dict.errors.fileTooLarge, setValidationError])
+    }, [tErrors, setValidationError])
 
     const validateMergeVideoFile = useCallback((file: File): boolean => {
         if (file.size > MAX_VIDEO_FILE_SIZE) {
-            setValidationError(dict.errors.videoFileTooLarge)
+            setValidationError(tErrors('videoFileTooLarge'))
             return false
         }
 
         if (file.size === 0) {
-            setValidationError(dict.errors.fileEmpty)
+            setValidationError(tErrors('fileEmpty'))
             return false
         }
 
         if (!isSupportedVideoFile(file)) {
-            setValidationError(dict.errors.fileFormatNotSupported)
+            setValidationError(tErrors('fileFormatNotSupported'))
             return false
         }
 
         return true
-    }, [dict.errors.fileEmpty, dict.errors.fileFormatNotSupported, dict.errors.videoFileTooLarge, setValidationError])
+    }, [tErrors, setValidationError])
 
     const validateMergeAudioFile = useCallback((file: File): boolean => {
         if (file.size > MAX_AUDIO_FILE_SIZE) {
-            setValidationError(dict.errors.audioFileTooLarge)
+            setValidationError(tErrors('audioFileTooLarge'))
             return false
         }
 
         if (file.size === 0) {
-            setValidationError(dict.errors.fileEmpty)
+            setValidationError(tErrors('fileEmpty'))
             return false
         }
 
         if (!isSupportedAudioFile(file)) {
-            setValidationError(dict.errors.audioFormatNotSupported)
+            setValidationError(tErrors('audioFormatNotSupported'))
             return false
         }
 
         return true
-    }, [dict.errors.audioFileTooLarge, dict.errors.audioFormatNotSupported, dict.errors.fileEmpty, setValidationError])
+    }, [tErrors, setValidationError])
 
     const fetchRemoteFile = useCallback(async (
         sourceUrl: string,
@@ -272,97 +276,98 @@ export function AudioExtractDialog({
         })
 
         if (!response.ok) {
-            throw new Error(dict.errors.downloadError)
+            throw new Error(tErrors('downloadError'))
         }
 
         const blob = await response.blob()
         if (blob.size === 0) {
-            throw new Error(dict.errors.fileEmpty)
+            throw new Error(tErrors('fileEmpty'))
         }
 
         const fallbackExtension = fileKind === 'video' ? 'mp4' : 'm4a'
         const extension = getExtensionFromUrl(sourceUrl)
             ?? getExtensionFromContentType(response.headers.get('content-type'), fallbackExtension)
-        const filename = `${sanitizeFilename(title || dict.history.unknownTitle)}-${fileKind}.${extension}`
+        const filename = `${sanitizeFilename(title || tHistory('unknownTitle'))}-${fileKind}.${extension}`
 
         return new File([blob], filename, {
             type: blob.type || response.headers.get('content-type') || undefined,
         })
-    }, [dict.errors.downloadError, dict.errors.fileEmpty, dict.history.unknownTitle])
+    }, [tErrors, tHistory])
 
     const statusText = (() => {
         if (stage === 'parsing') {
-            return dict.audioTool.statusParsing
+            return tAudioTool('statusParsing')
         }
 
         if (stage === 'preparing-merge') {
-            return dict.audioTool.statusPreparingMerge
+            return tAudioTool('statusPreparingMerge')
         }
 
         if (stage === 'direct-downloading') {
-            return dict.audioTool.statusDirectDownloading
+            return tAudioTool('statusDirectDownloading')
         }
 
         if (stage === 'fallback-extracting') {
-            return dict.audioTool.statusFallbackExtracting
+            return tAudioTool('statusFallbackExtracting')
         }
 
         if (status === 'reading-video') {
-            return dict.audioTool.statusReadingVideo
+            return tAudioTool('statusReadingVideo')
         }
 
         if (status === 'reading-audio') {
-            return dict.audioTool.statusReadingAudio
+            return tAudioTool('statusReadingAudio')
         }
 
         if (status === 'merging') {
-            return dict.audioTool.statusMerging
+            return tAudioTool('statusMerging')
         }
 
         if (mode === 'merge' && status === 'idle' && !mergeVideoFile && !mergeAudioFile) {
-            return dict.audioTool.statusMergeIdle
+            return tAudioTool('statusMergeIdle')
         }
 
         if (mode === 'file') {
             if (stage === 'reading-file') {
-                return dict.audioTool.statusReadingFile
+                return tAudioTool('statusReadingFile')
             }
 
             if (selectedFile && stage === 'idle' && status === 'idle') {
-                return dict.audioTool.statusFileReady
+                return tAudioTool('statusFileReady')
             }
         }
 
         if (status === 'loading') {
-            return dict.extractAudio.loading
+            return tExtractAudio('loading')
         }
 
         if (status === 'downloading') {
-            if (progressInfo?.loaded && progressInfo?.total && dict.extractAudio.downloadingWithSize) {
-                return dict.extractAudio.downloadingWithSize
-                    .replace('{progress}', String(Math.floor(progress)))
-                    .replace('{loaded}', formatBytes(progressInfo.loaded))
-                    .replace('{total}', formatBytes(progressInfo.total))
+            if (progressInfo?.loaded && progressInfo?.total) {
+                return tExtractAudio('downloadingWithSize', {
+                    progress: Math.floor(progress),
+                    loaded: formatBytes(progressInfo.loaded),
+                    total: formatBytes(progressInfo.total),
+                })
             }
 
-            return dict.extractAudio.downloading.replace('{progress}', String(Math.floor(progress)))
+            return tExtractAudio('downloading', { progress: Math.floor(progress) })
         }
 
         if (status === 'converting') {
-            return dict.extractAudio.converting.replace('{progress}', String(Math.floor(progress)))
+            return tExtractAudio('converting', { progress: Math.floor(progress) })
         }
 
         if (stage === 'completed' || status === 'completed') {
-            return dict.audioTool.statusCompleted
+            return tAudioTool('statusCompleted')
         }
 
         if (stage === 'error' || status === 'error') {
-            return errorMessage || error || dict.errors.downloadError
+            return errorMessage || error || tErrors('downloadError')
         }
 
         return (entry === 'result' && resultTaskAction === 'merge-video') || mode === 'merge'
-            ? dict.audioTool.statusMergeIdle
-            : dict.audioTool.statusIdle
+            ? tAudioTool('statusMergeIdle')
+            : tAudioTool('statusIdle')
     })()
 
     useEffect(() => {
@@ -389,7 +394,7 @@ export function AudioExtractDialog({
         setErrorMessage('')
 
         try {
-            const outputTitle = task.title || dict.history.unknownTitle
+            const outputTitle = task.title || tHistory('unknownTitle')
             const initialTaskAction = resolveResultTaskAction(task)
 
             if (initialTaskAction === 'extract-audio' && task.videoUrl) {
@@ -432,7 +437,7 @@ export function AudioExtractDialog({
             }
 
             if (!task.sourceUrl?.trim()) {
-                setValidationError(dict.audioTool.noAudioSource)
+                setValidationError(tAudioTool('noAudioSource'))
                 return
             }
 
@@ -463,7 +468,7 @@ export function AudioExtractDialog({
 
             if (resolvedTaskAction === 'merge-video') {
                 if (!videoDownloadUrl || !audioDownloadUrl) {
-                    throw new Error(dict.audioTool.noMergeSource)
+                    throw new Error(tAudioTool('noMergeSource'))
                 }
 
                 setStage('preparing-merge')
@@ -487,7 +492,7 @@ export function AudioExtractDialog({
 
             if (resolvedTaskAction === 'extract-audio') {
                 if (!videoDownloadUrl) {
-                    throw new Error(dict.audioTool.noAudioSource)
+                    throw new Error(tAudioTool('noAudioSource'))
                 }
 
                 setStage('fallback-extracting')
@@ -508,10 +513,15 @@ export function AudioExtractDialog({
                 return
             }
 
-            throw new Error(dict.audioTool.noAudioSource)
+            throw new Error(tAudioTool('noAudioSource'))
         } catch (err) {
             if (err instanceof UnifiedParseReloadError) {
                 setStage('idle')
+                return
+            }
+
+            if (notifyApiErrorToast(err)) {
+                setStage('error')
                 return
             }
 
@@ -524,15 +534,26 @@ export function AudioExtractDialog({
                 })
             }
 
-            const resolvedMessage = resolveApiErrorMessage(err, dict)
+            const resolvedMessage = resolveApiErrorMessage(err, {
+                api: {
+                    networkError: tErrors('api.networkError'),
+                    rateLimit: tErrors('api.rateLimit'),
+                    serverError: tErrors('api.serverError'),
+                    serviceUnavailable: tErrors('api.serviceUnavailable'),
+                    unknownError: tErrors('api.unknownError'),
+                },
+                downloadError: tErrors('downloadError'),
+            })
             setStage('error')
             setErrorMessage(resolvedMessage)
-            toast.error(dict.errors.downloadFailed, {
+            toast.error(tErrors('downloadFailed'), {
                 description: resolvedMessage,
             })
         }
     }, [
-        dict,
+        tAudioTool,
+        tErrors,
+        tHistory,
         extractAudio,
         fetchRemoteFile,
         mergeVideoAndAudio,
@@ -670,7 +691,7 @@ export function AudioExtractDialog({
 
     const handleExtractFile = async () => {
         if (!selectedFile) {
-            setValidationError(dict.errors.emptyUrl)
+            setValidationError(tErrors('emptyUrl'))
             return
         }
 
@@ -685,12 +706,12 @@ export function AudioExtractDialog({
 
     const handleMerge = async () => {
         if (!mergeVideoFile) {
-            setValidationError(dict.errors.noVideoSelected)
+            setValidationError(tErrors('noVideoSelected'))
             return
         }
 
         if (!mergeAudioFile) {
-            setValidationError(dict.errors.noAudioSelected)
+            setValidationError(tErrors('noAudioSelected'))
             return
         }
 
@@ -766,13 +787,13 @@ export function AudioExtractDialog({
                     <DialogTitle>
                         {entry === 'result'
                             ? (resultTaskAction === 'merge-video'
-                                ? dict.result.mergeDownloadVideo
-                                : dict.extractAudio.button)
-                            : dict.audioTool.title}
+                                ? tResult('mergeDownloadVideo')
+                                : tExtractAudio('button'))
+                            : tAudioTool('title')}
                     </DialogTitle>
                     <DialogDescription>
                         {entry === 'result'
-                            ? (autoExtractTask?.title || autoExtractTask?.videoUrl || dict.history.unknownTitle)
+                            ? (autoExtractTask?.title || autoExtractTask?.videoUrl || tHistory('unknownTitle'))
                             : toolbarDescription}
                     </DialogDescription>
                 </DialogHeader>
@@ -801,7 +822,7 @@ export function AudioExtractDialog({
                                             : 'text-muted-foreground hover:text-foreground'
                                     )}
                                 >
-                                    {dict.audioTool.fileTab}
+                                    {tAudioTool('fileTab')}
                                 </Tabs.Trigger>
                                 <Tabs.Trigger
                                     value="merge"
@@ -812,7 +833,7 @@ export function AudioExtractDialog({
                                             : 'text-muted-foreground hover:text-foreground'
                                     )}
                                 >
-                                    {dict.audioTool.mergeTab}
+                                    {tAudioTool('mergeTab')}
                                 </Tabs.Trigger>
                             </Tabs.List>
 

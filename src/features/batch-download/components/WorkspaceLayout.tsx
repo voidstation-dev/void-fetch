@@ -6,7 +6,7 @@
 
 "use client";
 
-import React, { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -29,8 +29,6 @@ interface WorkspaceLayoutProps {
 
 export function WorkspaceLayout({ children }: WorkspaceLayoutProps) {
   const pathname = usePathname();
-  const setIsSettingsOpen = useBatchStore((s) => s.setIsSettingsOpen);
-  const store = useBatchStore();
   const initializeStore = useBatchStore((s) => s.initializeStore);
 
   useEffect(() => {
@@ -75,13 +73,19 @@ export function WorkspaceLayout({ children }: WorkspaceLayoutProps) {
   return (
     <BackgroundGrid>
       <div className="min-h-screen text-foreground flex flex-col">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-xl focus:font-bold focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+        >
+          Skip to main content
+        </a>
         <div className="flex-1 flex max-w-7xl w-full mx-auto p-3 md:p-4 gap-4">
           {/* Left Sidebar - Desktop */}
           <aside className="hidden lg:flex flex-col w-[220px] shrink-0 gap-4">
             {/* Navigation box */}
             <div className="flex flex-col gap-1.5 p-4 border rounded-xl bg-card border-border/80">
               <div className="flex items-center gap-2 pb-3 mb-2 border-b border-border/60">
-                <Terminal className="h-4 w-4 text-primary animate-pulse" />
+                <Terminal className="h-4 w-4 text-primary animate-pulse" aria-hidden="true" />
                 <span className="font-bold text-xs tracking-widest text-foreground/90 uppercase">
                   VOIDFETCH
                 </span>
@@ -106,7 +110,7 @@ export function WorkspaceLayout({ children }: WorkspaceLayoutProps) {
                           : "text-muted-foreground hover:bg-muted/50 hover:text-foreground",
                       )}
                     >
-                      <Icon className="h-4 w-4 shrink-0" />
+                      <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />
                       <span>{link.label}</span>
                     </Link>
                   );
@@ -143,11 +147,11 @@ export function WorkspaceLayout({ children }: WorkspaceLayoutProps) {
           </aside>
 
           {/* Main Content Pane */}
-          <main className="flex-1 flex flex-col min-w-0 gap-4">
+          <main id="main-content" className="flex-1 flex flex-col min-w-0 gap-4">
             {/* Mobile Navigation bar header */}
             <div className="flex lg:hidden items-center justify-between p-3 border rounded-xl bg-card border-border/80 shrink-0">
               <div className="flex items-center gap-2">
-                <Terminal className="h-4 w-4 text-primary" />
+                <Terminal className="h-4 w-4 text-primary" aria-hidden="true" />
                 <span className="font-bold text-xs tracking-wider">
                   VOIDFETCH
                 </span>
@@ -160,6 +164,7 @@ export function WorkspaceLayout({ children }: WorkspaceLayoutProps) {
                       key={link.href}
                       href={link.href}
                       title={link.label}
+                      aria-label={link.label}
                       onClick={(e) => {
                         if (link.active) {
                           e.preventDefault();
@@ -172,7 +177,7 @@ export function WorkspaceLayout({ children }: WorkspaceLayoutProps) {
                           : "text-muted-foreground hover:bg-muted/50 hover:text-foreground",
                       )}
                     >
-                      <Icon className="h-4 w-4 shrink-0" />
+                      <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />
                     </Link>
                   );
                 })}

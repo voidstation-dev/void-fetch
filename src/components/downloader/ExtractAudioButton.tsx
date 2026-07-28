@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Loader2, Music, AlertCircle, CheckCircle } from 'lucide-react';
 import { useFFmpeg, FFmpegStatus } from '@/hooks/use-ffmpeg';
-import { useDictionary } from '@/i18n/client';
+import { useTranslations } from 'next-intl';
 import { formatBytes } from '@/lib/utils';
 
 interface ExtractAudioButtonProps {
@@ -13,7 +13,7 @@ interface ExtractAudioButtonProps {
 }
 
 export function ExtractAudioButton({ videoUrl, title }: ExtractAudioButtonProps) {
-  const dict = useDictionary();
+  const tExtractAudio = useTranslations('extractAudio');
   const { status, progress, progressInfo, error, extractAudio, reset } = useFFmpeg();
 
   const handleClick = () => {
@@ -32,36 +32,37 @@ export function ExtractAudioButton({ videoUrl, title }: ExtractAudioButtonProps)
         return (
           <>
             <Loader2 className="h-4 w-4 animate-spin" />
-            {dict.extractAudio.loading}
+            {tExtractAudio('loading')}
           </>
         );
       case 'downloading':
         // Compact version: show percentage and size
-        if (progressInfo?.loaded && progressInfo?.total && dict.extractAudio.downloadingWithSize) {
-          return dict.extractAudio.downloadingWithSize
-            .replace('{progress}', String(Math.floor(progress)))
-            .replace('{loaded}', formatBytes(progressInfo.loaded))
-            .replace('{total}', formatBytes(progressInfo.total));
+        if (progressInfo?.loaded && progressInfo?.total) {
+          return tExtractAudio('downloadingWithSize', {
+            progress: Math.floor(progress),
+            loaded: formatBytes(progressInfo.loaded),
+            total: formatBytes(progressInfo.total),
+          });
         }
-        return dict.extractAudio.downloading.replace('{progress}', String(Math.floor(progress)));
+        return tExtractAudio('downloading', { progress: Math.floor(progress) });
       case 'converting':
-        return dict.extractAudio.converting.replace('{progress}', String(Math.floor(progress)));
+        return tExtractAudio('converting', { progress: Math.floor(progress) });
       case 'completed':
         return (
           <>
             <CheckCircle className="h-4 w-4" />
-            {dict.extractAudio.completed}
+            {tExtractAudio('completed')}
           </>
         );
       case 'error':
         return (
           <>
             <AlertCircle className="h-4 w-4" />
-            {dict.extractAudio.retry}
+            {tExtractAudio('retry')}
           </>
         );
       default:
-        return dict.extractAudio.button;
+        return tExtractAudio('button');
     }
   };
 

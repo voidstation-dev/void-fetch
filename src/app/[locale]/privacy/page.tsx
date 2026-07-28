@@ -1,9 +1,8 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { getMessages } from "next-intl/server"
+import { getTranslations, setRequestLocale } from "next-intl/server"
 import { PageStructuredData } from "@/components/page-structured-data"
 import { i18n, type Locale } from "@/lib/i18n/config"
-import type { Dictionary } from "@/lib/i18n/types"
 
 export async function generateStaticParams() {
     return i18n.locales.map((locale) => ({ locale }))
@@ -23,9 +22,10 @@ export async function generateMetadata({
     params: Promise<{ locale: Locale }>
 }): Promise<Metadata> {
     const { locale } = await params
-    const dict = await getMessages({ locale }) as Dictionary
-    const title = dict.privacyPage.metaTitle
-    const description = dict.privacyPage.metaDescription
+    const tPrivacy = await getTranslations({ locale, namespace: "privacyPage" })
+    const tMeta = await getTranslations({ locale, namespace: "metadata" })
+    const title = tPrivacy("metaTitle")
+    const description = tPrivacy("metaDescription")
     const url = buildLocaleUrl(locale, "/privacy")
 
     return {
@@ -35,7 +35,7 @@ export async function generateMetadata({
             title,
             description,
             url,
-            siteName: dict.metadata.siteName,
+            siteName: tMeta("siteName"),
             locale: localeToOpenGraphLocale(locale),
             alternateLocale: buildOpenGraphLocaleAlternates(locale),
             type: "website",
@@ -60,38 +60,40 @@ export default async function PrivacyPage({
     params: Promise<{ locale: Locale }>
 }) {
     const { locale } = await params
-    const dict = await getMessages({ locale }) as Dictionary
-    const copy = dict.privacyPage
+    setRequestLocale(locale)
+    const tPrivacy = await getTranslations({ locale, namespace: "privacyPage" })
+    const tCommon = await getTranslations({ locale, namespace: "common" })
+    const points = tPrivacy.raw("points") as string[]
 
     return (
         <main className="min-h-screen bg-background">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-10 space-y-6">
-                <h1 className="text-3xl font-semibold tracking-tight">{copy.title}</h1>
-                <p className="text-sm text-muted-foreground leading-6">{copy.intro}</p>
+                <h1 className="text-3xl font-semibold tracking-tight">{tPrivacy("title")}</h1>
+                <p className="text-sm text-muted-foreground leading-6">{tPrivacy("intro")}</p>
                 <ul className="space-y-2 text-sm text-muted-foreground leading-6">
-                    {copy.points.map((point) => (
+                    {points.map((point) => (
                         <li key={point} className="rounded-md border bg-card p-4">
                             {point}
                         </li>
                     ))}
                 </ul>
-                <p className="text-xs text-muted-foreground">{copy.updated}</p>
+                <p className="text-xs text-muted-foreground">{tPrivacy("updated")}</p>
                 <p className="text-sm text-muted-foreground">
-                    {dict.common.relatedPages}
+                    {tCommon("relatedPages")}
                     {": "}
-                    <Link className="underline" href={`/${locale}/terms`}>{dict.common.terms}</Link>
+                    <Link className="underline" href={`/${locale}/terms`}>{tCommon("terms")}</Link>
                     {' · '}
-                    <Link className="underline" href={`/${locale}/contact`}>{dict.common.contact}</Link>
+                    <Link className="underline" href={`/${locale}/contact`}>{tCommon("contact")}</Link>
                 </p>
             </div>
             <PageStructuredData
                 locale={locale}
-                pageTitle={copy.title}
-                pageDescription={copy.intro}
+                pageTitle={tPrivacy("title")}
+                pageDescription={tPrivacy("intro")}
                 path="/privacy"
                 breadcrumbs={[
-                    { name: dict.common.home, path: "" },
-                    { name: copy.title, path: "/privacy" },
+                    { name: tCommon("home"), path: "" },
+                    { name: tPrivacy("title"), path: "/privacy" },
                 ]}
             />
         </main>

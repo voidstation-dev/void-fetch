@@ -1,6 +1,6 @@
 'use client'
 
-import { useDictionary } from '@/i18n/client'
+import { useTranslations } from 'next-intl'
 import { Badge } from '@/components/ui/badge'
 import { getPlatformBadge } from '@/lib/platforms'
 
@@ -9,8 +9,8 @@ interface PlatformBadgeProps {
 }
 
 export function PlatformBadge({ platform }: PlatformBadgeProps) {
-    const dict = useDictionary()
-    const badge = getPlatformBadge(platform, dict)
+    const tPlatforms = useTranslations('history.platforms')
+    const badge = getPlatformBadge(platform, tPlatforms)
 
     return (
         <Badge  variant="outline">

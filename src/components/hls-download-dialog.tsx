@@ -20,7 +20,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog'
-import { useDictionary } from '@/i18n/client'
+import { useTranslations } from 'next-intl'
 
 export interface HlsDownloadDialogRequest {
     sourceUrl: string
@@ -39,7 +39,9 @@ export function HlsDownloadDialog({
     onOpenChange,
     request,
 }: HlsDownloadDialogProps) {
-    const dict = useDictionary()
+    const tResult = useTranslations('result')
+    const tHls = useTranslations('hlsDownload')
+    const tErrors = useTranslations('errors')
     const [isBusy, setIsBusy] = useState(false)
     const [confirmCloseOpen, setConfirmCloseOpen] = useState(false)
     const [cancelDownload, setCancelDownload] = useState<(() => void) | null>(null)
@@ -73,8 +75,8 @@ export function HlsDownloadDialog({
                     }}
                 >
                     <DialogHeader>
-                        <DialogTitle>{dict.result.browserDownloadVideo}</DialogTitle>
-                        <DialogDescription>{dict.hlsDownload.description}</DialogDescription>
+                        <DialogTitle>{tResult('browserDownloadVideo')}</DialogTitle>
+                        <DialogDescription>{tHls('description')}</DialogDescription>
                     </DialogHeader>
 
                     <div
@@ -96,13 +98,13 @@ export function HlsDownloadDialog({
             <AlertDialog open={confirmCloseOpen} onOpenChange={setConfirmCloseOpen}>
                 <AlertDialogContent className="sm:max-w-md">
                     <AlertDialogHeader>
-                        <AlertDialogTitle>{dict.hlsDownload.confirmCloseTitle}</AlertDialogTitle>
-                        <AlertDialogDescription>{dict.hlsDownload.confirmCloseDescription}</AlertDialogDescription>
+                        <AlertDialogTitle>{tHls('confirmCloseTitle')}</AlertDialogTitle>
+                        <AlertDialogDescription>{tHls('confirmCloseDescription')}</AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel>{dict.errors.cancel}</AlertDialogCancel>
+                        <AlertDialogCancel>{tErrors('cancel')}</AlertDialogCancel>
                         <AlertDialogAction onClick={handleConfirmClose}>
-                            {dict.hlsDownload.confirmCloseAction}
+                            {tHls('confirmCloseAction')}
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>

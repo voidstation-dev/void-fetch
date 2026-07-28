@@ -18,7 +18,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { ChevronsUpDown } from 'lucide-react';
 import { toast } from '@/lib/deferred-toast';
-import { useDictionary } from '@/i18n/client';
+import { useTranslations } from 'next-intl';
 import { PlatformBadge } from '@/components/platform-badge';
 import { Platform } from '../../lib/types';
 
@@ -55,13 +55,14 @@ export function DownloadHistory({
     onRedownload,
     defaultOpen = true,
 }: DownloadHistoryProps) {
-    const dict = useDictionary()
+    const tHistory = useTranslations('history');
+    const tErrors = useTranslations('errors');
     const [isOpen, setIsOpen] = useState(defaultOpen);
     const [searchQuery, setSearchQuery] = useState('');
 
     const handleConfirmClearHistory = () => {
         clearHistory();
-        toast.success(dict.history.cleared);
+        toast.success(tHistory('cleared'));
     };
 
     const handleRedownload = (url: string) => {
@@ -91,7 +92,7 @@ export function DownloadHistory({
                             <ChevronsUpDown className="size-4" />
                             <div className="space-y-1 text-left">
                                 <h2 className="text-base font-semibold tracking-tight">
-                                    {dict.history.title}
+                                    {tHistory('title')}
                                 </h2>
                             </div>
                         </Button>
@@ -104,21 +105,21 @@ export function DownloadHistory({
                                     size="sm"
                                     className="h-8 text-xs"
                                 >
-                                    {dict.history.clear}
+                                    {tHistory('clear')}
                                 </Button>
                             </AlertDialogTrigger>
                             <AlertDialogContent className="sm:max-w-md">
                                 <AlertDialogHeader>
-                                    <AlertDialogTitle>{dict.history.clear}?</AlertDialogTitle>
-                                    <AlertDialogDescription>{dict.history.title}</AlertDialogDescription>
+                                    <AlertDialogTitle>{tHistory('clear')}?</AlertDialogTitle>
+                                    <AlertDialogDescription>{tHistory('title')}</AlertDialogDescription>
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>
-                                    <AlertDialogCancel>{dict.errors.cancel}</AlertDialogCancel>
+                                    <AlertDialogCancel>{tErrors('cancel')}</AlertDialogCancel>
                                     <AlertDialogAction
                                         className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                                         onClick={handleConfirmClearHistory}
                                     >
-                                        {dict.history.clear}
+                                        {tHistory('clear')}
                                     </AlertDialogAction>
                                 </AlertDialogFooter>
                             </AlertDialogContent>
@@ -126,8 +127,8 @@ export function DownloadHistory({
                         <Input
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            placeholder={dict.history.searchPlaceholder}
-                            aria-label={dict.history.searchPlaceholder}
+                            placeholder={tHistory('searchPlaceholder')}
+                            aria-label={tHistory('searchPlaceholder')}
                             className="h-8 w-30 text-xs sm:w-56"
                         />
                     </div>
@@ -138,7 +139,7 @@ export function DownloadHistory({
                             <div className="space-y-2 pr-2">
                                 {filteredHistory.length === 0 ? (
                                     <p className="py-5 text-center text-xs text-muted-foreground">
-                                        {dict.history.noSearchResults}
+                                        {tHistory('noSearchResults')}
                                     </p>
                                 ) : (
                                     <div className="space-y-2">
@@ -168,7 +169,7 @@ export function DownloadHistory({
                                                                 window.open(record.url, '_blank');
                                                             }}
                                                         >
-                                                            {dict.history.viewSource}
+                                                            {tHistory('viewSource')}
                                                         </Button>
                                                         <Button
                                                             variant="outline"
@@ -176,7 +177,7 @@ export function DownloadHistory({
                                                             className="h-8 text-xs"
                                                             onClick={() => handleRedownload(record.url)}
                                                         >
-                                                            {dict.history.redownload}
+                                                            {tHistory('redownload')}
                                                         </Button>
                                                     </div>
                                                 </div>

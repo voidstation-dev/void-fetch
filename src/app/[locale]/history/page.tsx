@@ -7,6 +7,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import { useBatchStore } from "@/features/batch-download/store/batch-store";
 import { WorkspaceLayout } from "@/features/batch-download/components/WorkspaceLayout";
 import { ExpandableJobCard } from "@/features/batch-download/components/ExpandableJobCard";
@@ -30,6 +31,8 @@ import { toast } from "@/lib/deferred-toast";
 import type { DownloadJob, OutputType } from "@/features/batch-download/types/batch-download";
 import { getPlatformBadgeStyle } from "@/lib/platforms";
 import { LoadingScreen } from "@/components/ui/LoadingScreen";
+import { useTranslations } from "next-intl";
+import { motion } from "framer-motion";
 
 interface HistoryCardRowProps {
   job: DownloadJob;
@@ -44,6 +47,7 @@ function HistoryCardRow({
   onRedownload,
   onRemove,
 }: HistoryCardRowProps) {
+  const tHistory = useTranslations("history");
   const completedDate = job.completedAt
     ? new Date(job.completedAt).toLocaleString()
     : "Recently";
@@ -59,19 +63,23 @@ function HistoryCardRow({
     (Boolean(images && images.length > 0) && !videoUrl && !audioUrl);
 
   return (
-    <div className="group relative flex flex-col md:flex-row items-start md:items-center justify-between p-4 rounded-2xl bg-card/90 backdrop-blur-2xl border border-border/80 hover:border-primary/50 shadow-md hover:shadow-xl transition-all duration-300 gap-4">
+    <motion.div
+      className="group relative flex flex-col md:flex-row items-start md:items-center justify-between p-4 rounded-2xl bg-card/90 backdrop-blur-2xl border border-border/80 hover:border-primary/50 shadow-md hover:shadow-xl transition-all duration-300 gap-4"
+    >
       {/* Left: Thumbnail Cover & Title Info */}
       <div className="flex items-center gap-3.5 min-w-0 flex-1 w-full md:w-auto">
         {/* Media Thumbnail */}
-        <div
+        <motion.div
           onClick={() => onExpand(job)}
           className="relative w-13 h-13 sm:w-14 sm:h-14 shrink-0 bg-muted rounded-xl border border-border/60 flex items-center justify-center overflow-hidden shadow-md cursor-pointer group/thumb hover:border-primary/80 transition-all duration-300"
         >
           {job.metadata?.cover ? (
-            /* eslint-disable-next-line @next/next/no-img-element */
-            <img
+            <Image
               src={job.metadata.cover}
               alt=""
+              width={56}
+              height={56}
+              unoptimized
               className="w-full h-full object-cover group-hover/thumb:scale-110 transition-transform duration-300"
             />
           ) : (
@@ -80,11 +88,13 @@ function HistoryCardRow({
           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center">
             <Maximize2 className="h-4 w-4 text-white" />
           </div>
-        </div>
+        </motion.div>
 
         {/* Info Column */}
         <div className="flex flex-col min-w-0 gap-1 flex-1">
-          <div className="flex items-center gap-2 flex-wrap">
+          <motion.div
+            className="flex items-center gap-2 flex-wrap"
+          >
             <Badge
               variant="outline"
               className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded-md uppercase tracking-wider ${getPlatformBadgeStyle(
@@ -105,15 +115,15 @@ function HistoryCardRow({
             <span className="text-[9px] font-mono text-muted-foreground/70">
               Completed: {completedDate}
             </span>
-          </div>
+          </motion.div>
 
-          <h4
+          <motion.h4
             onClick={() => onExpand(job)}
             className="text-sm font-bold text-foreground hover:text-primary transition-colors cursor-pointer line-clamp-1 leading-snug tracking-tight"
             title={job.metadata?.title || job.sourceUrl}
           >
             {job.metadata?.title || job.sourceUrl}
-          </h4>
+          </motion.h4>
 
           <a
             href={job.sourceUrl}
@@ -134,7 +144,7 @@ function HistoryCardRow({
           className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-500 border-emerald-500/30 flex items-center gap-1 shadow-2xs"
         >
           <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
-          Completed
+          {tHistory("completed")}
         </Badge>
 
         <div className="flex items-center gap-1.5">
@@ -145,10 +155,10 @@ function HistoryCardRow({
             size="default"
             onClick={() => onExpand(job)}
             className="h-8 text-xs font-semibold gap-1 px-2.5 rounded-xl border-border/70 bg-card hover:bg-primary/10 hover:text-primary hover:border-primary/50 shadow-2xs transition-all"
-            title="Open Details & Media Preview Modal"
+            title={tHistory("detailsTitle")}
           >
             <Maximize2 className="h-3.5 w-3.5 text-primary" />
-            <span className="hidden sm:inline">Details</span>
+            <span className="hidden sm:inline">{tHistory("details")}</span>
           </Button>
 
           {/* Format Redownload Buttons */}
@@ -163,7 +173,7 @@ function HistoryCardRow({
             >
               <ImageIcon className="h-3.5 w-3.5 text-cyan-400" />
               <span className="hidden sm:inline">
-                {images && images.length > 1 ? "Tải lại ZIP (Ảnh)" : "Tải lại Ảnh"}
+                {images && images.length > 1 ? tHistory("redownloadZip") : tHistory("redownloadSingleImage")}
               </span>
             </Button>
           ) : (
@@ -178,7 +188,7 @@ function HistoryCardRow({
                 title="Redownload MP4 Video"
               >
                 <Video className="h-3.5 w-3.5 text-emerald-500" />
-                <span className="hidden sm:inline">Redownload MP4</span>
+                <span className="hidden sm:inline">{tHistory("redownloadMp4")}</span>
               </Button>
 
               {/* Redownload MP3 */}
@@ -191,7 +201,7 @@ function HistoryCardRow({
                 title="Redownload MP3 Audio"
               >
                 <Music className="h-3.5 w-3.5 text-purple-400" />
-                <span className="hidden sm:inline">Redownload MP3</span>
+                <span className="hidden sm:inline">{tHistory("redownloadMp3")}</span>
               </Button>
             </>
           )}
@@ -203,17 +213,18 @@ function HistoryCardRow({
             size="icon"
             className="h-8 w-8 rounded-xl text-muted-foreground hover:text-destructive hover:bg-destructive/10 border-border/70 shadow-2xs"
             onClick={() => onRemove(job.id)}
-            title="Remove from history"
+            title={tHistory("removeFromHistory")}
           >
             <Trash2 className="h-3.5 w-3.5" />
           </Button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
 export default function HistoryPage() {
+  const tHistory = useTranslations("history");
   const store = useBatchStore();
   const initializeStore = useBatchStore((s) => s.initializeStore);
   const [expandedJob, setExpandedJob] = useState<DownloadJob | null>(null);
@@ -235,17 +246,17 @@ export default function HistoryPage() {
       });
     }
     await store.updateJobStatus(job.id, "queued");
-    toast.success(`Queued ${job.metadata?.title || "item"} for redownload`);
+    toast.success(tHistory("queuedForRedownload", { title: job.metadata?.title || "item" }));
   };
 
   const handleRemove = (id: string) => {
     store.removeJobs([id]);
-    toast.success("Removed job record");
+    toast.success(tHistory("removedJobRecord"));
   };
 
   const handleClearAll = () => {
     store.clearCompleted();
-    toast.success("Cleared all completed history");
+    toast.success(tHistory("clearedAllHistory"));
   };
 
   return (
@@ -255,10 +266,10 @@ export default function HistoryPage() {
         <div className="flex flex-col gap-0.5">
           <h1 className="text-sm font-bold text-foreground flex items-center gap-2">
             <History className="h-4 w-4 text-primary" />
-            <span>Download History</span>
+            <span>{tHistory("pageTitle")}</span>
           </h1>
           <span className="text-[10px] text-muted-foreground uppercase tracking-wide">
-            Logs of successfully completed jobs ({completedJobs.length} items)
+            {tHistory("logsCount", { count: completedJobs.length })}
           </span>
         </div>
         {completedJobs.length > 0 && (
@@ -270,7 +281,7 @@ export default function HistoryPage() {
             className="h-8 text-xs gap-1.5 text-destructive hover:bg-destructive/10 hover:text-destructive border-border/60 shadow-2xs transition-all"
           >
             <Trash2 className="h-3.5 w-3.5" />
-            Clear History
+            {tHistory("clearHistory")}
           </Button>
         )}
       </div>
@@ -289,24 +300,23 @@ export default function HistoryPage() {
           {/* Text Area */}
           <div className="flex flex-col items-center gap-2 max-w-md z-10">
             <h3 className="text-base font-extrabold text-foreground tracking-wide flex items-center gap-2">
-              <span>No History Records Found</span>
+              <span>{tHistory("noRecordsTitle")}</span>
               <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-bold uppercase">
-                Clean
+                {tHistory("cleanBadge")}
               </span>
             </h3>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Completed downloads will automatically appear here with media
-              details, instant redownload shortcuts, and download logs.
+              {tHistory("noRecordsDesc")}
             </p>
           </div>
 
           {/* Micro Feature Badges */}
           <div className="flex flex-wrap items-center justify-center gap-2 z-10 pt-2">
             <span className="px-3 py-1 rounded-full bg-muted/30 border border-border/60 text-[10px] font-medium text-muted-foreground flex items-center gap-1.5 shadow-2xs">
-              <Sparkles className="h-3 w-3 text-amber-400" /> Auto Persisted
+              <Sparkles className="h-3 w-3 text-amber-400" /> {tHistory("autoPersisted")}
             </span>
             <span className="px-3 py-1 rounded-full bg-muted/30 border border-border/60 text-[10px] font-medium text-muted-foreground flex items-center gap-1.5 shadow-2xs">
-              <Sparkles className="h-3 w-3 text-cyan-400" /> Instant Redownloads
+              <Sparkles className="h-3 w-3 text-cyan-400" /> {tHistory("instantRedownloads")}
             </span>
           </div>
         </div>
@@ -324,14 +334,12 @@ export default function HistoryPage() {
         </div>
       )}
 
-      {/* Expandable Detail Modal */}
-      {expandedJob && (
-        <ExpandableJobCard
-          job={expandedJob}
-          onClose={() => setExpandedJob(null)}
-          onOpenConfig={(j) => store.setActiveJobDrawerId(j.id)}
-        />
-      )}
+      {/* Aceternity Expandable Detail Modal */}
+      <ExpandableJobCard
+        job={expandedJob}
+        onClose={() => setExpandedJob(null)}
+        onOpenConfig={(j) => store.setActiveJobDrawerId(j.id)}
+      />
     </>
   );
 }

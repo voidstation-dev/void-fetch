@@ -7,9 +7,10 @@ import { Button } from "@/components/ui/button";
 import { DeferredLanguageSwitcher } from "@/components/deferred-language-switcher";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { DeferredMobileNavMenu } from "@/components/deferred-mobile-nav-menu";
-import { useDictionary } from "@/i18n/client";
+import { useTranslations } from "next-intl";
 import { i18n } from "@/lib/i18n/config";
 import { useTopBarActions } from "./top-bar-actions";
+import Image from "next/image";
 
 interface AppTopBarProps {
   showHistoryShortcut?: boolean;
@@ -28,7 +29,10 @@ export function AppTopBar({
   showHomeButton = false,
   homeHref = "/",
 }: AppTopBarProps) {
-  const dict = useDictionary();
+  const tCommon = useTranslations("common");
+  const tHistory = useTranslations("history");
+  const tAudioTool = useTranslations("audioTool");
+  const tModal = useTranslations("supportedPlatformsModal");
   const { actions } = useTopBarActions();
   const pathname = usePathname();
   const firstSegment = pathname.split("/").filter(Boolean)[0];
@@ -61,8 +65,8 @@ export function AppTopBar({
               href={`/${locale}`}
               className="flex items-center gap-2 group cursor-pointer"
             >
-              <div className="relative flex items-center justify-center p-1.5 rounded-xl bg-gradient-to-br from-primary/20 via-primary/10 to-transparent border border-primary/30 shadow-md">
-                <Zap className="h-4 w-4 text-primary animate-pulse" />
+              <div className="relative flex items-center justify-center p-1 rounded-xl bg-gradient-to-br from-primary/20 via-primary/10 to-transparent border border-primary/30 shadow-md">
+                <Image src="/favicon.svg" alt="VoidFetch" width={24} height={24} className="rounded-lg" />
                 <span className="absolute -top-0.5 -right-0.5 flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -115,13 +119,7 @@ export function AppTopBar({
               href={`/${locale}`}
               className="flex items-center gap-2.5 group cursor-pointer"
             >
-              <div className="relative flex items-center justify-center p-2 rounded-xl bg-gradient-to-br from-primary/20 via-primary/10 to-transparent border border-primary/30 shadow-md group-hover:border-primary/60 transition-colors">
-                <Zap className="h-5 w-5 text-primary animate-pulse" />
-                <span className="absolute -top-0.5 -right-0.5 flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                </span>
-              </div>
+              <Image src="/favicon.svg" alt="VoidFetch" width={40} height={40} className="rounded-lg" />
               <div className="flex flex-col">
                 <div className="flex items-center gap-1.5">
                   <span className="font-extrabold text-sm tracking-wider text-foreground">
@@ -132,7 +130,7 @@ export function AppTopBar({
                   </span>
                 </div>
                 <span className="text-[10px] text-muted-foreground font-medium">
-                  Universal Batch Downloader
+                  {tModal('universalSub')}
                 </span>
               </div>
             </Link>
@@ -148,7 +146,7 @@ export function AppTopBar({
               >
                 <Link href={resolvedHomeHref}>
                   <Home className="h-4 w-4" />
-                  <span>{dict.common.home}</span>
+                  <span>{tCommon("home")}</span>
                 </Link>
               </Button>
             )}
@@ -160,7 +158,7 @@ export function AppTopBar({
                 onClick={effectiveHistoryClick}
               >
                 <History className="h-4 w-4" />
-                <span>{dict.history.title}</span>
+                <span>{tHistory("title")}</span>
               </Button>
             )}
             {effectiveShowAudioTool && effectiveAudioToolClick && (
@@ -171,7 +169,7 @@ export function AppTopBar({
                 onClick={effectiveAudioToolClick}
               >
                 <Music className="h-4 w-4" />
-                <span>{dict.audioTool.triggerButton}</span>
+                <span>{tAudioTool("triggerButton")}</span>
               </Button>
             )}
           </div>

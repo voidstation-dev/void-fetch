@@ -5,6 +5,7 @@
  */
 
 import React from "react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -29,9 +30,10 @@ import type { DownloadJob, OutputType } from "../types/batch-download";
 import { useBatchStore } from "../store/batch-store";
 import { parseJobs, cancelParseJob } from "../services/parse-worker-pool";
 import { downloadScheduler } from "../services/download-scheduler";
-import { formatBytes } from "@/lib/utils";
+import { formatBytes, formatSpeed, formatEta } from "@/lib/utils";
 import { probeMediaDuration } from "../utils/duration-helper";
 import { getPlatformBadgeStyle } from "@/lib/platforms";
+import { motion } from "framer-motion";
 
 interface DownloadJobRowProps {
   job: DownloadJob;
@@ -39,13 +41,20 @@ interface DownloadJobRowProps {
   onExpand?: (job: DownloadJob) => void;
 }
 
-export function DownloadJobRow({
+export function DownloadJobRowComponent({
   job,
   onOpenErrorLogs,
   onExpand,
 }: DownloadJobRowProps) {
-  const store = useBatchStore();
-  const isSelected = store.selectedJobIds.includes(job.id);
+  const isSelected = useBatchStore((s) => s.selectedJobIds.includes(job.id));
+  const toggleJobSelection = useBatchStore((s) => s.toggleJobSelection);
+  const updateJobStatus = useBatchStore((s) => s.updateJobStatus);
+  const updateJobConfig = useBatchStore((s) => s.updateJobConfig);
+  const isQueueRunning = useBatchStore((s) => s.isQueueRunning);
+  const startQueue = useBatchStore((s) => s.startQueue);
+  const removeJobs = useBatchStore((s) => s.removeJobs);
+  const setActiveJobDrawerId = useBatchStore((s) => s.setActiveJobDrawerId);
+  const retryJob = useBatchStore((s) => s.retryJob);
 
   const handleParse = () => {
     parseJobs([job.id]);
@@ -56,41 +65,48 @@ export function DownloadJobRow({
   };
 
   const handleStart = async () => {
-    await store.updateJobStatus(job.id, "queued");
-    if (!store.isQueueRunning) {
-      await store.startQueue();
+    await updateJobStatus(job.id, "queued");
+    if (!isQueueRunning) {
+      await startQueue();
     } else {
       downloadScheduler.schedule();
     }
   };
 
-  const rawData = (job.metadata?.rawParsedData || job.metadata) as
-    | Record<string, unknown>
-    | undefined;
-  const videoUrl =
-    typeof rawData?.downloadVideoUrl === "string"
-      ? rawData.downloadVideoUrl
-      : typeof rawData?.originDownloadVideoUrl === "string"
-        ? rawData.originDownloadVideoUrl
-        : typeof rawData?.videoUrl === "string"
-          ? rawData.videoUrl
-          : undefined;
-  const audioUrl =
-    typeof rawData?.downloadAudioUrl === "string"
-      ? rawData.downloadAudioUrl
-      : typeof rawData?.originDownloadAudioUrl === "string"
-        ? rawData.originDownloadAudioUrl
-        : typeof rawData?.audioUrl === "string"
-          ? rawData.audioUrl
-          : undefined;
-  const images =
-    job.metadata?.images ||
-    (Array.isArray(rawData?.images) ? (rawData.images as string[]) : undefined);
+  const { rawData, videoUrl, audioUrl, images, isImageOnly } = React.useMemo(() => {
+    const raw = (job.metadata?.rawParsedData || job.metadata) as Record<string, unknown> | undefined;
+    const vUrl =
+      typeof raw?.downloadVideoUrl === "string"
+        ? raw.downloadVideoUrl
+        : typeof raw?.originDownloadVideoUrl === "string"
+          ? raw.originDownloadVideoUrl
+          : typeof raw?.videoUrl === "string"
+            ? raw.videoUrl
+            : undefined;
+    const aUrl =
+      typeof raw?.downloadAudioUrl === "string"
+        ? raw.downloadAudioUrl
+        : typeof raw?.originDownloadAudioUrl === "string"
+          ? raw.originDownloadAudioUrl
+          : typeof raw?.audioUrl === "string"
+            ? raw.audioUrl
+            : undefined;
+    const imgs =
+      job.metadata?.images ||
+      (Array.isArray(raw?.images) ? (raw.images as string[]) : undefined);
+    const imgOnly =
+      job.config.outputType === "images" ||
+      job.config.outputType === "zip_images" ||
+      (Boolean(imgs && imgs.length > 0) && !vUrl && !aUrl);
 
-  const isImageOnly =
-    job.config.outputType === "images" ||
-    job.config.outputType === "zip_images" ||
-    (Boolean(images && images.length > 0) && !videoUrl && !audioUrl);
+    return {
+      rawData: raw,
+      videoUrl: vUrl,
+      audioUrl: aUrl,
+      images: imgs,
+      isImageOnly: imgOnly,
+    };
+  }, [job.metadata, job.config.outputType]);
 
   // Background media duration probe if initial API response lacked duration
   React.useEffect(() => {
@@ -102,7 +118,7 @@ export function DownloadJobRow({
     let isMounted = true;
     probeMediaDuration(targetUrl, Boolean(videoUrl)).then((probed) => {
       if (isMounted && probed && probed > 0) {
-        store.updateJobStatus(job.id, job.status, {
+        updateJobStatus(job.id, job.status, {
           metadata: {
             ...job.metadata,
             title: job.metadata?.title || job.sourceUrl,
@@ -120,21 +136,22 @@ export function DownloadJobRow({
     job.id,
     job.status,
     job.metadata,
+    job.metadata?.duration,
     job.platform,
     job.sourceUrl,
     videoUrl,
     audioUrl,
-    store,
+    updateJobStatus,
   ]);
 
   const handleDownloadWithFormat = async (format: OutputType) => {
-    await store.updateJobConfig(job.id, {
+    await updateJobConfig(job.id, {
       outputType: format,
       extractAudio: format === "audio",
     });
-    await store.updateJobStatus(job.id, "queued");
-    if (!store.isQueueRunning) {
-      await store.startQueue();
+    await updateJobStatus(job.id, "queued");
+    if (!isQueueRunning) {
+      await startQueue();
     } else {
       downloadScheduler.schedule();
     }
@@ -149,24 +166,11 @@ export function DownloadJobRow({
   };
 
   const handleRemove = () => {
-    store.removeJobs([job.id]);
+    removeJobs([job.id]);
   };
 
   const handleEditConfig = () => {
-    store.setActiveJobDrawerId(job.id);
-  };
-
-  // Speed and ETA Formatting Helpers
-  const formatSpeed = (bytesPerSec?: number) => {
-    if (!bytesPerSec || bytesPerSec <= 0) return "";
-    return `${(bytesPerSec / (1024 * 1024)).toFixed(1)} MB/s`;
-  };
-
-  const formatEta = (seconds?: number) => {
-    if (!seconds || seconds <= 0) return "";
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
+    setActiveJobDrawerId(job.id);
   };
 
   // Render Status Badge & Controls
@@ -325,7 +329,7 @@ export function DownloadJobRow({
   };
 
   return (
-    <div
+    <motion.div
       className={`group relative flex flex-col md:flex-row items-start md:items-center justify-between p-4 rounded-2xl backdrop-blur-2xl border shadow-md hover:shadow-xl transition-all duration-300 gap-4 ${
         job.status === "failed"
           ? "bg-rose-500/5 dark:bg-rose-500/10 border-rose-500/30 hover:border-rose-500/50"
@@ -341,8 +345,9 @@ export function DownloadJobRow({
         {/* Selection Checkbox */}
         <input
           type="checkbox"
+          aria-label={`Select job ${job.metadata?.title || job.sourceUrl}`}
           checked={isSelected}
-          onChange={() => store.toggleJobSelection(job.id)}
+          onChange={() => toggleJobSelection(job.id)}
           disabled={[
             "parsing",
             "downloading",
@@ -350,35 +355,48 @@ export function DownloadJobRow({
             "saving",
             "processing",
           ].includes(job.status)}
-          className="h-4 w-4 rounded border-borderAccent text-primary focus:ring-0 cursor-pointer disabled:opacity-50 shrink-0"
+          className="h-4 w-4 rounded border-borderAccent text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 cursor-pointer disabled:opacity-50 shrink-0"
         />
 
         {/* Media Cover Thumbnail */}
-        <div
+        <motion.div
+          role="button"
+          tabIndex={0}
+          aria-label={`View details for ${job.metadata?.title || job.sourceUrl}`}
           onClick={() => onExpand?.(job)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              onExpand?.(job);
+            }
+          }}
           className="relative w-13 h-13 sm:w-14 sm:h-14 shrink-0 bg-muted rounded-xl border border-border/60 flex items-center justify-center overflow-hidden shadow-md cursor-pointer group/thumb hover:border-primary/80 transition-all duration-300"
         >
           {job.metadata?.cover ? (
-            /* eslint-disable-next-line @next/next/no-img-element */
-            <img
+            <Image
               src={job.metadata.cover}
               alt=""
+              width={56}
+              height={56}
+              unoptimized
               className="w-full h-full object-cover group-hover/thumb:scale-110 transition-transform duration-300"
             />
           ) : isImageOnly ? (
-            <ImageIcon className="h-6 w-6 text-primary/60" />
+            <ImageIcon className="h-6 w-6 text-primary/60" aria-hidden="true" />
           ) : (
-            <FileVideo className="h-6 w-6 text-muted-foreground/60" />
+            <FileVideo className="h-6 w-6 text-muted-foreground/60" aria-hidden="true" />
           )}
           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center">
-            <Maximize2 className="h-4 w-4 text-white" />
+            <Maximize2 className="h-4 w-4 text-white" aria-hidden="true" />
           </div>
-        </div>
+        </motion.div>
 
         {/* Info Column */}
         <div className="flex flex-col min-w-0 gap-1 flex-1">
           {/* Title & Platform Tag */}
-          <div className="flex items-center gap-2 flex-wrap">
+          <motion.div
+            className="flex items-center gap-2 flex-wrap"
+          >
             <Badge
               variant="outline"
               className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded-md uppercase tracking-wider ${getPlatformBadgeStyle(
@@ -397,15 +415,23 @@ export function DownloadJobRow({
                     ? "IMAGES ZIP"
                     : "MP4 VIDEO"}
             </span>
-          </div>
+          </motion.div>
 
-          <h4
+          <motion.h4
+            role="button"
+            tabIndex={0}
             onClick={() => onExpand?.(job)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onExpand?.(job);
+              }
+            }}
             className="text-sm font-bold text-foreground hover:text-primary transition-colors cursor-pointer line-clamp-1 leading-snug tracking-tight"
             title={job.metadata?.title || job.sourceUrl}
           >
             {job.metadata?.title || job.sourceUrl}
-          </h4>
+          </motion.h4>
 
           {/* URL Subtitle */}
           <a
@@ -435,8 +461,9 @@ export function DownloadJobRow({
             onClick={() => onExpand?.(job)}
             className="h-8 text-xs font-semibold gap-1 px-2.5 rounded-xl border-border/70 bg-card hover:bg-primary/10 hover:text-primary hover:border-primary/50 shadow-2xs transition-all"
             title="Open Details & Media Preview Modal"
+            aria-label="Open Details & Media Preview Modal"
           >
-            <Maximize2 className="h-3.5 w-3.5 text-primary" />
+            <Maximize2 className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
             <span className="hidden sm:inline">Details</span>
           </Button>
 
@@ -454,8 +481,9 @@ export function DownloadJobRow({
                 }
                 className="h-8 text-xs font-semibold gap-1 px-2.5 rounded-xl border-cyan-500/40 bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/20 shadow-2xs transition-all"
                 title="Download / Redownload Image Pack"
+                aria-label="Download / Redownload Image Pack"
               >
-                <ImageIcon className="h-3.5 w-3.5 text-cyan-400" />
+                <ImageIcon className="h-3.5 w-3.5 text-cyan-400" aria-hidden="true" />
                 <span className="hidden sm:inline">
                   {images && images.length > 1 ? "ZIP (Images)" : "IMAGE"}
                 </span>
@@ -469,8 +497,9 @@ export function DownloadJobRow({
                   onClick={() => handleDownloadWithFormat("mp4")}
                   className="h-8 text-xs font-semibold gap-1 px-2.5 rounded-xl border-border/70 bg-card hover:bg-emerald-500/10 hover:text-emerald-500 hover:border-emerald-500/40 shadow-2xs transition-all"
                   title="Download / Redownload MP4 Video"
+                  aria-label="Download / Redownload MP4 Video"
                 >
-                  <Video className="h-3.5 w-3.5 text-emerald-500" />
+                  <Video className="h-3.5 w-3.5 text-emerald-500" aria-hidden="true" />
                   <span className="hidden sm:inline">MP4</span>
                 </Button>
                 <Button
@@ -480,8 +509,9 @@ export function DownloadJobRow({
                   onClick={() => handleDownloadWithFormat("audio")}
                   className="h-8 text-xs font-semibold gap-1 px-2.5 rounded-xl border-border/70 bg-card hover:bg-purple-500/10 hover:text-purple-400 hover:border-purple-500/40 shadow-2xs transition-all"
                   title="Extract / Redownload MP3 Audio"
+                  aria-label="Extract / Redownload MP3 Audio"
                 >
-                  <Music className="h-3.5 w-3.5 text-purple-400" />
+                  <Music className="h-3.5 w-3.5 text-purple-400" aria-hidden="true" />
                   <span className="hidden sm:inline">MP3</span>
                 </Button>
               </>
@@ -505,7 +535,7 @@ export function DownloadJobRow({
                 type="button"
                 variant="outline"
                 size="default"
-                onClick={() => store.retryJob(job.id)}
+                onClick={() => retryJob(job.id)}
                 className="h-8 text-xs font-bold gap-1 px-3 rounded-xl bg-primary/10 border-primary/40 text-primary hover:bg-primary/20 shadow-2xs transition-all cursor-pointer"
                 title="Retry Parse & Download"
               >
@@ -513,6 +543,21 @@ export function DownloadJobRow({
                 <span>Retry</span>
               </Button>
             </>
+          )}
+
+          {/* Retry Button for Failed/Cancelled */}
+          {(job.status === "failed" || job.status === "cancelled") && (
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              className="h-8 w-8 rounded-xl text-amber-500 hover:text-amber-400 border-amber-500/30 hover:bg-amber-500/10 shadow-2xs"
+              onClick={() => retryJob(job.id)}
+              title={job.status === "cancelled" ? "Re-install" : "Retry"}
+              aria-label="Retry job"
+            >
+              <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
+            </Button>
           )}
 
           {/* Config Settings Button */}
@@ -526,8 +571,9 @@ export function DownloadJobRow({
               className="h-8 w-8 rounded-xl text-muted-foreground hover:text-foreground border-border/70 shadow-2xs"
               onClick={handleEditConfig}
               title="Edit Job Configuration"
+              aria-label="Edit Job Configuration"
             >
-              <Settings className="h-3.5 w-3.5" />
+              <Settings className="h-3.5 w-3.5" aria-hidden="true" />
             </Button>
           )}
 
@@ -548,8 +594,9 @@ export function DownloadJobRow({
                 job.status === "parsing" ? handleCancelParse : handleCancel
               }
               title="Cancel"
+              aria-label="Cancel active job"
             >
-              <Trash2 className="h-3.5 w-3.5" />
+              <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
             </Button>
           ) : (
             <Button
@@ -559,12 +606,15 @@ export function DownloadJobRow({
               className="h-8 w-8 rounded-xl text-muted-foreground hover:text-destructive hover:bg-destructive/10 border-border/70 shadow-2xs"
               onClick={handleRemove}
               title="Remove Job"
+              aria-label="Remove job from queue"
             >
-              <Trash2 className="h-3.5 w-3.5" />
+              <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
             </Button>
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
+
+export const DownloadJobRow = React.memo(DownloadJobRowComponent);

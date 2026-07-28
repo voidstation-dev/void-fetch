@@ -5,7 +5,7 @@ import type { ChangeEvent, DragEvent, ReactNode } from 'react'
 import { Loader2 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
-import { useDictionary } from '@/i18n/client'
+import { useTranslations } from 'next-intl'
 import { formatBytes } from '@/lib/utils'
 
 import { FileDropzone } from './file-dropzone'
@@ -33,20 +33,21 @@ export function FileExtractPanel({
     onClear,
     onSubmit,
 }: FileExtractPanelProps) {
-    const dict = useDictionary()
+    const tAudioTool = useTranslations('audioTool')
 
     return (
         <div className="space-y-4">
             <FileDropzone
                 acceptedFile={selectedFile}
-                title={dict.audioTool.videoFile}
-                hint={dict.audioTool.dropHint}
-                limitText={dict.audioTool.fileSizeLimit}
-                emptyButtonLabel={selectedFile ? dict.audioTool.changeFileButton : dict.audioTool.selectFileButton}
+                title={tAudioTool('videoFile')}
+                hint={tAudioTool('dropHint')}
+                limitText={tAudioTool('fileSizeLimit')}
+                emptyButtonLabel={selectedFile ? tAudioTool('changeFileButton') : tAudioTool('selectFileButton')}
                 selectedLabel={selectedFile
-                    ? dict.audioTool.fileSelected
-                        .replace('{name}', selectedFile.name)
-                        .replace('{size}', formatBytes(selectedFile.size))
+                    ? tAudioTool('fileSelected', {
+                        name: selectedFile.name,
+                        size: formatBytes(selectedFile.size),
+                    })
                     : ''}
                 inputId={inputId}
                 accept="video/*,.mp4,.webm,.mov,.mkv,.avi,.mpeg,.mpg"
@@ -66,7 +67,7 @@ export function FileExtractPanel({
                 disabled={isBusy || !selectedFile}
             >
                 {isBusy && <Loader2 className="h-4 w-4 animate-spin" />}
-                {isBusy ? dict.audioTool.processingButton : dict.audioTool.submitButton}
+                {isBusy ? tAudioTool('processingButton') : tAudioTool('submitButton')}
             </Button>
         </div>
     )
