@@ -6,6 +6,34 @@ vi.mock('next/image', () => ({
   default: (props: Record<string, unknown>) => React.createElement('img', props),
 }))
 
+vi.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => {
+    const translations: Record<string, string> = {
+      title: 'Result',
+      totalParts: '分P {count}',
+      videoCount: '合集 {count}',
+      videoList: '合集列表',
+      collectionSearchPlaceholder: '搜索合集',
+      collectionNoSearchResults: '无结果',
+      articleVideoUntitled: '视频 {index}',
+      playVideo: '播放视频',
+      playAudio: '播放音频',
+      downloadVideo: '下载视频',
+      downloadAudio: '下载音频',
+      mergeDownloadVideo: '合并下载视频',
+      sharePlayLink: '分享',
+      sharePlayLinkCopied: '已复制',
+      coverLabel: '封面',
+      imageNote: '图片',
+      imageCount: '{count} 张',
+      downloadImage: '下载图片',
+      downloadCover: '下载封面',
+      previewPlayerTitle: '预览',
+    };
+    return translations[key] || key;
+  },
+}));
+
 vi.mock('@/i18n/client', () => ({
   useDictionary: () => ({
     result: {

@@ -1,4 +1,5 @@
 import type {ApiErrorCode, ApiErrorDetails} from '@/lib/types'
+import {toast} from '@/lib/deferred-toast'
 
 export class ApiRequestError extends Error {
     readonly code?: ApiErrorCode | string
@@ -77,4 +78,54 @@ export function resolveApiErrorMessageWithFallback(
     }
 
     return fallbackMessage
+}
+
+/**
+ * UI/UX Skill: Xử lý thông báo toast thân thiện khi gặp HTTP Status 429 (RATE_LIMITED) hoặc 503/5xx (Server die).
+ * Sử dụng id định danh để tránh lặp (deduplicate) toast khi có nhiều job thất bại đồng thời.
+ */
+export function notifyApiErrorToast(error: unknown): boolean {
+    let status: number | undefined
+    let code: string | undefined
+
+    if (isApiRequestError(error)) {
+        status = error.status
+        code = error.code
+    } else if (error && typeof error === 'object') {
+        const errObj = error as Record<string, unknown>
+        if (typeof errObj.status === 'number') {
+            status = errObj.status
+        } else if (typeof errObj.httpStatus === 'number') {
+            status = errObj.httpStatus
+        }
+        if (typeof errObj.code === 'string') {
+            code = errObj.code
+        }
+    }
+
+    if (status === 429 || code === 'RATE_LIMITED' || code === 'RATE_LIMIT') {
+        toast.error('429: RATE_LIMITED', {
+            id: 'api-error-429',
+            description: 'Too many requests. Please wait a moment before trying again.',
+        })
+        return true
+    }
+
+    if (status === 503 || code === 'SERVICE_UNAVAILABLE') {
+        toast.error('503: Server die', {
+            id: 'api-error-503',
+            description: 'Server is currently offline or unavailable. Please try again later.',
+        })
+        return true
+    }
+
+    if (status && status >= 500) {
+        toast.error(`${status}: Server die`, {
+            id: `api-error-${status}`,
+            description: 'Server is currently offline or unavailable. Please try again later.',
+        })
+        return true
+    }
+
+    return false
 }

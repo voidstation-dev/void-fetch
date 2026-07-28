@@ -21,7 +21,7 @@ import {
 import { Progress } from '@/components/ui/progress'
 import { useFFmpeg, type FFmpegStatus } from '@/hooks/use-ffmpeg'
 import { useTranslations } from 'next-intl'
-import { isApiRequestError, resolveApiErrorMessage } from '@/lib/api-errors'
+import { isApiRequestError, notifyApiErrorToast, resolveApiErrorMessage } from '@/lib/api-errors'
 import { toast } from '@/lib/deferred-toast'
 import { UnifiedParseReloadError, requestUnifiedParse } from '@/lib/unified-parse'
 import { cn, downloadFile, formatBytes, sanitizeFilename } from '@/lib/utils'
@@ -517,6 +517,11 @@ export function AudioExtractDialog({
         } catch (err) {
             if (err instanceof UnifiedParseReloadError) {
                 setStage('idle')
+                return
+            }
+
+            if (notifyApiErrorToast(err)) {
+                setStage('error')
                 return
             }
 

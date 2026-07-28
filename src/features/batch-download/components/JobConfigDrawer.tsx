@@ -4,7 +4,7 @@
  * All rights reserved.
  */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -70,9 +70,20 @@ import { cn } from "@/lib/utils";
 export function JobConfigDrawer() {
   const store = useBatchStore();
   const activeJobId = store.activeJobDrawerId;
-  const isBulk = activeJobId === "bulk";
+  const [prevActiveJobIdForCache, setPrevActiveJobIdForCache] = useState<string | null>(activeJobId);
+  const [cachedJobId, setCachedJobId] = useState<string | null>(activeJobId);
 
-  const activeJob = store.jobs.find((j) => j.id === activeJobId);
+  if (activeJobId !== prevActiveJobIdForCache) {
+    setPrevActiveJobIdForCache(activeJobId);
+    if (activeJobId) {
+      setCachedJobId(activeJobId);
+    }
+  }
+
+  const effectiveJobId = activeJobId || cachedJobId;
+  const isBulk = effectiveJobId === "bulk";
+
+  const activeJob = store.jobs.find((j) => j.id === effectiveJobId);
 
   // Form states
   const [outputType, setOutputType] = useState<OutputType>("mp4");
@@ -82,9 +93,6 @@ export function JobConfigDrawer() {
   const [saveMetadata, setSaveMetadata] = useState(false);
   const [extractAudio, setExtractAudio] = useState(false);
   const [segmentConcurrency, setSegmentConcurrency] = useState("auto");
-
-  // Exit animation state
-  const [isClosing, setIsClosing] = useState(false);
 
   // State synchronization on selection change
   const [prevActiveJobId, setPrevActiveJobId] = useState<string | null>(null);
@@ -113,14 +121,10 @@ export function JobConfigDrawer() {
     }
   }
 
-  if (!activeJobId) return null;
+  if (!effectiveJobId) return null;
 
   const handleCloseDrawer = () => {
-    setIsClosing(true);
-    setTimeout(() => {
-      store.setActiveJobDrawerId(null);
-      setIsClosing(false);
-    }, 200);
+    store.setActiveJobDrawerId(null);
   };
 
   const rawData = activeJob?.metadata?.rawParsedData as
@@ -211,10 +215,20 @@ export function JobConfigDrawer() {
   };
 
   return (
-    <Dialog open={Boolean(activeJobId)} onOpenChange={(open) => !open && handleCloseDrawer()}>
-      <DialogContent showCloseButton={false} className="sm:max-w-[560px] bg-card/95 border border-border/80 rounded-2xl shadow-2xl flex flex-col p-6 text-foreground max-h-[90vh] overflow-hidden backdrop-blur-2xl">
-        <DialogTitle className="sr-only">{isBulk ? "BULK CONFIGURATION" : "CONFIGURE DOWNLOAD"}</DialogTitle>
-        <DialogDescription className="sr-only">Download settings and parameters</DialogDescription>
+    <Dialog
+      open={Boolean(activeJobId)}
+      onOpenChange={(open) => !open && handleCloseDrawer()}
+    >
+      <DialogContent
+        showCloseButton={false}
+        className="sm:max-w-[560px] bg-card/95 border border-border/80 rounded-2xl shadow-2xl flex flex-col p-6 text-foreground max-h-[90vh] overflow-hidden backdrop-blur-2xl"
+      >
+        <DialogTitle className="sr-only">
+          {isBulk ? "BULK CONFIGURATION" : "CONFIGURE DOWNLOAD"}
+        </DialogTitle>
+        <DialogDescription className="sr-only">
+          Download settings and parameters
+        </DialogDescription>
         {/* Glow Ambient Line Top */}
         <div className="absolute -top-px inset-x-8 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
 
@@ -235,12 +249,13 @@ export function JobConfigDrawer() {
             </div>
           </div>
           <Button
+            aria-label="Close configuration drawer"
             variant="ghost"
             size="icon"
             className="h-8 w-8 rounded-full text-muted-foreground hover:text-foreground"
             onClick={handleCloseDrawer}
           >
-            <X className="h-4 w-4" />
+            <X className="h-4 w-4" aria-hidden="true" />
           </Button>
         </div>
 
@@ -254,6 +269,8 @@ export function JobConfigDrawer() {
                   <img
                     src={activeJob.metadata.cover}
                     alt="cover"
+                    width={48}
+                    height={48}
                     className="w-12 h-12 rounded-lg object-cover border border-border/50 bg-muted shrink-0 shadow-xs"
                   />
                 )}
@@ -420,7 +437,10 @@ export function JobConfigDrawer() {
           {/* Filename Input with Dynamic Variable Chips */}
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
-              <Label className="text-[11px] font-bold text-foreground/80 uppercase tracking-wider">
+              <Label
+                htmlFor="filename-template-input"
+                className="text-[11px] font-bold text-foreground/80 uppercase tracking-wider"
+              >
                 {isBulk ? "Filename Template" : "Output Filename"}
               </Label>
               <span className="text-[9px] text-muted-foreground">
@@ -428,9 +448,11 @@ export function JobConfigDrawer() {
               </span>
             </div>
             <Input
+              id="filename-template-input"
+              aria-label={isBulk ? "Filename Template" : "Output Filename"}
               value={filename}
               onChange={(e) => setFilename(e.target.value)}
-              placeholder={isBulk ? "{index} - {title}" : "filename.mp4"}
+              placeholder={isBulk ? "{index} - {title}…" : "filename.mp4…"}
               className="h-9 text-xs font-mono bg-background/50"
             />
             {/* Token Chips */}
@@ -510,14 +532,17 @@ export function JobConfigDrawer() {
                   type="checkbox"
                   checked={saveMetadata}
                   onChange={(e) => setSaveMetadata(e.target.checked)}
-                  className="h-4 w-4 rounded border-borderAccent text-primary focus:ring-0 cursor-pointer"
+                  className="h-4 w-4 rounded border-borderAccent text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 cursor-pointer"
                 />
               </label>
 
               {outputType !== "audio" && (
                 <label className="flex items-center justify-between p-2.5 rounded-xl bg-muted/30 border border-border/50 cursor-pointer hover:bg-muted/60 transition-colors">
                   <div className="flex items-center gap-2">
-                    <Music className="h-3.5 w-3.5 text-primary" />
+                    <Music
+                      className="h-3.5 w-3.5 text-primary"
+                      aria-hidden="true"
+                    />
                     <span className="text-xs font-medium text-foreground">
                       Force audio extraction (MP3)
                     </span>
@@ -526,7 +551,7 @@ export function JobConfigDrawer() {
                     type="checkbox"
                     checked={extractAudio}
                     onChange={(e) => setExtractAudio(e.target.checked)}
-                    className="h-4 w-4 rounded border-borderAccent text-primary focus:ring-0 cursor-pointer"
+                    className="h-4 w-4 rounded border-borderAccent text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 cursor-pointer"
                   />
                 </label>
               )}

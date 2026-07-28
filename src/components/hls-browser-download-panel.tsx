@@ -22,7 +22,7 @@ import {
 } from '@/lib/hls-browser-download'
 import { HLS_PLAYLIST_ACCEPT } from '@/lib/hls-playback'
 import { requestUnifiedParse } from '@/lib/unified-parse'
-import { sanitizeFilename } from '@/lib/utils'
+import { sanitizeFilename, formatEta } from '@/lib/utils'
 
 const DOWNLOAD_CONCURRENCY = 8
 const SEGMENT_DOWNLOAD_RETRIES = 3
@@ -545,23 +545,6 @@ function formatSpeed(bytesPerSecond: number): string {
     }
 
     return `${(bytesPerSecond / (1024 * 1024)).toFixed(1)} mb/s`
-}
-
-function formatEta(seconds: number): string {
-    if (!Number.isFinite(seconds) || seconds <= 0) {
-        return '00:00'
-    }
-
-    const totalSeconds = Math.max(1, Math.round(seconds))
-    const hours = Math.floor(totalSeconds / 3600)
-    const minutes = Math.floor((totalSeconds % 3600) / 60)
-    const remainingSeconds = totalSeconds % 60
-
-    if (hours > 0) {
-        return [hours, minutes, remainingSeconds].map((value) => String(value).padStart(2, '0')).join(':')
-    }
-
-    return [minutes, remainingSeconds].map((value) => String(value).padStart(2, '0')).join(':')
 }
 
 export function HlsBrowserDownloadPanel({

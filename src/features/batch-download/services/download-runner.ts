@@ -18,7 +18,7 @@ import {
   type HlsSegment,
 } from '@/lib/hls-browser-download';
 import { isHlsPlaylistUrl } from '@/lib/hls-playback';
-import { isApiRequestError } from '@/lib/api-errors';
+import { isApiRequestError, notifyApiErrorToast } from '@/lib/api-errors';
 
 type HlsDirectFetchMode = 'probe' | 'direct-ok' | 'proxy-only';
 
@@ -615,13 +615,18 @@ export async function runJob(job: DownloadJob, signal: AbortSignal): Promise<voi
       const videoUrl = rawData?.downloadVideoUrl || rawData?.originDownloadVideoUrl;
       
       if (!videoUrl) {
-        // Fallback: If no video URL is resolved, but an audio URL exists (audio-only platform like SoundCloud), download audio instead.
+        // Fallback: If no video URL is resolved, check audio or image post fallback.
         const audioUrl = rawData?.downloadAudioUrl || rawData?.originDownloadAudioUrl;
         if (audioUrl) {
           console.warn(`No video URL resolved for job ${job.id}, falling back to audio-only download.`);
           outputBlob = await runDirectDownload(job, audioUrl, config.filename, signal);
           extension = 'mp3';
           mimeType = 'audio/mpeg';
+        } else if (job.metadata?.images && job.metadata.images.length > 0) {
+          console.warn(`No video or audio URL resolved for job ${job.id}, falling back to image download.`);
+          outputBlob = await runImagesDownload(job, job.metadata.images, signal);
+          extension = 'zip';
+          mimeType = 'application/zip';
         } else {
           throw new Error('No download media URL resolved');
         }
@@ -716,11 +721,15 @@ export async function runJob(job: DownloadJob, signal: AbortSignal): Promise<voi
 
     console.error(`Download execution error for job ${job.id}:`, error);
 
-    const errorCode: DownloadErrorCode = 'NETWORK_ERROR';
+    let errorCode: DownloadErrorCode = 'NETWORK_ERROR';
     let errorMessage = 'Media download failed';
-    const httpStatus: number | undefined = undefined;
+    let httpStatus: number | undefined = undefined;
 
-    if (error instanceof Error) {
+    if (isApiRequestError(error)) {
+      errorCode = (error.code as DownloadErrorCode) || 'NETWORK_ERROR';
+      errorMessage = error.fallbackMessage || errorMessage;
+      httpStatus = error.status;
+    } else if (error instanceof Error) {
       errorMessage = error.message;
     }
 
@@ -730,6 +739,8 @@ export async function runJob(job: DownloadJob, signal: AbortSignal): Promise<voi
       retryable: true, // retry by default unless cancelled
       httpStatus,
     };
+
+    notifyApiErrorToast(error);
 
     await store.updateJobError(job.id, downloadError);
   }

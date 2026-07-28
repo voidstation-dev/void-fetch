@@ -32,7 +32,7 @@ import {
   DOWNLOAD_HISTORY_STORAGE_KEY,
 } from "@/lib/constants";
 import { useTranslations } from "next-intl";
-import { isApiRequestError, resolveApiErrorMessage } from "@/lib/api-errors";
+import { isApiRequestError, notifyApiErrorToast, resolveApiErrorMessage } from "@/lib/api-errors";
 import { getPlatformLabel, normalizePlatform } from "@/lib/platforms";
 import {
   UnifiedParseReloadError,
@@ -238,6 +238,11 @@ export function UnifiedDownloader({
       setUrl("");
     } catch (err) {
       if (err instanceof UnifiedParseReloadError) {
+        setLoading(false);
+        return;
+      }
+
+      if (notifyApiErrorToast(err)) {
         setLoading(false);
         return;
       }

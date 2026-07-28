@@ -64,6 +64,7 @@ interface BatchStoreActions {
 
   // Queue Operations
   startQueue: () => void;
+  startSelectedQueue: () => void;
   pauseQueue: () => void;
   retryFailedJobs: () => Promise<void>;
   retryJob: (id: string) => Promise<void>;
@@ -90,12 +91,39 @@ const DEFAULT_SETTINGS: BatchSettings = {
   autoStartDownloads: false,
 };
 
+const BATCH_SETTINGS_STORAGE_KEY = 'voidfetch_batch_settings_v1';
+
+function getInitialSettings(): BatchSettings {
+  if (typeof window === 'undefined') {
+    return DEFAULT_SETTINGS;
+  }
+  try {
+    const saved = window.localStorage.getItem(BATCH_SETTINGS_STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      return { ...DEFAULT_SETTINGS, ...parsed };
+    }
+  } catch (error) {
+    console.warn('Failed to load batch settings from localStorage:', error);
+  }
+  return DEFAULT_SETTINGS;
+}
+
+function saveSettingsToLocalStorage(settings: BatchSettings): void {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.setItem(BATCH_SETTINGS_STORAGE_KEY, JSON.stringify(settings));
+  } catch (error) {
+    console.warn('Failed to save batch settings to localStorage:', error);
+  }
+}
+
 export const useBatchStore = create<BatchStore>((set, get) => ({
   jobs: [],
   selectedJobIds: [],
   isQueueRunning: false,
-  isInitialized: true,
-  settings: DEFAULT_SETTINGS,
+  isInitialized: false,
+  settings: getInitialSettings(),
   searchQuery: '',
   statusFilter: 'all',
   platformFilter: 'all',
@@ -110,11 +138,15 @@ export const useBatchStore = create<BatchStore>((set, get) => ({
     try {
       const loadedJobs = await getAllJobs();
       
-      // Load settings from a default project record or localStorage
-      let loadedSettings = DEFAULT_SETTINGS;
+      // Load settings from localStorage first, fallback to project record
+      let loadedSettings = getInitialSettings();
       const projectRecord = await getProject('default-project');
+      const hasLocalStorage = typeof window !== 'undefined' && !!window.localStorage.getItem(BATCH_SETTINGS_STORAGE_KEY);
       if (projectRecord) {
-        loadedSettings = projectRecord.settings;
+        if (!hasLocalStorage && projectRecord.settings) {
+          loadedSettings = projectRecord.settings;
+          saveSettingsToLocalStorage(loadedSettings);
+        }
       } else {
         // Save initial default project
         await saveProject({
@@ -122,7 +154,7 @@ export const useBatchStore = create<BatchStore>((set, get) => ({
           name: 'Default Workspace',
           createdAt: Date.now(),
           updatedAt: Date.now(),
-          settings: DEFAULT_SETTINGS,
+          settings: loadedSettings,
           jobIds: loadedJobs.map(j => j.id),
         });
       }
@@ -387,6 +419,25 @@ export const useBatchStore = create<BatchStore>((set, get) => ({
     });
   },
 
+  startSelectedQueue: () => {
+    set((state) => {
+      const selectedSet = new Set(state.selectedJobIds);
+      const updatedJobs = state.jobs.map((job) => {
+        if (selectedSet.has(job.id) && (job.status === 'paused' || job.status === 'ready' || job.status === 'cancelled' || job.status === 'failed')) {
+          const updatedJob = { ...job, status: 'queued' as const, updatedAt: Date.now() };
+          saveJob(updatedJob);
+          return updatedJob;
+        }
+        return job;
+      });
+
+      return {
+        jobs: updatedJobs,
+        isQueueRunning: true,
+      };
+    });
+  },
+
   pauseQueue: () => {
     set((state) => {
       // Pause any queued jobs
@@ -411,7 +462,7 @@ export const useBatchStore = create<BatchStore>((set, get) => ({
     const downloadJobIds: string[] = [];
     
     const updatedJobs = get().jobs.map((job) => {
-      if (job.status === 'failed') {
+      if (job.status === 'failed' || job.status === 'cancelled') {
         const hasMetadata = Boolean(job.metadata?.rawParsedData);
         if (!hasMetadata) {
           parseJobIds.push(job.id);
@@ -484,6 +535,7 @@ export const useBatchStore = create<BatchStore>((set, get) => ({
   updateSettings: async (settingsUpdates) => {
     const newSettings = { ...get().settings, ...settingsUpdates };
     set({ settings: newSettings });
+    saveSettingsToLocalStorage(newSettings);
 
     await saveProject({
       id: 'default-project',
