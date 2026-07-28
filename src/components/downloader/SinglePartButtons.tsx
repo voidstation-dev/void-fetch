@@ -5,7 +5,7 @@ import type { AudioExtractTask } from '@/components/audio-tool/types';
 import type { HlsDownloadDialogRequest } from '@/components/hls-download-dialog';
 import type { MediaPreviewRequest } from '@/components/downloader/media-preview';
 import { Button } from '@/components/ui/button';
-import { useDictionary } from '@/i18n/client';
+import { useTranslations } from 'next-intl';
 import { isHlsPlaylistUrl } from '@/lib/hls-playback';
 import type { UnifiedParseResult } from '@/lib/types';
 import { downloadFile } from '@/lib/utils';
@@ -44,7 +44,9 @@ export function SinglePartButtons({
     onOpenHlsDownload: (request: HlsDownloadDialogRequest) => void;
     onRequestPreview: (request: MediaPreviewRequest) => void;
 }) {
-    const dict = useDictionary();
+    const tResult = useTranslations('result');
+    const tExtractAudio = useTranslations('extractAudio');
+    const tHistory = useTranslations('history');
     const [videoLoading, setVideoLoading] = useState(false);
     const [audioLoading, setAudioLoading] = useState(false);
     const previewSourceUrl = typeof result.url === 'string' ? result.url.trim() : '';
@@ -89,7 +91,7 @@ export function SinglePartButtons({
         onOpenHlsDownload({
             sourceUrl: result.originDownloadVideoUrl,
             refererUrl: result.url || result.originDownloadVideoUrl,
-            title: result.title || result.desc || dict.history.unknownTitle,
+            title: result.title || result.desc || tHistory('unknownTitle'),
         });
     };
 
@@ -103,7 +105,7 @@ export function SinglePartButtons({
             mediaActions: result.mediaActions,
         });
     };
-    const previewTitle = result.title || result.desc || dict.result.title;
+    const previewTitle = result.title || result.desc || tResult('title');
     const previewActionCount = Number(showVideoPreview) + Number(showAudioPreview);
     const downloadActionCount = Number(showVideoDownload)
         + Number(showBrowserHlsDownload)
@@ -117,7 +119,7 @@ export function SinglePartButtons({
                     <div className={`grid ${getActionRowClass(previewActionCount)} gap-2`}>
                         {showVideoPreview && (
                             <MediaActionIconButton
-                                label={dict.result.playVideo}
+                                label={tResult('playVideo')}
                                 icon={MonitorPlay}
                                 variant="secondary"
                                 className={actionButtonClass}
@@ -131,7 +133,7 @@ export function SinglePartButtons({
                         )}
                         {showAudioPreview && (
                             <MediaActionIconButton
-                                label={dict.result.playAudio}
+                                label={tResult('playAudio')}
                                 icon={Headphones}
                                 variant="secondary"
                                 className={actionButtonClass}
@@ -150,8 +152,8 @@ export function SinglePartButtons({
                         {showVideoDownload && (
                             <MediaActionIconButton
                                 label={videoAction === 'merge-then-download'
-                                    ? dict.result.mergeDownloadVideo
-                                    : dict.result.downloadVideo}
+                                    ? tResult('mergeDownloadVideo')
+                                    : tResult('downloadVideo')}
                                 icon={VideoDownloadIcon}
                                 variant="default"
                                 className={actionButtonClass}
@@ -169,7 +171,7 @@ export function SinglePartButtons({
                         )}
                         {showBrowserHlsDownload && (
                             <MediaActionIconButton
-                                label={dict.result.browserDownloadVideo}
+                                label={tResult('browserDownloadVideo')}
                                 icon={Download}
                                 variant="outline"
                                 className={actionButtonClass}
@@ -179,8 +181,8 @@ export function SinglePartButtons({
                         {showAudioDownload && (
                             <MediaActionIconButton
                                 label={audioAction === 'direct-download'
-                                    ? dict.result.downloadAudio
-                                    : dict.extractAudio.button}
+                                    ? tResult('downloadAudio')
+                                    : tExtractAudio('button')}
                                 icon={AudioDownloadIcon}
                                 variant="default"
                                 className={actionButtonClass}
@@ -201,12 +203,12 @@ export function SinglePartButtons({
             </div>
             {videoAction === 'merge-then-download' && (
                 <p className="text-xs text-muted-foreground">
-                    {dict.result.mergeDownloadVideoHint}
+                    {tResult('mergeDownloadVideoHint')}
                 </p>
             )}
             {result.noteType === 'audio' && (
                 <p className="text-xs text-muted-foreground">
-                    {dict.result.pureMusicHint}
+                    {tResult('pureMusicHint')}
                 </p>
             )}
             {(showOriginVideoLink || showOriginAudioLink) && (
@@ -219,7 +221,7 @@ export function SinglePartButtons({
                                 rel="noopener noreferrer"
                             >
                                 <ExternalLink className="h-3.5 w-3.5" />
-                                {dict.result.originDownloadVideo}
+                                {tResult('originDownloadVideo')}
                             </a>
                         </Button>
                     )}
@@ -231,7 +233,7 @@ export function SinglePartButtons({
                                 rel="noopener noreferrer"
                             >
                                 <ExternalLink className="h-3.5 w-3.5" />
-                                {dict.result.originDownloadAudio}
+                                {tResult('originDownloadAudio')}
                             </a>
                         </Button>
                     )}

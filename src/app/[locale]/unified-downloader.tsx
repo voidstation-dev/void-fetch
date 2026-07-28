@@ -31,7 +31,7 @@ import {
   DOWNLOAD_HISTORY_MAX_COUNT,
   DOWNLOAD_HISTORY_STORAGE_KEY,
 } from "@/lib/constants";
-import { useDictionary } from "@/i18n/client";
+import { useTranslations } from "next-intl";
 import { isApiRequestError, resolveApiErrorMessage } from "@/lib/api-errors";
 import { getPlatformLabel, normalizePlatform } from "@/lib/platforms";
 import {
@@ -68,7 +68,15 @@ export function UnifiedDownloader({
   heroMeta,
   footer,
 }: UnifiedDownloaderProps) {
-  const dict = useDictionary();
+  const tUnified = useTranslations("unified");
+  const tHistory = useTranslations("history");
+  const tToast = useTranslations("toast");
+  const tForm = useTranslations("form");
+  const tErrors = useTranslations("errors");
+  const tPage = useTranslations("page");
+  const tCommon = useTranslations("common");
+  const tPlatforms = useTranslations("history.platforms");
+
   const { setActions: setTopBarActions } = useTopBarActions();
   const searchParams = useSearchParams();
   const [url, setUrl] = useState("");
@@ -144,14 +152,14 @@ export function UnifiedDownloader({
         platform: normalizePlatform(apiResult.data.platform),
       };
       const platformCode = normalizedData.platform;
-      const platformLabel = getPlatformLabel(platformCode, dict);
+      const platformLabel = getPlatformLabel(platformCode, tPlatforms);
 
       // Add to download history - use desc if title is empty
       // Use canonical URL returned by API to avoid tracking params/raw text inputs
       const displayTitle =
         normalizedData.title ||
         normalizedData.desc ||
-        dict.history.unknownTitle;
+        tHistory("unknownTitle");
       const nextRecord: DownloadRecord = {
         url: normalizedData.url || videoUrl,
         title: displayTitle,
@@ -167,18 +175,18 @@ export function UnifiedDownloader({
       });
 
       // Show success toast
-      toast.success(dict.toast.douyinParseSuccess, {
+      toast.success(tToast("douyinParseSuccess"), {
         description: `${platformLabel}: ${displayTitle}`,
       });
 
       // Prompt PWA installation on first successful parse
       if (canPrompt && !hasPromptedInstall.current) {
         hasPromptedInstall.current = true;
-        toast(dict.toast.installTitle, {
-          description: dict.toast.installDescription,
+        toast(tToast("installTitle"), {
+          description: tToast("installDescription"),
           duration: 10000,
           action: {
-            label: dict.toast.installAction,
+            label: tToast("installAction"),
             onClick: promptInstall,
           },
           onDismiss: dismiss,
@@ -186,7 +194,7 @@ export function UnifiedDownloader({
       }
       return normalizedData;
     },
-    [addToHistory, canPrompt, dict, dismiss, promptInstall],
+    [addToHistory, canPrompt, dismiss, promptInstall, tHistory, tPlatforms, tToast],
   );
 
   const closeParseResult = () => {
@@ -206,7 +214,7 @@ export function UnifiedDownloader({
     e.preventDefault();
 
     if (!url.trim()) {
-      setError(dict.errors.emptyUrl);
+      setError(tErrors("emptyUrl"));
       return;
     }
 
@@ -243,9 +251,18 @@ export function UnifiedDownloader({
         });
       }
 
-      const errorMessage = resolveApiErrorMessage(err, dict);
+      const errorMessage = resolveApiErrorMessage(err, {
+        api: {
+          networkError: tErrors("api.networkError"),
+          rateLimit: tErrors("api.rateLimit"),
+          serverError: tErrors("api.serverError"),
+          serviceUnavailable: tErrors("api.serviceUnavailable"),
+          unknownError: tErrors("api.unknownError"),
+        },
+        downloadError: tErrors("downloadError"),
+      });
       setError(errorMessage);
-      toast.error(dict.errors.downloadFailed, {
+      toast.error(tErrors("downloadFailed"), {
         description: errorMessage,
       });
     }
@@ -257,8 +274,8 @@ export function UnifiedDownloader({
     setUrl(url);
     setParseResult(null);
     setActivePreview(null);
-    toast(dict.toast.linkFilledForRedownload, {
-      description: dict.toast.clickToRedownloadDesc,
+    toast(tToast("linkFilledForRedownload"), {
+      description: tToast("clickToRedownloadDesc"),
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -349,9 +366,18 @@ export function UnifiedDownloader({
           });
         }
 
-        const errorMessage = resolveApiErrorMessage(err, dict);
+        const errorMessage = resolveApiErrorMessage(err, {
+          api: {
+            networkError: tErrors("api.networkError"),
+            rateLimit: tErrors("api.rateLimit"),
+            serverError: tErrors("api.serverError"),
+            serviceUnavailable: tErrors("api.serviceUnavailable"),
+            unknownError: tErrors("api.unknownError"),
+          },
+          downloadError: tErrors("downloadError"),
+        });
         setError(errorMessage);
-        toast.error(dict.errors.downloadFailed, {
+        toast.error(tErrors("downloadFailed"), {
           description: errorMessage,
         });
       } finally {
@@ -366,7 +392,7 @@ export function UnifiedDownloader({
     return () => {
       cancelled = true;
     };
-  }, [dict, handleUnifiedParse, sharedAutoplayRequested, sharedPlaySourceUrl]);
+  }, [handleUnifiedParse, sharedAutoplayRequested, sharedPlaySourceUrl, tErrors]);
 
   useEffect(() => {
     let idleId: number | null = null;
@@ -453,10 +479,10 @@ export function UnifiedDownloader({
               <Card className="shrink-0">
                 <CardHeader className="p-4 pb-2 space-y-1.5">
                   <h1 className="text-2xl text-center font-semibold tracking-tight">
-                    {dict.unified.pageTitle}
+                    {tUnified("pageTitle")}
                   </h1>
                   <p className="text-xs sm:text-[13px] leading-relaxed text-foreground/60 text-center break-words">
-                    {dict.unified.pageDescription}
+                    {tUnified("pageDescription")}
                   </p>
                 </CardHeader>
                 <CardContent className="px-4 pb-4 pt-1">
@@ -467,7 +493,7 @@ export function UnifiedDownloader({
                         ref={urlInputRef}
                         value={url}
                         onChange={(e) => setUrl(e.target.value)}
-                        placeholder={dict.unified.placeholder}
+                        placeholder={tUnified("placeholder")}
                         required
                         className="min-h-[120px] resize-none break-all"
                       />
@@ -482,16 +508,16 @@ export function UnifiedDownloader({
                               setUrl(text);
 
                               // Show link pasted toast
-                              toast.success(dict.toast.linkFilled);
+                              toast.success(tToast("linkFilled"));
                             } catch (err) {
                               console.error("Failed to read clipboard:", err);
-                              toast.error(dict.errors.clipboardFailed, {
-                                description: dict.errors.clipboardPermission,
+                              toast.error(tErrors("clipboardFailed"), {
+                                description: tErrors("clipboardPermission"),
                               });
                             }
                           }}
                         >
-                          {dict.form.pasteButton}
+                          {tForm("pasteButton")}
                         </Button>
                         <Button
                           type="submit"
@@ -502,8 +528,8 @@ export function UnifiedDownloader({
                             <Loader2 className="h-4 w-4 animate-spin" />
                           )}
                           {loading
-                            ? dict.form.downloading
-                            : dict.form.downloadButton}
+                            ? tForm("downloading")
+                            : tForm("downloadButton")}
                         </Button>
                       </div>
                     </div>
@@ -516,7 +542,7 @@ export function UnifiedDownloader({
 
                     <div className="pt-2 space-y-3">
                       <div className="rounded-md border border-amber-500/20 bg-amber-500/10 px-3 py-2 text-center text-xs text-amber-600 dark:text-amber-400/90 break-words">
-                        {dict.page.copyrightBilibiliRestriction}
+                        {tPage("copyrightBilibiliRestriction")}
                       </div>
                       {heroMeta}
                     </div>
@@ -559,7 +585,7 @@ export function UnifiedDownloader({
             ? "pointer-events-auto opacity-100 translate-y-0 scale-100"
             : "pointer-events-none opacity-0 translate-y-2 scale-95"
         }`}
-        aria-label={dict.common.backToTop}
+        aria-label={tCommon("backToTop")}
         onClick={() => {
           window.scrollTo({ top: 0, behavior: "smooth" });
         }}

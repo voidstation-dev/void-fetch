@@ -12,7 +12,7 @@ import {
 import { ScrollText } from 'lucide-react'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import changelogData from '@/lib/changelog.json'
-import { useAppLocale, useDictionary } from '@/i18n/client'
+import { useLocale, useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 
 interface ChangelogDialogProps {
@@ -28,8 +28,8 @@ export function ChangelogDialog({
     defaultOpen = false,
     onTriggerClick,
 }: ChangelogDialogProps) {
-    const locale = useAppLocale()
-    const dict = useDictionary()
+    const locale = useLocale()
+    const t = useTranslations('changelog')
     const [open, setOpen] = useState(defaultOpen)
 
     // Get changelog for current locale, falling back to English
@@ -37,7 +37,7 @@ export function ChangelogDialog({
         return changes[locale] || changes['en'] || []
     }
 
-    const title = dict.changelog.title
+    const title = t('title')
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>

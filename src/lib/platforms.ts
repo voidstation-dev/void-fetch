@@ -144,74 +144,78 @@ export function normalizePlatform(platform?: string | null): CanonicalPlatform {
 
 export function getPlatformLabel(
     platform: string | null | undefined,
-    dict: Pick<Dictionary, 'history'>
+    t: ((key: string) => string) | Pick<Dictionary, 'history'>
 ): string {
+    const get = typeof t === 'function'
+        ? t
+        : (k: string) => ((t as Pick<Dictionary, 'history'>).history.platforms as Record<string, string>)[k] ?? k
+
     switch (normalizePlatform(platform)) {
         case 'bilibili':
-            return dict.history.platforms.bilibili
+            return get('bilibili')
         case 'bilibili_tv':
-            return dict.history.platforms.bilibiliTv
+            return get('bilibiliTv')
         case 'dailymotion':
-            return dict.history.platforms.dailymotion
+            return get('dailymotion')
         case 'douyin':
-            return dict.history.platforms.douyin
+            return get('douyin')
         case 'kuaishou':
-            return dict.history.platforms.kuaishou
+            return get('kuaishou')
         case 'newgrounds':
-            return dict.history.platforms.newgrounds
+            return get('newgrounds')
         case 'okru':
-            return dict.history.platforms.okru
+            return get('okru')
         case 'pinterest':
-            return dict.history.platforms.pinterest
+            return get('pinterest')
         case 'reddit':
-            return dict.history.platforms.reddit
+            return get('reddit')
         case 'soundcloud':
-            return dict.history.platforms.soundcloud
+            return get('soundcloud')
         case 'streamable':
-            return dict.history.platforms.streamable
+            return get('streamable')
         case 'twitch':
-            return dict.history.platforms.twitch
+            return get('twitch')
         case 'tumblr':
-            return dict.history.platforms.tumblr
+            return get('tumblr')
         case 'youtube':
-            return dict.history.platforms.youtube
+            return get('youtube')
         case 'telegram':
-            return dict.history.platforms.telegram
+            return get('telegram')
         case 'threads':
-            return dict.history.platforms.threads
+            return get('threads')
         case 'vk':
-            return dict.history.platforms.vk
+            return get('vk')
         case 'vimeo':
-            return dict.history.platforms.vimeo
+            return get('vimeo')
         case 'wechat':
-            return dict.history.platforms.wechat
+            return get('wechat')
         case 'niconico':
-            return dict.history.platforms.niconico
+            return get('niconico')
         case 'weibo':
-            return dict.history.platforms.weibo
+            return get('weibo')
         case 'xiaohongshu':
-            return dict.history.platforms.xiaohongshu
+            return get('xiaohongshu')
         case 'tiktok':
-            return dict.history.platforms.tiktok
+            return get('tiktok')
         case 'instagram':
-            return dict.history.platforms.instagram
+            return get('instagram')
         case 'x':
-            return dict.history.platforms.x
+            return get('x')
         case 'apple_podcasts':
             return 'Apple Podcasts'
         case 'generic':
-            return dict.history.platforms.generic
+            return get('generic')
         default:
-            return dict.history.platforms.unknown
+            return get('unknown')
     }
 }
 
 export function getPlatformBadge(
     platform: string | null | undefined,
-    dict: Pick<Dictionary, 'history'>
+    t: ((key: string) => string) | Pick<Dictionary, 'history'>
 ) {
     return {
-        text: getPlatformLabel(platform, dict),
+        text: getPlatformLabel(platform, t),
     }
 }
 

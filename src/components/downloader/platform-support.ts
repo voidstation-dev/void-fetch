@@ -77,9 +77,8 @@ const PLATFORM_SUPPORT_VISUALS: Record<PlatformSupportKey, PlatformSupportVisual
         badgeClassName: 'bg-primary text-primary-foreground',
     },
     douyin: {
-        src: '/platform-icons/douyin.ico',
+        src: '/platform-icons/douyin.svg',
         frameClassName: UNIFIED_FRAME_CLASS_NAME,
-        iconClassName: 'rounded-[4px]',
     },
     youtube: {
         src: '/platform-icons/youtube.svg',
@@ -135,7 +134,7 @@ const PLATFORM_SUPPORT_VISUALS: Record<PlatformSupportKey, PlatformSupportVisual
         frameClassName: UNIFIED_FRAME_CLASS_NAME,
     },
     streamable: {
-        src: '/platform-icons/streamable.png',
+        src: '/platform-icons/streamable.svg',
         frameClassName: UNIFIED_FRAME_CLASS_NAME,
     },
     reddit: {

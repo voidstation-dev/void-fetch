@@ -5,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Globe, ChevronDown, Check } from 'lucide-react'
 import type { Locale } from '@/lib/i18n/config'
-import { useAppLocale, useDictionary } from '@/i18n/client'
+import { useLocale, useTranslations } from 'next-intl'
 import { getLocaleLabel, SUPPORTED_LOCALES } from '@/lib/i18n/locale-meta'
 import { LOCALE_COOKIE_NAME, LOCALE_COOKIE_MAX_AGE } from '@/lib/constants'
 import { cn } from '@/lib/utils'
@@ -28,8 +28,8 @@ export function LanguageSwitcher({
     fullWidth = false,
     iconOnly = false,
 }: LanguageSwitcherProps) {
-    const dict = useDictionary()
-    const currentLocale = useAppLocale()
+    const t = useTranslations('page')
+    const currentLocale = useLocale() as Locale
     const [isOpen, setIsOpen] = useState(defaultOpen)
     const pathname = usePathname()
     const router = useRouter()
@@ -98,11 +98,11 @@ export function LanguageSwitcher({
                     iconOnly && 'h-8 w-8 p-0',
                     fullWidth && 'w-full justify-between'
                 )}
-                aria-label={iconOnly ? dict.page.switchLanguageLabel : getLocaleLabel(currentLocale)}
+                aria-label={iconOnly ? t('switchLanguageLabel') : getLocaleLabel(currentLocale)}
             >
                 <Globe className="h-4 w-4" />
                 {iconOnly ? (
-                    <span className="sr-only">{dict.page.switchLanguageLabel}</span>
+                    <span className="sr-only">{t('switchLanguageLabel')}</span>
                 ) : compact ? (
                     <span className="max-w-[5.5rem] truncate">{getLocaleLabel(currentLocale)}</span>
                 ) : (

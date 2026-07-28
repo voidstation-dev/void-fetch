@@ -5,7 +5,7 @@ import type { ChangeEvent, DragEvent, ReactNode } from 'react'
 import { Loader2 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
-import { useDictionary } from '@/i18n/client'
+import { useTranslations } from 'next-intl'
 import { formatBytes } from '@/lib/utils'
 
 import { FileDropzone } from './file-dropzone'
@@ -43,21 +43,22 @@ export function MergePanel({
     onClearAudio,
     onSubmit,
 }: MergePanelProps) {
-    const dict = useDictionary()
+    const tAudioTool = useTranslations('audioTool')
 
     return (
         <div className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2">
                 <FileDropzone
                     acceptedFile={mergeVideoFile}
-                    title={dict.audioTool.videoFile}
-                    hint={dict.audioTool.dropHint}
-                    limitText={dict.audioTool.videoSizeLimit}
-                    emptyButtonLabel={mergeVideoFile ? dict.audioTool.changeVideoButton : dict.audioTool.selectVideoButton}
+                    title={tAudioTool('videoFile')}
+                    hint={tAudioTool('dropHint')}
+                    limitText={tAudioTool('videoSizeLimit')}
+                    emptyButtonLabel={mergeVideoFile ? tAudioTool('changeVideoButton') : tAudioTool('selectVideoButton')}
                     selectedLabel={mergeVideoFile
-                        ? dict.audioTool.videoSelected
-                            .replace('{name}', mergeVideoFile.name)
-                            .replace('{size}', formatBytes(mergeVideoFile.size))
+                        ? tAudioTool('videoSelected', {
+                            name: mergeVideoFile.name,
+                            size: formatBytes(mergeVideoFile.size),
+                        })
                         : ''}
                     inputId={videoInputId}
                     accept="video/*,.mp4,.webm,.mov,.mkv,.avi,.mpeg,.mpg"
@@ -70,14 +71,15 @@ export function MergePanel({
 
                 <FileDropzone
                     acceptedFile={mergeAudioFile}
-                    title={dict.audioTool.audioFile}
-                    hint={dict.audioTool.dropHint}
-                    limitText={dict.audioTool.audioSizeLimit}
-                    emptyButtonLabel={mergeAudioFile ? dict.audioTool.changeAudioButton : dict.audioTool.selectAudioButton}
+                    title={tAudioTool('audioFile')}
+                    hint={tAudioTool('dropHint')}
+                    limitText={tAudioTool('audioSizeLimit')}
+                    emptyButtonLabel={mergeAudioFile ? tAudioTool('changeAudioButton') : tAudioTool('selectAudioButton')}
                     selectedLabel={mergeAudioFile
-                        ? dict.audioTool.audioSelected
-                            .replace('{name}', mergeAudioFile.name)
-                            .replace('{size}', formatBytes(mergeAudioFile.size))
+                        ? tAudioTool('audioSelected', {
+                            name: mergeAudioFile.name,
+                            size: formatBytes(mergeAudioFile.size),
+                        })
                         : ''}
                     inputId={audioInputId}
                     accept="audio/*,.mp3,.aac,.wav,.ogg,.flac,.m4a"
@@ -98,7 +100,7 @@ export function MergePanel({
                 disabled={isBusy || !mergeVideoFile || !mergeAudioFile}
             >
                 {isBusy && <Loader2 className="h-4 w-4 animate-spin" />}
-                {isBusy ? dict.audioTool.processingButton : dict.audioTool.mergeButton}
+                {isBusy ? tAudioTool('processingButton') : tAudioTool('mergeButton')}
             </Button>
         </div>
     )

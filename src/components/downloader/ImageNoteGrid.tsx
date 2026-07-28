@@ -3,7 +3,7 @@ import { Download, Loader2, Package } from 'lucide-react';
 import Image from 'next/image';
 
 import { Button } from '@/components/ui/button';
-import { useDictionary } from '@/i18n/client';
+import { useTranslations } from 'next-intl';
 import { toast } from '@/lib/deferred-toast';
 import { sanitizeFilename } from '@/lib/utils';
 
@@ -11,7 +11,6 @@ import { shouldHideSingleImagePreview } from './result-card-visibility';
 import {
     createInitialImageStates,
     fetchImageBlobCandidates,
-    replaceTemplate,
     resolveImageDownloadExtension,
     resolveImageSrc,
     triggerBlobDownload,
@@ -48,7 +47,8 @@ function ImageNoteGridContent({
     title: string;
     singleImageMode?: boolean;
 }) {
-    const dict = useDictionary();
+    const tResult = useTranslations('result');
+    const tErrors = useTranslations('errors');
     const [imageStates, setImageStates] = useState<ImageLoadState[]>(() => createInitialImageStates(images));
     const [isPackaging, setIsPackaging] = useState(false);
     const [packagingProgress, setPackagingProgress] = useState(0);
@@ -99,7 +99,7 @@ function ImageNoteGridContent({
             triggerBlobDownload(blob, `${sanitizeFilename(title)}-${filenameSuffix}.${extension}`);
         } catch (error) {
             console.error(`Failed to download image ${index}:`, error);
-            toast.error(dict.errors.downloadError);
+            toast.error(tErrors('downloadError'));
         }
     };
 
@@ -135,7 +135,7 @@ function ImageNoteGridContent({
             }
 
             if (successCount === 0) {
-                toast.error(dict.errors.allImagesLoadFailed);
+                toast.error(tErrors('allImagesLoadFailed'));
                 return;
             }
 
@@ -143,7 +143,7 @@ function ImageNoteGridContent({
             triggerBlobDownload(zipBlob, `${sanitizeFilename(title)}.zip`);
         } catch (error) {
             console.error('Failed to package images:', error);
-            toast.error(dict.errors.packageFailed);
+            toast.error(tErrors('packageFailed'));
         } finally {
             setIsPackaging(false);
             setPackagingProgress(0);
@@ -166,14 +166,14 @@ function ImageNoteGridContent({
                 <div className="flex items-center justify-between">
                     <div className="text-xs text-foreground/75">
                         <span className="inline-flex items-center gap-1">
-                            {dict.result.imageNote}
+                            {tResult('imageNote')}
                         </span>
                         <span className="ml-2">
-                            {replaceTemplate(dict.result.imageCount, '{count}', String(images.length))}
+                            {tResult('imageCount', { count: images.length })}
                         </span>
                         {!allLoaded && (
                             <span className="ml-2 text-xs">
-                                ({dict.result.imageLoadingProgress.replace('{loaded}', String(loadedCount)).replace('{total}', String(images.length))})
+                                ({tResult('imageLoadingProgress', { loaded: loadedCount, total: images.length })})
                             </span>
                         )}
                     </div>
@@ -187,12 +187,12 @@ function ImageNoteGridContent({
                         {isPackaging ? (
                             <>
                                 <Loader2 className="h-3 w-3 mr-1 animate-spin" />
-                                {dict.result.packaging} {packagingProgress}%
+                                {tResult('packaging')} {packagingProgress}%
                             </>
                         ) : (
                             <>
                                 <Package className="h-3 w-3 mr-1" />
-                                {dict.result.packageDownload}
+                                {tResult('packageDownload')}
                             </>
                         )}
                     </Button>
@@ -216,8 +216,8 @@ function ImageNoteGridContent({
                                         src={displaySrc}
                                         alt={
                                             singleImageMode
-                                                ? (title || dict.result.coverLabel)
-                                                : replaceTemplate(dict.result.imageAlt, '{index}', String(index + 1))
+                                                ? (title || tResult('coverLabel'))
+                                                : tResult('imageAlt', { index: index + 1 })
                                         }
                                         fill
                                         unoptimized
@@ -230,7 +230,7 @@ function ImageNoteGridContent({
                                 {isLoading && (
                                     <div className="absolute inset-0 flex flex-col items-center justify-center">
                                         <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-                                        <p className="text-xs text-muted-foreground mt-2">{dict.result.loading}</p>
+                                        <p className="text-xs text-muted-foreground mt-2">{tResult('loading')}</p>
                                     </div>
                                 )}
                                 {!isLoading && hasError && (
@@ -238,10 +238,10 @@ function ImageNoteGridContent({
                                         <div className="text-2xl">🖼️</div>
                                         <p className="text-xs mt-2">
                                             {singleImageMode
-                                                ? dict.result.coverLabel
-                                                : replaceTemplate(dict.result.imageIndexLabel, '{index}', String(index + 1))}
+                                                ? tResult('coverLabel')
+                                                : tResult('imageIndexLabel', { index: index + 1 })}
                                         </p>
-                                        <p className="text-[10px] mt-1 opacity-60">{dict.result.loadFailed}</p>
+                                        <p className="text-[10px] mt-1 opacity-60">{tResult('loadFailed')}</p>
                                     </div>
                                 )}
                             </div>
@@ -252,8 +252,8 @@ function ImageNoteGridContent({
                                         variant="secondary"
                                         className="h-8 w-8 p-0 shadow-md"
                                         onClick={() => void handleDownload(index, imageUrl)}
-                                        title={singleImageMode ? dict.result.downloadCover : dict.result.downloadImage}
-                                        aria-label={singleImageMode ? dict.result.downloadCover : dict.result.downloadImage}
+                                        title={singleImageMode ? tResult('downloadCover') : tResult('downloadImage')}
+                                        aria-label={singleImageMode ? tResult('downloadCover') : tResult('downloadImage')}
                                     >
                                         <Download className="h-4 w-4" />
                                     </Button>

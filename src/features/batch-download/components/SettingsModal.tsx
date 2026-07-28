@@ -90,7 +90,7 @@ export function SettingsModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
-      <DialogContent showCloseButton={false} className="sm:max-w-lg p-6 rounded-2xl border border-border/80 bg-card shadow-2xl backdrop-blur-xl transition-all duration-200">
+      <DialogContent showCloseButton={false} className="sm:max-w-xl w-[calc(100vw-2rem)] max-h-[85vh] overflow-x-hidden overflow-y-auto p-6 rounded-2xl border border-border/80 bg-card shadow-2xl backdrop-blur-xl transition-all duration-200">
         <DialogTitle className="sr-only">Workspace Preferences</DialogTitle>
         <DialogDescription className="sr-only">Configure global download defaults and network concurrency</DialogDescription>
         {/* Glow Ambient Line Top */}
@@ -130,7 +130,7 @@ export function SettingsModal() {
               <span>Default Output & Quality</span>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="flex flex-col gap-1.5">
                 <Label className="text-[11px] text-muted-foreground">
                   Default Format
@@ -186,8 +186,8 @@ export function SettingsModal() {
             </div>
 
             <div className="flex flex-col gap-2 p-3.5 rounded-xl border border-border/60 bg-muted/20 backdrop-blur-md">
-              <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2 overflow-hidden">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-2 overflow-hidden min-w-0">
                   <div className="p-2 rounded-lg bg-primary/10 border border-primary/20 text-primary shrink-0">
                     <FolderCheck className="h-4 w-4" />
                   </div>
@@ -205,7 +205,7 @@ export function SettingsModal() {
                   </div>
                 </div>
 
-                <div className="flex gap-1.5 shrink-0">
+                <div className="flex flex-wrap gap-1.5 shrink-0">
                   {customDirName ? (
                     <Button
                       variant="outline"
@@ -248,7 +248,7 @@ export function SettingsModal() {
               <span>Network Concurrency</span>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="flex flex-col gap-1.5">
                 <Label className="text-[11px] text-muted-foreground">
                   Concurrent Jobs

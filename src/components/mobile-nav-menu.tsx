@@ -12,7 +12,7 @@ import {
     DialogTrigger,
 } from '@/components/ui/dialog'
 import { ThemeSwitcher } from '@/components/theme-switcher'
-import { useDictionary } from '@/i18n/client'
+import { useTranslations } from 'next-intl'
 
 interface MobileNavMenuProps {
     defaultOpen?: boolean
@@ -21,13 +21,13 @@ interface MobileNavMenuProps {
 export function MobileNavMenu({
     defaultOpen = false,
 }: MobileNavMenuProps) {
-    const dict = useDictionary()
+    const tPage = useTranslations('page')
     const [open, setOpen] = useState(defaultOpen)
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="ghost" size="icon" aria-label={dict.page.openMenuLabel}>
+                <Button variant="ghost" size="icon" aria-label={tPage('openMenuLabel')}>
                     <Menu className="h-5 w-5" />
                 </Button>
             </DialogTrigger>
@@ -36,7 +36,7 @@ export function MobileNavMenu({
                 className="top-auto bottom-4 left-1/2 w-[calc(100%-2rem)] max-w-sm translate-x-[-50%] translate-y-0 rounded-xl p-4"
             >
                 <DialogHeader className="sr-only">
-                    <DialogTitle>{dict.page.openMenuLabel}</DialogTitle>
+                    <DialogTitle>{tPage('openMenuLabel')}</DialogTitle>
                 </DialogHeader>
                 <div className="space-y-2">
                     <Button variant="outline" className="w-full justify-start" asChild>

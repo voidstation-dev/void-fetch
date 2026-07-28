@@ -6,7 +6,7 @@ import type { HlsDownloadDialogRequest } from '@/components/hls-download-dialog'
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { HlsVideoPlayer } from '@/components/hls-video-player';
-import { useDictionary } from '@/i18n/client';
+import { useTranslations } from 'next-intl';
 import { toast } from '@/lib/deferred-toast';
 import { buildHlsPlayProxyUrl, HLS_PLAYLIST_ACCEPT, isHlsPlaylistUrl } from '@/lib/hls-playback';
 import type { UnifiedParseResult } from '@/lib/types';
@@ -23,7 +23,7 @@ import {
 } from './media-preview';
 import { MultiPartList } from './MultiPartList';
 import { ResultCardHeader } from './ResultCardHeader';
-import { replaceTemplate, resolveCoverSrc } from './result-card-utils';
+import { resolveCoverSrc } from './result-card-utils';
 import { resolveResultDisplayImages } from './result-card-visibility';
 import { SinglePartButtons } from './SinglePartButtons';
 
@@ -105,7 +105,8 @@ export function VideoResultPanel({
     onRequestPreview,
     activePreview,
 }: VideoResultPanelProps) {
-    const dict = useDictionary();
+    const tResult = useTranslations('result');
+    const tErrors = useTranslations('errors');
     const activeListKey = `${result.url ?? ''}-${result.currentPage ?? ''}-${result.currentItemId ?? ''}`;
     const defaultBiliList = result.currentItemId ? 'season' : 'pages';
     const [activeBiliListState, setActiveBiliListState] = useState<{ key: string; value: 'pages' | 'season' }>({
@@ -141,8 +142,8 @@ export function VideoResultPanel({
         (result.platform === 'bili' || result.platform === 'bilibili') &&
         Boolean(isMultiPart) &&
         hasSeasonAlternative;
-    const pageTabLabel = replaceTemplate(dict.result.totalParts, '{count}', String(result.pages?.length || 0));
-    const seasonTabLabel = replaceTemplate(dict.result.videoCount, '{count}', String(result.videos?.length || 0));
+    const pageTabLabel = tResult('totalParts', { count: result.pages?.length || 0 });
+    const seasonTabLabel = tResult('videoCount', { count: result.videos?.length || 0 });
     const showMultiPartList = Boolean(isMultiPart) && (!hasBilibiliSourceSwitch || activeBiliList === 'pages');
     const showSeasonList = hasEmbeddedVideos && (!isMultiPart || (hasBilibiliSourceSwitch && activeBiliList === 'season'));
     const hasSupplementalImages = !isImageNote && displayImages.length > 0;
@@ -253,10 +254,10 @@ export function VideoResultPanel({
             shareUrl.searchParams.set('play', shareSourceUrl);
             shareUrl.searchParams.set('autoplay', '1');
             await navigator.clipboard.writeText(shareUrl.toString());
-            toast.success(dict.result.sharePlayLinkCopied);
+            toast.success(tResult('sharePlayLinkCopied'));
         } catch (error) {
             console.error('Failed to copy share-play link:', error);
-            toast.error(dict.errors.clipboardFailed, { description: dict.errors.clipboardPermission });
+            toast.error(tErrors('clipboardFailed'), { description: tErrors('clipboardPermission') });
         }
     };
 

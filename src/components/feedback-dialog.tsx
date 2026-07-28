@@ -21,7 +21,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { MessageSquare, Loader2, CheckCircle2 } from "lucide-react";
 import { toast } from "@/lib/deferred-toast";
-import { useDictionary } from "@/i18n/client";
+import { useTranslations } from "next-intl";
 import type { FeedbackType } from "@/lib/feedback-config";
 import {
   collectFeedbackClientMetadata,
@@ -51,9 +51,9 @@ export function FeedbackDialog({
   defaultOpen = false,
   onTriggerClick,
 }: FeedbackDialogProps) {
-  const dict = useDictionary();
-  const feedback = dict.feedback;
-  const triggerLabel = triggerLabelOverride ?? feedback.triggerButton;
+  const tFeedback = useTranslations("feedback");
+  const tErrors = useTranslations("errors");
+  const triggerLabel = triggerLabelOverride ?? tFeedback("triggerButton");
   const [open, setOpen] = useState(defaultOpen);
   const [feedbackType, setFeedbackType] = useState<FeedbackType>("bug");
   const [content, setContent] = useState("");
@@ -74,19 +74,19 @@ export function FeedbackDialog({
     !contentError &&
     !emailError &&
     content.trim().length >= FEEDBACK_CONFIG.validation.contentMinLength;
-  const contentTooShortMessage = feedback.contentTooShort.replace(
-    "{min}",
-    String(FEEDBACK_CONFIG.validation.contentMinLength),
-  );
-  const contentCounterText = feedback.contentCounter
-    .replace("{current}", String(contentLength))
-    .replace("{max}", String(maxLength));
+  const contentTooShortMessage = tFeedback("contentTooShort", {
+    min: FEEDBACK_CONFIG.validation.contentMinLength,
+  });
+  const contentCounterText = tFeedback("contentCounter", {
+    current: contentLength,
+    max: maxLength,
+  });
 
   // Get placeholder based on feedback type
   const getPlaceholder = () => {
     return (
-      feedback.contentPlaceholder[feedbackType] ||
-      feedback.contentPlaceholder.other ||
+      tFeedback(`contentPlaceholder.${feedbackType}`) ||
+      tFeedback("contentPlaceholder.other") ||
       ""
     );
   };
@@ -124,7 +124,7 @@ export function FeedbackDialog({
       });
 
       setSubmitStatus("success");
-      toast.success(feedback.toastSuccess);
+      toast.success(tFeedback("toastSuccess"));
 
       // Auto close after 3 seconds
       setTimeout(() => {
@@ -144,11 +144,20 @@ export function FeedbackDialog({
 
       const errorMessage = resolveApiErrorMessageWithFallback(
         error,
-        dict,
-        feedback.errorMessage,
+        {
+          api: {
+            networkError: tErrors("api.networkError"),
+            rateLimit: tErrors("api.rateLimit"),
+            serverError: tErrors("api.serverError"),
+            serviceUnavailable: tErrors("api.serviceUnavailable"),
+            unknownError: tErrors("api.unknownError"),
+          },
+          downloadError: tErrors("downloadError"),
+        },
+        tFeedback("errorMessage"),
       );
       setSubmitStatus("error");
-      toast.error(feedback.toastError, {
+      toast.error(tFeedback("toastError"), {
         description: errorMessage,
       });
     } finally {
@@ -163,18 +172,18 @@ export function FeedbackDialog({
         <CheckCircle2 className="h-16 w-16 text-green-500" />
       </div>
       <div className="space-y-2">
-        <h3 className="text-lg font-semibold">{feedback.successTitle}</h3>
+        <h3 className="text-lg font-semibold">{tFeedback("successTitle")}</h3>
         <p className="text-sm text-muted-foreground">
-          {feedback.successMessage}
+          {tFeedback("successMessage")}
         </p>
         {email && (
           <p className="text-xs text-muted-foreground">
-            {feedback.successNote}
+            {tFeedback("successNote")}
           </p>
         )}
       </div>
       <Button onClick={() => setOpen(false)} className="mt-4">
-        {feedback.closeButton}
+        {tFeedback("closeButton")}
       </Button>
     </div>
   );
@@ -184,7 +193,7 @@ export function FeedbackDialog({
     <div className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="feedback-type">
-          {feedback.typeLabel} <span className="text-red-500">*</span>
+          {tFeedback("typeLabel")} <span className="text-red-500">*</span>
         </Label>
         <Select
           value={feedbackType}
@@ -194,16 +203,16 @@ export function FeedbackDialog({
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="bug">{feedback.types.bug}</SelectItem>
-            <SelectItem value="feature">{feedback.types.feature}</SelectItem>
-            <SelectItem value="other">{feedback.types.other}</SelectItem>
+            <SelectItem value="bug">{tFeedback("types.bug")}</SelectItem>
+            <SelectItem value="feature">{tFeedback("types.feature")}</SelectItem>
+            <SelectItem value="other">{tFeedback("types.other")}</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="feedback-content">
-          {feedback.contentLabel} <span className="text-red-500">*</span>
+          {tFeedback("contentLabel")} <span className="text-red-500">*</span>
         </Label>
         <Textarea
           id="feedback-content"
@@ -218,7 +227,7 @@ export function FeedbackDialog({
           <span
             className={contentError ? "text-red-500" : "text-muted-foreground"}
           >
-            {contentError === "contentRequired" && feedback.contentRequired}
+            {contentError === "contentRequired" && tFeedback("contentRequired")}
             {contentError === "contentTooShort" && contentTooShortMessage}
           </span>
           <span
@@ -234,26 +243,26 @@ export function FeedbackDialog({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="feedback-email">{feedback.emailLabel}</Label>
+        <Label htmlFor="feedback-email">{tFeedback("emailLabel")}</Label>
         <Input
           id="feedback-email"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder={feedback.emailPlaceholder}
+          placeholder={tFeedback("emailPlaceholder")}
         />
         {emailError && (
-          <p className="text-xs text-red-500">{feedback.emailInvalid}</p>
+          <p className="text-xs text-red-500">{tFeedback("emailInvalid")}</p>
         )}
         {!email && !emailError && (
           <p className="text-xs text-muted-foreground">
-            {feedback.emailRequired}
+            {tFeedback("emailRequired")}
           </p>
         )}
       </div>
 
       <p className="text-xs text-muted-foreground">
-        {feedback.diagnosticInfoHint}
+        {tFeedback("diagnosticInfoHint")}
       </p>
 
       <div className="flex justify-end gap-2 pt-4">
@@ -262,16 +271,16 @@ export function FeedbackDialog({
           onClick={() => setOpen(false)}
           disabled={isSubmitting}
         >
-          {feedback.cancelButton}
+          {tFeedback("cancelButton")}
         </Button>
         <Button onClick={handleSubmit} disabled={!canSubmit || isSubmitting}>
           {isSubmitting ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              {feedback.submittingButton}
+              {tFeedback("submittingButton")}
             </>
           ) : (
-            feedback.submitButton
+            tFeedback("submitButton")
           )}
         </Button>
       </div>
@@ -303,7 +312,7 @@ export function FeedbackDialog({
         onInteractOutside={(event) => event.preventDefault()}
       >
         <DialogHeader>
-          <DialogTitle>{feedback.title}</DialogTitle>
+          <DialogTitle>{tFeedback("title")}</DialogTitle>
         </DialogHeader>
         {submitStatus === "success" ? renderSuccess() : renderForm()}
       </DialogContent>

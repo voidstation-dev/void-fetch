@@ -57,7 +57,7 @@ function buildPlatformSupportFeatureList(dict: Dictionary): string[] {
 
 export function StructuredData({ locale, dict }: StructuredDataProps) {
     const localeUrl = buildLocaleUrl(locale)
-    const seoLocale: keyof Dictionary['seo']['features'] = locale
+    const seoLocale = locale as keyof Dictionary['seo']['features']
     const publicDescription = resolvePublicMetadataDescription(locale)
     const featureList = sanitizeStructuredDataTextList([
         ...(dict.seo.features[seoLocale] || []),

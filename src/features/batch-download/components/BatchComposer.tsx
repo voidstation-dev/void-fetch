@@ -158,11 +158,10 @@ export function BatchComposer() {
 
   return (
     <SpotlightCard
-      className={`relative transition-colors duration-200 p-5 rounded-2xl border ${
-        dragActive
+      className={`relative transition-colors duration-200 p-5 rounded-2xl border ${dragActive
           ? "border-primary ring-2 ring-primary/20 bg-primary/5"
           : "border-border/80 bg-card/90 backdrop-blur-xl shadow-lg"
-      }`}
+        }`}
       onDragEnter={handleDrag}
       onDragOver={handleDrag}
       onDragLeave={handleDrag}

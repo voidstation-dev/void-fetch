@@ -80,6 +80,25 @@
         "linkFilled": "連結已填入",
         "clickToRedownload": "點擊解析按鈕開始重新解析",
         "unknownTitle": "未知標題",
+        "pageTitle": "下載歷史",
+        "logsCount": "已完成的解析下載記錄 ({count} 項)",
+        "clearHistory": "清空歷史",
+        "noRecordsTitle": "暫無歷史記錄",
+        "cleanBadge": "無記錄",
+        "noRecordsDesc": "已完成的下載記錄會自動顯示在這裡，支援媒體詳情預覽與快速重新解析。",
+        "autoPersisted": "自動儲存",
+        "instantRedownloads": "快速重新解析",
+        "completed": "已完成",
+        "details": "詳情",
+        "detailsTitle": "開啟詳情與媒體預覽彈窗",
+        "redownloadZip": "重新下載 ZIP (圖片)",
+        "redownloadSingleImage": "重新下載圖片",
+        "redownloadMp4": "重新下載 MP4",
+        "redownloadMp3": "重新下載 MP3",
+        "removeFromHistory": "從歷史記錄移除",
+        "queuedForRedownload": "已將 {title} 加入重新解析隊列",
+        "removedJobRecord": "已移除該條歷史記錄",
+        "clearedAllHistory": "已清空所有已完成的歷史記錄",
         "platforms": {
             "bilibili": "嗶哩嗶哩",
             "bilibiliTv": "Bilibili TV",
@@ -144,6 +163,28 @@
         "feedbackHint": "適合公開討論功能建議、平台支援請求和一般問題。",
         "github": "前往 GitHub 提交 Issue",
         "githubHint": "適合回報錯誤與提出功能需求。"
+    },
+    "aboutPage": {
+        "metaTitle": "關於我們｜VoidFetch",
+        "metaDescription": "了解 VoidFetch 及其規格、版權聲明、隱私政策與合規使用說明。",
+        "title": "關於 VoidFetch",
+        "subtitle": "VoidStation 產品資訊",
+        "productInfo": "產品資訊",
+        "productName": "產品名稱",
+        "publisher": "發行團隊",
+        "appVersion": "應用程式版本",
+        "targetRuntime": "執行環境",
+        "compilationBuild": "編譯建置號",
+        "thirdPartyLibraries": "第三方開源庫與致謝",
+        "thirdPartyDesc": "VoidFetch 構建於開源社區的優秀項目之上：Next.js, React 19, Tailwind CSS, Radix UI, Zustand, IndexedDB, FFmpeg.wasm, JSZip 與 browser-fs-access APIs。",
+        "copyrightNotice": "版權聲明",
+        "copyrightTitle": "VoidFetch © 2026 VoidStation.",
+        "copyrightSub": "保留所有權利。",
+        "copyrightDesc": "媒體內容（影片流、音訊檔案、圖片）版權歸原作者與平台所有。",
+        "privacyPolicy": "隱私政策",
+        "privacyDesc": "VoidFetch 重視使用者隱私。所有媒體解密與拼接均在瀏覽器本地沙盒中完成。",
+        "responsibleUse": "合規使用政策",
+        "responsibleUseDesc": "VoidFetch 旨在方便個人歸檔公開媒體，請尊重原作者版權。"
     },
     "feedbackPage": {
         "metaTitle": "回饋｜VoidFetch",
@@ -579,6 +620,8 @@
                 "Support multiple media formats",
                 "Browser-based processing",
                 "Download Threads videos and image posts",
+                "Download Weibo videos and mixed-media posts",
+                "Download Threads videos and image posts",
                 "Download Weibo videos and mixed-media posts"
             ],
             "zh": [
@@ -602,8 +645,7 @@
                 "支持多种媒体格式",
                 "浏览器内处理",
                 "????????????????",
-                "下载 Threads 视频和图文帖子",
-                "下载微博视频、图文与混合媒体帖子"
+                "下载 Threads 视频和图文帖子"
             ],
             "zh-tw": [
                 "提取嗶哩嗶哩影片MP3音訊",
@@ -626,9 +668,7 @@
                 "免費線上工具",
                 "無需註冊",
                 "支援多種媒體格式",
-                "瀏覽器內處理",
-                "下載 Threads 影片與圖文貼文",
-                "下載微博影片、圖文與混合媒體貼文"
+                "瀏覽器內處理"
             ],
             "ja": [
                 "Bilibili動画からMP3音声を抽出",
@@ -650,8 +690,7 @@
                 "登録不要",
                 "複数のメディア形式に対応",
                 "ブラウザ内で処理",
-                "Threads の動画と画像投稿をダウンロード",
-                "Weibo の動画・画像・混合メディア投稿をダウンロード"
+                "Threads の動画と画像投稿をダウンロード"
             ],
             "es": [
                 "Extract MP3 audio from Bilibili videos",
@@ -673,6 +712,8 @@
                 "No registration required",
                 "Support multiple media formats",
                 "Browser-based processing",
+                "Download Threads videos and image posts",
+                "Download Weibo videos and mixed-media posts",
                 "Download Threads videos and image posts",
                 "Download Weibo videos and mixed-media posts"
             ],
@@ -696,6 +737,8 @@
                 "No registration required",
                 "Support multiple media formats",
                 "Browser-based processing",
+                "Download Threads videos and image posts",
+                "Download Weibo videos and mixed-media posts",
                 "Download Threads videos and image posts",
                 "Download Weibo videos and mixed-media posts"
             ]
@@ -908,5 +951,21 @@
         "retryButton": "重試",
         "toastSuccess": "反饋提交成功！",
         "toastError": "提交失敗，請重試"
+    },
+    "supportedPlatformsModal": {
+        "title": "支援的媒體平台",
+        "badge": "25+ 線上",
+        "description": "VoidFetch 支援全球主流平台的影片、音訊、圖集及 HLS/M3U8 高速解析下載。",
+        "searchPlaceholder": "搜尋平台 (例如 YouTube, Douyin, TikTok, Pinterest, SoundCloud...)",
+        "noSearchResults": "未找到符合 \"{query}\" 的平台",
+        "activeStreamer": "線上解析中",
+        "active": "線上",
+        "fastExtract": "極速提取",
+        "autoDetect": "自動識別",
+        "showingCount": "顯示 {total} 個支援平台中的 {count} 個",
+        "close": "關閉",
+        "clickDetails": "點擊查看詳情",
+        "clickTitle": "點擊查看全部 25+ 支援的平台",
+        "universalSub": "全能批量下載工具"
     }
 }

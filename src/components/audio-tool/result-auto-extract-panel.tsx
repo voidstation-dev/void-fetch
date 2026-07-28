@@ -3,7 +3,7 @@
 import type { ReactNode } from 'react'
 
 import { Button } from '@/components/ui/button'
-import { useDictionary } from '@/i18n/client'
+import { useTranslations } from 'next-intl'
 
 import type { AudioExtractTask, AudioToolStage } from './types'
 
@@ -22,7 +22,7 @@ export function ResultAutoExtractPanel({
     statusPanel,
     onRetry,
 }: ResultAutoExtractPanelProps) {
-    const dict = useDictionary()
+    const tExtractAudio = useTranslations('extractAudio')
 
     return (
         <div className="space-y-4">
@@ -38,7 +38,7 @@ export function ResultAutoExtractPanel({
                     onClick={onRetry}
                     disabled={isBusy}
                 >
-                    {dict.extractAudio.retry}
+                    {tExtractAudio('retry')}
                 </Button>
             )}
 
