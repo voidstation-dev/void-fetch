@@ -1084,5 +1084,37 @@
             "hlsSegmentConcurrency": "HLS Segment Concurrency",
             "savePreferences": "Save Preferences"
         }
+    },
+    "settingsPage": {
+        "metaTitle": "Settings | VoidFetch",
+        "metaDescription": "Configure downloader defaults, concurrency caps, network budgets, and directory path preferences.",
+        "title": "Preferences",
+        "subtitle": "Configure default downloader behaviors",
+        "resetDefaults": "Reset Defaults",
+        "loading": "Loading settings...",
+        "downloaderDefaults": "Downloader Defaults",
+        "defaultOutputType": "Default Output Type",
+        "defaultQuality": "Default Quality",
+        "selectQuality": "Select quality",
+        "defaultFilenameTemplate": "Default Filename Template",
+        "placeholderTokens": "Placeholder tokens:",
+        "customDirectoryTitle": "Custom Download Directory Path",
+        "customDirName": "📁 Custom Directory: {name}",
+        "browserDefaultDir": "Browser Default (Downloads Folder)",
+        "customDirDesc": "All VoidFetch downloads will be written directly into this folder handle",
+        "browserDefaultDesc": "Files are handled by browser standard download manager",
+        "resetDefaultDir": "Reset Default",
+        "changeFolder": "Change Folder",
+        "selectCustomFolder": "Select Custom Folder",
+        "concurrencyTitle": "Concurrency & Performance Caps",
+        "parserConcurrency": "Parser Concurrency",
+        "downloadConcurrency": "Download Concurrency",
+        "networkBudget": "Global Network Request Budget",
+        "networkBudgetDesc": "Controls combined HLS chunks downloaded globally to avoid connection limits.",
+        "workflowsTitle": "Workflows & Flags",
+        "continueOnError": "Continue queue on error",
+        "continueOnErrorDesc": "Keep downloading subsequent jobs in the queue if one fails.",
+        "autoStartDownloads": "Auto-start queue on URL parse",
+        "autoStartDownloadsDesc": "Immediately append parsed ready URLs directly to the download stream."
     }
 }

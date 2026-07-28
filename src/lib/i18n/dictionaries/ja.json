@@ -1084,5 +1084,37 @@
             "hlsSegmentConcurrency": "HLSセグメント並列数",
             "savePreferences": "設定を保存"
         }
+    },
+    "settingsPage": {
+        "metaTitle": "設定 | VoidFetch",
+        "metaDescription": "ダウンロードのデフォルト設定、並列数上限、ネットワーク制限、保存先フォルダを設定します。",
+        "title": "環境設定",
+        "subtitle": "ダウンローダーのデフォルト動作を設定",
+        "resetDefaults": "初期設定に戻す",
+        "loading": "設定を読み込み中...",
+        "downloaderDefaults": "ダウンローダーのデフォルト設定",
+        "defaultOutputType": "デフォルト出力タイプ",
+        "defaultQuality": "デフォルト画質・音質",
+        "selectQuality": "品質を選択",
+        "defaultFilenameTemplate": "デフォルトのファイル名テンプレート",
+        "placeholderTokens": "利用可能な変数トークン:",
+        "customDirectoryTitle": "カスタム保存先フォルダのパス",
+        "customDirName": "📁 カスタムフォルダ: {name}",
+        "browserDefaultDir": "ブラウザ標準 (ダウンロードフォルダ)",
+        "customDirDesc": "すべての VoidFetch ダウンロードはこのフォルダに直接保存されます",
+        "browserDefaultDesc": "ファイルはブラウザの標準ダウンロードマネージャーで処理されます",
+        "resetDefaultDir": "標準に戻す",
+        "changeFolder": "フォルダを変更",
+        "selectCustomFolder": "カスタムフォルダを選択",
+        "concurrencyTitle": "並列数とパフォーマンス制限",
+        "parserConcurrency": "解析の並列数",
+        "downloadConcurrency": "ダウンロードの並列数",
+        "networkBudget": "グローバルネットワークリクエスト制限",
+        "networkBudgetDesc": "接続制限を防ぐため、全体で同時にダウンロードするHLSチャンク数を制御します。",
+        "workflowsTitle": "ワークフローと設定フラグ",
+        "continueOnError": "エラー発生時もキューを継続",
+        "continueOnErrorDesc": "1つのタスクが失敗しても、キュー内の後続タスクのダウンロードを継続します。",
+        "autoStartDownloads": "URL解析完了時に自動でダウンロードを開始",
+        "autoStartDownloadsDesc": "解析が完了したURLを直ちにダウンロードストリームに追加します。"
     }
 }

@@ -1084,5 +1084,37 @@
             "hlsSegmentConcurrency": "Потоки сегментов HLS",
             "savePreferences": "Сохранить настройки"
         }
+    },
+    "settingsPage": {
+        "metaTitle": "Настройки | VoidFetch",
+        "metaDescription": "Настройка параметров загрузки по умолчанию, лимитов параллельности и пути к папке.",
+        "title": "Предпочтения",
+        "subtitle": "Настройка стандартного поведения загрузчика",
+        "resetDefaults": "Сбросить настройки",
+        "loading": "Загрузка настроек...",
+        "downloaderDefaults": "Настройки загрузчика по умолчанию",
+        "defaultOutputType": "Тип вывода по умолчанию",
+        "defaultQuality": "Качество по умолчанию",
+        "selectQuality": "Выберите качество",
+        "defaultFilenameTemplate": "Шаблон имени файла по умолчанию",
+        "placeholderTokens": "Доступные переменные:",
+        "customDirectoryTitle": "Путь к пользовательской папке загрузок",
+        "customDirName": "📁 Пользовательская папка: {name}",
+        "browserDefaultDir": "По умолчанию в браузере (Загрузки)",
+        "customDirDesc": "Все загрузки VoidFetch будут сохраняться прямо в эту папку",
+        "browserDefaultDesc": "Файлы обрабатываются стандартным менеджером загрузок браузера",
+        "resetDefaultDir": "Сбросить по умолчанию",
+        "changeFolder": "Сменить папку",
+        "selectCustomFolder": "Выбрать папку",
+        "concurrencyTitle": "Лимиты параллельности и производительности",
+        "parserConcurrency": "Параллельность анализатора",
+        "downloadConcurrency": "Параллельность загрузки",
+        "networkBudget": "Глобальный лимит сетевых запросов",
+        "networkBudgetDesc": "Управляет суммарным количеством сегментов HLS для предотвращения блокировок.",
+        "workflowsTitle": "Рабочие процессы и флаги",
+        "continueOnError": "Продолжать очередь при ошибке",
+        "continueOnErrorDesc": "Продолжать загрузку следующих задач в очереди при сбое одной из них.",
+        "autoStartDownloads": "Автозапуск очереди после анализа URL",
+        "autoStartDownloadsDesc": "Сразу добавлять готовые URL в поток загрузки."
     }
 }

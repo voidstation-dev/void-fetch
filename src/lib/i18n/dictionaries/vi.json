@@ -1084,5 +1084,37 @@
             "hlsSegmentConcurrency": "Số luồng phân đoạn HLS",
             "savePreferences": "Lưu tùy chỉnh"
         }
+    },
+    "settingsPage": {
+        "metaTitle": "Cài đặt | VoidFetch",
+        "metaDescription": "Cấu hình mặc định trình tải xuống, số luồng đồng thời, giới hạn mạng và tùy chọn đường dẫn thư mục.",
+        "title": "Tùy chỉnh",
+        "subtitle": "Cấu hình hành vi mặc định của trình tải xuống",
+        "resetDefaults": "Khôi phục mặc định",
+        "loading": "Đang tải cài đặt...",
+        "downloaderDefaults": "Mặc định trình tải xuống",
+        "defaultOutputType": "Định dạng đầu ra mặc định",
+        "defaultQuality": "Chất lượng mặc định",
+        "selectQuality": "Chọn chất lượng",
+        "defaultFilenameTemplate": "Mẫu tên tệp mặc định",
+        "placeholderTokens": "Các biến hỗ trợ:",
+        "customDirectoryTitle": "Đường dẫn thư mục tải xuống tùy chỉnh",
+        "customDirName": "📁 Thư mục tùy chỉnh: {name}",
+        "browserDefaultDir": "Mặc định trình duyệt (Thư mục Downloads)",
+        "customDirDesc": "Tất cả các bản tải xuống từ VoidFetch sẽ được ghi trực tiếp vào thư mục này",
+        "browserDefaultDesc": "Tệp được quản lý bởi trình quản lý tải xuống tiêu chuẩn của trình duyệt",
+        "resetDefaultDir": "Đặt lại mặc định",
+        "changeFolder": "Đổi thư mục",
+        "selectCustomFolder": "Chọn thư mục tùy chỉnh",
+        "concurrencyTitle": "Giới hạn luồng đồng thời & Hiệu năng",
+        "parserConcurrency": "Số luồng phân tích URL",
+        "downloadConcurrency": "Số tệp tải xuống đồng thời",
+        "networkBudget": "Giới hạn yêu cầu mạng toàn cục",
+        "networkBudgetDesc": "Kiểm soát tổng số phân đoạn HLS được tải xuống đồng thời để tránh vượt giới hạn kết nối.",
+        "workflowsTitle": "Quy trình & Cờ tính năng",
+        "continueOnError": "Tiếp tục hàng đợi khi gặp lỗi",
+        "continueOnErrorDesc": "Tiếp tục tải các tác vụ tiếp theo trong hàng đợi nếu một tác vụ bị lỗi.",
+        "autoStartDownloads": "Tự động bắt đầu tải khi phân tích xong URL",
+        "autoStartDownloadsDesc": "Tự động đưa các URL đã phân tích xong vào luồng tải xuống ngay lập tức."
     }
 }

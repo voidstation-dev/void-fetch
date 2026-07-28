@@ -1084,5 +1084,37 @@
             "hlsSegmentConcurrency": "Segmentos HLS simultáneos",
             "savePreferences": "Guardar Preferencias"
         }
+    },
+    "settingsPage": {
+        "metaTitle": "Configuración | VoidFetch",
+        "metaDescription": "Configura valores predeterminados de descarga, límites de concurrencia y preferencias de ruta.",
+        "title": "Preferencias",
+        "subtitle": "Configura comportamientos predeterminados del descargador",
+        "resetDefaults": "Restablecer Valores",
+        "loading": "Cargando configuración...",
+        "downloaderDefaults": "Valores Predeterminados del Descargador",
+        "defaultOutputType": "Tipo de Salida Predeterminado",
+        "defaultQuality": "Calidad Predeterminada",
+        "selectQuality": "Seleccionar calidad",
+        "defaultFilenameTemplate": "Plantilla de Nombre de Archivo Predeterminada",
+        "placeholderTokens": "Variables disponibles:",
+        "customDirectoryTitle": "Ruta de Carpeta de Descargas Personalizada",
+        "customDirName": "📁 Carpeta Personalizada: {name}",
+        "browserDefaultDir": "Predeterminado del Navegador (Descargas)",
+        "customDirDesc": "Todas las descargas de VoidFetch se guardarán directamente en esta carpeta",
+        "browserDefaultDesc": "Los archivos son gestionados por el administrador de descargas estándar",
+        "resetDefaultDir": "Restablecer por Defecto",
+        "changeFolder": "Cambiar Carpeta",
+        "selectCustomFolder": "Seleccionar Carpeta Personalizada",
+        "concurrencyTitle": "Límites de Concurrencia y Rendimiento",
+        "parserConcurrency": "Concurrencia de Analizador",
+        "downloadConcurrency": "Concurrencia de Descarga",
+        "networkBudget": "Presupuesto Global de Solicitudes de Red",
+        "networkBudgetDesc": "Controla los fragmentos HLS descargados globalmente para evitar límites de conexión.",
+        "workflowsTitle": "Flujos de Trabajo y Opciones",
+        "continueOnError": "Continuar cola en caso de error",
+        "continueOnErrorDesc": "Seguir descargando las siguientes tareas de la cola si una falla.",
+        "autoStartDownloads": "Iniciar cola automáticamente al analizar URL",
+        "autoStartDownloadsDesc": "Añadir inmediatamente las URLs analizadas al flujo de descarga."
     }
 }

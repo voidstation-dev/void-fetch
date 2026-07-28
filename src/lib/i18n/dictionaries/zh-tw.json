@@ -1084,5 +1084,37 @@
             "hlsSegmentConcurrency": "HLS 切片並發數",
             "savePreferences": "儲存偏好設定"
         }
+    },
+    "settingsPage": {
+        "metaTitle": "設定 | VoidFetch",
+        "metaDescription": "配置下載預設值、並發上限、網路預算及儲存目錄偏好。",
+        "title": "偏好設定",
+        "subtitle": "配置預設下載行為",
+        "resetDefaults": "恢復預設設定",
+        "loading": "正在載入設定...",
+        "downloaderDefaults": "下載器預設設定",
+        "defaultOutputType": "預設輸出類型",
+        "defaultQuality": "預設畫質/音質",
+        "selectQuality": "選擇品質",
+        "defaultFilenameTemplate": "預設檔名範本",
+        "placeholderTokens": "可用變數標籤：",
+        "customDirectoryTitle": "自訂下載儲存目錄路徑",
+        "customDirName": "📁 自訂目錄：{name}",
+        "browserDefaultDir": "瀏覽器預設（下載資料夾）",
+        "customDirDesc": "所有 VoidFetch 下載的檔案將直接寫入該資料夾控制代碼中",
+        "browserDefaultDesc": "檔案由瀏覽器標準下載管理器處理",
+        "resetDefaultDir": "恢復預設",
+        "changeFolder": "變更資料夾",
+        "selectCustomFolder": "選擇自訂資料夾",
+        "concurrencyTitle": "並發數與效能上限",
+        "parserConcurrency": "解析器並發數",
+        "downloadConcurrency": "下載並發數",
+        "networkBudget": "全域網路請求預算",
+        "networkBudgetDesc": "控制全域同時下載的 HLS 切片總數，防止超出連線數限制。",
+        "workflowsTitle": "工作流程與開關標誌",
+        "continueOnError": "發生錯誤時繼續執行隊列",
+        "continueOnErrorDesc": "當某個任務下載失敗時，自動跳過並繼續下載隊列中的後續任務。",
+        "autoStartDownloads": "解析 URL 後自動啟動下載",
+        "autoStartDownloadsDesc": "解析就緒後立即將 URL 直接加入下載流中。"
     }
 }
