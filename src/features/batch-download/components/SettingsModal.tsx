@@ -86,14 +86,14 @@ export function SettingsModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
-      <DialogContent showCloseButton={false} className="sm:max-w-xl w-[calc(100vw-2rem)] max-h-[85vh] overflow-x-hidden overflow-y-auto p-6 rounded-2xl border border-border/80 bg-card shadow-2xl backdrop-blur-xl transition-all duration-200">
+      <DialogContent showCloseButton={false} className="sm:max-w-xl w-[calc(100vw-2rem)] max-h-[88vh] flex flex-col p-6 rounded-2xl border border-border/80 bg-card shadow-2xl backdrop-blur-xl transition-all duration-200 overflow-hidden">
         <DialogTitle className="sr-only">{t("title")}</DialogTitle>
         <DialogDescription className="sr-only">{t("description")}</DialogDescription>
         {/* Glow Ambient Line Top */}
         <div className="absolute -top-px inset-x-8 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
 
-        {/* Modal Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-border/60">
+        {/* Modal Header (Fixed Top) */}
+        <div className="flex items-center justify-between pb-4 border-b border-border/60 shrink-0">
           <div className="flex items-center gap-2.5">
             <div className="p-2 rounded-xl bg-primary/10 border border-primary/20 text-primary">
               <Settings className="h-5 w-5 animate-spin-slow" />
@@ -117,8 +117,8 @@ export function SettingsModal() {
           </Button>
         </div>
 
-        {/* Modal Body */}
-        <div className="flex flex-col gap-5 py-4">
+        {/* Modal Body (Scrollable Middle) */}
+        <div className="flex-1 overflow-y-auto overflow-x-hidden flex flex-col gap-5 py-4 pr-1 min-h-0">
           {/* Default Format & Quality */}
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground/90 uppercase tracking-wider">
@@ -314,8 +314,8 @@ export function SettingsModal() {
           </div>
         </div>
 
-        {/* Modal Footer */}
-        <div className="flex items-center justify-between pt-3 border-t border-border/60">
+        {/* Modal Footer (Fixed Bottom) */}
+        <div className="flex items-center justify-between pt-3 border-t border-border/60 shrink-0">
           <span className="text-[10px] text-muted-foreground flex items-center gap-1">
             <ShieldCheck className="h-3 w-3 text-emerald-500" />
             Changes saved to local workspace
