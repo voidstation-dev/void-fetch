@@ -654,6 +654,13 @@ export interface Dictionary {
     title: string;
     subtitle: string;
     queuePreferences: string;
+    nav: {
+      queueWorkspace: string;
+      downloadHistory: string;
+      preferences: string;
+      aboutVoidFetch: string;
+      privacyAndTerms: string;
+    };
     composer: {
       title: string;
       subtitlePrefix: string;

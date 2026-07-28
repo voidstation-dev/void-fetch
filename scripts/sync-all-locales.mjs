@@ -148,6 +148,13 @@ const BATCH_WORKSPACE = {
     title: "Untitled Batch Workspace",
     subtitle: "VoidFetch Queue Manager",
     queuePreferences: "Queue Preferences",
+    nav: {
+      queueWorkspace: "Queue Workspace",
+      downloadHistory: "Download History",
+      preferences: "Preferences",
+      aboutVoidFetch: "About VoidFetch",
+      privacyAndTerms: "Privacy & Terms"
+    },
     composer: {
       title: "BATCH URL COMPOSER",
       subtitlePrefix: "Paste video links from",
@@ -265,6 +272,13 @@ const BATCH_WORKSPACE = {
     title: "Không gian làm việc hàng loạt",
     subtitle: "Trình quản lý hàng đợi VoidFetch",
     queuePreferences: "Tùy chọn hàng đợi",
+    nav: {
+      queueWorkspace: "Hàng đợi làm việc",
+      downloadHistory: "Lịch sử tải xuống",
+      preferences: "Tùy chỉnh",
+      aboutVoidFetch: "Giới thiệu VoidFetch",
+      privacyAndTerms: "Bảo mật & Điều khoản"
+    },
     composer: {
       title: "TRÌNH SOẠN THẢO URL HÀNG LOẠT",
       subtitlePrefix: "Dán liên kết video từ",
@@ -382,6 +396,13 @@ const BATCH_WORKSPACE = {
     title: "Espacio de trabajo masivo",
     subtitle: "Gestor de cola de VoidFetch",
     queuePreferences: "Preferencias de Cola",
+    nav: {
+      queueWorkspace: "Espacio de Cola",
+      downloadHistory: "Historial de Descargas",
+      preferences: "Preferencias",
+      aboutVoidFetch: "Acerca de VoidFetch",
+      privacyAndTerms: "Privacidad y Términos"
+    },
     composer: {
       title: "COMPOSITOR DE URL MASIVO",
       subtitlePrefix: "Pega enlaces de video de",
@@ -499,6 +520,13 @@ const BATCH_WORKSPACE = {
     title: "一括ダウンロードワークスペース",
     subtitle: "VoidFetch キューマネージャー",
     queuePreferences: "キュー設定",
+    nav: {
+      queueWorkspace: "キュー ワークスペース",
+      downloadHistory: "ダウンロード履歴",
+      preferences: "環境設定",
+      aboutVoidFetch: "VoidFetch について",
+      privacyAndTerms: "プライバシーと利用規約"
+    },
     composer: {
       title: "一括 URL コンポーザー",
       subtitlePrefix: "動画リンクを貼り付け:",
@@ -616,6 +644,13 @@ const BATCH_WORKSPACE = {
     title: "Пакетная рабочей область",
     subtitle: "Менеджер очереди VoidFetch",
     queuePreferences: "Настройки очереди",
+    nav: {
+      queueWorkspace: "Рабочая область очереди",
+      downloadHistory: "История загрузок",
+      preferences: "Настройки",
+      aboutVoidFetch: "О VoidFetch",
+      privacyAndTerms: "Конфиденциальность и условия"
+    },
     composer: {
       title: "ПАКЕТНЫЙ СОСТАВИТЕЛЬ URL",
       subtitlePrefix: "Вставьте ссылки на видео из",
@@ -733,6 +768,13 @@ const BATCH_WORKSPACE = {
     title: "未命名批量下载工作区",
     subtitle: "VoidFetch 队列管理器",
     queuePreferences: "队列偏好设置",
+    nav: {
+      queueWorkspace: "队列工作区",
+      downloadHistory: "下载历史",
+      preferences: "首选项",
+      aboutVoidFetch: "关于 VoidFetch",
+      privacyAndTerms: "隐私与条款"
+    },
     composer: {
       title: "批量 URL 解析器",
       subtitlePrefix: "粘贴来自",
@@ -850,6 +892,13 @@ const BATCH_WORKSPACE = {
     title: "未命名批量下載工作區",
     subtitle: "VoidFetch 隊列管理器",
     queuePreferences: "隊列偏好設定",
+    nav: {
+      queueWorkspace: "隊列工作區",
+      downloadHistory: "下載歷史",
+      preferences: "偏好設定",
+      aboutVoidFetch: "關於 VoidFetch",
+      privacyAndTerms: "隱私與條款"
+    },
     composer: {
       title: "批量 URL 解析器",
       subtitlePrefix: "貼上來自",
@@ -952,7 +1001,7 @@ const BATCH_WORKSPACE = {
       browserDefault: "瀏覽器預設（下載資料夾）",
       customFolder: "📁 自訂：{name}",
       customFolderDesc: "檔案將直接儲存到該資料夾控制代碼中",
-      browserDefaultDesc: "檔案會自動直接儲存到您的「下載」資料夾",
+      browserDefaultDesc: "檔案會自動簡單儲存到您的「下載」資料夾",
       resetDefault: "恢復預設",
       changeFolder: "變更資料夾",
       selectCustomFolder: "選擇自訂資料夾",

@@ -972,6 +972,13 @@
         "title": "Không gian làm việc hàng loạt",
         "subtitle": "Trình quản lý hàng đợi VoidFetch",
         "queuePreferences": "Tùy chọn hàng đợi",
+        "nav": {
+            "queueWorkspace": "Hàng đợi làm việc",
+            "downloadHistory": "Lịch sử tải xuống",
+            "preferences": "Tùy chỉnh",
+            "aboutVoidFetch": "Giới thiệu VoidFetch",
+            "privacyAndTerms": "Bảo mật & Điều khoản"
+        },
         "composer": {
             "title": "TRÌNH SOẠN THẢO URL HÀNG LOẠT",
             "subtitlePrefix": "Dán liên kết video từ",

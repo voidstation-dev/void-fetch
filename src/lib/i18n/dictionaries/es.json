@@ -972,6 +972,13 @@
         "title": "Espacio de trabajo masivo",
         "subtitle": "Gestor de cola de VoidFetch",
         "queuePreferences": "Preferencias de Cola",
+        "nav": {
+            "queueWorkspace": "Espacio de Cola",
+            "downloadHistory": "Historial de Descargas",
+            "preferences": "Preferencias",
+            "aboutVoidFetch": "Acerca de VoidFetch",
+            "privacyAndTerms": "Privacidad y Términos"
+        },
         "composer": {
             "title": "COMPOSITOR DE URL MASIVO",
             "subtitlePrefix": "Pega enlaces de video de",

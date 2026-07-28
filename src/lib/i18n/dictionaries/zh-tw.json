@@ -972,6 +972,13 @@
         "title": "未命名批量下載工作區",
         "subtitle": "VoidFetch 隊列管理器",
         "queuePreferences": "隊列偏好設定",
+        "nav": {
+            "queueWorkspace": "隊列工作區",
+            "downloadHistory": "下載歷史",
+            "preferences": "偏好設定",
+            "aboutVoidFetch": "關於 VoidFetch",
+            "privacyAndTerms": "隱私與條款"
+        },
         "composer": {
             "title": "批量 URL 解析器",
             "subtitlePrefix": "貼上來自",
@@ -1074,7 +1081,7 @@
             "browserDefault": "瀏覽器預設（下載資料夾）",
             "customFolder": "📁 自訂：{name}",
             "customFolderDesc": "檔案將直接儲存到該資料夾控制代碼中",
-            "browserDefaultDesc": "檔案會自動直接儲存到您的「下載」資料夾",
+            "browserDefaultDesc": "檔案會自動簡單儲存到您的「下載」資料夾",
             "resetDefault": "恢復預設",
             "changeFolder": "變更資料夾",
             "selectCustomFolder": "選擇自訂資料夾",

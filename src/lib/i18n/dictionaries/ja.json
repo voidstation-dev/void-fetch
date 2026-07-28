@@ -972,6 +972,13 @@
         "title": "一括ダウンロードワークスペース",
         "subtitle": "VoidFetch キューマネージャー",
         "queuePreferences": "キュー設定",
+        "nav": {
+            "queueWorkspace": "キュー ワークスペース",
+            "downloadHistory": "ダウンロード履歴",
+            "preferences": "環境設定",
+            "aboutVoidFetch": "VoidFetch について",
+            "privacyAndTerms": "プライバシーと利用規約"
+        },
         "composer": {
             "title": "一括 URL コンポーザー",
             "subtitlePrefix": "動画リンクを貼り付け:",

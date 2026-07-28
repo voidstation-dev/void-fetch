@@ -972,6 +972,13 @@
         "title": "未命名批量下载工作区",
         "subtitle": "VoidFetch 队列管理器",
         "queuePreferences": "队列偏好设置",
+        "nav": {
+            "queueWorkspace": "队列工作区",
+            "downloadHistory": "下载历史",
+            "preferences": "首选项",
+            "aboutVoidFetch": "关于 VoidFetch",
+            "privacyAndTerms": "隐私与条款"
+        },
         "composer": {
             "title": "批量 URL 解析器",
             "subtitlePrefix": "粘贴来自",

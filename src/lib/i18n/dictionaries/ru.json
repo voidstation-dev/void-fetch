@@ -972,6 +972,13 @@
         "title": "Пакетная рабочей область",
         "subtitle": "Менеджер очереди VoidFetch",
         "queuePreferences": "Настройки очереди",
+        "nav": {
+            "queueWorkspace": "Рабочая область очереди",
+            "downloadHistory": "История загрузок",
+            "preferences": "Настройки",
+            "aboutVoidFetch": "О VoidFetch",
+            "privacyAndTerms": "Конфиденциальность и условия"
+        },
         "composer": {
             "title": "ПАКЕТНЫЙ СОСТАВИТЕЛЬ URL",
             "subtitlePrefix": "Вставьте ссылки на видео из",

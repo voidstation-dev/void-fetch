@@ -972,6 +972,13 @@
         "title": "Untitled Batch Workspace",
         "subtitle": "VoidFetch Queue Manager",
         "queuePreferences": "Queue Preferences",
+        "nav": {
+            "queueWorkspace": "Queue Workspace",
+            "downloadHistory": "Download History",
+            "preferences": "Preferences",
+            "aboutVoidFetch": "About VoidFetch",
+            "privacyAndTerms": "Privacy & Terms"
+        },
         "composer": {
             "title": "BATCH URL COMPOSER",
             "subtitlePrefix": "Paste video links from",
