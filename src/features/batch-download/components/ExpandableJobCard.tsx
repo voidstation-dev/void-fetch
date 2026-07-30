@@ -23,6 +23,7 @@ import {
   AlertCircle,
   Image as ImageIcon,
   Volume2,
+  Share2,
 } from "lucide-react";
 import { cn, downloadFile } from "@/lib/utils";
 import { toast } from "@/lib/deferred-toast";
@@ -166,6 +167,21 @@ export function ExpandableJobCard({
     if (!url) return;
     navigator.clipboard.writeText(url);
     toast.success("Copied direct link to clipboard");
+  };
+
+  const handleSharePlay = async () => {
+    if (!currentJob?.sourceUrl) return;
+    try {
+      const pathnameSegments = window.location.pathname.split('/').filter((s) => s.length > 0);
+      const localePrefix = pathnameSegments[0] ? `/${pathnameSegments[0]}` : '';
+      const shareUrl = new URL(`${window.location.origin}${localePrefix}/play`);
+      shareUrl.searchParams.set('play', currentJob.sourceUrl);
+      shareUrl.searchParams.set('autoplay', '1');
+      await navigator.clipboard.writeText(shareUrl.toString());
+      toast.success("Đã copy link Share to Play (Copied Share Link)");
+    } catch (error) {
+      toast.error("Không thể copy link");
+    }
   };
 
   const handleDownload = (url: string | null | undefined, filename: string) => {
@@ -372,12 +388,12 @@ export function ExpandableJobCard({
             <span className="text-xs font-mono text-muted-foreground truncate flex-1">
               {currentJob.sourceUrl}
             </span>
-            <div className="flex items-center gap-1 shrink-0">
+            <div className="flex items-center gap-1.5 shrink-0">
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => handleCopyLink(currentJob.sourceUrl)}
-                className="h-7 text-[10px] gap-1 px-2"
+                className="h-7 text-[10px] gap-1 px-2 hover:bg-background"
               >
                 <Copy className="h-3 w-3" /> Copy
               </Button>
@@ -385,11 +401,19 @@ export function ExpandableJobCard({
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="h-7 text-[10px] gap-1 px-2"
+                  className="h-7 text-[10px] gap-1 px-2 hover:bg-background"
                 >
                   <ExternalLink className="h-3 w-3" /> Visit
                 </Button>
               </a>
+              <div className="w-px h-4 bg-border mx-1" />
+              <Button
+                onClick={handleSharePlay}
+                size="sm"
+                className="h-7 text-[10px] font-semibold gap-1.5 px-3 bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20 border border-indigo-500/30 shadow-sm transition-all"
+              >
+                <Share2 className="h-3 w-3" /> Share Play
+              </Button>
             </div>
           </div>
 
