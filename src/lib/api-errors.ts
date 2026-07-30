@@ -127,5 +127,9 @@ export function notifyApiErrorToast(error: unknown): boolean {
         return true
     }
 
-    return false
+    const message = resolveApiErrorMessage(error, 'An unexpected error occurred.');
+    toast.error(message, {
+        id: `api-error-${code || status || Date.now()}`,
+    })
+    return true
 }

@@ -4,23 +4,44 @@
  * All rights reserved.
  */
 
-import { supported as supportsStreamingFileSave } from 'browser-fs-access';
-import JSZip from 'jszip';
-import { useBatchStore } from '../store/batch-store';
-import type { DownloadJob, DownloadError, DownloadErrorCode } from '../types/batch-download';
-import { calculateSegmentConcurrency } from '../utils/concurrency-budget';
-import { renderFilename } from '../utils/filename-template';
+import { supported as supportsStreamingFileSave } from "browser-fs-access";
+import JSZip from "jszip";
+import type {
+  BatchSettings,
+  DownloadProgress,
+  DownloadJobStatus,
+} from "../types/batch-download";
+
+export interface RunnerContext {
+  settings: BatchSettings;
+  activeJobsCount: number;
+  jobIndex: number;
+  updateJobStatus: (
+    id: string,
+    status: DownloadJobStatus,
+    extra?: Partial<DownloadJob>,
+  ) => Promise<void>;
+  updateJobProgress: (id: string, progress: Partial<DownloadProgress>) => void;
+  updateJobError: (id: string, error: DownloadError | undefined) => Promise<void>;
+}
+import type {
+  DownloadJob,
+  DownloadError,
+  DownloadErrorCode,
+} from "../types/batch-download";
+import { calculateSegmentConcurrency } from "../utils/concurrency-budget";
+import { renderFilename } from "../utils/filename-template";
 import {
   parseHlsMediaPlaylist,
   importAes128Key,
   decryptAes128Cbc,
   buildRangeHeader,
   type HlsSegment,
-} from '@/lib/hls-browser-download';
-import { isHlsPlaylistUrl } from '@/lib/hls-playback';
-import { isApiRequestError, notifyApiErrorToast } from '@/lib/api-errors';
+} from "@/infrastructure/hls-browser-download";
+import { isHlsPlaylistUrl } from "@/lib/hls-playback";
+import { isApiRequestError, notifyApiErrorToast } from "@/lib/api-errors";
 
-type HlsDirectFetchMode = 'probe' | 'direct-ok' | 'proxy-only';
+type HlsDirectFetchMode = "probe" | "direct-ok" | "proxy-only";
 
 type ParsedDataRecord = Record<string, unknown> & {
   downloadAudioUrl?: string | null;
@@ -54,9 +75,10 @@ async function runDirectDownloadStream(
   job: DownloadJob,
   url: string,
   _filename: string,
-  signal: AbortSignal
+  signal: AbortSignal,
+  context: RunnerContext,
 ): Promise<Blob> {
-  const store = useBatchStore.getState();
+  const store = context;
   let response: Response;
   let retries = job.maxRetries || 3;
   let backoff = 1000;
@@ -86,11 +108,13 @@ async function runDirectDownloadStream(
           backoff *= 2;
           continue;
         }
-        throw new Error(`HTTP Error ${response.status}: ${response.statusText}`);
+        throw new Error(
+          `HTTP Error ${response.status}: ${response.statusText}`,
+        );
       }
       break;
     } catch (err: unknown) {
-      if (err instanceof DOMException && err.name === 'AbortError') throw err;
+      if (err instanceof DOMException && err.name === "AbortError") throw err;
       if (signal.aborted) throw err;
       if (!useProxy) {
         useProxy = true;
@@ -106,7 +130,7 @@ async function runDirectDownloadStream(
     }
   }
 
-  const contentLength = response.headers.get('content-length');
+  const contentLength = response.headers.get("content-length");
   const totalBytes = contentLength ? parseInt(contentLength, 10) : undefined;
 
   if (!response.body) {
@@ -114,7 +138,7 @@ async function runDirectDownloadStream(
     return new Blob([buffer]);
   }
 
-  await store.updateJobStatus(job.id, 'downloading');
+  await store.updateJobStatus(job.id, "downloading");
 
   const reader = response.body.getReader();
   const chunks: Uint8Array[] = [];
@@ -125,7 +149,7 @@ async function runDirectDownloadStream(
   while (true) {
     if (signal.aborted) {
       await reader.cancel().catch(() => undefined);
-      throw new DOMException('Download aborted', 'AbortError');
+      throw new DOMException("Download aborted", "AbortError");
     }
 
     const { done, value } = await reader.read();
@@ -140,14 +164,23 @@ async function runDirectDownloadStream(
     updateSample = updateSample.filter((s) => now - s.timestamp <= 4000);
 
     if (now - lastUpdate > 200) {
-      const elapsed = updateSample.length >= 2 
-        ? (updateSample[updateSample.length - 1].timestamp - updateSample[0].timestamp) / 1000 
+      const elapsed =
+        updateSample.length >= 2
+          ? (updateSample[updateSample.length - 1].timestamp -
+              updateSample[0].timestamp) /
+            1000
+          : 0;
+      const speed =
+        elapsed > 0
+          ? updateSample.reduce((acc, s) => acc + s.bytes, 0) / elapsed
+          : undefined;
+      const eta =
+        speed && totalBytes
+          ? (totalBytes - downloadedBytes) / speed
+          : undefined;
+      const percent = totalBytes
+        ? Math.round((downloadedBytes * 100) / totalBytes)
         : 0;
-      const speed = elapsed > 0 
-        ? updateSample.reduce((acc, s) => acc + s.bytes, 0) / elapsed 
-        : undefined;
-      const eta = speed && totalBytes ? (totalBytes - downloadedBytes) / speed : undefined;
-      const percent = totalBytes ? Math.round((downloadedBytes * 100) / totalBytes) : 0;
 
       store.updateJobProgress(job.id, {
         percent,
@@ -167,10 +200,11 @@ async function runDirectDownload(
   job: DownloadJob,
   url: string,
   filename: string,
-  signal: AbortSignal
+  signal: AbortSignal,
+  context: RunnerContext,
 ): Promise<Blob> {
-  const store = useBatchStore.getState();
-  await store.updateJobStatus(job.id, 'resolving');
+  const store = context;
+  await store.updateJobStatus(job.id, "resolving");
 
   // Probe HEAD or Range 0-0 request to check file size and range support
   let totalBytes: number | undefined = undefined;
@@ -185,37 +219,48 @@ async function runDirectDownload(
       }
     }
 
-    const headRes = await fetch(checkUrl, { method: 'HEAD', signal }).catch(() => null);
+    const headRes = await fetch(checkUrl, { method: "HEAD", signal }).catch(
+      () => null,
+    );
     if (headRes && headRes.ok) {
-      const cl = headRes.headers.get('content-length');
+      const cl = headRes.headers.get("content-length");
       if (cl) totalBytes = parseInt(cl, 10);
     }
 
     if (!totalBytes) {
-      const rangeRes = await fetch(checkUrl, { headers: { Range: 'bytes=0-0' }, signal }).catch(() => null);
+      const rangeRes = await fetch(checkUrl, {
+        headers: { Range: "bytes=0-0" },
+        signal,
+      }).catch(() => null);
       if (rangeRes && (rangeRes.status === 206 || rangeRes.ok)) {
-        const cr = rangeRes.headers.get('content-range');
+        const cr = rangeRes.headers.get("content-range");
         if (cr) {
-          const parts = cr.split('/');
+          const parts = cr.split("/");
           if (parts[1]) totalBytes = parseInt(parts[1], 10);
         }
       }
     }
   } catch {
     // If probing fails, fall back to single stream
-    return runDirectDownloadStream(job, url, filename, signal);
+    return runDirectDownloadStream(job, url, filename, signal, context);
   }
 
   // If totalBytes is small (< 3MB) or indeterminate, use single stream
   if (!totalBytes || totalBytes < 3 * 1024 * 1024) {
-    return runDirectDownloadStream(job, url, filename, signal);
+    return runDirectDownloadStream(job, url, filename, signal, context);
   }
 
   // Large file detected (e.g. Douyin / TikTok 140MB - 231MB video)!
   // Launch Multi-Threaded Parallel HTTP Range Chunking to boost speeds 10x - 50x!
   try {
-    const maxWorkers = Math.max(8, calculateSegmentConcurrency(1, job.config.segmentConcurrency));
-    const chunkSize = Math.max(2 * 1024 * 1024, Math.ceil(totalBytes / (maxWorkers * 4))); // 2MB to 5MB chunks
+    const maxWorkers = Math.max(
+      8,
+      calculateSegmentConcurrency(1, job.config.segmentConcurrency),
+    );
+    const chunkSize = Math.max(
+      2 * 1024 * 1024,
+      Math.ceil(totalBytes / (maxWorkers * 4)),
+    ); // 2MB to 5MB chunks
 
     interface ChunkTask {
       index: number;
@@ -232,7 +277,7 @@ async function runDirectDownload(
       startByte = endByte + 1;
     }
 
-    await store.updateJobStatus(job.id, 'downloading');
+    await store.updateJobStatus(job.id, "downloading");
 
     let downloadedBytes = 0;
     let lastUpdate = Date.now();
@@ -242,7 +287,8 @@ async function runDirectDownload(
       let retries = 3;
       let backoff = 800;
       while (true) {
-        if (signal.aborted) throw new DOMException('Download aborted', 'AbortError');
+        if (signal.aborted)
+          throw new DOMException("Download aborted", "AbortError");
         try {
           let fetchUrl = url;
           if (useProxy) {
@@ -280,14 +326,23 @@ async function runDirectDownload(
           updateSample = updateSample.filter((s) => now - s.timestamp <= 4000);
 
           if (now - lastUpdate > 150) {
-            const elapsed = updateSample.length >= 2
-              ? (updateSample[updateSample.length - 1].timestamp - updateSample[0].timestamp) / 1000
-              : 0;
-            const speed = elapsed > 0
-              ? updateSample.reduce((acc, s) => acc + s.bytes, 0) / elapsed
+            const elapsed =
+              updateSample.length >= 2
+                ? (updateSample[updateSample.length - 1].timestamp -
+                    updateSample[0].timestamp) /
+                  1000
+                : 0;
+            const speed =
+              elapsed > 0
+                ? updateSample.reduce((acc, s) => acc + s.bytes, 0) / elapsed
+                : undefined;
+            const eta = speed
+              ? (totalBytes! - downloadedBytes) / speed
               : undefined;
-            const eta = speed ? (totalBytes! - downloadedBytes) / speed : undefined;
-            const percent = Math.min(100, Math.round((downloadedBytes * 100) / totalBytes!));
+            const percent = Math.min(
+              100,
+              Math.round((downloadedBytes * 100) / totalBytes!),
+            );
 
             store.updateJobProgress(job.id, {
               percent,
@@ -333,13 +388,16 @@ async function runDirectDownload(
     await Promise.all(workerPromises);
 
     if (signal.aborted) {
-      throw new DOMException('Download aborted', 'AbortError');
+      throw new DOMException("Download aborted", "AbortError");
     }
 
     return new Blob(results as BlobPart[]);
   } catch (err) {
-    console.warn(`Parallel chunk download failed for job ${job.id}, falling back to single stream:`, err);
-    return runDirectDownloadStream(job, url, filename, signal);
+    console.warn(
+      `Parallel chunk download failed for job ${job.id}, falling back to single stream:`,
+      err,
+    );
+    return runDirectDownloadStream(job, url, filename, signal, context);
   }
 }
 
@@ -349,10 +407,11 @@ async function runDirectDownload(
 async function runImagesDownload(
   job: DownloadJob,
   imageUrls: string[],
-  signal: AbortSignal
+  signal: AbortSignal,
+  context: RunnerContext,
 ): Promise<Blob> {
-  const store = useBatchStore.getState();
-  await store.updateJobStatus(job.id, 'downloading');
+  const store = context;
+  await store.updateJobStatus(job.id, "downloading");
 
   const zip = new JSZip();
   let completed = 0;
@@ -360,7 +419,7 @@ async function runImagesDownload(
 
   for (let i = 0; i < total; i++) {
     if (signal.aborted) {
-      throw new DOMException('Download aborted', 'AbortError');
+      throw new DOMException("Download aborted", "AbortError");
     }
 
     const imgUrl = imageUrls[i];
@@ -370,13 +429,13 @@ async function runImagesDownload(
       const buffer = await response.arrayBuffer();
 
       // Detect type
-      let ext = 'jpg';
-      const contentType = response.headers.get('content-type');
-      if (contentType?.includes('png')) ext = 'png';
-      else if (contentType?.includes('webp')) ext = 'webp';
-      else if (contentType?.includes('gif')) ext = 'gif';
+      let ext = "jpg";
+      const contentType = response.headers.get("content-type");
+      if (contentType?.includes("png")) ext = "png";
+      else if (contentType?.includes("webp")) ext = "webp";
+      else if (contentType?.includes("gif")) ext = "gif";
 
-      zip.file(`${String(i + 1).padStart(3, '0')}.${ext}`, buffer);
+      zip.file(`${String(i + 1).padStart(3, "0")}.${ext}`, buffer);
     } catch (err) {
       console.warn(`Failed to download image ${imgUrl}:`, err);
       // Continue download of other images
@@ -390,8 +449,8 @@ async function runImagesDownload(
     });
   }
 
-  await store.updateJobStatus(job.id, 'processing');
-  return await zip.generateAsync({ type: 'blob' });
+  await store.updateJobStatus(job.id, "processing");
+  return await zip.generateAsync({ type: "blob" });
 }
 
 // -------------------------------------------------------------
@@ -400,10 +459,11 @@ async function runImagesDownload(
 async function runHlsDownload(
   job: DownloadJob,
   playlistUrl: string,
-  signal: AbortSignal
+  signal: AbortSignal,
+  context: RunnerContext,
 ): Promise<Response> {
-  const store = useBatchStore.getState();
-  await store.updateJobStatus(job.id, 'resolving');
+  const store = context;
+  await store.updateJobStatus(job.id, "resolving");
 
   // 1. Fetch playlist
   const response = await fetch(playlistUrl, { signal });
@@ -412,21 +472,28 @@ async function runHlsDownload(
 
   // Parse playlist
   const resolution = parseHlsMediaPlaylist(playlistText, playlistUrl);
-  
+
   // 2. Select segment limit / slice if browser lacks streaming save support
   const segmentCount = resolution.segments.length;
   if (!supportsStreamingFileSave && segmentCount > 800) {
-    throw new Error('HLS playlist contains too many segments for direct browser memory download. Please use a supported browser with file streaming capabilities.');
+    throw new Error(
+      "HLS playlist contains too many segments for direct browser memory download. Please use a supported browser with file streaming capabilities.",
+    );
   }
 
   // Calculate dynamic concurrency based on current active jobs and job config
-  const activeJobs = store.jobs.filter((j) => j.status === 'downloading' || j.status === 'resolving').length;
-  const concurrency = calculateSegmentConcurrency(Math.max(1, activeJobs), job.config.segmentConcurrency);
+  const activeJobs = context.activeJobsCount;
+  const concurrency = calculateSegmentConcurrency(
+    Math.max(1, activeJobs),
+    job.config.segmentConcurrency,
+  );
 
-  await store.updateJobStatus(job.id, 'downloading');
+  await store.updateJobStatus(job.id, "downloading");
 
   const targets = [
-    ...(resolution.mapUrl ? [{ url: resolution.mapUrl, byterange: resolution.mapByterange }] : []),
+    ...(resolution.mapUrl
+      ? [{ url: resolution.mapUrl, byterange: resolution.mapByterange }]
+      : []),
     ...resolution.segments,
   ];
 
@@ -453,89 +520,112 @@ async function runHlsDownload(
 
       // Define a concurrent chunk-fetch runner
       let nextIndex = 0;
-      const workers = Array.from({ length: Math.min(concurrency, targets.length) }, async () => {
-        while (nextIndex < targets.length && !signal.aborted) {
-          const currentIndex = nextIndex;
-          nextIndex++;
-          const target = targets[currentIndex];
+      const workers = Array.from(
+        { length: Math.min(concurrency, targets.length) },
+        async () => {
+          while (nextIndex < targets.length && !signal.aborted) {
+            const currentIndex = nextIndex;
+            nextIndex++;
+            const target = targets[currentIndex];
 
-          let retries = 3;
-          let backoff = 1000;
-          let bytes: Uint8Array | null = null;
+            let retries = 3;
+            let backoff = 1000;
+            let bytes: Uint8Array | null = null;
 
-          while (retries > 0) {
-            try {
-              const headers = target.byterange ? { Range: buildRangeHeader(target.byterange)! } : undefined;
-              const res = await fetch(target.url, { headers, signal });
-              if (!res.ok) {
-                if (isRetryableStatus(res.status)) {
-                  retries--;
-                  await delay(backoff);
-                  backoff *= 2;
-                  continue;
+            while (retries > 0) {
+              try {
+                const headers = target.byterange
+                  ? { Range: buildRangeHeader(target.byterange)! }
+                  : undefined;
+                const res = await fetch(target.url, { headers, signal });
+                if (!res.ok) {
+                  if (isRetryableStatus(res.status)) {
+                    retries--;
+                    await delay(backoff);
+                    backoff *= 2;
+                    continue;
+                  }
+                  throw new Error(`HTTP ${res.status}`);
                 }
-                throw new Error(`HTTP ${res.status}`);
+                const buffer = await res.arrayBuffer();
+                bytes = new Uint8Array(buffer);
+                break;
+              } catch (err) {
+                if (signal.aborted) throw err;
+                retries--;
+                if (retries === 0) throw err;
+                await delay(backoff);
+                backoff *= 2;
               }
-              const buffer = await res.arrayBuffer();
-              bytes = new Uint8Array(buffer);
-              break;
-            } catch (err) {
-              if (signal.aborted) throw err;
-              retries--;
-              if (retries === 0) throw err;
-              await delay(backoff);
-              backoff *= 2;
             }
-          }
 
-          if (!bytes) throw new Error('Failed to fetch segment bytes');
+            if (!bytes) throw new Error("Failed to fetch segment bytes");
 
-          let outputChunk = bytes;
-          const hlsSeg = target as HlsSegment;
-          if (hlsSeg.keyUrl) {
-            if (!hlsSeg.iv) throw new Error('Encrypted HLS segment missing IV');
-            if (!keyCache.has(hlsSeg.keyUrl)) {
-              keyCache.set(hlsSeg.keyUrl, (async () => {
-                const keyRes = await fetch(hlsSeg.keyUrl!, { signal });
-                if (!keyRes.ok) throw new Error(`Key HTTP ${keyRes.status}`);
-                const rawKey = new Uint8Array(await keyRes.arrayBuffer());
-                return importAes128Key(rawKey);
-              })());
+            let outputChunk = bytes;
+            const hlsSeg = target as HlsSegment;
+            if (hlsSeg.keyUrl) {
+              if (!hlsSeg.iv)
+                throw new Error("Encrypted HLS segment missing IV");
+              if (!keyCache.has(hlsSeg.keyUrl)) {
+                keyCache.set(
+                  hlsSeg.keyUrl,
+                  (async () => {
+                    const keyRes = await fetch(hlsSeg.keyUrl!, { signal });
+                    if (!keyRes.ok)
+                      throw new Error(`Key HTTP ${keyRes.status}`);
+                    const rawKey = new Uint8Array(await keyRes.arrayBuffer());
+                    return importAes128Key(rawKey);
+                  })(),
+                );
+              }
+              const cryptoKey = await keyCache.get(hlsSeg.keyUrl)!;
+              outputChunk = await decryptAes128Cbc(bytes, cryptoKey, hlsSeg.iv);
             }
-            const cryptoKey = await keyCache.get(hlsSeg.keyUrl)!;
-            outputChunk = await decryptAes128Cbc(bytes, cryptoKey, hlsSeg.iv);
-          }
 
-          pendingChunks.set(currentIndex, outputChunk);
-          completed++;
-          downloadedBytes += outputChunk.byteLength;
+            pendingChunks.set(currentIndex, outputChunk);
+            completed++;
+            downloadedBytes += outputChunk.byteLength;
 
-          // Emit progress updates
-          const now = Date.now();
-          updateSample.push({ bytes: outputChunk.byteLength, timestamp: now });
-          updateSample = updateSample.filter((s) => now - s.timestamp <= 4000);
-
-          if (now - lastUpdate > 250) {
-            const elapsed = updateSample.length >= 2 
-              ? (updateSample[updateSample.length - 1].timestamp - updateSample[0].timestamp) / 1000 
-              : 0;
-            const speed = elapsed > 0 
-              ? updateSample.reduce((acc, s) => acc + s.bytes, 0) / elapsed 
-              : undefined;
-            const eta = speed ? ((targets.length - completed) * (downloadedBytes / completed)) / speed : undefined;
-
-            store.updateJobProgress(job.id, {
-              percent: Math.round((completed * 100) / targets.length),
-              downloadedBytes,
-              speedBytesPerSecond: speed,
-              etaSeconds: eta,
+            // Emit progress updates
+            const now = Date.now();
+            updateSample.push({
+              bytes: outputChunk.byteLength,
+              timestamp: now,
             });
-            lastUpdate = now;
-          }
+            updateSample = updateSample.filter(
+              (s) => now - s.timestamp <= 4000,
+            );
 
-          flushChunks();
-        }
-      });
+            if (now - lastUpdate > 250) {
+              const elapsed =
+                updateSample.length >= 2
+                  ? (updateSample[updateSample.length - 1].timestamp -
+                      updateSample[0].timestamp) /
+                    1000
+                  : 0;
+              const speed =
+                elapsed > 0
+                  ? updateSample.reduce((acc, s) => acc + s.bytes, 0) / elapsed
+                  : undefined;
+              const eta = speed
+                ? ((targets.length - completed) *
+                    (downloadedBytes / completed)) /
+                  speed
+                : undefined;
+
+              store.updateJobProgress(job.id, {
+                percent: Math.round((completed * 100) / targets.length),
+                downloadedBytes,
+                speedBytesPerSecond: speed,
+                etaSeconds: eta,
+              });
+              lastUpdate = now;
+            }
+
+            flushChunks();
+          }
+        },
+      );
 
       try {
         await Promise.all(workers);
@@ -544,7 +634,7 @@ async function runHlsDownload(
       } catch (err) {
         controller.error(err);
       }
-    }
+    },
   });
 
   return new Response(stream);
@@ -553,112 +643,156 @@ async function runHlsDownload(
 // -------------------------------------------------------------
 // Core Runner Dispatcher
 // -------------------------------------------------------------
-export async function runJob(job: DownloadJob, signal: AbortSignal): Promise<void> {
-  const store = useBatchStore.getState();
+export async function runJob(
+  job: DownloadJob,
+  signal: AbortSignal,
+  context: RunnerContext,
+): Promise<void> {
+  const store = context;
   const config = job.config;
 
   try {
     let outputBlob: Blob | null = null;
     let responseStream: Response | null = null;
     let resolvedFilename = job.config.filename;
-    let extension = 'mp4';
-    let mimeType = 'video/mp4';
+    let extension = "mp4";
+    let mimeType = "video/mp4";
 
-    const platform = job.metadata?.platform || 'generic';
-    const title = job.metadata?.title || 'VoidFetch Media';
+    const platform = job.metadata?.platform || "generic";
+    const title = job.metadata?.title || "VoidFetch Media";
     const rawData = job.metadata?.rawParsedData as ParsedDataRecord | undefined;
 
     // 1. Check Output Type & Dispatcher
-    if (config.outputType === 'images' || config.outputType === 'zip_images') {
+    if (config.outputType === "images" || config.outputType === "zip_images") {
       const images = job.metadata?.images || [];
-      if (images.length === 0) throw new Error('No images detected to package');
-      
-      outputBlob = await runImagesDownload(job, images, signal);
-      extension = 'zip';
-      mimeType = 'application/zip';
-    } 
-    else if (config.outputType === 'audio') {
+      if (images.length === 0) throw new Error("No images found in this URL. Please change config to download MP4 or MP3 instead.");
+
+      outputBlob = await runImagesDownload(job, images, signal, context);
+      extension = "zip";
+      mimeType = "application/zip";
+    } else if (config.outputType === "audio") {
       const audioUrl = rawData?.downloadAudioUrl;
-      const extractAudioNeeded = job.config.extractAudio || rawData?.mediaActions?.audio === 'extract-audio';
-      
+      const extractAudioNeeded =
+        job.config.extractAudio ||
+        rawData?.mediaActions?.audio === "extract-audio";
+
       if (audioUrl && !extractAudioNeeded) {
         // Direct audio stream download
-        outputBlob = await runDirectDownload(job, audioUrl, config.filename, signal);
+        outputBlob = await runDirectDownload(
+          job,
+          audioUrl,
+          config.filename,
+          signal,
+          context,
+        );
       } else {
         // Must fetch video and run client-side FFmpeg extraction!
-        const videoUrl = rawData?.downloadVideoUrl || rawData?.originDownloadVideoUrl;
-        if (!videoUrl) throw new Error('Video URL missing for audio extraction');
+        const videoUrl =
+          rawData?.downloadVideoUrl || rawData?.originDownloadVideoUrl;
+        if (!videoUrl)
+          throw new Error("Video URL missing for audio extraction");
 
-        await store.updateJobStatus(job.id, 'processing', {
-          progress: { percent: 0, downloadedBytes: 0 }
+        await store.updateJobStatus(job.id, "processing", {
+          progress: { percent: 0, downloadedBytes: 0 },
         });
 
         // Dynamic load FFmpeg to save load memory
-        const { extractAudioFromVideo } = await import('@/lib/ffmpeg');
-        
+        const { extractAudioFromVideo } = await import("@/infrastructure/ffmpeg");
+
         outputBlob = await extractAudioFromVideo({
           videoUrl,
           signal,
           onProgress: (p, stage) => {
             store.updateJobProgress(job.id, {
               percent: p,
-              downloadedBytes: stage === 'downloading' ? p : 100, // mock bytes
+              downloadedBytes: stage === "downloading" ? p : 100, // mock bytes
             });
-          }
+          },
         });
       }
-      extension = 'mp3';
-      mimeType = 'audio/mpeg';
-    }
-    else {
+      extension = "mp3";
+      mimeType = "audio/mpeg";
+    } else {
       // Original video or MP4 video format
-      const videoUrl = rawData?.downloadVideoUrl || rawData?.originDownloadVideoUrl;
-      
+      const videoUrl =
+        rawData?.downloadVideoUrl || rawData?.originDownloadVideoUrl;
+
       if (!videoUrl) {
         // Fallback: If no video URL is resolved, check audio or image post fallback.
-        const audioUrl = rawData?.downloadAudioUrl || rawData?.originDownloadAudioUrl;
+        const audioUrl =
+          rawData?.downloadAudioUrl || rawData?.originDownloadAudioUrl;
         if (audioUrl) {
-          console.warn(`No video URL resolved for job ${job.id}, falling back to audio-only download.`);
-          outputBlob = await runDirectDownload(job, audioUrl, config.filename, signal);
-          extension = 'mp3';
-          mimeType = 'audio/mpeg';
+          console.warn(
+            `No video URL resolved for job ${job.id}, falling back to audio-only download.`,
+          );
+          outputBlob = await runDirectDownload(
+            job,
+            audioUrl,
+            config.filename,
+            signal,
+            context,
+          );
+          extension = "mp3";
+          mimeType = "audio/mpeg";
         } else if (job.metadata?.images && job.metadata.images.length > 0) {
-          console.warn(`No video or audio URL resolved for job ${job.id}, falling back to image download.`);
-          outputBlob = await runImagesDownload(job, job.metadata.images, signal);
-          extension = 'zip';
-          mimeType = 'application/zip';
+          console.warn(
+            `No video or audio URL resolved for job ${job.id}, falling back to image download.`,
+          );
+          outputBlob = await runImagesDownload(
+            job,
+            job.metadata.images,
+            signal,
+            context,
+          );
+          extension = "zip";
+          mimeType = "application/zip";
         } else {
-          throw new Error('No download media URL resolved');
+          throw new Error("No media found. Please try changing config to another format (MP4/MP3) or retry.");
         }
       } else {
         const isHls = isHlsPlaylistUrl(videoUrl);
         if (isHls) {
-          responseStream = await runHlsDownload(job, videoUrl, signal);
-          extension = 'mp4';
-          mimeType = 'video/mp4';
+          responseStream = await runHlsDownload(job, videoUrl, signal, context);
+          extension = "mp4";
+          mimeType = "video/mp4";
         } else {
-          const needsMerge = rawData?.mediaActions?.video === 'merge-then-download';
+          const needsMerge =
+            rawData?.mediaActions?.video === "merge-then-download";
           if (needsMerge) {
             // Separate audio and video streams must be combined!
-            const audioUrl = rawData?.downloadAudioUrl || rawData?.originDownloadAudioUrl;
-            if (!audioUrl) throw new Error('Audio URL missing for stream merge');
+            const audioUrl =
+              rawData?.downloadAudioUrl || rawData?.originDownloadAudioUrl;
+            if (!audioUrl)
+              throw new Error("Audio URL missing for stream merge");
 
-            await store.updateJobStatus(job.id, 'processing');
-            const { getFFmpeg } = await import('@/lib/ffmpeg');
-            
+            await store.updateJobStatus(job.id, "processing");
+            const { getFFmpeg } = await import("@/infrastructure/ffmpeg");
+
             // Download both to blobs
-            const videoBlob = await runDirectDownload(job, videoUrl, 'video-temp', signal);
-            const audioBlob = await runDirectDownload(job, audioUrl, 'audio-temp', signal);
+            const videoBlob = await runDirectDownload(
+              job,
+              videoUrl,
+              "video-temp",
+              signal,
+              context,
+            );
+            const audioBlob = await runDirectDownload(
+              job,
+              audioUrl,
+              "audio-temp",
+              signal,
+              context,
+            );
 
-            await store.updateJobStatus(job.id, 'processing', {
-              progress: { percent: 50, downloadedBytes: 100 }
+            await store.updateJobStatus(job.id, "processing", {
+              progress: { percent: 50, downloadedBytes: 100 },
             });
 
             const _ffmpeg = await getFFmpeg();
-            const videoFile = new File([videoBlob], 'input-video.mp4');
-            const audioFile = new File([audioBlob], 'input-audio.mp3');
+            const videoFile = new File([videoBlob], "input-video.mp4");
+            const audioFile = new File([audioBlob], "input-audio.mp3");
 
-            const { mergeVideoAudio } = await import('@/lib/ffmpeg');
+            const { mergeVideoAudio } = await import("@/infrastructure/ffmpeg");
             outputBlob = await mergeVideoAudio({
               videoFile,
               audioFile,
@@ -667,66 +801,71 @@ export async function runJob(job: DownloadJob, signal: AbortSignal): Promise<voi
                 store.updateJobProgress(job.id, {
                   percent: p,
                 });
-              }
+              },
             });
           } else {
             // Standard progressive fetch
-            outputBlob = await runDirectDownload(job, videoUrl, config.filename, signal);
+            outputBlob = await runDirectDownload(
+              job,
+              videoUrl,
+              config.filename,
+              signal,
+              context,
+            );
           }
-          extension = 'mp4';
-          mimeType = 'video/mp4';
+          extension = "mp4";
+          mimeType = "video/mp4";
         }
       }
     }
 
     if (signal.aborted) {
-      throw new DOMException('Download aborted', 'AbortError');
+      throw new DOMException("Download aborted", "AbortError");
     }
 
     // 2. Set saving state
-    await store.updateJobStatus(job.id, 'saving');
+    await store.updateJobStatus(job.id, "saving");
 
     // 3. Render final filename
     resolvedFilename = renderFilename(
-      store.settings.filenameTemplate || '{index} - {title}',
+      store.settings.filenameTemplate || "{index} - {title}",
       {
-        index: store.jobs.findIndex((j) => j.id === job.id) + 1,
+        index: context.jobIndex + 1,
         title,
         platform,
         mediaId: job.id,
         quality: config.quality,
       },
-      extension
+      extension,
     );
 
     // 4. Save to filesystem (Custom directory or browser download fallback)
     const finalBlob = responseStream ? await responseStream.blob() : outputBlob;
     if (finalBlob) {
-      const { saveDownloadedFile } = await import('@/lib/directory-picker');
+      const { saveDownloadedFile } = await import("@/infrastructure/directory-picker");
       await saveDownloadedFile(finalBlob, resolvedFilename);
     } else {
-      throw new Error('No media output buffer resolved');
+      throw new Error("No media output buffer resolved");
     }
 
     // 5. Complete job
-    await store.updateJobStatus(job.id, 'completed', {
+    await store.updateJobStatus(job.id, "completed", {
       progress: { percent: 100, downloadedBytes: 100 },
     });
-
   } catch (error: unknown) {
-    if (error instanceof DOMException && error.name === 'AbortError') {
-      await store.updateJobStatus(job.id, 'cancelled');
+    if (error instanceof DOMException && error.name === "AbortError") {
+      await store.updateJobStatus(job.id, "cancelled");
       return;
     }
 
     console.error(`Download execution error for job ${job.id}:`, error);
 
-    let errorCode: DownloadErrorCode = 'NETWORK_ERROR';
-    let errorMessage = 'Media download failed';
+    let errorCode: DownloadErrorCode = "NETWORK_ERROR";
+    let errorMessage = "Media download failed";
     let httpStatus: number | undefined = undefined;
 
     if (isApiRequestError(error)) {
-      errorCode = (error.code as DownloadErrorCode) || 'NETWORK_ERROR';
+      errorCode = (error.code as DownloadErrorCode) || "NETWORK_ERROR";
       errorMessage = error.fallbackMessage || errorMessage;
       httpStatus = error.status;
     } else if (error instanceof Error) {

@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from 'react'
 
-import { HlsBrowserDownloadPanel } from '@/components/hls-browser-download-panel'
+import { HlsBrowserDownloadPanel } from './hls-browser-download-panel'
 import {
     AlertDialog,
     AlertDialogAction,

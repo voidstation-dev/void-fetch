@@ -2,10 +2,10 @@ import { useEffect, useState, useMemo } from 'react';
 
 import type { AudioExtractTask } from '@/components/audio-tool/types';
 import { DeferredHlsDownloadDialog } from '@/components/deferred-hls-download-dialog';
-import type { HlsDownloadDialogRequest } from '@/components/hls-download-dialog';
+import type { HlsDownloadDialogRequest } from '@/features/hls/components/hls-download-dialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { HlsVideoPlayer } from '@/components/hls-video-player';
+import { HlsVideoPlayer } from '@/features/hls/components/hls-video-player';
 import { useTranslations } from 'next-intl';
 import { toast } from '@/lib/deferred-toast';
 import { buildHlsPlayProxyUrl, HLS_PLAYLIST_ACCEPT, isHlsPlaylistUrl } from '@/lib/hls-playback';

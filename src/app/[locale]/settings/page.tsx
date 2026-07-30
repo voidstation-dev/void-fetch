@@ -21,7 +21,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { toast } from '@/lib/deferred-toast';
 import { Settings, Save, RefreshCw, Loader2, Folder, FolderCheck, FolderSync } from 'lucide-react';
-import { getActiveDirectoryName, selectCustomDirectory, clearActiveDirectoryHandle } from '@/lib/directory-picker';
+import { getActiveDirectoryName, selectCustomDirectory, clearActiveDirectoryHandle } from '@/infrastructure/directory-picker';
 import type { OutputType, BatchSettings } from '@/features/batch-download/types/batch-download';
 
 export default function SettingsPage() {

@@ -51,7 +51,7 @@ export function DownloadJobRowComponent({
   const updateJobStatus = useBatchStore((s) => s.updateJobStatus);
   const updateJobConfig = useBatchStore((s) => s.updateJobConfig);
   const isQueueRunning = useBatchStore((s) => s.isQueueRunning);
-  const startQueue = useBatchStore((s) => s.startQueue);
+  const resumeQueue = useBatchStore((s) => s.resumeQueue);
   const removeJobs = useBatchStore((s) => s.removeJobs);
   const setActiveJobDrawerId = useBatchStore((s) => s.setActiveJobDrawerId);
   const retryJob = useBatchStore((s) => s.retryJob);
@@ -67,46 +67,49 @@ export function DownloadJobRowComponent({
   const handleStart = async () => {
     await updateJobStatus(job.id, "queued");
     if (!isQueueRunning) {
-      await startQueue();
-    } else {
-      downloadScheduler.schedule();
+      resumeQueue();
     }
+    // We must call schedule() because isQueueRunning state update is batched
+    downloadScheduler.schedule();
   };
 
-  const { rawData, videoUrl, audioUrl, images, isImageOnly } = React.useMemo(() => {
-    const raw = (job.metadata?.rawParsedData || job.metadata) as Record<string, unknown> | undefined;
-    const vUrl =
-      typeof raw?.downloadVideoUrl === "string"
-        ? raw.downloadVideoUrl
-        : typeof raw?.originDownloadVideoUrl === "string"
-          ? raw.originDownloadVideoUrl
-          : typeof raw?.videoUrl === "string"
-            ? raw.videoUrl
-            : undefined;
-    const aUrl =
-      typeof raw?.downloadAudioUrl === "string"
-        ? raw.downloadAudioUrl
-        : typeof raw?.originDownloadAudioUrl === "string"
-          ? raw.originDownloadAudioUrl
-          : typeof raw?.audioUrl === "string"
-            ? raw.audioUrl
-            : undefined;
-    const imgs =
-      job.metadata?.images ||
-      (Array.isArray(raw?.images) ? (raw.images as string[]) : undefined);
-    const imgOnly =
-      job.config.outputType === "images" ||
-      job.config.outputType === "zip_images" ||
-      (Boolean(imgs && imgs.length > 0) && !vUrl && !aUrl);
+  const { rawData, videoUrl, audioUrl, images, isImageOnly } =
+    React.useMemo(() => {
+      const raw = (job.metadata?.rawParsedData || job.metadata) as
+        | Record<string, unknown>
+        | undefined;
+      const vUrl =
+        typeof raw?.downloadVideoUrl === "string"
+          ? raw.downloadVideoUrl
+          : typeof raw?.originDownloadVideoUrl === "string"
+            ? raw.originDownloadVideoUrl
+            : typeof raw?.videoUrl === "string"
+              ? raw.videoUrl
+              : undefined;
+      const aUrl =
+        typeof raw?.downloadAudioUrl === "string"
+          ? raw.downloadAudioUrl
+          : typeof raw?.originDownloadAudioUrl === "string"
+            ? raw.originDownloadAudioUrl
+            : typeof raw?.audioUrl === "string"
+              ? raw.audioUrl
+              : undefined;
+      const imgs =
+        job.metadata?.images ||
+        (Array.isArray(raw?.images) ? (raw.images as string[]) : undefined);
+      const imgOnly =
+        job.config.outputType === "images" ||
+        job.config.outputType === "zip_images" ||
+        (Boolean(imgs && imgs.length > 0) && !vUrl && !aUrl);
 
-    return {
-      rawData: raw,
-      videoUrl: vUrl,
-      audioUrl: aUrl,
-      images: imgs,
-      isImageOnly: imgOnly,
-    };
-  }, [job.metadata, job.config.outputType]);
+      return {
+        rawData: raw,
+        videoUrl: vUrl,
+        audioUrl: aUrl,
+        images: imgs,
+        isImageOnly: imgOnly,
+      };
+    }, [job.metadata, job.config.outputType]);
 
   // Background media duration probe if initial API response lacked duration
   React.useEffect(() => {
@@ -151,10 +154,10 @@ export function DownloadJobRowComponent({
     });
     await updateJobStatus(job.id, "queued");
     if (!isQueueRunning) {
-      await startQueue();
-    } else {
-      downloadScheduler.schedule();
+      resumeQueue();
     }
+    // Force schedule in case state hasn't flushed yet
+    downloadScheduler.schedule();
   };
 
   const handlePause = () => {
@@ -278,10 +281,11 @@ export function DownloadJobRowComponent({
         return (
           <Badge
             variant="outline"
-            className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-purple-500/15 text-purple-400 border-purple-500/30 animate-pulse flex items-center gap-1"
+            className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-purple-500/15 text-purple-400 border-purple-500/30 flex items-center gap-1"
           >
             <Loader2 className="h-3 w-3 animate-spin text-purple-400" />
-            FFmpeg Processing...
+            FFmpeg Processing...{" "}
+            {job.progress?.percent > 0 ? `${job.progress.percent}%` : ""}
           </Badge>
         );
       case "saving":
@@ -384,7 +388,10 @@ export function DownloadJobRowComponent({
           ) : isImageOnly ? (
             <ImageIcon className="h-6 w-6 text-primary/60" aria-hidden="true" />
           ) : (
-            <FileVideo className="h-6 w-6 text-muted-foreground/60" aria-hidden="true" />
+            <FileVideo
+              className="h-6 w-6 text-muted-foreground/60"
+              aria-hidden="true"
+            />
           )}
           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center">
             <Maximize2 className="h-4 w-4 text-white" aria-hidden="true" />
@@ -394,9 +401,7 @@ export function DownloadJobRowComponent({
         {/* Info Column */}
         <div className="flex flex-col min-w-0 gap-1 flex-1">
           {/* Title & Platform Tag */}
-          <motion.div
-            className="flex items-center gap-2 flex-wrap"
-          >
+          <motion.div className="flex items-center gap-2 flex-wrap">
             <Badge
               variant="outline"
               className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded-md uppercase tracking-wider ${getPlatformBadgeStyle(
@@ -463,7 +468,10 @@ export function DownloadJobRowComponent({
             title="Open Details & Media Preview Modal"
             aria-label="Open Details & Media Preview Modal"
           >
-            <Maximize2 className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
+            <Maximize2
+              className="h-3.5 w-3.5 text-primary"
+              aria-hidden="true"
+            />
             <span className="hidden sm:inline">Details</span>
           </Button>
 
@@ -483,7 +491,10 @@ export function DownloadJobRowComponent({
                 title="Download / Redownload Image Pack"
                 aria-label="Download / Redownload Image Pack"
               >
-                <ImageIcon className="h-3.5 w-3.5 text-cyan-400" aria-hidden="true" />
+                <ImageIcon
+                  className="h-3.5 w-3.5 text-cyan-400"
+                  aria-hidden="true"
+                />
                 <span className="hidden sm:inline">
                   {images && images.length > 1 ? "ZIP (Images)" : "IMAGE"}
                 </span>
@@ -499,7 +510,10 @@ export function DownloadJobRowComponent({
                   title="Download / Redownload MP4 Video"
                   aria-label="Download / Redownload MP4 Video"
                 >
-                  <Video className="h-3.5 w-3.5 text-emerald-500" aria-hidden="true" />
+                  <Video
+                    className="h-3.5 w-3.5 text-emerald-500"
+                    aria-hidden="true"
+                  />
                   <span className="hidden sm:inline">MP4</span>
                 </Button>
                 <Button
@@ -511,7 +525,10 @@ export function DownloadJobRowComponent({
                   title="Extract / Redownload MP3 Audio"
                   aria-label="Extract / Redownload MP3 Audio"
                 >
-                  <Music className="h-3.5 w-3.5 text-purple-400" aria-hidden="true" />
+                  <Music
+                    className="h-3.5 w-3.5 text-purple-400"
+                    aria-hidden="true"
+                  />
                   <span className="hidden sm:inline">MP3</span>
                 </Button>
               </>
@@ -545,15 +562,15 @@ export function DownloadJobRowComponent({
             </>
           )}
 
-          {/* Retry Button for Failed/Cancelled */}
-          {(job.status === "failed" || job.status === "cancelled") && (
+          {/* Retry Button for Cancelled */}
+          {job.status === "cancelled" && (
             <Button
               type="button"
               variant="outline"
               size="icon"
               className="h-8 w-8 rounded-xl text-amber-500 hover:text-amber-400 border-amber-500/30 hover:bg-amber-500/10 shadow-2xs"
               onClick={() => retryJob(job.id)}
-              title={job.status === "cancelled" ? "Re-install" : "Retry"}
+              title="Re-install"
               aria-label="Retry job"
             >
               <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />

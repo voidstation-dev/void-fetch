@@ -338,7 +338,8 @@ export async function extractAudioFromVideo({
 
   // Set conversion progress listener
   const handleProgress = ({ progress }: { progress: number }) => {
-    onProgress?.(Math.round(progress * 100), 'converting');
+    const percent = Math.max(0, Math.min(100, Math.round(progress * 100)));
+    onProgress?.(percent, 'converting');
   };
   ffmpeg.on('progress', handleProgress);
 
@@ -399,7 +400,8 @@ export async function mergeVideoAudio({
   console.log('[FFmpeg] Merge inputs written to virtual filesystem');
 
   const handleProgress = ({ progress }: { progress: number }) => {
-    onProgress?.(50 + Math.round(progress * 50), 'merging');
+    const percent = Math.max(0, Math.min(100, Math.round(progress * 100)));
+    onProgress?.(50 + Math.round(percent / 2), 'merging');
   };
   ffmpeg.on('progress', handleProgress);
 

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Download, ExternalLink, MonitorPlay, Headphones } from 'lucide-react';
 
 import type { AudioExtractTask } from '@/components/audio-tool/types';
-import type { HlsDownloadDialogRequest } from '@/components/hls-download-dialog';
+import type { HlsDownloadDialogRequest } from '@/features/hls/components/hls-download-dialog';
 import type { MediaPreviewRequest } from '@/components/downloader/media-preview';
 import { Button } from '@/components/ui/button';
 import { useTranslations } from 'next-intl';
