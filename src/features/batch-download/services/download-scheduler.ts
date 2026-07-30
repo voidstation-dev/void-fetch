@@ -87,9 +87,9 @@ class DownloadScheduler {
           if (!this.callbacks?.isQueueRunning()) break;
           this.startJob(job);
           // 50ms stagger to avoid network/DNS spikes when starting multiple jobs simultaneously
-          await new Promise(r => setTimeout(r, 50));
+          await new Promise((r) => setTimeout(r, 50));
         }
-        
+
         if (queuedJobs.length === 0 && this.activeJobs.size === 0) {
           this.callbacks?.checkQueueFinished();
         }
