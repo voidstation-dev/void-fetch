@@ -69,54 +69,83 @@ export default async function ContactPage({
   });
 
   return (
-    <main className="min-h-screen bg-background">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-10 space-y-6">
-        <h1 className="text-3xl font-semibold tracking-tight">
-          {tContact("title")}
-        </h1>
-        <p className="text-sm text-muted-foreground leading-6">
-          {tContact("intro")}
-        </p>
-        <div className="rounded-md border bg-card p-5 space-y-2">
-          <Link href={`/${locale}/feedback`} className="text-sm underline">
-            {tContact("feedback")}
-          </Link>
-          <p className="text-sm text-muted-foreground">
-            {tContact("feedbackHint")}
-          </p>
+    <main className="min-h-screen bg-background/50">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-10 space-y-4">
+        {/* Header Block */}
+        <div className="flex items-center justify-between p-4 border rounded-xl bg-card border-border/80 shadow-sm">
+          <div className="flex flex-col gap-0.5">
+            <h1 className="text-sm font-bold text-foreground">
+              {tContact("title")}
+            </h1>
+            <span className="text-[10px] text-muted-foreground uppercase">
+              {tContact("intro")}
+            </span>
+          </div>
         </div>
-        <div className="rounded-md border bg-card p-5 space-y-2">
-          <a
-            href="https://github.com/voidstation-dev/void-fetch/issues/new"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm underline"
-          >
-            {tContact("github")}
-          </a>
-          <p className="text-sm text-muted-foreground">
-            {tContact("githubHint")}
-          </p>
+
+        {/* Content Block */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="border rounded-xl bg-card border-border/80 p-5 flex flex-col gap-2 text-xs text-foreground shadow-sm">
+            <Link
+              href={`/${locale}/feedback`}
+              className="font-semibold text-sm hover:text-primary transition-colors underline underline-offset-2"
+            >
+              {tContact("feedback")}
+            </Link>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              {tContact("feedbackHint")}
+            </p>
+          </div>
+          <div className="border rounded-xl bg-card border-border/80 p-5 flex flex-col gap-2 text-xs text-foreground shadow-sm">
+            <a
+              href="https://github.com/voidstation-dev/void-fetch/issues/new"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-sm hover:text-primary transition-colors underline underline-offset-2"
+            >
+              {tContact("github")}
+            </a>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              {tContact("githubHint")}
+            </p>
+          </div>
         </div>
-        <p className="text-sm text-muted-foreground">
-          {tCommon("relatedPages")}
-          {": "}
-          <Link className="underline" href={`/${locale}`}>
-            {tCommon("home")}
-          </Link>
-          {" · "}
-          <Link className="underline" href={`/${locale}/feedback`}>
-            {tFeedback("title")}
-          </Link>
-          {" · "}
-          <Link className="underline" href={`/${locale}/privacy`}>
-            {tCommon("privacy")}
-          </Link>
-          {" · "}
-          <Link className="underline" href={`/${locale}/terms`}>
-            {tCommon("terms")}
-          </Link>
-        </p>
+
+        {/* Footer Block */}
+        <div className="flex flex-col gap-2 p-5 border rounded-xl bg-card border-border/80 shadow-sm">
+          <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+            <span className="font-bold text-foreground/80">
+              {tCommon("relatedPages")}
+            </span>
+            <Link
+              className="hover:text-primary transition-colors underline underline-offset-2"
+              href={`/${locale}`}
+            >
+              {tCommon("home")}
+            </Link>
+            <span className="opacity-50">·</span>
+            <Link
+              className="hover:text-primary transition-colors underline underline-offset-2"
+              href={`/${locale}/feedback`}
+            >
+              {tFeedback("title")}
+            </Link>
+            <span className="opacity-50">·</span>
+            <Link
+              className="hover:text-primary transition-colors underline underline-offset-2"
+              href={`/${locale}/privacy`}
+            >
+              {tCommon("privacy")}
+            </Link>
+            <span className="opacity-50">·</span>
+            <Link
+              className="hover:text-primary transition-colors underline underline-offset-2"
+              href={`/${locale}/terms`}
+            >
+              {tCommon("terms")}
+            </Link>
+          </div>
+        </div>
       </div>
       <PageStructuredData
         locale={locale}

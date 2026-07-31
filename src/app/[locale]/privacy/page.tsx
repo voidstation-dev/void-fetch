@@ -66,33 +66,58 @@ export default async function PrivacyPage({
   const points = tPrivacy.raw("points") as string[];
 
   return (
-    <main className="min-h-screen bg-background">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-10 space-y-6">
-        <h1 className="text-3xl font-semibold tracking-tight">
-          {tPrivacy("title")}
-        </h1>
-        <p className="text-sm text-muted-foreground leading-6">
-          {tPrivacy("intro")}
-        </p>
-        <ul className="space-y-2 text-sm text-muted-foreground leading-6">
-          {points.map((point) => (
-            <li key={point} className="rounded-md border bg-card p-4">
-              {point}
-            </li>
-          ))}
-        </ul>
-        <p className="text-xs text-muted-foreground">{tPrivacy("updated")}</p>
-        <p className="text-sm text-muted-foreground">
-          {tCommon("relatedPages")}
-          {": "}
-          <Link className="underline" href={`/${locale}/terms`}>
-            {tCommon("terms")}
-          </Link>
-          {" · "}
-          <Link className="underline" href={`/${locale}/contact`}>
-            {tCommon("contact")}
-          </Link>
-        </p>
+    <main className="min-h-screen bg-background/50">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-10 space-y-4">
+        {/* Header Block */}
+        <div className="flex items-center justify-between p-4 border rounded-xl bg-card border-border/80 shadow-sm">
+          <div className="flex flex-col gap-0.5">
+            <h1 className="text-sm font-bold text-foreground">
+              {tPrivacy("title")}
+            </h1>
+            <span className="text-[10px] text-muted-foreground uppercase">
+              {tPrivacy("intro")}
+            </span>
+          </div>
+        </div>
+
+        {/* Content Block */}
+        <div className="border rounded-xl bg-card border-border/80 p-6 flex flex-col gap-5 text-xs text-foreground shadow-sm">
+          <ul className="space-y-4 text-xs text-muted-foreground leading-relaxed">
+            {points.map((point) => (
+              <li
+                key={point}
+                className="flex flex-col gap-1 border-b border-border/40 pb-4 last:border-0 last:pb-0"
+              >
+                {point}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Footer Block */}
+        <div className="flex flex-col gap-2 p-5 border rounded-xl bg-card border-border/80 shadow-sm">
+          <p className="text-[10px] font-semibold text-muted-foreground uppercase">
+            {tPrivacy("updated")}
+          </p>
+          <div className="flex items-center gap-3 text-xs text-muted-foreground">
+            <span className="font-bold text-foreground/80">
+              {tCommon("relatedPages")}
+            </span>
+            <Link
+              className="hover:text-primary transition-colors underline underline-offset-2"
+              href={`/${locale}/terms`}
+            >
+              {tCommon("terms")}
+            </Link>
+            <span className="opacity-50">·</span>
+            <Link
+              className="hover:text-primary transition-colors underline underline-offset-2"
+              href={`/${locale}/contact`}
+            >
+              {tCommon("contact")}
+            </Link>
+          </div>
+        </div>
       </div>
       <PageStructuredData
         locale={locale}
