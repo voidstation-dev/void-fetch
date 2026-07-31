@@ -1,4 +1,5 @@
-import type { Dictionary } from '@/lib/i18n/types'
+import type { Dictionary } from '@/lib/i18n/types';
+import { PLATFORMS } from '@/features/platforms';
 
 export type CanonicalPlatform =
     | 'bilibili'
@@ -108,30 +109,13 @@ export function isCanonicalPlatform(val: string): val is CanonicalPlatform {
     return CANONICAL_SET.has(val as CanonicalPlatform)
 }
 
-/**
- * Platform Brand Badge Style Resolver
- */
 export function getPlatformBadgeStyle(platform?: string): string {
   const p = (platform || "generic").toLowerCase();
-  if (p.includes("douyin"))
-    return "bg-pink-500/15 text-pink-500 border-pink-500/30";
-  if (p.includes("tiktok"))
-    return "bg-cyan-500/15 text-cyan-400 border-cyan-500/30";
-  if (p.includes("youtube"))
-    return "bg-red-500/15 text-red-500 border-red-500/30";
-  if (p.includes("soundcloud"))
-    return "bg-orange-500/15 text-orange-500 border-orange-500/30";
-  if (p.includes("bilibili"))
-    return "bg-sky-500/15 text-sky-400 border-sky-500/30";
-  if (p.includes("instagram"))
-    return "bg-purple-500/15 text-purple-400 border-purple-500/30";
-  if (p.includes("apple") || p.includes("podcast"))
-    return "bg-purple-600/15 text-purple-300 border-purple-500/30";
-  if (p.includes("pinterest"))
-    return "bg-red-600/15 text-red-400 border-red-500/30";
-  if (p.includes("threads"))
-    return "bg-zinc-500/15 text-zinc-200 border-zinc-500/30";
-  return "bg-primary/10 text-primary border-primary/20";
+  
+  // Find exact ID match, or partial match for legacy fallback strings
+  const config = PLATFORMS[p] || Object.values(PLATFORMS).find(c => p.includes(c.id));
+  
+  return config?.ui.badgeColor || "bg-primary/10 text-primary border-primary/20";
 }
 
 export function normalizePlatform(platform?: string | null): CanonicalPlatform {

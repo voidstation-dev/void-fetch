@@ -1,14 +1,16 @@
 'use client'
 
+import { AudioExtractDialogView } from './audio-extract-dialog-ui'
+
 import { useCallback, useEffect, useId, useState, type ChangeEvent, type DragEvent } from 'react'
 
 import { AlertCircle, CheckCircle2, Loader2, Music } from 'lucide-react'
 import * as Tabs from '@radix-ui/react-tabs'
 
-import { FileExtractPanel } from '@/components/audio-tool/file-extract-panel'
-import { MergePanel } from '@/components/audio-tool/merge-panel'
-import { ResultAutoExtractPanel } from '@/components/audio-tool/result-auto-extract-panel'
-import type { AudioExtractTask, AudioToolStage, ExtractMode, ResultTaskAction } from '@/components/audio-tool/types'
+import { FileExtractPanel } from './file-extract-panel'
+import { MergePanel } from './merge-panel'
+import { ResultAutoExtractPanel } from './result-auto-extract-panel'
+import type { AudioExtractTask, AudioToolStage, ExtractMode, ResultTaskAction } from './types'
 import { getResultMediaActions } from '@/components/downloader/result-card-visibility'
 import { Button } from '@/components/ui/button'
 import {
@@ -21,7 +23,7 @@ import {
 import { Progress } from '@/components/ui/progress'
 import { useFFmpeg, type FFmpegStatus } from '@/hooks/use-ffmpeg'
 import { useTranslations } from 'next-intl'
-import { isApiRequestError, resolveApiErrorMessage } from '@/lib/api-errors'
+import { isApiRequestError, notifyApiErrorToast, resolveApiErrorMessage } from '@/lib/api-errors'
 import { toast } from '@/lib/deferred-toast'
 import { UnifiedParseReloadError, requestUnifiedParse } from '@/lib/unified-parse'
 import { cn, downloadFile, formatBytes, sanitizeFilename } from '@/lib/utils'
@@ -520,6 +522,11 @@ export function AudioExtractDialog({
                 return
             }
 
+            if (notifyApiErrorToast(err)) {
+                setStage('error')
+                return
+            }
+
             if (isApiRequestError(err)) {
                 console.error('Audio tool auto parse failed', {
                     code: err.code,
@@ -747,127 +754,64 @@ export function AudioExtractDialog({
         onOpenChange(nextOpen)
     }, [cancel, onOpenChange])
 
-    const statusPanel = (
-        <div className="rounded-md border bg-muted/30 p-3 space-y-2">
-            <div className="flex items-start gap-2 text-sm">
-                {(stage === 'error' || status === 'error') ? (
-                    <AlertCircle className="h-4 w-4 text-destructive mt-0.5 shrink-0" />
-                ) : (stage === 'completed' || status === 'completed') ? (
-                    <CheckCircle2 className="h-4 w-4 text-green-600 mt-0.5 shrink-0" />
-                ) : ffmpegProcessing || stage === 'parsing' || stage === 'preparing-merge' || stage === 'direct-downloading' || stage === 'reading-file' ? (
-                    <Loader2 className="h-4 w-4 animate-spin mt-0.5 shrink-0" />
-                ) : (
-                    <Music className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
-                )}
-                <p className={(stage === 'error' || status === 'error') ? 'text-destructive' : 'text-foreground/80'}>
-                    {statusText}
-                </p>
-            </div>
-
-            {showProgress && (
-                <Progress value={Math.floor(progress)} className="h-2" />
-            )}
-        </div>
-    )
-
+    
     return (
-        <Dialog open={open} onOpenChange={handleDialogOpenChange}>
-            <DialogContent
-                className="flex max-h-[calc(100vh-2rem)] max-w-2xl flex-col overflow-hidden p-4 sm:max-h-[90vh] sm:p-6"
-                onInteractOutside={(event) => {
-                    event.preventDefault()
-                }}
-            >
-                <DialogHeader>
-                    <DialogTitle>
-                        {entry === 'result'
-                            ? (resultTaskAction === 'merge-video'
-                                ? tResult('mergeDownloadVideo')
-                                : tExtractAudio('button'))
-                            : tAudioTool('title')}
-                    </DialogTitle>
-                    <DialogDescription>
-                        {entry === 'result'
-                            ? (autoExtractTask?.title || autoExtractTask?.videoUrl || tHistory('unknownTitle'))
-                            : toolbarDescription}
-                    </DialogDescription>
-                </DialogHeader>
+        <AudioExtractDialogView
+            open={open}
+            entry={entry}
+            autoExtractTask={autoExtractTask}
+            tAudioTool={tAudioTool}
+            tExtractAudio={tExtractAudio}
+            tHistory={tHistory}
+            tResult={tResult}
+            mode={mode}
+            setMode={setMode}
+            stage={stage}
+            isBusy={isBusy}
+            statusPanel={
+                <div className="rounded-md border bg-muted/30 p-3 space-y-2">
+                    <div className="flex items-start gap-2 text-sm">
+                        {(stage === 'error' || status === 'error') ? (
+                            <AlertCircle className="h-4 w-4 text-destructive mt-0.5 shrink-0" />
+                        ) : (stage === 'completed' || status === 'completed') ? (
+                            <CheckCircle2 className="h-4 w-4 text-green-600 mt-0.5 shrink-0" />
+                        ) : ffmpegProcessing || stage === 'parsing' || stage === 'preparing-merge' || stage === 'direct-downloading' || stage === 'reading-file' ? (
+                            <Loader2 className="h-4 w-4 animate-spin mt-0.5 shrink-0" />
+                        ) : (
+                            <Music className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
+                        )}
+                        <p className={(stage === 'error' || status === 'error') ? 'text-destructive' : 'text-foreground/80'}>
+                            {statusText}
+                        </p>
+                    </div>
 
-                <div
-                    className="flex-1 min-h-0 overflow-y-auto pr-1"
-                    style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 0px)' }}
-                >
-                    {entry === 'result' && autoExtractTask ? (
-                        <ResultAutoExtractPanel
-                            task={autoExtractTask}
-                            stage={stage}
-                            isBusy={isBusy}
-                            statusPanel={statusPanel}
-                            onRetry={() => void runAutoExtractTask(autoExtractTask)}
-                        />
-                    ) : (
-                        <Tabs.Root value={mode} onValueChange={(value) => setMode(value as ExtractMode)} className="space-y-4">
-                            <Tabs.List className="grid grid-cols-2 rounded-lg bg-muted p-1">
-                                <Tabs.Trigger
-                                    value="file"
-                                    className={cn(
-                                        'inline-flex items-center justify-center rounded-md px-3 py-1.5 text-sm font-medium transition-all',
-                                        mode === 'file'
-                                            ? 'bg-background text-foreground shadow-sm'
-                                            : 'text-muted-foreground hover:text-foreground'
-                                    )}
-                                >
-                                    {tAudioTool('fileTab')}
-                                </Tabs.Trigger>
-                                <Tabs.Trigger
-                                    value="merge"
-                                    className={cn(
-                                        'inline-flex items-center justify-center rounded-md px-3 py-1.5 text-sm font-medium transition-all',
-                                        mode === 'merge'
-                                            ? 'bg-background text-foreground shadow-sm'
-                                            : 'text-muted-foreground hover:text-foreground'
-                                    )}
-                                >
-                                    {tAudioTool('mergeTab')}
-                                </Tabs.Trigger>
-                            </Tabs.List>
-
-                            <Tabs.Content value="file" className="space-y-4 focus:outline-none">
-                                <FileExtractPanel
-                                    selectedFile={selectedFile}
-                                    inputId={extractFileInputId}
-                                    isBusy={isBusy}
-                                    statusPanel={statusPanel}
-                                    onSelect={handleExtractFileSelect}
-                                    onDrop={handleExtractFileDrop}
-                                    onDragOver={handleDragOver}
-                                    onClear={handleClearExtractFile}
-                                    onSubmit={() => void handleExtractFile()}
-                                />
-                            </Tabs.Content>
-
-                            <Tabs.Content value="merge" className="space-y-4 focus:outline-none">
-                                <MergePanel
-                                    mergeVideoFile={mergeVideoFile}
-                                    mergeAudioFile={mergeAudioFile}
-                                    videoInputId={mergeVideoInputId}
-                                    audioInputId={mergeAudioInputId}
-                                    isBusy={isBusy}
-                                    statusPanel={statusPanel}
-                                    onVideoSelect={handleMergeVideoSelect}
-                                    onAudioSelect={handleMergeAudioSelect}
-                                    onVideoDrop={handleMergeVideoDrop}
-                                    onAudioDrop={handleMergeAudioDrop}
-                                    onDragOver={handleDragOver}
-                                    onClearVideo={handleClearMergeVideo}
-                                    onClearAudio={handleClearMergeAudio}
-                                    onSubmit={() => void handleMerge()}
-                                />
-                            </Tabs.Content>
-                        </Tabs.Root>
+                    {showProgress && (
+                        <Progress value={Math.floor(progress)} className="h-2" />
                     )}
                 </div>
-            </DialogContent>
-        </Dialog>
+            }
+            selectedFile={selectedFile}
+            extractFileInputId={extractFileInputId}
+            handleExtractFileSelect={handleExtractFileSelect}
+            handleExtractFileDrop={handleExtractFileDrop}
+            handleClearExtractFile={handleClearExtractFile}
+            handleExtractFile={() => void handleExtractFile()}
+            mergeVideoFile={mergeVideoFile}
+            mergeAudioFile={mergeAudioFile}
+            mergeVideoInputId={mergeVideoInputId}
+            mergeAudioInputId={mergeAudioInputId}
+            handleMergeVideoSelect={handleMergeVideoSelect}
+            handleMergeAudioSelect={handleMergeAudioSelect}
+            handleMergeVideoDrop={handleMergeVideoDrop}
+            handleMergeAudioDrop={handleMergeAudioDrop}
+            handleClearMergeVideo={handleClearMergeVideo}
+            handleClearMergeAudio={handleClearMergeAudio}
+            handleMerge={() => void handleMerge()}
+            handleDragOver={handleDragOver}
+            handleDialogOpenChange={handleDialogOpenChange}
+            toolbarDescription={toolbarDescription}
+            resultTaskAction={resultTaskAction}
+            runAutoExtractTask={() => void runAutoExtractTask(autoExtractTask)}
+        />
     )
 }

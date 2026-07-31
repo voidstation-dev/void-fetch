@@ -4,14 +4,14 @@ import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { Loader2, ExternalLink } from 'lucide-react'
-import { HlsVideoPlayer } from '@/components/hls-video-player'
+import { HlsVideoPlayer } from '@/features/hls/components/hls-video-player'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { PlatformBadge } from '@/components/platform-badge'
 import { ViewportSideRailAd } from '@/components/ads/viewport-side-rail-ad'
 import { buildMediaPreviewUrl, canSharePlayResult } from '@/components/downloader/media-preview'
 import { useLocale, useTranslations } from 'next-intl'
-import { isApiRequestError, resolveApiErrorMessage } from '@/lib/api-errors'
+import { isApiRequestError, notifyApiErrorToast, resolveApiErrorMessage } from '@/lib/api-errors'
 import { buildHlsPlayProxyUrl, HLS_PLAYLIST_ACCEPT, isHlsPlaylistUrl } from '@/lib/hls-playback'
 import { UnifiedParseReloadError, requestUnifiedParse } from '@/lib/unified-parse'
 import type { UnifiedParseResult } from '@/lib/types'
@@ -63,6 +63,11 @@ export function PlayPageClient() {
                 }
 
                 if (err instanceof UnifiedParseReloadError) {
+                    return
+                }
+
+                if (notifyApiErrorToast(err)) {
+                    setError('Server unavailable or rate limited')
                     return
                 }
 

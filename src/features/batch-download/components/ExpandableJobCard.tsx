@@ -6,6 +6,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { DownloadJob } from "../types/batch-download";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -27,12 +28,7 @@ import { cn, downloadFile } from "@/lib/utils";
 import { toast } from "@/lib/deferred-toast";
 import { buildMediaPreviewUrl } from "@/components/downloader/media-preview";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
+import { AnimatePresence, motion } from "framer-motion";
 
 import { formatDuration, probeMediaDuration } from "../utils/duration-helper";
 import { useBatchStore } from "../store/batch-store";
@@ -49,19 +45,61 @@ export function ExpandableJobCard({
   onOpenConfig,
 }: ExpandableJobCardProps) {
   const store = useBatchStore();
-  const [isClosing, setIsClosing] = React.useState(false);
+  const [prevJob, setPrevJob] = React.useState<DownloadJob | null>(job);
+  const [activeJob, setActiveJob] = React.useState<DownloadJob | null>(job);
+
+  if (job !== prevJob) {
+    setPrevJob(job);
+    if (job) {
+      setActiveJob(job);
+    }
+  }
+
+  const currentJob = job || activeJob;
+
+  const ref = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+    if (job) {
+      document.body.style.overflow = "hidden";
+      window.addEventListener("keydown", handleKeyDown);
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [job, onClose]);
+
+  React.useEffect(() => {
+    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        onClose();
+      }
+    };
+    if (job) {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("touchstart", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [job, onClose]);
 
   const handleClose = React.useCallback(() => {
-    setIsClosing(true);
-    setTimeout(() => {
-      onClose();
-      setIsClosing(false);
-    }, 150);
+    onClose();
   }, [onClose]);
 
-  const title = job?.metadata?.title || job?.sourceUrl || "";
-  const coverUrl = job?.metadata?.cover;
-  const rawData = (job?.metadata?.rawParsedData || job?.metadata) as
+  const title = currentJob?.metadata?.title || currentJob?.sourceUrl || "";
+  const coverUrl = currentJob?.metadata?.cover;
+  const rawData = (currentJob?.metadata?.rawParsedData || currentJob?.metadata) as
     | Record<string, unknown>
     | undefined;
   const videoUrl =
@@ -91,9 +129,9 @@ export function ExpandableJobCard({
   );
 
   const isImagePost = Boolean(
-    job &&
-    (job.config.outputType === "images" ||
-      job.config.outputType === "zip_images" ||
+    currentJob &&
+    (currentJob.config.outputType === "images" ||
+      currentJob.config.outputType === "zip_images" ||
       (Boolean(images && images.length > 0) && !videoUrl && !audioUrl)),
   );
 
@@ -122,7 +160,7 @@ export function ExpandableJobCard({
     };
   }, [job, videoUrl, audioUrl, store]);
 
-  if (!job) return null;
+  if (!currentJob) return null;
 
   const handleCopyLink = (url?: string | null) => {
     if (!url) return;
@@ -144,75 +182,112 @@ export function ExpandableJobCard({
   };
 
   return (
-    <Dialog open={Boolean(job)} onOpenChange={(open) => !open && handleClose()}>
-      <DialogContent
-        showCloseButton={false}
-        className="sm:max-w-2xl p-0 overflow-hidden bg-card border-border/80 rounded-2xl shadow-2xl backdrop-blur-xl max-h-[90vh] flex flex-col border"
-      >
-        <DialogTitle className="sr-only">{title}</DialogTitle>
-        <DialogDescription className="sr-only">
-          {job.platform} media preview and downloads
-        </DialogDescription>
-        {/* Glow Ambient Line Top */}
-        <div className="absolute -top-px inset-x-12 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent z-20" />
+    <>
+      {/* Backdrop Overlay */}
+      <AnimatePresence>
+        {job && currentJob && (
+          <motion.div
+            key="expandable-card-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={handleClose}
+            className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 h-full w-full"
+          />
+        )}
+      </AnimatePresence>
 
-        {/* Hero Cover / Media Header */}
-        <div className="relative w-full h-56 md:h-64 bg-slate-950 flex items-center justify-center overflow-hidden shrink-0">
-          {coverUrl ? (
-            /* eslint-disable-next-line @next/next/no-img-element */
-            <img
-              src={coverUrl}
-              alt={title}
-              className="w-full h-full object-cover opacity-90 transition-transform duration-700 hover:scale-105"
-            />
-          ) : (
-            <div className="flex flex-col items-center gap-2 text-muted-foreground/60">
-              {isImagePost ? (
-                <ImageIcon className="h-12 w-12 stroke-[1.5] text-cyan-400" />
-              ) : (
-                <Video className="h-12 w-12 stroke-[1.5]" />
-              )}
-              <span className="text-xs uppercase tracking-wider">
-                No Preview Available
-              </span>
-            </div>
-          )}
-
-          {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-card via-card/30 to-transparent" />
-
-          {/* Top Floating Badge Bar */}
-          <div className="absolute top-3 left-3 right-3 flex items-center justify-between z-10">
-            <Badge className="bg-background/90 backdrop-blur-md border border-border/60 text-foreground text-[10px] px-2.5 py-1 uppercase tracking-wider font-mono">
-              {job.platform}
-            </Badge>
-
-            <Button
-              variant="secondary"
-              size="icon"
-              onClick={handleClose}
-              className="h-8 w-8 rounded-full bg-background/80 backdrop-blur-md border border-border/60 text-muted-foreground hover:text-foreground shadow-md"
+      {/* Expanded Modal Overlay Container */}
+      <AnimatePresence>
+        {job && currentJob && (
+          <motion.div
+            key="expandable-card-modal-container"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className="fixed inset-0 grid place-items-center z-[51] p-4 overflow-y-auto pointer-events-none"
+          >
+            <motion.div
+              initial={{ scale: 0.95, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 20 }}
+              transition={{ type: "spring", bounce: 0, duration: 0.3 }}
+              ref={ref}
+              className="w-full max-w-2xl p-0 overflow-hidden bg-card border border-border/80 rounded-2xl shadow-2xl backdrop-blur-xl max-h-[90vh] flex flex-col pointer-events-auto relative"
             >
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
+              {/* Glow Ambient Line Top */}
+              <div className="absolute -top-px inset-x-12 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent z-20" />
 
-          {/* Bottom Title Overlay */}
-          <div className="absolute bottom-3 left-4 right-4 z-10 flex flex-col gap-1">
-            <div className="flex items-center gap-2">
-              <Sparkles className="h-3.5 w-3.5 text-amber-400" />
-              <span className="text-[10px] font-semibold text-amber-400 uppercase tracking-widest">
-                Expanded Media Item
-              </span>
-            </div>
-            <h3 className="text-base md:text-lg font-bold text-white drop-shadow-md line-clamp-2 leading-tight">
-              {title}
-            </h3>
-          </div>
-        </div>
+              {/* Independent Top-Right Close Button (No layoutId) */}
+              <button
+                type="button"
+                aria-label="Close details modal"
+                onClick={handleClose}
+                className="absolute top-3.5 right-3.5 z-20 h-8 w-8 rounded-full bg-black/60 hover:bg-black/80 backdrop-blur-md border border-white/20 text-white flex items-center justify-center shadow-lg transition-colors cursor-pointer"
+              >
+                <X className="h-4 w-4" aria-hidden="true" />
+              </button>
+
+              {/* Hero Cover / Media Header */}
+              <div
+                className="relative w-full h-56 md:h-64 bg-slate-950 flex items-center justify-center overflow-hidden shrink-0"
+              >
+                {coverUrl ? (
+                  <Image
+                    src={coverUrl}
+                    alt={title}
+                    width={640}
+                    height={256}
+                    unoptimized
+                    className="w-full h-full object-cover opacity-90 transition-transform duration-700 hover:scale-105"
+                  />
+                ) : (
+                  <div className="flex flex-col items-center gap-2 text-muted-foreground/60">
+                    {isImagePost ? (
+                      <ImageIcon className="h-12 w-12 stroke-[1.5] text-cyan-400" aria-hidden="true" />
+                    ) : (
+                      <Video className="h-12 w-12 stroke-[1.5]" aria-hidden="true" />
+                    )}
+                    <span className="text-xs uppercase tracking-wider">
+                      No Preview Available
+                    </span>
+                  </div>
+                )}
+
+                {/* Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-card via-card/15 to-transparent" />
+              </div>
+
+              {/* Title & Description Below Image (Aceternity UI Standard) */}
+              <div className="flex items-start justify-between px-6 pt-5 pb-3 gap-4 border-b border-border/40">
+                <div className="flex flex-col gap-1.5 min-w-0 flex-1">
+                  <div className="flex items-center gap-2">
+                    <Badge className="bg-primary/10 text-primary border border-primary/20 text-[10px] px-2.5 py-0.5 uppercase tracking-wider font-mono">
+                      {currentJob.platform || "generic"}
+                    </Badge>
+                    <div className="flex items-center gap-1.5 text-[11px] text-amber-400 font-semibold">
+                      <Sparkles className="h-3 w-3" />
+                      <span>Expanded Media Detail</span>
+                    </div>
+                  </div>
+                  <h3
+                    className="text-base md:text-lg font-bold text-foreground leading-tight break-words"
+                  >
+                    {title}
+                  </h3>
+                </div>
+              </div>
 
         {/* Card Details Body */}
-        <div className="p-5 flex flex-col gap-4 overflow-y-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 10 }}
+          transition={{ duration: 0.2 }}
+          className="p-5 flex flex-col gap-4 overflow-y-auto"
+        >
           {/* Status & Metadata Badges Row */}
           <div className="flex flex-wrap items-center gap-2 text-xs">
             {isImagePost ? (
@@ -227,7 +302,7 @@ export function ExpandableJobCard({
               <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-muted/60 border border-border/40 text-foreground font-medium">
                 <Clock className="h-3.5 w-3.5 text-muted-foreground" />
                 <span>
-                  {formatDuration(job.metadata?.duration) ||
+                  {formatDuration(currentJob.metadata?.duration) ||
                     (videoUrl ? "HD Video Stream" : "Audio Stream")}
                 </span>
               </div>
@@ -239,7 +314,7 @@ export function ExpandableJobCard({
                 className={`text-[9px] uppercase ${
                   isImagePost
                     ? "bg-cyan-500/15 text-cyan-400 border-cyan-500/30 font-bold"
-                    : job.config.outputType === "audio"
+                    : currentJob.config.outputType === "audio"
                       ? "bg-purple-500/15 text-purple-400 border-purple-500/30 font-bold"
                       : "bg-primary/15 text-primary border-primary/30 font-bold"
                 }`}
@@ -248,20 +323,20 @@ export function ExpandableJobCard({
                   ? images && images.length > 1
                     ? "ZIP IMAGES"
                     : "HD IMAGE"
-                  : job.config.outputType === "audio"
+                  : currentJob.config.outputType === "audio"
                     ? "AUDIO MP3"
                     : "MP4 VIDEO"}
               </Badge>
-              <span>{job.config.quality || "1080p"}</span>
+              <span>{currentJob.config.quality || "1080p"}</span>
             </div>
 
             <div className="ml-auto flex items-center gap-1.5">
-              {job.status === "completed" && (
+              {currentJob.status === "completed" && (
                 <span className="flex items-center gap-1 text-[11px] font-semibold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
                   <CheckCircle2 className="h-3 w-3" /> Ready
                 </span>
               )}
-              {job.status === "failed" && (
+              {currentJob.status === "failed" && (
                 <span className="flex items-center gap-1 text-[11px] font-semibold text-destructive bg-destructive/10 px-2 py-0.5 rounded-full border border-destructive/20">
                   <AlertCircle className="h-3 w-3" /> Failed
                 </span>
@@ -295,18 +370,18 @@ export function ExpandableJobCard({
           {/* Source Link Bar */}
           <div className="flex items-center justify-between p-2.5 rounded-xl bg-muted/40 border border-border/60 gap-2">
             <span className="text-xs font-mono text-muted-foreground truncate flex-1">
-              {job.sourceUrl}
+              {currentJob.sourceUrl}
             </span>
             <div className="flex items-center gap-1 shrink-0">
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => handleCopyLink(job.sourceUrl)}
+                onClick={() => handleCopyLink(currentJob.sourceUrl)}
                 className="h-7 text-[10px] gap-1 px-2"
               >
                 <Copy className="h-3 w-3" /> Copy
               </Button>
-              <a href={job.sourceUrl} target="_blank" rel="noopener noreferrer">
+              <a href={currentJob.sourceUrl} target="_blank" rel="noopener noreferrer">
                 <Button
                   variant="ghost"
                   size="sm"
@@ -404,16 +479,21 @@ export function ExpandableJobCard({
                 </p>
               )}
           </div>
-        </div>
+        </motion.div>
 
         {/* Modal Footer */}
-        <div className="flex items-center justify-between p-4 bg-muted/20 border-t border-border/60">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="flex items-center justify-between p-4 bg-muted/20 border-t border-border/60"
+        >
           <Button
             variant="outline"
             size="sm"
             onClick={() => {
               handleClose();
-              onOpenConfig?.(job);
+              onOpenConfig?.(currentJob);
             }}
             className="h-8 text-xs gap-1.5"
           >
@@ -427,8 +507,11 @@ export function ExpandableJobCard({
           >
             Close Preview
           </Button>
-        </div>
-      </DialogContent>
-    </Dialog>
+        </motion.div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

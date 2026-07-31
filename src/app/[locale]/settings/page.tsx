@@ -4,39 +4,59 @@
  * All rights reserved.
  */
 
-'use client';
+"use client";
 
-import React, { useEffect } from 'react';
-import { useBatchStore } from '@/features/batch-download/store/batch-store';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
-} from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
-import { toast } from '@/lib/deferred-toast';
-import { Settings, RefreshCw, Loader2, Folder, FolderCheck, FolderSync } from 'lucide-react';
-import { getActiveDirectoryName, selectCustomDirectory, clearActiveDirectoryHandle } from '@/lib/directory-picker';
-import type { OutputType, BatchSettings } from '@/features/batch-download/types/batch-download';
-import { useTranslations } from 'next-intl';
+import React, { useEffect } from "react";
+import { useBatchStore } from "@/features/batch-download/store/batch-store";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { toast } from "@/lib/deferred-toast";
+import {
+  Settings,
+  Save,
+  RefreshCw,
+  Loader2,
+  Folder,
+  FolderCheck,
+  FolderSync,
+} from "lucide-react";
+import {
+  getActiveDirectoryName,
+  selectCustomDirectory,
+  clearActiveDirectoryHandle,
+} from "@/infrastructure/directory-picker";
+import type {
+  OutputType,
+  BatchSettings,
+} from "@/features/batch-download/types/batch-download";
+import { useTranslations } from "next-intl";
 
 export default function SettingsPage() {
-  const t = useTranslations('settingsPage');
+  const t = useTranslations("settingsPage");
   const store = useBatchStore();
   const initializeStore = useBatchStore((s) => s.initializeStore);
-  const [customDirName, setCustomDirName] = React.useState<string | null>(getActiveDirectoryName());
+  const [customDirName, setCustomDirName] = React.useState<string | null>(
+    getActiveDirectoryName(),
+  );
 
   useEffect(() => {
     initializeStore();
   }, [initializeStore]);
 
-  const handleUpdateSetting = async <K extends keyof BatchSettings>(key: K, value: BatchSettings[K]) => {
+  const handleUpdateSetting = async <K extends keyof BatchSettings>(
+    key: K,
+    value: BatchSettings[K],
+  ) => {
     await store.updateSettings({ [key]: value });
-    toast.success('Preference auto-saved');
+    toast.success("Preference auto-saved");
   };
 
   const handleChooseDirectory = async () => {
@@ -56,7 +76,7 @@ export default function SettingsPage() {
   const handleResetDirectory = () => {
     clearActiveDirectoryHandle();
     setCustomDirName(null);
-    toast.info('Reset download location to browser default');
+    toast.info("Reset download location to browser default");
   };
 
   const handleResetDefaults = async () => {
@@ -64,20 +84,20 @@ export default function SettingsPage() {
       parseConcurrency: 4,
       downloadConcurrency: 3,
       globalNetworkBudget: 18,
-      defaultOutputType: 'mp4',
-      defaultQuality: '1080p',
-      filenameTemplate: '{index} - {title}',
+      defaultOutputType: "mp4",
+      defaultQuality: "1080p",
+      filenameTemplate: "{index} - {title}",
       continueOnError: true,
       autoStartDownloads: false,
     });
-    toast.success('Restored default preferences');
+    toast.success("Restored default preferences");
   };
 
   if (!store.isInitialized) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center min-h-[400px] gap-2">
         <Loader2 className="h-6 w-6 animate-spin text-primary" />
-        <span className="text-xs text-muted-foreground">{t('loading')}</span>
+        <span className="text-xs text-muted-foreground">{t("loading")}</span>
       </div>
     );
   }
@@ -88,8 +108,10 @@ export default function SettingsPage() {
     <>
       <div className="flex items-center justify-between p-4 border rounded-xl bg-card border-border/80">
         <div className="flex flex-col gap-0.5">
-          <h1 className="text-sm font-bold text-foreground">{t('title')}</h1>
-          <span className="text-[10px] text-muted-foreground uppercase">{t('subtitle')}</span>
+          <h1 className="text-sm font-bold text-foreground">{t("title")}</h1>
+          <span className="text-[10px] text-muted-foreground uppercase">
+            {t("subtitle")}
+          </span>
         </div>
         <Button
           type="button"
@@ -99,31 +121,36 @@ export default function SettingsPage() {
           className="h-8 text-xs gap-1.5 border-border/60"
         >
           <RefreshCw className="h-3.5 w-3.5" />
-          {t('resetDefaults')}
+          {t("resetDefaults")}
         </Button>
       </div>
 
       <div className="border rounded-xl bg-card border-border/80 p-5 flex flex-col gap-5 text-xs text-foreground">
-        
         {/* Core Defaults */}
         <div className="flex flex-col gap-4">
           <h2 className="text-xs font-bold uppercase tracking-wider text-muted-foreground pb-2 border-b border-border/40">
-            {t('downloaderDefaults')}
+            {t("downloaderDefaults")}
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex flex-col gap-1.5">
-              <Label className="text-[11px] text-muted-foreground uppercase font-semibold">{t('defaultOutputType')}</Label>
-              <Select 
-                value={settings.defaultOutputType} 
-                onValueChange={(val) => handleUpdateSetting('defaultOutputType', val as OutputType)}
+              <Label className="text-[11px] text-muted-foreground uppercase font-semibold">
+                {t("defaultOutputType")}
+              </Label>
+              <Select
+                value={settings.defaultOutputType}
+                onValueChange={(val) =>
+                  handleUpdateSetting("defaultOutputType", val as OutputType)
+                }
               >
                 <SelectTrigger className="h-9 text-xs bg-background">
                   <SelectValue placeholder="Format" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="mp4">Video (MP4)</SelectItem>
-                  <SelectItem value="original_video">Original Video format</SelectItem>
+                  <SelectItem value="original_video">
+                    Original Video format
+                  </SelectItem>
                   <SelectItem value="audio">Audio Only (MP3)</SelectItem>
                   <SelectItem value="images">Original Images</SelectItem>
                   <SelectItem value="zip_images">ZIP Image Package</SelectItem>
@@ -132,13 +159,17 @@ export default function SettingsPage() {
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <Label className="text-[11px] text-muted-foreground uppercase font-semibold">{t('defaultQuality')}</Label>
-              <Select 
-                value={settings.defaultQuality} 
-                onValueChange={(val) => handleUpdateSetting('defaultQuality', val)}
+              <Label className="text-[11px] text-muted-foreground uppercase font-semibold">
+                {t("defaultQuality")}
+              </Label>
+              <Select
+                value={settings.defaultQuality}
+                onValueChange={(val) =>
+                  handleUpdateSetting("defaultQuality", val)
+                }
               >
                 <SelectTrigger className="h-9 text-xs bg-background">
-                  <SelectValue placeholder={t('selectQuality')} />
+                  <SelectValue placeholder={t("selectQuality")} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="best">Best Available</SelectItem>
@@ -154,14 +185,27 @@ export default function SettingsPage() {
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <Label className="text-[11px] text-muted-foreground uppercase font-semibold">{t('defaultFilenameTemplate')}</Label>
+            <Label className="text-[11px] text-muted-foreground uppercase font-semibold">
+              {t("defaultFilenameTemplate")}
+            </Label>
             <Input
               value={settings.filenameTemplate}
-              onChange={(e) => handleUpdateSetting('filenameTemplate', e.target.value)}
+              onChange={(e) =>
+                handleUpdateSetting("filenameTemplate", e.target.value)
+              }
               className="h-9 bg-background font-mono text-xs"
             />
             <span className="text-[10px] text-muted-foreground leading-relaxed mt-0.5">
-              {t('placeholderTokens')} <code className="bg-background px-1 py-0.5 rounded">{`{index}`}</code>, <code className="bg-background px-1 py-0.5 rounded">{`{title}`}</code>, <code className="bg-background px-1 py-0.5 rounded">{`{platform}`}</code>, <code className="bg-background px-1 py-0.5 rounded">{`{quality}`}</code>, <code className="bg-background px-1 py-0.5 rounded">{`{date}`}</code>
+              {t("placeholderTokens")}{" "}
+              <code className="bg-background px-1 py-0.5 rounded">{`{index}`}</code>
+              ,{" "}
+              <code className="bg-background px-1 py-0.5 rounded">{`{title}`}</code>
+              ,{" "}
+              <code className="bg-background px-1 py-0.5 rounded">{`{platform}`}</code>
+              ,{" "}
+              <code className="bg-background px-1 py-0.5 rounded">{`{quality}`}</code>
+              ,{" "}
+              <code className="bg-background px-1 py-0.5 rounded">{`{date}`}</code>
             </span>
           </div>
         </div>
@@ -170,7 +214,7 @@ export default function SettingsPage() {
         <div className="flex flex-col gap-3 mt-2">
           <h2 className="text-xs font-bold uppercase tracking-wider text-muted-foreground pb-2 border-b border-border/40 flex items-center gap-2">
             <Folder className="h-4 w-4 text-primary" />
-            <span>{t('customDirectoryTitle')}</span>
+            <span>{t("customDirectoryTitle")}</span>
           </h2>
 
           <div className="flex flex-col md:flex-row items-center justify-between gap-3 p-4 rounded-xl border border-border/60 bg-muted/20 backdrop-blur-md">
@@ -180,10 +224,12 @@ export default function SettingsPage() {
               </div>
               <div className="flex flex-col min-w-0">
                 <span className="text-xs font-bold text-foreground truncate">
-                  {customDirName ? t('customDirName', { name: customDirName }) : t('browserDefaultDir')}
+                  {customDirName
+                    ? t("customDirName", { name: customDirName })
+                    : t("browserDefaultDir")}
                 </span>
                 <span className="text-[10px] text-muted-foreground truncate">
-                  {customDirName ? t('customDirDesc') : t('browserDefaultDesc')}
+                  {customDirName ? t("customDirDesc") : t("browserDefaultDesc")}
                 </span>
               </div>
             </div>
@@ -196,7 +242,7 @@ export default function SettingsPage() {
                   onClick={handleResetDirectory}
                   className="h-9 text-xs px-3 rounded-xl text-muted-foreground hover:text-destructive"
                 >
-                  {t('resetDefaultDir')}
+                  {t("resetDefaultDir")}
                 </Button>
               ) : null}
               <Button
@@ -206,7 +252,7 @@ export default function SettingsPage() {
                 className="h-9 text-xs gap-1.5 px-4 rounded-xl border-primary/40 bg-primary/10 text-primary font-bold hover:bg-primary/20"
               >
                 <FolderSync className="h-4 w-4" />
-                {customDirName ? t('changeFolder') : t('selectCustomFolder')}
+                {customDirName ? t("changeFolder") : t("selectCustomFolder")}
               </Button>
             </div>
           </div>
@@ -215,22 +261,28 @@ export default function SettingsPage() {
         {/* Concurrency and Performance */}
         <div className="flex flex-col gap-4 mt-2">
           <h2 className="text-xs font-bold uppercase tracking-wider text-muted-foreground pb-2 border-b border-border/40">
-            {t('concurrencyTitle')}
+            {t("concurrencyTitle")}
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="flex flex-col gap-1.5">
-              <Label className="text-[11px] text-muted-foreground uppercase font-semibold">{t('parserConcurrency')}</Label>
-              <Select 
-                value={String(settings.parseConcurrency)} 
-                onValueChange={(val) => handleUpdateSetting('parseConcurrency', parseInt(val, 10))}
+              <Label className="text-[11px] text-muted-foreground uppercase font-semibold">
+                {t("parserConcurrency")}
+              </Label>
+              <Select
+                value={String(settings.parseConcurrency)}
+                onValueChange={(val) =>
+                  handleUpdateSetting("parseConcurrency", parseInt(val, 10))
+                }
               >
                 <SelectTrigger className="h-9 text-xs bg-background">
                   <SelectValue placeholder="Parse Limit" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="2">2 concurrent URLs</SelectItem>
-                  <SelectItem value="4">4 concurrent URLs (Recommended)</SelectItem>
+                  <SelectItem value="4">
+                    4 concurrent URLs (Recommended)
+                  </SelectItem>
                   <SelectItem value="6">6 concurrent URLs</SelectItem>
                   <SelectItem value="8">8 concurrent URLs</SelectItem>
                 </SelectContent>
@@ -238,10 +290,14 @@ export default function SettingsPage() {
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <Label className="text-[11px] text-muted-foreground uppercase font-semibold">{t('downloadConcurrency')}</Label>
-              <Select 
-                value={String(settings.downloadConcurrency)} 
-                onValueChange={(val) => handleUpdateSetting('downloadConcurrency', parseInt(val, 10))}
+              <Label className="text-[11px] text-muted-foreground uppercase font-semibold">
+                {t("downloadConcurrency")}
+              </Label>
+              <Select
+                value={String(settings.downloadConcurrency)}
+                onValueChange={(val) =>
+                  handleUpdateSetting("downloadConcurrency", parseInt(val, 10))
+                }
               >
                 <SelectTrigger className="h-9 text-xs bg-background">
                   <SelectValue placeholder="Downloads Limit" />
@@ -249,7 +305,9 @@ export default function SettingsPage() {
                 <SelectContent>
                   <SelectItem value="1">1 video at a time</SelectItem>
                   <SelectItem value="2">2 videos at a time</SelectItem>
-                  <SelectItem value="3">3 videos at a time (Recommended)</SelectItem>
+                  <SelectItem value="3">
+                    3 videos at a time (Recommended)
+                  </SelectItem>
                   <SelectItem value="4">4 videos at a time</SelectItem>
                   <SelectItem value="6">6 videos at a time</SelectItem>
                 </SelectContent>
@@ -257,23 +315,29 @@ export default function SettingsPage() {
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <Label className="text-[11px] text-muted-foreground uppercase font-semibold">{t('networkBudget')}</Label>
-              <Select 
-                value={String(settings.globalNetworkBudget)} 
-                onValueChange={(val) => handleUpdateSetting('globalNetworkBudget', parseInt(val, 10))}
+              <Label className="text-[11px] text-muted-foreground uppercase font-semibold">
+                {t("networkBudget")}
+              </Label>
+              <Select
+                value={String(settings.globalNetworkBudget)}
+                onValueChange={(val) =>
+                  handleUpdateSetting("globalNetworkBudget", parseInt(val, 10))
+                }
               >
                 <SelectTrigger className="h-9 text-xs bg-background">
                   <SelectValue placeholder="Budget limit" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="12">12 active requests</SelectItem>
-                  <SelectItem value="18">18 active requests (Recommended)</SelectItem>
+                  <SelectItem value="18">
+                    18 active requests (Recommended)
+                  </SelectItem>
                   <SelectItem value="24">24 active requests</SelectItem>
                   <SelectItem value="36">36 active requests</SelectItem>
                 </SelectContent>
               </Select>
               <span className="text-[9px] text-muted-foreground leading-relaxed mt-0.5">
-                {t('networkBudgetDesc')}
+                {t("networkBudgetDesc")}
               </span>
             </div>
           </div>
@@ -282,36 +346,43 @@ export default function SettingsPage() {
         {/* Global Flags */}
         <div className="flex flex-col gap-3 mt-2">
           <h2 className="text-xs font-bold uppercase tracking-wider text-muted-foreground pb-2 border-b border-border/40">
-            {t('workflowsTitle')}
+            {t("workflowsTitle")}
           </h2>
 
           <label className="flex items-center gap-2.5 cursor-pointer text-xs">
-            <input 
-              type="checkbox" 
-              checked={settings.continueOnError} 
-              onChange={(e) => handleUpdateSetting('continueOnError', e.target.checked)}
-              className="h-3.5 w-3.5 rounded border-borderAccent text-primary focus:ring-0" 
+            <input
+              type="checkbox"
+              checked={settings.continueOnError}
+              onChange={(e) =>
+                handleUpdateSetting("continueOnError", e.target.checked)
+              }
+              className="h-3.5 w-3.5 rounded border-borderAccent text-primary focus:ring-0"
             />
             <div className="flex flex-col">
-              <span className="font-semibold">{t('continueOnError')}</span>
-              <span className="text-[10px] text-muted-foreground">{t('continueOnErrorDesc')}</span>
+              <span className="font-semibold">{t("continueOnError")}</span>
+              <span className="text-[10px] text-muted-foreground">
+                {t("continueOnErrorDesc")}
+              </span>
             </div>
           </label>
 
           <label className="flex items-center gap-2.5 cursor-pointer text-xs mt-1">
-            <input 
-              type="checkbox" 
-              checked={settings.autoStartDownloads} 
-              onChange={(e) => handleUpdateSetting('autoStartDownloads', e.target.checked)}
-              className="h-3.5 w-3.5 rounded border-borderAccent text-primary focus:ring-0" 
+            <input
+              type="checkbox"
+              checked={settings.autoStartDownloads}
+              onChange={(e) =>
+                handleUpdateSetting("autoStartDownloads", e.target.checked)
+              }
+              className="h-3.5 w-3.5 rounded border-borderAccent text-primary focus:ring-0"
             />
             <div className="flex flex-col">
-              <span className="font-semibold">{t('autoStartDownloads')}</span>
-              <span className="text-[10px] text-muted-foreground">{t('autoStartDownloadsDesc')}</span>
+              <span className="font-semibold">{t("autoStartDownloads")}</span>
+              <span className="text-[10px] text-muted-foreground">
+                {t("autoStartDownloadsDesc")}
+              </span>
             </div>
           </label>
         </div>
-
       </div>
     </>
   );

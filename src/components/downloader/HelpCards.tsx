@@ -44,15 +44,15 @@ export function HelpCards({ dict }: HelpCardsProps) {
         <CardContent className="space-y-3 p-4">
           <PlatformSupportGrid dict={dict} />
 
-          {Boolean((dict.guide.platformSupport as Record<string, any>).audioTip) && (
+          {Boolean((dict.guide.platformSupport as unknown as Record<string, Record<string, string>>).audioTip) && (
             <div className="p-3 bg-muted/50 rounded-lg space-y-1 border border-border/50 mt-2">
               <p className="text-sm font-medium flex items-center gap-1.5">
                 <span className="text-primary text-xs">🎵</span>
-                {(dict.guide.platformSupport as Record<string, any>).audioTip.title}
+                {(dict.guide.platformSupport as unknown as Record<string, Record<string, string>>).audioTip.title}
               </p>
               <div className="text-[10px] leading-relaxed text-muted-foreground space-y-1">
-                <p>{(dict.guide.platformSupport as Record<string, any>).audioTip.steps}</p>
-                <p>{(dict.guide.platformSupport as Record<string, any>).audioTip.warning}</p>
+                <p>{(dict.guide.platformSupport as unknown as Record<string, Record<string, string>>).audioTip.steps}</p>
+                <p>{(dict.guide.platformSupport as unknown as Record<string, Record<string, string>>).audioTip.warning}</p>
               </div>
             </div>
           )}

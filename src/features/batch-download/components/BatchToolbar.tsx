@@ -23,6 +23,7 @@ import {
   RefreshCw 
 } from 'lucide-react';
 import { useBatchStore } from '../store/batch-store';
+import { downloadScheduler } from "@/features/batch-download/services/download-scheduler";
 import { parseJobs } from '../services/parse-worker-pool';
 
 import { SpotlightCard } from '@/components/ui/spotlight-card';
@@ -129,7 +130,10 @@ export function BatchToolbar() {
             type="button"
             variant="outline"
             size="sm"
-            onClick={store.pauseQueue}
+            onClick={() => {
+              store.pauseQueue();
+              downloadScheduler.stopAll();
+            }}
             className="h-9 text-xs gap-1.5 px-4 rounded-xl border-amber-500/40 text-amber-600 dark:text-amber-400 bg-amber-500/5 hover:bg-amber-500/15 font-semibold transition-all"
           >
             <Pause className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />

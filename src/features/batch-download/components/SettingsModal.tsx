@@ -38,7 +38,7 @@ import {
   getActiveDirectoryName,
   selectCustomDirectory,
   clearActiveDirectoryHandle,
-} from "@/lib/directory-picker";
+} from "@/infrastructure/directory-picker";
 
 import type { OutputType } from "../types/batch-download";
 import { useTranslations } from "next-intl";

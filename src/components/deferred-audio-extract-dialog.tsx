@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic'
 import type { AudioExtractTask } from '@/components/audio-tool/types'
 
 const AudioExtractDialog = dynamic(
-    () => import('@/components/audio-extract-dialog').then((m) => m.AudioExtractDialog),
+    () => import('@/features/audio/components/audio-extract-dialog').then((m) => m.AudioExtractDialog),
     { ssr: false }
 )
 

@@ -37,7 +37,7 @@ import {
 import { useBatchStore } from "../store/batch-store";
 import type { OutputType } from "../types/batch-download";
 import { toast } from "@/lib/deferred-toast";
-import { HlsVideoPlayer } from "@/components/hls-video-player";
+import { HlsVideoPlayer } from "@/features/hls/components/hls-video-player";
 import { buildMediaPreviewUrl } from "@/components/downloader/media-preview";
 import {
   buildHlsPlayProxyUrl,
