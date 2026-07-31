@@ -46,6 +46,7 @@ browse stop
 ```
 
 **Result**:
+
 ```
 ## UI Test Results
 ### STEP_PASS|cta-text|button "Start Free Trial" found at @0-8
@@ -168,6 +169,7 @@ browse stop
 ```
 
 **Result**:
+
 ```
 ## UI Test Results
 ### STEP_PASS|invalid-email|alert "Please enter a valid email" at @0-9
@@ -500,6 +502,7 @@ browse stop
 ```
 
 **Report format for exploratory findings**:
+
 ```
 FINDING: Contact form textarea has no maxlength — 500+ char input accepted without truncation
 SEVERITY: low

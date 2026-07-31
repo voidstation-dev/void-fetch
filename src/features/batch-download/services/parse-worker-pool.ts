@@ -26,8 +26,15 @@ import type { BatchSettings, DownloadJobStatus } from "../types/batch-download";
 export interface ParseWorkerCallbacks {
   getJob: (id: string) => DownloadJob | undefined;
   getSettings: () => BatchSettings;
-  updateJobStatus: (id: string, status: DownloadJobStatus, extra?: Partial<DownloadJob>) => Promise<void>;
-  updateJobError: (id: string, error: DownloadError | undefined) => Promise<void>;
+  updateJobStatus: (
+    id: string,
+    status: DownloadJobStatus,
+    extra?: Partial<DownloadJob>,
+  ) => Promise<void>;
+  updateJobError: (
+    id: string,
+    error: DownloadError | undefined,
+  ) => Promise<void>;
 }
 
 /**
@@ -62,12 +69,15 @@ async function requestWithRetry(
  * Helper to resolve the correct file extension based on OutputType and platform
  */
 function inferExtension(outputType: string, platform: string): string {
-  if (outputType === "audio" || platform === "soundcloud" || platform === "apple_podcasts") return "mp3";
+  if (
+    outputType === "audio" ||
+    platform === "soundcloud" ||
+    platform === "apple_podcasts"
+  )
+    return "mp3";
   if (outputType === "zip_images" || outputType === "images") return "zip";
   return "mp4"; // default to mp4
 }
-
-
 
 class ParseWorkerPool {
   private activeParsersCount = 0;
@@ -83,7 +93,10 @@ class ParseWorkerPool {
     const settings = this.callbacks.getSettings();
     const maxConcurrency = settings.parseConcurrency || 4;
 
-    while (this.activeParsersCount < maxConcurrency && this.parseQueue.length > 0) {
+    while (
+      this.activeParsersCount < maxConcurrency &&
+      this.parseQueue.length > 0
+    ) {
       const jobId = this.parseQueue.shift();
       if (jobId) {
         this.activeParsersCount++;
@@ -97,7 +110,7 @@ class ParseWorkerPool {
 
   private async parseJob(jobId: string): Promise<void> {
     if (!this.callbacks) return;
-    
+
     const job = this.callbacks.getJob(jobId);
     if (!job) return;
 
@@ -123,14 +136,15 @@ class ParseWorkerPool {
         : undefined;
 
       const parseRecord = parseData as Record<string, unknown>;
-      const rawParsedData = parseRecord.rawParsedData as Record<string, unknown> | undefined;
+      const rawParsedData = parseRecord.rawParsedData as
+        Record<string, unknown> | undefined;
 
       const resolvedDuration = parseMediaDuration(
         defaultEpisode?.duration ??
           parseData.duration ??
           parseRecord.videoDuration ??
           parseRecord.video_duration ??
-          parseRecord.duration_seconds
+          parseRecord.duration_seconds,
       );
 
       const metadata: MediaMetadata = {
@@ -143,7 +157,9 @@ class ParseWorkerPool {
         duration: resolvedDuration,
         isMultiPart: parseData.isMultiPart,
         images: parseData.images
-          ?.map((img: unknown) => (typeof img === "string" ? img : (img as { url?: string })?.url))
+          ?.map((img: unknown) =>
+            typeof img === "string" ? img : (img as { url?: string })?.url,
+          )
           .filter((url): url is string => Boolean(url)),
         pagesCount: parseData.pages?.length,
         episodesCount: episodes.length,
@@ -158,11 +174,20 @@ class ParseWorkerPool {
       };
 
       const settings = this.callbacks.getSettings();
-      const targetSourceUrl = (job.sourceUrl || job.normalizedUrl || "").toLowerCase();
+      const targetSourceUrl = (
+        job.sourceUrl ||
+        job.normalizedUrl ||
+        ""
+      ).toLowerCase();
       const isValidStreamUrl = (url?: unknown): boolean => {
         if (typeof url !== "string" || !url.trim()) return false;
         const lower = url.toLowerCase();
-        if (lower === targetSourceUrl || lower.includes("pinterest.com/pin/") || lower.includes("pin.it/")) return false;
+        if (
+          lower === targetSourceUrl ||
+          lower.includes("pinterest.com/pin/") ||
+          lower.includes("pin.it/")
+        )
+          return false;
         return true;
       };
 
@@ -171,7 +196,7 @@ class ParseWorkerPool {
         isValidStreamUrl(parseRecord.streamUrl) ||
         isValidStreamUrl(parseData.downloadAudioUrl) ||
         isValidStreamUrl(rawParsedData?.downloadVideoUrl) ||
-        isValidStreamUrl(rawParsedData?.downloadAudioUrl)
+        isValidStreamUrl(rawParsedData?.downloadAudioUrl),
       );
       const isAudioItem =
         metadata.platform === "soundcloud" ||
@@ -187,12 +212,11 @@ class ParseWorkerPool {
       const isImageOnlyPost =
         !isAudioItem &&
         !isExplicitVideo &&
-        (
-          parseRecord.type === "image" ||
+        (parseRecord.type === "image" ||
           parseRecord.type === "images" ||
           (metadata.platform === "pinterest" && !isExplicitVideo) ||
-          (Boolean(metadata.images && metadata.images.length > 0) && !hasStream)
-        );
+          (Boolean(metadata.images && metadata.images.length > 0) &&
+            !hasStream));
 
       const isAudioMode = isAudioItem || settings.defaultOutputType === "audio";
 
@@ -201,8 +225,8 @@ class ParseWorkerPool {
           ? "zip_images"
           : "images"
         : isAudioMode
-        ? "audio"
-        : settings.defaultOutputType;
+          ? "audio"
+          : settings.defaultOutputType;
 
       const extension = inferExtension(effectiveOutputType, metadata.platform);
 
@@ -219,7 +243,8 @@ class ParseWorkerPool {
         downloadThumbnail: true,
         saveMetadata: false,
         extractAudio: false,
-        packageImagesAsZip: effectiveOutputType === "zip_images" || isImageOnlyPost,
+        packageImagesAsZip:
+          effectiveOutputType === "zip_images" || isImageOnlyPost,
       };
 
       await this.callbacks.updateJobStatus(jobId, "ready", {
@@ -256,15 +281,23 @@ class ParseWorkerPool {
 
       notifyApiErrorToast(downloadError);
 
-      await this.callbacks.updateJobStatus(jobId, errorCode === "RATE_LIMITED" || (httpStatus && httpStatus >= 500) ? "failed" : "failed");
+      await this.callbacks.updateJobStatus(
+        jobId,
+        errorCode === "RATE_LIMITED" || (httpStatus && httpStatus >= 500)
+          ? "failed"
+          : "failed",
+      );
       await this.callbacks.updateJobError(jobId, downloadError);
     }
   }
 
   public parseJobs(jobIds?: string[], allJobs?: DownloadJob[]): void {
-    const targets = jobIds && allJobs
-      ? allJobs.filter((j) => jobIds.includes(j.id))
-      : (allJobs || []).filter((j) => j.status === "draft" || j.status === "failed");
+    const targets =
+      jobIds && allJobs
+        ? allJobs.filter((j) => jobIds.includes(j.id))
+        : (allJobs || []).filter(
+            (j) => j.status === "draft" || j.status === "failed",
+          );
 
     targets.forEach((job) => {
       if (
@@ -280,7 +313,7 @@ class ParseWorkerPool {
 
   public cancelParseJob(jobId: string): void {
     if (!this.callbacks) return;
-    
+
     const index = this.parseQueue.indexOf(jobId);
     if (index > -1) {
       this.parseQueue.splice(index, 1);

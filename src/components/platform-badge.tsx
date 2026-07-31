@@ -1,20 +1,16 @@
-'use client'
+"use client";
 
-import { useTranslations } from 'next-intl'
-import { Badge } from '@/components/ui/badge'
-import { getPlatformBadge } from '@/lib/platforms'
+import { useTranslations } from "next-intl";
+import { Badge } from "@/components/ui/badge";
+import { getPlatformBadge } from "@/lib/platforms";
 
 interface PlatformBadgeProps {
-    platform: string | null | undefined
+  platform: string | null | undefined;
 }
 
 export function PlatformBadge({ platform }: PlatformBadgeProps) {
-    const tPlatforms = useTranslations('history.platforms')
-    const badge = getPlatformBadge(platform, tPlatforms)
+  const tPlatforms = useTranslations("history.platforms");
+  const badge = getPlatformBadge(platform, tPlatforms);
 
-    return (
-        <Badge  variant="outline">
-            {badge.text}
-        </Badge>
-    )
+  return <Badge variant="outline">{badge.text}</Badge>;
 }

@@ -14,6 +14,7 @@ compatibility: "Requires the browse CLI (`npm install -g browse`). For remote te
 Test UI changes in a real browser. Your job is to **try to break things**, not confirm they work.
 
 Three workflows:
+
 - **Diff-driven** — analyze a git diff, test only what changed
 - **Exploratory** — navigate the app, find bugs the developer didn't think about
 - **Parallel** — fan out independent test groups across multiple Browserbase browsers
@@ -54,6 +55,7 @@ As a rough heuristic: ~25 steps for a few targeted checks, ~40 for a full page w
 As a rough heuristic: ~25 steps for a few targeted checks, ~40 for a full page with functional + adversarial + a11y, ~75 for multiple pages or a broad category. **Adjust based on what the assigned tests actually require** — these are starting points, not rules.
 
 Every sub-agent prompt must include:
+
 ```
 You have a budget of N browse steps (each `browse` command = 1 step). Count your steps as you go. When you reach N, stop immediately and report:
 - STEP_PASS/STEP_FAIL for every test you completed
@@ -72,11 +74,13 @@ The main agent should NOT run `browse` commands itself (except to verify the dev
 ### Reporting
 
 **Every sub-agent reports back with:**
+
 ```
 Tests: 8 | Passed: 5 | Failed: 2 | Skipped: 1 | Pages visited: 2
 ```
 
 **The main agent merges into a final report with:**
+
 ```
 Tests: 20 | Passed: 14 | Failed: 4 | Skipped: 2 | Agents: 3 | Pass rate: 70%
 ```
@@ -103,7 +107,9 @@ For each test step, emit exactly one marker:
 ```
 STEP_PASS|<step-id>|<evidence>
 ```
+
 or
+
 ```
 STEP_FAIL|<step-id>|<expected> → <actual>|<screenshot-path>
 ```
@@ -136,6 +142,7 @@ mkdir -p .context/ui-test-screenshots
 ```
 
 **Rules:**
+
 - File name = step-id (e.g., `double-submit.png`, `axe-audit.png`, `modal-focus-trap.png`)
 - Store in `.context/ui-test-screenshots/` — this directory is gitignored and accessible to the developer and other agents
 - For parallel runs, include the session name: `<session>-<step-id>.png` (e.g., `signup-double-submit.png`)
@@ -183,13 +190,11 @@ which browse || npm install -g browse
 This skill runs many `browse` commands (snapshots, clicks, evals). To avoid approving each one, add `browse` to your allowed commands:
 
 Add both patterns to `.claude/settings.json` (project-level) or `~/.claude/settings.json` (user-level):
+
 ```json
 {
   "permissions": {
-    "allow": [
-      "Bash(browse:*)",
-      "Bash(BROWSE_SESSION=*)"
-    ]
+    "allow": ["Bash(browse:*)", "Bash(BROWSE_SESSION=*)"]
   }
 }
 ```
@@ -198,10 +203,10 @@ The first pattern covers plain `browse` commands. The second covers parallel ses
 
 ## Mode Selection
 
-| Target | Mode | Command | Auth |
-|--------|------|---------|------|
-| `localhost` / `127.0.0.1` | Local | `browse open <url> --local` | None needed (clean isolated local browser by default) |
-| Deployed/staging site | Remote | `browse open <url> --remote` | Browserbase credentials; use contexts where supported |
+| Target                    | Mode   | Command                      | Auth                                                  |
+| ------------------------- | ------ | ---------------------------- | ----------------------------------------------------- |
+| `localhost` / `127.0.0.1` | Local  | `browse open <url> --local`  | None needed (clean isolated local browser by default) |
+| Deployed/staging site     | Remote | `browse open <url> --remote` | Browserbase credentials; use contexts where supported |
 
 **Rule: If the target URL contains `localhost` or `127.0.0.1`, pass `--local` on the first `browse open`.**
 
@@ -250,34 +255,35 @@ git diff HEAD~1 -- <file>            # read actual changes
 
 Categorize changed files:
 
-| File pattern | UI impact | What to test |
-|-------------|-----------|--------------|
-| `*.tsx`, `*.jsx`, `*.vue`, `*.svelte` | Component | Render, interaction, state, edge cases |
-| `pages/**`, `app/**`, `src/routes/**` | Route/page | Navigation, page load, content, 404 handling |
-| `*.css`, `*.scss`, `*.module.css` | Style | Visual appearance (screenshot), responsive |
-| `*form*`, `*input*`, `*field*` | Form | Validation, submission, empty input, long input, special chars |
-| `*modal*`, `*dialog*`, `*dropdown*` | Interactive | Open/close, escape, focus trap, cancel vs confirm |
-| `*nav*`, `*menu*`, `*header*` | Navigation | Links, active states, routing, keyboard nav |
-| Non-UI files only | None | Skip — report "no UI tests needed" |
+| File pattern                          | UI impact   | What to test                                                   |
+| ------------------------------------- | ----------- | -------------------------------------------------------------- |
+| `*.tsx`, `*.jsx`, `*.vue`, `*.svelte` | Component   | Render, interaction, state, edge cases                         |
+| `pages/**`, `app/**`, `src/routes/**` | Route/page  | Navigation, page load, content, 404 handling                   |
+| `*.css`, `*.scss`, `*.module.css`     | Style       | Visual appearance (screenshot), responsive                     |
+| `*form*`, `*input*`, `*field*`        | Form        | Validation, submission, empty input, long input, special chars |
+| `*modal*`, `*dialog*`, `*dropdown*`   | Interactive | Open/close, escape, focus trap, cancel vs confirm              |
+| `*nav*`, `*menu*`, `*header*`         | Navigation  | Links, active states, routing, keyboard nav                    |
+| Non-UI files only                     | None        | Skip — report "no UI tests needed"                             |
 
 ### Phase 2: Map files to URLs
 
 Detect framework: `cat package.json | grep -E '"(next|react|vue|nuxt|svelte|@sveltejs|angular|vite)"'`
 
-| Framework | Default port | File → URL pattern |
-|-----------|-------------|-----|
-| Next.js App Router | 3000 | `app/dashboard/page.tsx` → `/dashboard` |
-| Next.js Pages Router | 3000 | `pages/about.tsx` → `/about` |
-| Vite | 5173 | Check router config |
-| Nuxt | 3000 | `pages/index.vue` → `/` |
-| SvelteKit | 5173 | `src/routes/+page.svelte` → `/` |
-| Angular | 4200 | Check routing module |
+| Framework            | Default port | File → URL pattern                      |
+| -------------------- | ------------ | --------------------------------------- |
+| Next.js App Router   | 3000         | `app/dashboard/page.tsx` → `/dashboard` |
+| Next.js Pages Router | 3000         | `pages/about.tsx` → `/about`            |
+| Vite                 | 5173         | Check router config                     |
+| Nuxt                 | 3000         | `pages/index.vue` → `/`                 |
+| SvelteKit            | 5173         | `src/routes/+page.svelte` → `/`         |
+| Angular              | 4200         | Check routing module                    |
 
 ### Phase 3: Ensure the right code is running
 
 Before testing, verify the dev server is serving the code from the diff — not a stale branch.
 
 **If testing a PR or specific branch:**
+
 ```bash
 # Check what branch is currently checked out
 git branch --show-current
@@ -292,6 +298,7 @@ yarn install  # or npm install / pnpm install
 If the dev server was already running on a different branch, restart it after checkout.
 
 **Find a running dev server:**
+
 ```bash
 for port in 3000 3001 5173 4200 8080 8000 5000; do
   s=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:$port" 2>/dev/null)
@@ -406,19 +413,19 @@ After producing the text report, generate a standalone HTML report that a review
 1. Read the HTML template at [references/report-template.html](references/report-template.html)
 2. Build the report by replacing the template placeholders with actual test data:
 
-| Placeholder | Value |
-|-------------|-------|
-| `{{TITLE}}` | Report title for `<title>` tag (e.g., "UI Test: PR #1234 — OAuth Settings") |
-| `{{TITLE_HTML}}` | Report title for the visible `<h1>`. If a PR URL is available, wrap the PR reference in an `<a>` tag so it's clickable (e.g., `UI Test: <a href="https://github.com/org/repo/pull/1234">PR #1234</a> — OAuth Settings`). If no URL, use plain text same as `{{TITLE}}`. |
-| `{{META}}` | One-line context: date, app URL, user, branch |
-| `{{TOTAL_TESTS}}` | Total STEP_PASS + STEP_FAIL count |
-| `{{AGENT_COUNT}}` | Number of sub-agents that ran |
-| `{{PASS_COUNT}}` | Number of STEP_PASS |
-| `{{FAIL_COUNT}}` | Number of STEP_FAIL |
-| `{{PASS_RATE}}` | Integer percentage (e.g., "92") |
-| `{{RATE_CLASS}}` | `good` (≥90%), `warn` (70–89%), `bad` (<70%) |
-| `{{FAILURES_SECTION}}` | HTML for failed test cards (see below) |
-| `{{PASSES_SECTION}}` | HTML for passed test cards (see below) |
+| Placeholder            | Value                                                                                                                                                                                                                                                                   |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `{{TITLE}}`            | Report title for `<title>` tag (e.g., "UI Test: PR #1234 — OAuth Settings")                                                                                                                                                                                             |
+| `{{TITLE_HTML}}`       | Report title for the visible `<h1>`. If a PR URL is available, wrap the PR reference in an `<a>` tag so it's clickable (e.g., `UI Test: <a href="https://github.com/org/repo/pull/1234">PR #1234</a> — OAuth Settings`). If no URL, use plain text same as `{{TITLE}}`. |
+| `{{META}}`             | One-line context: date, app URL, user, branch                                                                                                                                                                                                                           |
+| `{{TOTAL_TESTS}}`      | Total STEP_PASS + STEP_FAIL count                                                                                                                                                                                                                                       |
+| `{{AGENT_COUNT}}`      | Number of sub-agents that ran                                                                                                                                                                                                                                           |
+| `{{PASS_COUNT}}`       | Number of STEP_PASS                                                                                                                                                                                                                                                     |
+| `{{FAIL_COUNT}}`       | Number of STEP_FAIL                                                                                                                                                                                                                                                     |
+| `{{PASS_RATE}}`        | Integer percentage (e.g., "92")                                                                                                                                                                                                                                         |
+| `{{RATE_CLASS}}`       | `good` (≥90%), `warn` (70–89%), `bad` (<70%)                                                                                                                                                                                                                            |
+| `{{FAILURES_SECTION}}` | HTML for failed test cards (see below)                                                                                                                                                                                                                                  |
+| `{{PASSES_SECTION}}`   | HTML for passed test cards (see below)                                                                                                                                                                                                                                  |
 
 3. For each test result, generate a `<details>` card. Failed tests should be **open by default** so reviewers see them immediately:
 
@@ -434,14 +441,18 @@ After producing the text report, generate a standalone HTML report that a review
     </summary>
     <div class="body">
       <dl>
-        <dt>URL</dt><dd>http://localhost:3000/path</dd>
-        <dt>Action</dt><dd>What was done</dd>
-        <dt>Expected</dt><dd>What should have happened</dd>
-        <dt>Actual</dt><dd>What happened instead</dd>
+        <dt>URL</dt>
+        <dd>http://localhost:3000/path</dd>
+        <dt>Action</dt>
+        <dd>What was done</dd>
+        <dt>Expected</dt>
+        <dd>What should have happened</dd>
+        <dt>Actual</dt>
+        <dd>What happened instead</dd>
       </dl>
       <div class="suggestion">Fix: description of suggested fix</div>
       <div class="screenshot">
-        <img src="data:image/png;base64,..." alt="Screenshot of failure">
+        <img src="data:image/png;base64,..." alt="Screenshot of failure" />
         <div class="caption">step-id.png — captured at moment of failure</div>
       </div>
     </div>
@@ -459,8 +470,10 @@ After producing the text report, generate a standalone HTML report that a review
     </summary>
     <div class="body">
       <dl>
-        <dt>URL</dt><dd>http://localhost:3000/path</dd>
-        <dt>Evidence</dt><dd>What was observed</dd>
+        <dt>URL</dt>
+        <dd>http://localhost:3000/path</dd>
+        <dt>Evidence</dt>
+        <dd>What was observed</dd>
       </dl>
     </div>
   </details>
@@ -494,6 +507,7 @@ open .context/ui-test-report.html  # macOS
 6. Tell the user: `Report saved to .context/ui-test-report.html` and offer to open it.
 
 **Rules:**
+
 - Failures section comes before passes — reviewers care about what's broken first
 - Failed cards are `open` by default; passed cards are collapsed
 - Every STEP_FAIL card MUST have an embedded screenshot — if the screenshot file is missing, note it in the card
@@ -509,12 +523,12 @@ Apply these to every interactive element you test. Read [references/adversarial-
 
 These produce structured data, not judgment calls. Use them as the strongest form of assertion.
 
-| Check | What it catches | Assertion |
-|-------|----------------|-----------|
-| axe-core | WCAG violations | `violations.length === 0` |
-| Console errors | Runtime exceptions, failed requests | empty error array |
-| Broken images | Missing/failed image loads | no images with `naturalWidth === 0` |
-| Form labels | Inputs without accessible labels | every input has `hasLabel: true` |
+| Check          | What it catches                     | Assertion                           |
+| -------------- | ----------------------------------- | ----------------------------------- |
+| axe-core       | WCAG violations                     | `violations.length === 0`           |
+| Console errors | Runtime exceptions, failed requests | empty error array                   |
+| Broken images  | Missing/failed image loads          | no images with `naturalWidth === 0` |
+| Form labels    | Inputs without accessible labels    | every input has `hasLabel: true`    |
 
 For the exact `browse eval` recipes, read [references/browser-recipes.md](references/browser-recipes.md).
 
@@ -555,19 +569,20 @@ Check whether changed UI matches the rest of the app visually. Read [references/
 
 ## Test Categories
 
-| Category | How | Assertion type |
-|----------|-----|---------------|
-| Accessibility | axe-core + keyboard nav | Deterministic (violation count) |
-| Visual Quality | Screenshot + heuristic evaluation | Visual judgment (weakest — note specifics) |
-| Responsive | Viewport sweep + screenshots | Visual + deterministic (overflow check) |
-| Console Health | Console capture eval | Deterministic (error count) |
-| UX Heuristics | Snapshot + Laws of UX + Nielsen's | Structured judgment (cite specific heuristic) |
-| Error States | Navigate to empty/error states | Before/after comparison |
-| Data Display | Snapshot on tables/dashboards | Element match (column count, formatting) |
-| Design Consistency | Screenshot baseline + changed page comparison | Visual judgment (cite specific property) |
-| Exploratory | Free navigation + adversarial testing | Before/after + judgment |
+| Category           | How                                           | Assertion type                                |
+| ------------------ | --------------------------------------------- | --------------------------------------------- |
+| Accessibility      | axe-core + keyboard nav                       | Deterministic (violation count)               |
+| Visual Quality     | Screenshot + heuristic evaluation             | Visual judgment (weakest — note specifics)    |
+| Responsive         | Viewport sweep + screenshots                  | Visual + deterministic (overflow check)       |
+| Console Health     | Console capture eval                          | Deterministic (error count)                   |
+| UX Heuristics      | Snapshot + Laws of UX + Nielsen's             | Structured judgment (cite specific heuristic) |
+| Error States       | Navigate to empty/error states                | Before/after comparison                       |
+| Data Display       | Snapshot on tables/dashboards                 | Element match (column count, formatting)      |
+| Design Consistency | Screenshot baseline + changed page comparison | Visual judgment (cite specific property)      |
+| Exploratory        | Free navigation + adversarial testing         | Before/after + judgment                       |
 
 Reference guides (load on demand):
+
 - **Adversarial patterns** — [references/adversarial-patterns.md](references/adversarial-patterns.md) — load when testing forms, modals, navigation, or keyboard a11y
 - **Browser recipes** — [references/browser-recipes.md](references/browser-recipes.md) — load when running deterministic checks (axe-core, console, images, form labels)
 - **Exploratory testing** — [references/exploratory-testing.md](references/exploratory-testing.md) — load for Workflow B (no diff, open exploration)

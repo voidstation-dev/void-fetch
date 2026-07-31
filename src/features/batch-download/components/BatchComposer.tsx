@@ -49,25 +49,24 @@ export function BatchComposer() {
   const settings = useBatchStore((s) => s.settings);
 
   // Single consolidated memoization for URL detection and counters
-  const { existingUrls, detectedResults, validDetectedCount, duplicateCount } =
-    useMemo(() => {
-      const urls = jobs.map((j) => j.normalizedUrl);
-      const results = inputText.trim()
-        ? extractAndNormalizeUrls(inputText, urls)
-        : [];
-      let validCount = 0;
-      let dupCount = 0;
-      for (const r of results) {
-        if (r.status === "valid") validCount++;
-        else if (r.status === "duplicate") dupCount++;
-      }
-      return {
-        existingUrls: urls,
-        detectedResults: results,
-        validDetectedCount: validCount,
-        duplicateCount: dupCount,
-      };
-    }, [jobs, inputText]);
+  const { existingUrls, validDetectedCount, duplicateCount } = useMemo(() => {
+    const urls = jobs.map((j) => j.normalizedUrl);
+    const results = inputText.trim()
+      ? extractAndNormalizeUrls(inputText, urls)
+      : [];
+    let validCount = 0;
+    let dupCount = 0;
+    for (const r of results) {
+      if (r.status === "valid") validCount++;
+      else if (r.status === "duplicate") dupCount++;
+    }
+    return {
+      existingUrls: urls,
+      detectedResults: results,
+      validDetectedCount: validCount,
+      duplicateCount: dupCount,
+    };
+  }, [jobs, inputText]);
 
   const handleProcessInput = (text: string) => {
     if (!text.trim()) return;
@@ -281,7 +280,7 @@ export function BatchComposer() {
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             placeholder="Paste multiple URLs here (one per line, or raw text with embedded links)…"
-            className="min-h-[110px] max-h-[300px] font-mono text-xs resize-y bg-background/50 border-border/80 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all rounded-xl p-3 shadow-inner"
+            className="min-h-27.5 max-h-75 font-mono text-xs resize-y bg-background/50 border-border/80 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all rounded-xl p-3 shadow-inner"
           />
 
           {/* Live Link Counter Badge */}

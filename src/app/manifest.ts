@@ -5,8 +5,14 @@ import { i18n } from "@/lib/i18n/config";
 import { localeToHtmlLang } from "@/lib/seo";
 
 export default async function manifest(): Promise<MetadataRoute.Manifest> {
-  const tMeta = await getTranslations({ locale: i18n.defaultLocale, namespace: "metadata" });
-  const tUnified = await getTranslations({ locale: i18n.defaultLocale, namespace: "unified" });
+  const tMeta = await getTranslations({
+    locale: i18n.defaultLocale,
+    namespace: "metadata",
+  });
+  const tUnified = await getTranslations({
+    locale: i18n.defaultLocale,
+    namespace: "unified",
+  });
 
   return {
     id: "/",

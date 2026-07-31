@@ -22,7 +22,10 @@ export interface RunnerContext {
     extra?: Partial<DownloadJob>,
   ) => Promise<void>;
   updateJobProgress: (id: string, progress: Partial<DownloadProgress>) => void;
-  updateJobError: (id: string, error: DownloadError | undefined) => Promise<void>;
+  updateJobError: (
+    id: string,
+    error: DownloadError | undefined,
+  ) => Promise<void>;
 }
 import type {
   DownloadJob,
@@ -656,7 +659,6 @@ export async function runJob(
     let responseStream: Response | null = null;
     let resolvedFilename = job.config.filename;
     let extension = "mp4";
-    let mimeType = "video/mp4";
 
     const platform = job.metadata?.platform || "generic";
     const title = job.metadata?.title || "VoidFetch Media";
@@ -665,11 +667,13 @@ export async function runJob(
     // 1. Check Output Type & Dispatcher
     if (config.outputType === "images" || config.outputType === "zip_images") {
       const images = job.metadata?.images || [];
-      if (images.length === 0) throw new Error("No images found in this URL. Please change config to download MP4 or MP3 instead.");
+      if (images.length === 0)
+        throw new Error(
+          "No images found in this URL. Please change config to download MP4 or MP3 instead.",
+        );
 
       outputBlob = await runImagesDownload(job, images, signal, context);
       extension = "zip";
-      mimeType = "application/zip";
     } else if (config.outputType === "audio") {
       const audioUrl = rawData?.downloadAudioUrl;
       const extractAudioNeeded =
@@ -697,7 +701,8 @@ export async function runJob(
         });
 
         // Dynamic load FFmpeg to save load memory
-        const { extractAudioFromVideo } = await import("@/infrastructure/ffmpeg");
+        const { extractAudioFromVideo } =
+          await import("@/infrastructure/ffmpeg");
 
         outputBlob = await extractAudioFromVideo({
           videoUrl,
@@ -711,7 +716,6 @@ export async function runJob(
         });
       }
       extension = "mp3";
-      mimeType = "audio/mpeg";
     } else {
       // Original video or MP4 video format
       const videoUrl =
@@ -733,7 +737,6 @@ export async function runJob(
             context,
           );
           extension = "mp3";
-          mimeType = "audio/mpeg";
         } else if (job.metadata?.images && job.metadata.images.length > 0) {
           console.warn(
             `No video or audio URL resolved for job ${job.id}, falling back to image download.`,
@@ -745,16 +748,16 @@ export async function runJob(
             context,
           );
           extension = "zip";
-          mimeType = "application/zip";
         } else {
-          throw new Error("No media found. Please try changing config to another format (MP4/MP3) or retry.");
+          throw new Error(
+            "No media found. Please try changing config to another format (MP4/MP3) or retry.",
+          );
         }
       } else {
         const isHls = isHlsPlaylistUrl(videoUrl);
         if (isHls) {
           responseStream = await runHlsDownload(job, videoUrl, signal, context);
           extension = "mp4";
-          mimeType = "video/mp4";
         } else {
           const needsMerge =
             rawData?.mediaActions?.video === "merge-then-download";
@@ -814,7 +817,6 @@ export async function runJob(
             );
           }
           extension = "mp4";
-          mimeType = "video/mp4";
         }
       }
     }
@@ -842,7 +844,8 @@ export async function runJob(
     // 4. Save to filesystem (Custom directory or browser download fallback)
     const finalBlob = responseStream ? await responseStream.blob() : outputBlob;
     if (finalBlob) {
-      const { saveDownloadedFile } = await import("@/infrastructure/directory-picker");
+      const { saveDownloadedFile } =
+        await import("@/infrastructure/directory-picker");
       await saveDownloadedFile(finalBlob, resolvedFilename);
     } else {
       throw new Error("No media output buffer resolved");

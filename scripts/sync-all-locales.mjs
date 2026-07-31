@@ -1,17 +1,19 @@
-import { readdir, readFile, writeFile } from 'node:fs/promises';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { readdir, readFile, writeFile } from "node:fs/promises";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const DICT_DIR = join(__dirname, '..', 'src', 'lib', 'i18n', 'dictionaries');
+const DICT_DIR = join(__dirname, "..", "src", "lib", "i18n", "dictionaries");
 
 const SUPPORTED_PLATFORMS_MODAL = {
   en: {
     title: "Supported Media Platforms",
     badge: "25+ Live",
-    description: "VoidFetch supports high-speed video, audio, image, and HLS/M3U8 extraction across global sites.",
-    searchPlaceholder: "Search platform (e.g. YouTube, Douyin, TikTok, Pinterest, SoundCloud...)",
-    noSearchResults: "No platform found matching \"{query}\"",
+    description:
+      "VoidFetch supports high-speed video, audio, image, and HLS/M3U8 extraction across global sites.",
+    searchPlaceholder:
+      "Search platform (e.g. YouTube, Douyin, TikTok, Pinterest, SoundCloud...)",
+    noSearchResults: 'No platform found matching "{query}"',
     activeStreamer: "Active Streamer",
     active: "Active",
     fastExtract: "Fast Extract",
@@ -20,14 +22,16 @@ const SUPPORTED_PLATFORMS_MODAL = {
     close: "Close",
     clickDetails: "Click to view details",
     clickTitle: "Click to view all 25+ supported platforms",
-    universalSub: "Universal Batch Downloader"
+    universalSub: "Universal Batch Downloader",
   },
   vi: {
     title: "Nền tảng truyền thông được hỗ trợ",
     badge: "25+ Đang hoạt động",
-    description: "VoidFetch hỗ trợ trích xuất video, âm thanh, hình ảnh và luồng HLS/M3U8 tốc độ cao trên các trang web toàn cầu.",
-    searchPlaceholder: "Tìm kiếm nền tảng (ví dụ: YouTube, Douyin, TikTok, Pinterest, SoundCloud...)",
-    noSearchResults: "Không tìm thấy nền tảng phù hợp với \"{query}\"",
+    description:
+      "VoidFetch hỗ trợ trích xuất video, âm thanh, hình ảnh và luồng HLS/M3U8 tốc độ cao trên các trang web toàn cầu.",
+    searchPlaceholder:
+      "Tìm kiếm nền tảng (ví dụ: YouTube, Douyin, TikTok, Pinterest, SoundCloud...)",
+    noSearchResults: 'Không tìm thấy nền tảng phù hợp với "{query}"',
     activeStreamer: "Máy chủ hoạt động",
     active: "Hoạt động",
     fastExtract: "Trích xuất nhanh",
@@ -36,14 +40,17 @@ const SUPPORTED_PLATFORMS_MODAL = {
     close: "Đóng",
     clickDetails: "Nhấp để xem chi tiết",
     clickTitle: "Nhấp để xem tất cả hơn 25 nền tảng được hỗ trợ",
-    universalSub: "Trình tải hàng loạt đa năng"
+    universalSub: "Trình tải hàng loạt đa năng",
   },
   es: {
     title: "Plataformas de medios compatibles",
     badge: "25+ Activas",
-    description: "VoidFetch admite la extracción de video, audio, imágenes y transmisiones HLS/M3U8 a alta velocidad.",
-    searchPlaceholder: "Buscar plataforma (ej. YouTube, Douyin, TikTok, Pinterest, SoundCloud...)",
-    noSearchResults: "No se encontraron plataformas que coincidan con \"{query}\"",
+    description:
+      "VoidFetch admite la extracción de video, audio, imágenes y transmisiones HLS/M3U8 a alta velocidad.",
+    searchPlaceholder:
+      "Buscar plataforma (ej. YouTube, Douyin, TikTok, Pinterest, SoundCloud...)",
+    noSearchResults:
+      'No se encontraron plataformas que coincidan con "{query}"',
     activeStreamer: "Servidor activo",
     active: "Activo",
     fastExtract: "Extracción rápida",
@@ -52,13 +59,15 @@ const SUPPORTED_PLATFORMS_MODAL = {
     close: "Cerrar",
     clickDetails: "Haz clic para ver detalles",
     clickTitle: "Haz clic para ver las 25+ plataformas compatibles",
-    universalSub: "Descargador masivo universal"
+    universalSub: "Descargador masivo universal",
   },
   ja: {
     title: "対応メディアプラットフォーム",
     badge: "25+ 稼働中",
-    description: "VoidFetchは、動画、音声、画像、HLS/M3U8ストリームの高速抽出に対応しています。",
-    searchPlaceholder: "プラットフォームを検索 (例: YouTube, Douyin, TikTok, Pinterest, SoundCloud...)",
+    description:
+      "VoidFetchは、動画、音声、画像、HLS/M3U8ストリームの高速抽出に対応しています。",
+    searchPlaceholder:
+      "プラットフォームを検索 (例: YouTube, Douyin, TikTok, Pinterest, SoundCloud...)",
     noSearchResults: "「{query}」に一致するプラットフォームが見つかりません",
     activeStreamer: "アクティブ配信",
     active: "稼働中",
@@ -68,13 +77,15 @@ const SUPPORTED_PLATFORMS_MODAL = {
     close: "閉じる",
     clickDetails: "クリックして詳細を表示",
     clickTitle: "クリックして対応する全25以上のプラットフォームを表示",
-    universalSub: "万能一括ダウンローダー"
+    universalSub: "万能一括ダウンローダー",
   },
   ru: {
     title: "Поддерживаемые медиа-платформы",
     badge: "25+ Активно",
-    description: "VoidFetch поддерживает высокоскоростное извлечение видео, аудио, изображений и HLS/M3U8 потоков.",
-    searchPlaceholder: "Поиск платформы (например, YouTube, Douyin, TikTok, Pinterest, SoundCloud...)",
+    description:
+      "VoidFetch поддерживает высокоскоростное извлечение видео, аудио, изображений и HLS/M3U8 потоков.",
+    searchPlaceholder:
+      "Поиск платформы (например, YouTube, Douyin, TikTok, Pinterest, SoundCloud...)",
     noSearchResults: "Платформы по запросу «{query}» не найдены",
     activeStreamer: "Активный сервер",
     active: "Активно",
@@ -84,14 +95,16 @@ const SUPPORTED_PLATFORMS_MODAL = {
     close: "Закрыть",
     clickDetails: "Нажмите для подробностей",
     clickTitle: "Нажмите, чтобы просмотреть все 25+ поддерживаемых платформ",
-    universalSub: "Универсальный пакетный загрузчик"
+    universalSub: "Универсальный пакетный загрузчик",
   },
   zh: {
     title: "支持的媒体平台",
     badge: "25+ 在线",
-    description: "VoidFetch 支持全球主流平台的视频、音频、图集及 HLS/M3U8 高速解析下载。",
-    searchPlaceholder: "搜索平台 (例如 YouTube, Douyin, TikTok, Pinterest, SoundCloud...)",
-    noSearchResults: "未找到匹配 \"{query}\" 的平台",
+    description:
+      "VoidFetch 支持全球主流平台的视频、音频、图集及 HLS/M3U8 高速解析下载。",
+    searchPlaceholder:
+      "搜索平台 (例如 YouTube, Douyin, TikTok, Pinterest, SoundCloud...)",
+    noSearchResults: '未找到匹配 "{query}" 的平台',
     activeStreamer: "在线解析中",
     active: "在线",
     fastExtract: "极速提取",
@@ -100,14 +113,16 @@ const SUPPORTED_PLATFORMS_MODAL = {
     close: "关闭",
     clickDetails: "点击查看详情",
     clickTitle: "点击查看全部 25+ 支持的平台",
-    universalSub: "全能批量下载工具"
+    universalSub: "全能批量下载工具",
   },
   "zh-tw": {
     title: "支援的媒體平台",
     badge: "25+ 線上",
-    description: "VoidFetch 支援全球主流平台的影片、音訊、圖集及 HLS/M3U8 高速解析下載。",
-    searchPlaceholder: "搜尋平台 (例如 YouTube, Douyin, TikTok, Pinterest, SoundCloud...)",
-    noSearchResults: "未找到符合 \"{query}\" 的平台",
+    description:
+      "VoidFetch 支援全球主流平台的影片、音訊、圖集及 HLS/M3U8 高速解析下載。",
+    searchPlaceholder:
+      "搜尋平台 (例如 YouTube, Douyin, TikTok, Pinterest, SoundCloud...)",
+    noSearchResults: '未找到符合 "{query}" 的平台',
     activeStreamer: "線上解析中",
     active: "線上",
     fastExtract: "極速提取",
@@ -116,13 +131,14 @@ const SUPPORTED_PLATFORMS_MODAL = {
     close: "關閉",
     clickDetails: "點擊查看詳情",
     clickTitle: "點擊查看全部 25+ 支援的平台",
-    universalSub: "全能批量下載工具"
-  }
+    universalSub: "全能批量下載工具",
+  },
 };
 
 const JAPANESE_ABOUT_PAGE = {
   metaTitle: "VoidFetchについて | VoidFetch",
-  metaDescription: "VoidFetchの詳細、VoidStation製品仕様、著作権情報、プライバシーポリシー、利用規約について。",
+  metaDescription:
+    "VoidFetchの詳細、VoidStation製品仕様、著作権情報、プライバシーポリシー、利用規約について。",
   title: "VoidFetchについて",
   subtitle: "VoidStation製品情報",
   productInfo: "製品情報",
@@ -132,15 +148,19 @@ const JAPANESE_ABOUT_PAGE = {
   targetRuntime: "ターゲットランタイム",
   compilationBuild: "ビルド構成",
   thirdPartyLibraries: "サードパーティライブラリと感謝",
-  thirdPartyDesc: "VoidFetchは、Next.js、React 19、Tailwind CSS、Radix UI、Zustand、IndexedDB、FFmpeg.wasm (GPL/LGPL v3+)、JSZip、browser-fs-access などのオープンソースプロジェクトに支えられています。",
+  thirdPartyDesc:
+    "VoidFetchは、Next.js、React 19、Tailwind CSS、Radix UI、Zustand、IndexedDB、FFmpeg.wasm (GPL/LGPL v3+)、JSZip、browser-fs-access などのオープンソースプロジェクトに支えられています。",
   copyrightNotice: "著作権情報",
   copyrightTitle: "VoidFetch © 2026 VoidStation.",
   copyrightSub: "All rights reserved.",
-  copyrightDesc: "メディアコンテンツ（動画、音声、画像）の権利は、各プラットフォームの所有者およびコンテンツ制作者に帰属します。",
+  copyrightDesc:
+    "メディアコンテンツ（動画、音声、画像）の権利は、各プラットフォームの所有者およびコンテンツ制作者に帰属します。",
   privacyPolicy: "プライバシーポリシー",
-  privacyDesc: "VoidFetchはユーザーのプライバシーを最優先しています。すべてのダウンロード、復号化、バッファ作成処理はブラウザのサンドボックス内で完結し、サーバー上に保存されません。",
+  privacyDesc:
+    "VoidFetchはユーザーのプライバシーを最優先しています。すべてのダウンロード、復号化、バッファ作成処理はブラウザのサンドボックス内で完結し、サーバー上に保存されません。",
   responsibleUse: "利用規範ポリシー",
-  responsibleUseDesc: "VoidFetchは公開メディアのアーカイブ用ツールです。ユーザーは入力するコンテンツのダウンロード権限を所有している必要があります。"
+  responsibleUseDesc:
+    "VoidFetchは公開メディアのアーカイブ用ツールです。ユーザーは入力するコンテンツのダウンロード権限を所有している必要があります。",
 };
 
 const BATCH_WORKSPACE = {
@@ -153,7 +173,7 @@ const BATCH_WORKSPACE = {
       downloadHistory: "Download History",
       preferences: "Preferences",
       aboutVoidFetch: "About VoidFetch",
-      privacyAndTerms: "Privacy & Terms"
+      privacyAndTerms: "Privacy & Terms",
     },
     composer: {
       title: "BATCH URL COMPOSER",
@@ -162,17 +182,20 @@ const BATCH_WORKSPACE = {
       subtitleSuffix: "or import a file",
       pasteClipboard: "Paste Clipboard",
       importFile: "Import File",
-      placeholder: "Paste multiple URLs here (one per line, or raw text with embedded links)...",
+      placeholder:
+        "Paste multiple URLs here (one per line, or raw text with embedded links)...",
       detectedSingle: "{count} New Link Detected",
       detectedPlural: "{count} New Links Detected",
       dupesCount: "({count} dupes)",
       dropFileHint: "Drop text or CSV file here to import links",
-      copyrightWarning: "Copyrighted, paid, or member-only restricted content is not supported.",
-      feedbackHint: "Feedback? Click \"Feedback\" in top-right.",
-      supportedPlatformsBar: "Supported: YouTube, TikTok, Douyin, Bilibili, SoundCloud & 20+ more",
+      copyrightWarning:
+        "Copyrighted, paid, or member-only restricted content is not supported.",
+      feedbackHint: 'Feedback? Click "Feedback" in top-right.',
+      supportedPlatformsBar:
+        "Supported: YouTube, TikTok, Douyin, Bilibili, SoundCloud & 20+ more",
       clear: "Clear",
       addUrls: "Add URLs to Queue",
-      addUrlsCount: "Add {count} URLs to Queue"
+      addUrlsCount: "Add {count} URLs to Queue",
     },
     toolbar: {
       searchPlaceholder: "Search title or URL...",
@@ -195,13 +218,14 @@ const BATCH_WORKSPACE = {
         paused: "Paused",
         completed: "Completed",
         failed: "Failed",
-        cancelled: "Cancelled"
-      }
+        cancelled: "Cancelled",
+      },
     },
     queue: {
       emptyTitle: "Empty Downloader Workspace",
       emptyBadge: "Ready",
-      emptyDescription: "Paste video URLs (YouTube, TikTok, Douyin, SoundCloud...) or import a text file above to start batch downloading.",
+      emptyDescription:
+        "Paste video URLs (YouTube, TikTok, Douyin, SoundCloud...) or import a text file above to start batch downloading.",
       multiThreaded: "Multi-Threaded Engine",
       audioExtraction: "Audio Stream Extraction",
       upTo4k: "Up to 4K / 60FPS Video",
@@ -212,16 +236,18 @@ const BATCH_WORKSPACE = {
       removeSelected: "Remove Selected",
       selectAll: "Select All Queue Items",
       itemsCount: "{count} Items",
-      noMatchingJobs: "No jobs match the active search or filters."
+      noMatchingJobs: "No jobs match the active search or filters.",
     },
     configDrawer: {
       titleSingle: "CONFIGURE DOWNLOAD",
       titleBulk: "BULK CONFIGURATION",
-      subtitle: "Customize output format, quality stream, and metadata preferences",
+      subtitle:
+        "Customize output format, quality stream, and metadata preferences",
       outputFormat: "Output Format",
       videoQuality: "Video Quality Stream",
       selectVideoQuality: "Select video quality",
-      qualityNote: "Note: If the source video does not support 4K/2K, system will automatically download the highest quality available.",
+      qualityNote:
+        "Note: If the source video does not support 4K/2K, system will automatically download the highest quality available.",
       audioQuality: "Audio Bitrate Quality",
       selectAudioQuality: "Select audio quality",
       filenameTemplate: "Filename Template",
@@ -234,7 +260,7 @@ const BATCH_WORKSPACE = {
       forceAudioExtraction: "Force audio extraction (MP3)",
       applyChecked: "Apply Checked ({count})",
       applyAll: "Apply All ({count})",
-      saveConfig: "Save Configuration"
+      saveConfig: "Save Configuration",
     },
     progress: {
       totalItems: "{count} items",
@@ -245,7 +271,7 @@ const BATCH_WORKSPACE = {
       speed: "Speed",
       eta: "ETA",
       queueActive: "QUEUE ACTIVE",
-      queueIdle: "QUEUE IDLE"
+      queueIdle: "QUEUE IDLE",
     },
     settingsModal: {
       title: "Workspace Preferences",
@@ -257,16 +283,18 @@ const BATCH_WORKSPACE = {
       browserDefault: "Browser Default (Downloads Folder)",
       customFolder: "📁 Custom: {name}",
       customFolderDesc: "Files will be saved directly into this folder handle",
-      browserDefaultDesc: "Files are automatically saved directly to your Downloads folder",
+      browserDefaultDesc:
+        "Files are automatically saved directly to your Downloads folder",
       resetDefault: "Reset Default",
       changeFolder: "Change Folder",
       selectCustomFolder: "Select Custom Folder",
-      directoryTip: "💡 Tip: Browser security blocks picking the root Downloads folder directly. To organize inside Downloads, create or pick a subfolder (e.g. Downloads/VoidFetch).",
+      directoryTip:
+        "💡 Tip: Browser security blocks picking the root Downloads folder directly. To organize inside Downloads, create or pick a subfolder (e.g. Downloads/VoidFetch).",
       networkConcurrency: "Network Concurrency",
       concurrentJobs: "Concurrent Jobs",
       hlsSegmentConcurrency: "HLS Segment Concurrency",
-      savePreferences: "Save Preferences"
-    }
+      savePreferences: "Save Preferences",
+    },
   },
   vi: {
     title: "Không gian làm việc hàng loạt",
@@ -277,7 +305,7 @@ const BATCH_WORKSPACE = {
       downloadHistory: "Lịch sử tải xuống",
       preferences: "Tùy chỉnh",
       aboutVoidFetch: "Giới thiệu VoidFetch",
-      privacyAndTerms: "Bảo mật & Điều khoản"
+      privacyAndTerms: "Bảo mật & Điều khoản",
     },
     composer: {
       title: "TRÌNH SOẠN THẢO URL HÀNG LOẠT",
@@ -286,17 +314,20 @@ const BATCH_WORKSPACE = {
       subtitleSuffix: "hoặc nhập từ tệp",
       pasteClipboard: "Dán từ Khay nhớ tạm",
       importFile: "Nhập từ tệp",
-      placeholder: "Dán nhiều liên kết vào đây (mỗi liên kết một dòng, hoặc văn bản có chứa liên kết)...",
+      placeholder:
+        "Dán nhiều liên kết vào đây (mỗi liên kết một dòng, hoặc văn bản có chứa liên kết)...",
       detectedSingle: "Đã phát hiện {count} liên kết mới",
       detectedPlural: "Đã phát hiện {count} liên kết mới",
       dupesCount: "({count} trùng lặp)",
       dropFileHint: "Kéo thả tệp văn bản hoặc CSV vào đây để nhập liên kết",
-      copyrightWarning: "Nội dung có bản quyền, trả phí hoặc giới hạn thành viên không được hỗ trợ.",
-      feedbackHint: "Góp ý? Nhấp \"Góp ý\" ở góc trên bên phải.",
-      supportedPlatformsBar: "Hỗ trợ: YouTube, TikTok, Douyin, Bilibili, SoundCloud & hơn 20 nền tảng khác",
+      copyrightWarning:
+        "Nội dung có bản quyền, trả phí hoặc giới hạn thành viên không được hỗ trợ.",
+      feedbackHint: 'Góp ý? Nhấp "Góp ý" ở góc trên bên phải.',
+      supportedPlatformsBar:
+        "Hỗ trợ: YouTube, TikTok, Douyin, Bilibili, SoundCloud & hơn 20 nền tảng khác",
       clear: "Xóa",
       addUrls: "Thêm liên kết vào hàng đợi",
-      addUrlsCount: "Thêm {count} liên kết vào hàng đợi"
+      addUrlsCount: "Thêm {count} liên kết vào hàng đợi",
     },
     toolbar: {
       searchPlaceholder: "Tìm kiếm tiêu đề hoặc URL...",
@@ -319,13 +350,14 @@ const BATCH_WORKSPACE = {
         paused: "Đã tạm dừng",
         completed: "Đã hoàn thành",
         failed: "Thất bại",
-        cancelled: "Đã hủy"
-      }
+        cancelled: "Đã hủy",
+      },
     },
     queue: {
       emptyTitle: "Không gian làm việc trống",
       emptyBadge: "Sẵn sàng",
-      emptyDescription: "Dán URL video (YouTube, TikTok, Douyin, SoundCloud...) hoặc nhập tệp văn bản ở trên để bắt đầu tải hàng loạt.",
+      emptyDescription:
+        "Dán URL video (YouTube, TikTok, Douyin, SoundCloud...) hoặc nhập tệp văn bản ở trên để bắt đầu tải hàng loạt.",
       multiThreaded: "Động cơ đa luồng",
       audioExtraction: "Trích xuất luồng âm thanh",
       upTo4k: "Video lên đến 4K / 60FPS",
@@ -336,7 +368,7 @@ const BATCH_WORKSPACE = {
       removeSelected: "Xóa các mục đã chọn",
       selectAll: "Chọn tất cả mục trong hàng đợi",
       itemsCount: "{count} mục",
-      noMatchingJobs: "Không có tác vụ nào khớp với tìm kiếm hoặc bộ lọc."
+      noMatchingJobs: "Không có tác vụ nào khớp với tìm kiếm hoặc bộ lọc.",
     },
     configDrawer: {
       titleSingle: "CẤU HÌNH TẢI XUỐNG",
@@ -345,7 +377,8 @@ const BATCH_WORKSPACE = {
       outputFormat: "Định dạng đầu ra",
       videoQuality: "Chất lượng video",
       selectVideoQuality: "Chọn chất lượng video",
-      qualityNote: "Lưu ý: Nếu video gốc không hỗ trợ 4K/2K, hệ thống sẽ tự động tải chất lượng cao nhất có sẵn.",
+      qualityNote:
+        "Lưu ý: Nếu video gốc không hỗ trợ 4K/2K, hệ thống sẽ tự động tải chất lượng cao nhất có sẵn.",
       audioQuality: "Chất lượng âm thanh (Bitrate)",
       selectAudioQuality: "Chọn chất lượng âm thanh",
       filenameTemplate: "Mẫu tên tệp",
@@ -358,7 +391,7 @@ const BATCH_WORKSPACE = {
       forceAudioExtraction: "Ép trích xuất âm thanh (MP3)",
       applyChecked: "Áp dụng mục đã chọn ({count})",
       applyAll: "Áp dụng tất cả ({count})",
-      saveConfig: "Lưu cấu hình"
+      saveConfig: "Lưu cấu hình",
     },
     progress: {
       totalItems: "{count} mục",
@@ -369,11 +402,12 @@ const BATCH_WORKSPACE = {
       speed: "Tốc độ",
       eta: "Thời gian còn lại",
       queueActive: "HÀNG ĐỢI HOẠT ĐỘNG",
-      queueIdle: "HÀNG ĐỢI RẢNH"
+      queueIdle: "HÀNG ĐỢI RẢNH",
     },
     settingsModal: {
       title: "Tùy chỉnh không gian làm việc",
-      description: "Cấu hình mặc định tải xuống toàn cục & luồng mạng đồng thời",
+      description:
+        "Cấu hình mặc định tải xuống toàn cục & luồng mạng đồng thời",
       defaultOutputAndQuality: "Định dạng & Chất lượng mặc định",
       defaultFormat: "Định dạng mặc định",
       defaultQuality: "Chất lượng mặc định",
@@ -381,16 +415,18 @@ const BATCH_WORKSPACE = {
       browserDefault: "Mặc định trình duyệt (Thư mục Downloads)",
       customFolder: "📁 Thư mục riêng: {name}",
       customFolderDesc: "Tệp sẽ được lưu trực tiếp vào thư mục này",
-      browserDefaultDesc: "Tệp tự động được lưu trực tiếp vào thư mục Downloads của bạn",
+      browserDefaultDesc:
+        "Tệp tự động được lưu trực tiếp vào thư mục Downloads của bạn",
       resetDefault: "Đặt lại mặc định",
       changeFolder: "Đổi thư mục",
       selectCustomFolder: "Chọn thư mục tùy chỉnh",
-      directoryTip: "💡 Mẹo: Bảo mật trình duyệt ngăn chọn trực tiếp thư mục Downloads gốc. Để sắp xếp bên trong Downloads, hãy tạo hoặc chọn thư mục con (ví dụ: Downloads/VoidFetch).",
+      directoryTip:
+        "💡 Mẹo: Bảo mật trình duyệt ngăn chọn trực tiếp thư mục Downloads gốc. Để sắp xếp bên trong Downloads, hãy tạo hoặc chọn thư mục con (ví dụ: Downloads/VoidFetch).",
       networkConcurrency: "Số luồng mạng đồng thời",
       concurrentJobs: "Số tác vụ đồng thời",
       hlsSegmentConcurrency: "Số luồng phân đoạn HLS",
-      savePreferences: "Lưu tùy chỉnh"
-    }
+      savePreferences: "Lưu tùy chỉnh",
+    },
   },
   es: {
     title: "Espacio de trabajo masivo",
@@ -401,7 +437,7 @@ const BATCH_WORKSPACE = {
       downloadHistory: "Historial de Descargas",
       preferences: "Preferencias",
       aboutVoidFetch: "Acerca de VoidFetch",
-      privacyAndTerms: "Privacidad y Términos"
+      privacyAndTerms: "Privacidad y Términos",
     },
     composer: {
       title: "COMPOSITOR DE URL MASIVO",
@@ -410,17 +446,22 @@ const BATCH_WORKSPACE = {
       subtitleSuffix: "o importa un archivo",
       pasteClipboard: "Pegar Portapapeles",
       importFile: "Importar Archivo",
-      placeholder: "Pega múltiples URLs aquí (una por línea, o texto con enlaces)...",
+      placeholder:
+        "Pega múltiples URLs aquí (una por línea, o texto con enlaces)...",
       detectedSingle: "{count} nuevo enlace detectado",
       detectedPlural: "{count} nuevos enlaces detectados",
       dupesCount: "({count} duplicados)",
-      dropFileHint: "Arrastra un archivo de texto o CSV aquí para importar enlaces",
-      copyrightWarning: "El contenido con derechos de autor, de pago o restringido a miembros no es compatible.",
-      feedbackHint: "¿Comentarios? Haz clic en \"Comentarios\" arriba a la derecha.",
-      supportedPlatformsBar: "Compatibles: YouTube, TikTok, Douyin, Bilibili, SoundCloud y 20+ más",
+      dropFileHint:
+        "Arrastra un archivo de texto o CSV aquí para importar enlaces",
+      copyrightWarning:
+        "El contenido con derechos de autor, de pago o restringido a miembros no es compatible.",
+      feedbackHint:
+        '¿Comentarios? Haz clic en "Comentarios" arriba a la derecha.',
+      supportedPlatformsBar:
+        "Compatibles: YouTube, TikTok, Douyin, Bilibili, SoundCloud y 20+ más",
       clear: "Limpiar",
       addUrls: "Añadir URLs a la Cola",
-      addUrlsCount: "Añadir {count} URLs a la Cola"
+      addUrlsCount: "Añadir {count} URLs a la Cola",
     },
     toolbar: {
       searchPlaceholder: "Buscar título o URL...",
@@ -443,13 +484,14 @@ const BATCH_WORKSPACE = {
         paused: "Pausado",
         completed: "Completado",
         failed: "Fallido",
-        cancelled: "Cancelado"
-      }
+        cancelled: "Cancelado",
+      },
     },
     queue: {
       emptyTitle: "Espacio de trabajo vacío",
       emptyBadge: "Listo",
-      emptyDescription: "Pega URLs de video (YouTube, TikTok, Douyin, SoundCloud...) o importa un archivo de texto arriba para iniciar la descarga masiva.",
+      emptyDescription:
+        "Pega URLs de video (YouTube, TikTok, Douyin, SoundCloud...) o importa un archivo de texto arriba para iniciar la descarga masiva.",
       multiThreaded: "Motor Multihilo",
       audioExtraction: "Extracción de Audio",
       upTo4k: "Video hasta 4K / 60FPS",
@@ -460,16 +502,18 @@ const BATCH_WORKSPACE = {
       removeSelected: "Eliminar Seleccionados",
       selectAll: "Seleccionar Todos los Elementos",
       itemsCount: "{count} Elementos",
-      noMatchingJobs: "No hay tareas que coincidan con los filtros activos."
+      noMatchingJobs: "No hay tareas que coincidan con los filtros activos.",
     },
     configDrawer: {
       titleSingle: "CONFIGURAR DESCARGA",
       titleBulk: "CONFIGURACIÓN MASIVA",
-      subtitle: "Personaliza el formato de salida, la calidad y las preferencias de metadatos",
+      subtitle:
+        "Personaliza el formato de salida, la calidad y las preferencias de metadatos",
       outputFormat: "Formato de Salida",
       videoQuality: "Calidad de Video",
       selectVideoQuality: "Seleccionar calidad de video",
-      qualityNote: "Nota: Si el video de origen no admite 4K/2K, se descargará automáticamente la mayor calidad disponible.",
+      qualityNote:
+        "Nota: Si el video de origen no admite 4K/2K, se descargará automáticamente la mayor calidad disponible.",
       audioQuality: "Calidad de Audio (Bitrate)",
       selectAudioQuality: "Seleccionar calidad de audio",
       filenameTemplate: "Plantilla de Nombre de Archivo",
@@ -482,7 +526,7 @@ const BATCH_WORKSPACE = {
       forceAudioExtraction: "Forzar extracción de audio (MP3)",
       applyChecked: "Aplicar a Seleccionados ({count})",
       applyAll: "Aplicar a Todos ({count})",
-      saveConfig: "Guardar Configuración"
+      saveConfig: "Guardar Configuración",
     },
     progress: {
       totalItems: "{count} elementos",
@@ -493,7 +537,7 @@ const BATCH_WORKSPACE = {
       speed: "Velocidad",
       eta: "ETA",
       queueActive: "COLA ACTIVA",
-      queueIdle: "COLA INACTIVA"
+      queueIdle: "COLA INACTIVA",
     },
     settingsModal: {
       title: "Preferencias del espacio de trabajo",
@@ -504,17 +548,20 @@ const BATCH_WORKSPACE = {
       downloadDirectoryPath: "Ruta de Carpeta de Descargas",
       browserDefault: "Predeterminado del navegador (Carpeta Descargas)",
       customFolder: "📁 Personalizada: {name}",
-      customFolderDesc: "Los archivos se guardarán directamente en esta carpeta",
-      browserDefaultDesc: "Los archivos se guardan automáticamente en tu carpeta de Descargas",
+      customFolderDesc:
+        "Los archivos se guardarán directamente en esta carpeta",
+      browserDefaultDesc:
+        "Los archivos se guardan automáticamente en tu carpeta de Descargas",
       resetDefault: "Restablecer por defecto",
       changeFolder: "Cambiar carpeta",
       selectCustomFolder: "Seleccionar carpeta personalizada",
-      directoryTip: "💡 Consejo: La seguridad del navegador impide elegir directamente la carpeta raíz de Descargas. Para organizar dentro de Descargas, crea una subcarpeta (ej. Descargas/VoidFetch).",
+      directoryTip:
+        "💡 Consejo: La seguridad del navegador impide elegir directamente la carpeta raíz de Descargas. Para organizar dentro de Descargas, crea una subcarpeta (ej. Descargas/VoidFetch).",
       networkConcurrency: "Concurrencia de Red",
       concurrentJobs: "Tareas simultáneas",
       hlsSegmentConcurrency: "Segmentos HLS simultáneos",
-      savePreferences: "Guardar Preferencias"
-    }
+      savePreferences: "Guardar Preferencias",
+    },
   },
   ja: {
     title: "一括ダウンロードワークスペース",
@@ -525,7 +572,7 @@ const BATCH_WORKSPACE = {
       downloadHistory: "ダウンロード履歴",
       preferences: "環境設定",
       aboutVoidFetch: "VoidFetch について",
-      privacyAndTerms: "プライバシーと利用規約"
+      privacyAndTerms: "プライバシーと利用規約",
     },
     composer: {
       title: "一括 URL コンポーザー",
@@ -534,17 +581,21 @@ const BATCH_WORKSPACE = {
       subtitleSuffix: "またはファイルをインポート",
       pasteClipboard: "クリップボードから貼り付け",
       importFile: "ファイルをインポート",
-      placeholder: "複数のURLをここに貼り付け (1行に1つのURL、またはテキストから自動抽出)...",
+      placeholder:
+        "複数のURLをここに貼り付け (1行に1つのURL、またはテキストから自動抽出)...",
       detectedSingle: "{count} 件の新しいリンクを検出",
       detectedPlural: "{count} 件の新しいリンクを検出",
       dupesCount: "({count} 件の重複)",
       dropFileHint: "テキストまたはCSVファイルをここにドロップしてインポート",
-      copyrightWarning: "著作権で保護されたコンテンツ、有料コンテンツ、会員限定コンテンツには対応していません。",
-      feedbackHint: "フィードバック？ 右上の「フィードバック」をクリックしてください。",
-      supportedPlatformsBar: "対応: YouTube, TikTok, Douyin, Bilibili, SoundCloud およびその他20以上のサイト",
+      copyrightWarning:
+        "著作権で保護されたコンテンツ、有料コンテンツ、会員限定コンテンツには対応していません。",
+      feedbackHint:
+        "フィードバック？ 右上の「フィードバック」をクリックしてください。",
+      supportedPlatformsBar:
+        "対応: YouTube, TikTok, Douyin, Bilibili, SoundCloud およびその他20以上のサイト",
       clear: "クリア",
       addUrls: "URLをキューに追加",
-      addUrlsCount: "{count} 件のURLをキューに追加"
+      addUrlsCount: "{count} 件のURLをキューに追加",
     },
     toolbar: {
       searchPlaceholder: "タイトルまたはURLを検索...",
@@ -567,13 +618,14 @@ const BATCH_WORKSPACE = {
         paused: "一時停止中",
         completed: "完了",
         failed: "失敗",
-        cancelled: "キャンセル済み"
-      }
+        cancelled: "キャンセル済み",
+      },
     },
     queue: {
       emptyTitle: "ワークスペースは空です",
       emptyBadge: "準備完了",
-      emptyDescription: "動画URL (YouTube, TikTok, Douyin, SoundCloud...) を貼り付けるか、テキストファイルをインポートして一括ダウンロードを開始します。",
+      emptyDescription:
+        "動画URL (YouTube, TikTok, Douyin, SoundCloud...) を貼り付けるか、テキストファイルをインポートして一括ダウンロードを開始します。",
       multiThreaded: "マルチスレッドエンジン",
       audioExtraction: "音声ストリーム抽出",
       upTo4k: "最大 4K / 60FPS 動画",
@@ -584,16 +636,18 @@ const BATCH_WORKSPACE = {
       removeSelected: "選択項目を削除",
       selectAll: "すべてのキュー項目を選択",
       itemsCount: "{count} 件",
-      noMatchingJobs: "一致するタスクが見つかりません。"
+      noMatchingJobs: "一致するタスクが見つかりません。",
     },
     configDrawer: {
       titleSingle: "ダウンロード設定",
       titleBulk: "一括設定",
-      subtitle: "出力フォーマット、画質ストリーム、メタデータの設定をカスタマイズ",
+      subtitle:
+        "出力フォーマット、画質ストリーム、メタデータの設定をカスタマイズ",
       outputFormat: "出力フォーマット",
       videoQuality: "画質ストリーム",
       selectVideoQuality: "画質を選択",
-      qualityNote: "注: 元動画が4K/2Kに対応していない場合、自動的に利用可能な最高画質でダウンロードされます。",
+      qualityNote:
+        "注: 元動画が4K/2Kに対応していない場合、自動的に利用可能な最高画質でダウンロードされます。",
       audioQuality: "音質 (ビットレート)",
       selectAudioQuality: "音質を選択",
       filenameTemplate: "ファイル名テンプレート",
@@ -606,7 +660,7 @@ const BATCH_WORKSPACE = {
       forceAudioExtraction: "音声を強制抽出 (MP3)",
       applyChecked: "選択項目に適用 ({count})",
       applyAll: "すべてに適用 ({count})",
-      saveConfig: "設定を保存"
+      saveConfig: "設定を保存",
     },
     progress: {
       totalItems: "{count} 件",
@@ -617,7 +671,7 @@ const BATCH_WORKSPACE = {
       speed: "速度",
       eta: "残り時間",
       queueActive: "キュー稼働中",
-      queueIdle: "キューアイドル"
+      queueIdle: "キューアイドル",
     },
     settingsModal: {
       title: "ワークスペース設定",
@@ -629,16 +683,18 @@ const BATCH_WORKSPACE = {
       browserDefault: "ブラウザ標準 (ダウンロードフォルダ)",
       customFolder: "📁 カスタム: {name}",
       customFolderDesc: "ファイルはこのフォルダに直接保存されます",
-      browserDefaultDesc: "ファイルは自動的にダウンロードフォルダに保存されます",
+      browserDefaultDesc:
+        "ファイルは自動的にダウンロードフォルダに保存されます",
       resetDefault: "標準設定に戻す",
       changeFolder: "フォルダを変更",
       selectCustomFolder: "カスタムフォルダを選択",
-      directoryTip: "💡 ヒント: ブラウザのセキュリティ仕様により、ルートのダウンロードフォルダを直接指定できません。サブフォルダを作成または選択してください（例: Downloads/VoidFetch）。",
+      directoryTip:
+        "💡 ヒント: ブラウザのセキュリティ仕様により、ルートのダウンロードフォルダを直接指定できません。サブフォルダを作成または選択してください（例: Downloads/VoidFetch）。",
       networkConcurrency: "ネットワーク並行処理数",
       concurrentJobs: "同時ダウンロードタスク数",
       hlsSegmentConcurrency: "HLSセグメント並列数",
-      savePreferences: "設定を保存"
-    }
+      savePreferences: "設定を保存",
+    },
   },
   ru: {
     title: "Пакетная рабочей область",
@@ -649,7 +705,7 @@ const BATCH_WORKSPACE = {
       downloadHistory: "История загрузок",
       preferences: "Настройки",
       aboutVoidFetch: "О VoidFetch",
-      privacyAndTerms: "Конфиденциальность и условия"
+      privacyAndTerms: "Конфиденциальность и условия",
     },
     composer: {
       title: "ПАКЕТНЫЙ СОСТАВИТЕЛЬ URL",
@@ -658,17 +714,20 @@ const BATCH_WORKSPACE = {
       subtitleSuffix: "или импортируйте файл",
       pasteClipboard: "Вставить из буфера",
       importFile: "Импортировать файл",
-      placeholder: "Вставьте несколько URL сюда (по одному на строку или текст со ссылками)...",
+      placeholder:
+        "Вставьте несколько URL сюда (по одному на строку или текст со ссылками)...",
       detectedSingle: "Обнаружена {count} новая ссылка",
       detectedPlural: "Обнаружено {count} новых ссылок",
       dupesCount: "({count} дубликатов)",
       dropFileHint: "Перетащите текстовый файл или CSV сюда для импорта ссылок",
-      copyrightWarning: "Защищенный авторским правом, платный или приватный контент не поддерживается.",
+      copyrightWarning:
+        "Защищенный авторским правом, платный или приватный контент не поддерживается.",
       feedbackHint: "Отзывы? Нажмите «Отзывы» вверху справа.",
-      supportedPlatformsBar: "Поддерживаются: YouTube, TikTok, Douyin, Bilibili, SoundCloud и еще 20+",
+      supportedPlatformsBar:
+        "Поддерживаются: YouTube, TikTok, Douyin, Bilibili, SoundCloud и еще 20+",
       clear: "Очистить",
       addUrls: "Добавить URL в очередь",
-      addUrlsCount: "Добавить {count} URL в очередь"
+      addUrlsCount: "Добавить {count} URL в очередь",
     },
     toolbar: {
       searchPlaceholder: "Поиск названия или URL...",
@@ -691,13 +750,14 @@ const BATCH_WORKSPACE = {
         paused: "Приостановлено",
         completed: "Завершено",
         failed: "Ошибка",
-        cancelled: "Отменено"
-      }
+        cancelled: "Отменено",
+      },
     },
     queue: {
       emptyTitle: "Пустая рабочая область",
       emptyBadge: "Готово",
-      emptyDescription: "Вставьте URL видео (YouTube, TikTok, Douyin, SoundCloud...) или импортируйте текстовый файл выше для начала пакетной загрузки.",
+      emptyDescription:
+        "Вставьте URL видео (YouTube, TikTok, Douyin, SoundCloud...) или импортируйте текстовый файл выше для начала пакетной загрузки.",
       multiThreaded: "Многопоточный движок",
       audioExtraction: "Извлечение аудиопотока",
       upTo4k: "Видео до 4K / 60FPS",
@@ -708,7 +768,7 @@ const BATCH_WORKSPACE = {
       removeSelected: "Удалить выбранные",
       selectAll: "Выбрать все элементы очереди",
       itemsCount: "{count} элементов",
-      noMatchingJobs: "Нет задач, соответствующих фильтрам."
+      noMatchingJobs: "Нет задач, соответствующих фильтрам.",
     },
     configDrawer: {
       titleSingle: "НАСТРОЙКА ЗАГРУЗКИ",
@@ -717,7 +777,8 @@ const BATCH_WORKSPACE = {
       outputFormat: "Формат вывода",
       videoQuality: "Качество видео",
       selectVideoQuality: "Выберите качество видео",
-      qualityNote: "Примечание: Если исходное видео не поддерживает 4K/2K, система автоматически загрузит максимально доступное качество.",
+      qualityNote:
+        "Примечание: Если исходное видео не поддерживает 4K/2K, система автоматически загрузит максимально доступное качество.",
       audioQuality: "Качество аудио (битрейт)",
       selectAudioQuality: "Выберите качество аудио",
       filenameTemplate: "Шаблон имени файла",
@@ -730,7 +791,7 @@ const BATCH_WORKSPACE = {
       forceAudioExtraction: "Принудительное извлечение аудио (MP3)",
       applyChecked: "Применить к выбранным ({count})",
       applyAll: "Применить ко всем ({count})",
-      saveConfig: "Сохранить настройки"
+      saveConfig: "Сохранить настройки",
     },
     progress: {
       totalItems: "{count} элементов",
@@ -741,7 +802,7 @@ const BATCH_WORKSPACE = {
       speed: "Скорость",
       eta: "Осталось",
       queueActive: "ОЧЕРЕДЬ АКТИВНА",
-      queueIdle: "ОЧЕРЕДЬ СВОБОДНА"
+      queueIdle: "ОЧЕРЕДЬ СВОБОДНА",
     },
     settingsModal: {
       title: "Настройки рабочей области",
@@ -757,12 +818,13 @@ const BATCH_WORKSPACE = {
       resetDefault: "Сбросить по умолчанию",
       changeFolder: "Сменить папку",
       selectCustomFolder: "Выбрать папку",
-      directoryTip: "💡 Совет: Безопасность браузера запрещает выбирать корень Загрузок. Создайте подпапку (например, Downloads/VoidFetch).",
+      directoryTip:
+        "💡 Совет: Безопасность браузера запрещает выбирать корень Загрузок. Создайте подпапку (например, Downloads/VoidFetch).",
       networkConcurrency: "Сетевые потоки",
       concurrentJobs: "Одновременные загрузки",
       hlsSegmentConcurrency: "Потоки сегментов HLS",
-      savePreferences: "Сохранить настройки"
-    }
+      savePreferences: "Сохранить настройки",
+    },
   },
   zh: {
     title: "未命名批量下载工作区",
@@ -773,7 +835,7 @@ const BATCH_WORKSPACE = {
       downloadHistory: "下载历史",
       preferences: "首选项",
       aboutVoidFetch: "关于 VoidFetch",
-      privacyAndTerms: "隐私与条款"
+      privacyAndTerms: "隐私与条款",
     },
     composer: {
       title: "批量 URL 解析器",
@@ -789,10 +851,11 @@ const BATCH_WORKSPACE = {
       dropFileHint: "将文本或 CSV 文件拖放到此处以导入链接",
       copyrightWarning: "不支持受版权保护、付费或会员限定的内容。",
       feedbackHint: "有建议？点击右上角的“反馈”。",
-      supportedPlatformsBar: "支持：YouTube, TikTok, 抖音, Bilibili, SoundCloud 等 20+ 平台",
+      supportedPlatformsBar:
+        "支持：YouTube, TikTok, 抖音, Bilibili, SoundCloud 等 20+ 平台",
       clear: "清空",
       addUrls: "添加 URL 到队列",
-      addUrlsCount: "添加 {count} 个 URL 到队列"
+      addUrlsCount: "添加 {count} 个 URL 到队列",
     },
     toolbar: {
       searchPlaceholder: "搜索标题或 URL...",
@@ -815,13 +878,14 @@ const BATCH_WORKSPACE = {
         paused: "已暂停",
         completed: "已完成",
         failed: "失败",
-        cancelled: "已取消"
-      }
+        cancelled: "已取消",
+      },
     },
     queue: {
       emptyTitle: "工作区为空",
       emptyBadge: "就绪",
-      emptyDescription: "粘贴视频 URL (YouTube, TikTok, 抖音, SoundCloud...) 或在上方导入文本文件以开始批量下载。",
+      emptyDescription:
+        "粘贴视频 URL (YouTube, TikTok, 抖音, SoundCloud...) 或在上方导入文本文件以开始批量下载。",
       multiThreaded: "多线程解析引擎",
       audioExtraction: "音频流提取",
       upTo4k: "最高支持 4K / 60FPS 视频",
@@ -832,7 +896,7 @@ const BATCH_WORKSPACE = {
       removeSelected: "删除所选项",
       selectAll: "全选队列项目",
       itemsCount: "{count} 项",
-      noMatchingJobs: "没有匹配当前搜索或筛选条件的任务。"
+      noMatchingJobs: "没有匹配当前搜索或筛选条件的任务。",
     },
     configDrawer: {
       titleSingle: "配置下载",
@@ -841,7 +905,8 @@ const BATCH_WORKSPACE = {
       outputFormat: "输出格式",
       videoQuality: "视频画质",
       selectVideoQuality: "选择视频画质",
-      qualityNote: "注意：如果原视频不支持 4K/2K，系统将自动下载可用的最高画质。",
+      qualityNote:
+        "注意：如果原视频不支持 4K/2K，系统将自动下载可用的最高画质。",
       audioQuality: "音频比特率",
       selectAudioQuality: "选择音频质量",
       filenameTemplate: "文件名模板",
@@ -854,7 +919,7 @@ const BATCH_WORKSPACE = {
       forceAudioExtraction: "强制提取音频 (MP3)",
       applyChecked: "应用到选中项 ({count})",
       applyAll: "应用到全部 ({count})",
-      saveConfig: "保存配置"
+      saveConfig: "保存配置",
     },
     progress: {
       totalItems: "{count} 项",
@@ -865,7 +930,7 @@ const BATCH_WORKSPACE = {
       speed: "速度",
       eta: "剩余时间",
       queueActive: "队列运行中",
-      queueIdle: "队列空闲"
+      queueIdle: "队列空闲",
     },
     settingsModal: {
       title: "工作区首选项",
@@ -881,12 +946,13 @@ const BATCH_WORKSPACE = {
       resetDefault: "恢复默认",
       changeFolder: "更改文件夹",
       selectCustomFolder: "选择自定义文件夹",
-      directoryTip: "💡 提示：浏览器安全限制禁止直接选择“下载”根目录。如需在“下载”目录内归类，请创建或选择子文件夹（例如 Downloads/VoidFetch）。",
+      directoryTip:
+        "💡 提示：浏览器安全限制禁止直接选择“下载”根目录。如需在“下载”目录内归类，请创建或选择子文件夹（例如 Downloads/VoidFetch）。",
       networkConcurrency: "网络并发",
       concurrentJobs: "并发下载任务数",
       hlsSegmentConcurrency: "HLS 切片并发数",
-      savePreferences: "保存偏好设置"
-    }
+      savePreferences: "保存偏好设置",
+    },
   },
   "zh-tw": {
     title: "未命名批量下載工作區",
@@ -897,7 +963,7 @@ const BATCH_WORKSPACE = {
       downloadHistory: "下載歷史",
       preferences: "偏好設定",
       aboutVoidFetch: "關於 VoidFetch",
-      privacyAndTerms: "隱私與條款"
+      privacyAndTerms: "隱私與條款",
     },
     composer: {
       title: "批量 URL 解析器",
@@ -913,10 +979,11 @@ const BATCH_WORKSPACE = {
       dropFileHint: "將文字或 CSV 檔案拖放到此處以匯入連結",
       copyrightWarning: "不支援受版權保護、付費或會員限定的內容。",
       feedbackHint: "有建議？點擊右上角的「回饋」。",
-      supportedPlatformsBar: "支援：YouTube, TikTok, 抖音, Bilibili, SoundCloud 等 20+ 平台",
+      supportedPlatformsBar:
+        "支援：YouTube, TikTok, 抖音, Bilibili, SoundCloud 等 20+ 平台",
       clear: "清空",
       addUrls: "新增 URL 到隊列",
-      addUrlsCount: "新增 {count} 個 URL 到隊列"
+      addUrlsCount: "新增 {count} 個 URL 到隊列",
     },
     toolbar: {
       searchPlaceholder: "搜尋標題或 URL...",
@@ -939,13 +1006,14 @@ const BATCH_WORKSPACE = {
         paused: "已暫停",
         completed: "已完成",
         failed: "失敗",
-        cancelled: "已取消"
-      }
+        cancelled: "已取消",
+      },
     },
     queue: {
       emptyTitle: "工作區為空",
       emptyBadge: "就緒",
-      emptyDescription: "貼上影片 URL (YouTube, TikTok, 抖音, SoundCloud...) 或在上方匯入文字檔案以開始批量下載。",
+      emptyDescription:
+        "貼上影片 URL (YouTube, TikTok, 抖音, SoundCloud...) 或在上方匯入文字檔案以開始批量下載。",
       multiThreaded: "多線程解析引擎",
       audioExtraction: "音訊流提取",
       upTo4k: "最高支援 4K / 60FPS 影片",
@@ -956,7 +1024,7 @@ const BATCH_WORKSPACE = {
       removeSelected: "刪除所選項",
       selectAll: "全選隊列項目",
       itemsCount: "{count} 項",
-      noMatchingJobs: "沒有符合目前搜尋或篩選條件的任務。"
+      noMatchingJobs: "沒有符合目前搜尋或篩選條件的任務。",
     },
     configDrawer: {
       titleSingle: "配置下載",
@@ -965,7 +1033,8 @@ const BATCH_WORKSPACE = {
       outputFormat: "輸出格式",
       videoQuality: "影片畫質",
       selectVideoQuality: "選擇影片畫質",
-      qualityNote: "注意：如果原影片不支援 4K/2K，系統將自動下載可用的最高畫質。",
+      qualityNote:
+        "注意：如果原影片不支援 4K/2K，系統將自動下載可用的最高畫質。",
       audioQuality: "音訊位元率",
       selectAudioQuality: "選擇音訊品質",
       filenameTemplate: "檔名範本",
@@ -978,7 +1047,7 @@ const BATCH_WORKSPACE = {
       forceAudioExtraction: "強制提取音訊 (MP3)",
       applyChecked: "應用到選中項 ({count})",
       applyAll: "應用到全部 ({count})",
-      saveConfig: "儲存配置"
+      saveConfig: "儲存配置",
     },
     progress: {
       totalItems: "{count} 項",
@@ -989,7 +1058,7 @@ const BATCH_WORKSPACE = {
       speed: "速度",
       eta: "剩餘時間",
       queueActive: "隊列運行中",
-      queueIdle: "隊列空閒"
+      queueIdle: "隊列空閒",
     },
     settingsModal: {
       title: "工作區偏好設定",
@@ -1005,19 +1074,21 @@ const BATCH_WORKSPACE = {
       resetDefault: "恢復預設",
       changeFolder: "變更資料夾",
       selectCustomFolder: "選擇自訂資料夾",
-      directoryTip: "💡 提示：瀏覽器安全限制禁止直接選擇「下載」根目錄。如需在「下載」目錄內歸類，請建立或選擇子資料夾（例如 Downloads/VoidFetch）。",
+      directoryTip:
+        "💡 提示：瀏覽器安全限制禁止直接選擇「下載」根目錄。如需在「下載」目錄內歸類，請建立或選擇子資料夾（例如 Downloads/VoidFetch）。",
       networkConcurrency: "網路並發",
       concurrentJobs: "並發下載任務數",
       hlsSegmentConcurrency: "HLS 切片並發數",
-      savePreferences: "儲存偏好設定"
-    }
-  }
+      savePreferences: "儲存偏好設定",
+    },
+  },
 };
 
 const SETTINGS_PAGE = {
   en: {
     metaTitle: "Settings | VoidFetch",
-    metaDescription: "Configure downloader defaults, concurrency caps, network budgets, and directory path preferences.",
+    metaDescription:
+      "Configure downloader defaults, concurrency caps, network budgets, and directory path preferences.",
     title: "Preferences",
     subtitle: "Configure default downloader behaviors",
     resetDefaults: "Reset Defaults",
@@ -1031,8 +1102,10 @@ const SETTINGS_PAGE = {
     customDirectoryTitle: "Custom Download Directory Path",
     customDirName: "📁 Custom Directory: {name}",
     browserDefaultDir: "Browser Default (Downloads Folder)",
-    customDirDesc: "All VoidFetch downloads will be written directly into this folder handle",
-    browserDefaultDesc: "Files are handled by browser standard download manager",
+    customDirDesc:
+      "All VoidFetch downloads will be written directly into this folder handle",
+    browserDefaultDesc:
+      "Files are handled by browser standard download manager",
     resetDefaultDir: "Reset Default",
     changeFolder: "Change Folder",
     selectCustomFolder: "Select Custom Folder",
@@ -1040,16 +1113,20 @@ const SETTINGS_PAGE = {
     parserConcurrency: "Parser Concurrency",
     downloadConcurrency: "Download Concurrency",
     networkBudget: "Global Network Request Budget",
-    networkBudgetDesc: "Controls combined HLS chunks downloaded globally to avoid connection limits.",
+    networkBudgetDesc:
+      "Controls combined HLS chunks downloaded globally to avoid connection limits.",
     workflowsTitle: "Workflows & Flags",
     continueOnError: "Continue queue on error",
-    continueOnErrorDesc: "Keep downloading subsequent jobs in the queue if one fails.",
+    continueOnErrorDesc:
+      "Keep downloading subsequent jobs in the queue if one fails.",
     autoStartDownloads: "Auto-start queue on URL parse",
-    autoStartDownloadsDesc: "Immediately append parsed ready URLs directly to the download stream."
+    autoStartDownloadsDesc:
+      "Immediately append parsed ready URLs directly to the download stream.",
   },
   vi: {
     metaTitle: "Cài đặt | VoidFetch",
-    metaDescription: "Cấu hình mặc định trình tải xuống, số luồng đồng thời, giới hạn mạng và tùy chọn đường dẫn thư mục.",
+    metaDescription:
+      "Cấu hình mặc định trình tải xuống, số luồng đồng thời, giới hạn mạng và tùy chọn đường dẫn thư mục.",
     title: "Tùy chỉnh",
     subtitle: "Cấu hình hành vi mặc định của trình tải xuống",
     resetDefaults: "Khôi phục mặc định",
@@ -1063,8 +1140,10 @@ const SETTINGS_PAGE = {
     customDirectoryTitle: "Đường dẫn thư mục tải xuống tùy chỉnh",
     customDirName: "📁 Thư mục tùy chỉnh: {name}",
     browserDefaultDir: "Mặc định trình duyệt (Thư mục Downloads)",
-    customDirDesc: "Tất cả các bản tải xuống từ VoidFetch sẽ được ghi trực tiếp vào thư mục này",
-    browserDefaultDesc: "Tệp được quản lý bởi trình quản lý tải xuống tiêu chuẩn của trình duyệt",
+    customDirDesc:
+      "Tất cả các bản tải xuống từ VoidFetch sẽ được ghi trực tiếp vào thư mục này",
+    browserDefaultDesc:
+      "Tệp được quản lý bởi trình quản lý tải xuống tiêu chuẩn của trình duyệt",
     resetDefaultDir: "Đặt lại mặc định",
     changeFolder: "Đổi thư mục",
     selectCustomFolder: "Chọn thư mục tùy chỉnh",
@@ -1072,16 +1151,20 @@ const SETTINGS_PAGE = {
     parserConcurrency: "Số luồng phân tích URL",
     downloadConcurrency: "Số tệp tải xuống đồng thời",
     networkBudget: "Giới hạn yêu cầu mạng toàn cục",
-    networkBudgetDesc: "Kiểm soát tổng số phân đoạn HLS được tải xuống đồng thời để tránh vượt giới hạn kết nối.",
+    networkBudgetDesc:
+      "Kiểm soát tổng số phân đoạn HLS được tải xuống đồng thời để tránh vượt giới hạn kết nối.",
     workflowsTitle: "Quy trình & Cờ tính năng",
     continueOnError: "Tiếp tục hàng đợi khi gặp lỗi",
-    continueOnErrorDesc: "Tiếp tục tải các tác vụ tiếp theo trong hàng đợi nếu một tác vụ bị lỗi.",
+    continueOnErrorDesc:
+      "Tiếp tục tải các tác vụ tiếp theo trong hàng đợi nếu một tác vụ bị lỗi.",
     autoStartDownloads: "Tự động bắt đầu tải khi phân tích xong URL",
-    autoStartDownloadsDesc: "Tự động đưa các URL đã phân tích xong vào luồng tải xuống ngay lập tức."
+    autoStartDownloadsDesc:
+      "Tự động đưa các URL đã phân tích xong vào luồng tải xuống ngay lập tức.",
   },
   es: {
     metaTitle: "Configuración | VoidFetch",
-    metaDescription: "Configura valores predeterminados de descarga, límites de concurrencia y preferencias de ruta.",
+    metaDescription:
+      "Configura valores predeterminados de descarga, límites de concurrencia y preferencias de ruta.",
     title: "Preferencias",
     subtitle: "Configura comportamientos predeterminados del descargador",
     resetDefaults: "Restablecer Valores",
@@ -1095,8 +1178,10 @@ const SETTINGS_PAGE = {
     customDirectoryTitle: "Ruta de Carpeta de Descargas Personalizada",
     customDirName: "📁 Carpeta Personalizada: {name}",
     browserDefaultDir: "Predeterminado del Navegador (Descargas)",
-    customDirDesc: "Todas las descargas de VoidFetch se guardarán directamente en esta carpeta",
-    browserDefaultDesc: "Los archivos son gestionados por el administrador de descargas estándar",
+    customDirDesc:
+      "Todas las descargas de VoidFetch se guardarán directamente en esta carpeta",
+    browserDefaultDesc:
+      "Los archivos son gestionados por el administrador de descargas estándar",
     resetDefaultDir: "Restablecer por Defecto",
     changeFolder: "Cambiar Carpeta",
     selectCustomFolder: "Seleccionar Carpeta Personalizada",
@@ -1104,16 +1189,20 @@ const SETTINGS_PAGE = {
     parserConcurrency: "Concurrencia de Analizador",
     downloadConcurrency: "Concurrencia de Descarga",
     networkBudget: "Presupuesto Global de Solicitudes de Red",
-    networkBudgetDesc: "Controla los fragmentos HLS descargados globalmente para evitar límites de conexión.",
+    networkBudgetDesc:
+      "Controla los fragmentos HLS descargados globalmente para evitar límites de conexión.",
     workflowsTitle: "Flujos de Trabajo y Opciones",
     continueOnError: "Continuar cola en caso de error",
-    continueOnErrorDesc: "Seguir descargando las siguientes tareas de la cola si una falla.",
+    continueOnErrorDesc:
+      "Seguir descargando las siguientes tareas de la cola si una falla.",
     autoStartDownloads: "Iniciar cola automáticamente al analizar URL",
-    autoStartDownloadsDesc: "Añadir inmediatamente las URLs analizadas al flujo de descarga."
+    autoStartDownloadsDesc:
+      "Añadir inmediatamente las URLs analizadas al flujo de descarga.",
   },
   ja: {
     metaTitle: "設定 | VoidFetch",
-    metaDescription: "ダウンロードのデフォルト設定、並列数上限、ネットワーク制限、保存先フォルダを設定します。",
+    metaDescription:
+      "ダウンロードのデフォルト設定、並列数上限、ネットワーク制限、保存先フォルダを設定します。",
     title: "環境設定",
     subtitle: "ダウンローダーのデフォルト動作を設定",
     resetDefaults: "初期設定に戻す",
@@ -1127,8 +1216,10 @@ const SETTINGS_PAGE = {
     customDirectoryTitle: "カスタム保存先フォルダのパス",
     customDirName: "📁 カスタムフォルダ: {name}",
     browserDefaultDir: "ブラウザ標準 (ダウンロードフォルダ)",
-    customDirDesc: "すべての VoidFetch ダウンロードはこのフォルダに直接保存されます",
-    browserDefaultDesc: "ファイルはブラウザの標準ダウンロードマネージャーで処理されます",
+    customDirDesc:
+      "すべての VoidFetch ダウンロードはこのフォルダに直接保存されます",
+    browserDefaultDesc:
+      "ファイルはブラウザの標準ダウンロードマネージャーで処理されます",
     resetDefaultDir: "標準に戻す",
     changeFolder: "フォルダを変更",
     selectCustomFolder: "カスタムフォルダを選択",
@@ -1136,16 +1227,20 @@ const SETTINGS_PAGE = {
     parserConcurrency: "解析の並列数",
     downloadConcurrency: "ダウンロードの並列数",
     networkBudget: "グローバルネットワークリクエスト制限",
-    networkBudgetDesc: "接続制限を防ぐため、全体で同時にダウンロードするHLSチャンク数を制御します。",
+    networkBudgetDesc:
+      "接続制限を防ぐため、全体で同時にダウンロードするHLSチャンク数を制御します。",
     workflowsTitle: "ワークフローと設定フラグ",
     continueOnError: "エラー発生時もキューを継続",
-    continueOnErrorDesc: "1つのタスクが失敗しても、キュー内の後続タスクのダウンロードを継続します。",
+    continueOnErrorDesc:
+      "1つのタスクが失敗しても、キュー内の後続タスクのダウンロードを継続します。",
     autoStartDownloads: "URL解析完了時に自動でダウンロードを開始",
-    autoStartDownloadsDesc: "解析が完了したURLを直ちにダウンロードストリームに追加します。"
+    autoStartDownloadsDesc:
+      "解析が完了したURLを直ちにダウンロードストリームに追加します。",
   },
   ru: {
     metaTitle: "Настройки | VoidFetch",
-    metaDescription: "Настройка параметров загрузки по умолчанию, лимитов параллельности и пути к папке.",
+    metaDescription:
+      "Настройка параметров загрузки по умолчанию, лимитов параллельности и пути к папке.",
     title: "Предпочтения",
     subtitle: "Настройка стандартного поведения загрузчика",
     resetDefaults: "Сбросить настройки",
@@ -1160,7 +1255,8 @@ const SETTINGS_PAGE = {
     customDirName: "📁 Пользовательская папка: {name}",
     browserDefaultDir: "По умолчанию в браузере (Загрузки)",
     customDirDesc: "Все загрузки VoidFetch будут сохраняться прямо в эту папку",
-    browserDefaultDesc: "Файлы обрабатываются стандартным менеджером загрузок браузера",
+    browserDefaultDesc:
+      "Файлы обрабатываются стандартным менеджером загрузок браузера",
     resetDefaultDir: "Сбросить по умолчанию",
     changeFolder: "Сменить папку",
     selectCustomFolder: "Выбрать папку",
@@ -1168,12 +1264,14 @@ const SETTINGS_PAGE = {
     parserConcurrency: "Параллельность анализатора",
     downloadConcurrency: "Параллельность загрузки",
     networkBudget: "Глобальный лимит сетевых запросов",
-    networkBudgetDesc: "Управляет суммарным количеством сегментов HLS для предотвращения блокировок.",
+    networkBudgetDesc:
+      "Управляет суммарным количеством сегментов HLS для предотвращения блокировок.",
     workflowsTitle: "Рабочие процессы и флаги",
     continueOnError: "Продолжать очередь при ошибке",
-    continueOnErrorDesc: "Продолжать загрузку следующих задач в очереди при сбое одной из них.",
+    continueOnErrorDesc:
+      "Продолжать загрузку следующих задач в очереди при сбое одной из них.",
     autoStartDownloads: "Автозапуск очереди после анализа URL",
-    autoStartDownloadsDesc: "Сразу добавлять готовые URL в поток загрузки."
+    autoStartDownloadsDesc: "Сразу добавлять готовые URL в поток загрузки.",
   },
   zh: {
     metaTitle: "设置 | VoidFetch",
@@ -1203,9 +1301,10 @@ const SETTINGS_PAGE = {
     networkBudgetDesc: "控制全局同时下载的 HLS 切片总数，防止超出连接数限制。",
     workflowsTitle: "工作流与开关标志",
     continueOnError: "发生错误时继续执行队列",
-    continueOnErrorDesc: "当某个任务下载失败时，自动跳过并继续下载队列中的后续任务。",
+    continueOnErrorDesc:
+      "当某个任务下载失败时，自动跳过并继续下载队列中的后续任务。",
     autoStartDownloads: "解析 URL 后自动启动下载",
-    autoStartDownloadsDesc: "解析就绪后立即将 URL 直接加入下载流中。"
+    autoStartDownloadsDesc: "解析就绪后立即将 URL 直接加入下载流中。",
   },
   "zh-tw": {
     metaTitle: "設定 | VoidFetch",
@@ -1235,57 +1334,67 @@ const SETTINGS_PAGE = {
     networkBudgetDesc: "控制全域同時下載的 HLS 切片總數，防止超出連線數限制。",
     workflowsTitle: "工作流程與開關標誌",
     continueOnError: "發生錯誤時繼續執行隊列",
-    continueOnErrorDesc: "當某個任務下載失敗時，自動跳過並繼續下載隊列中的後續任務。",
+    continueOnErrorDesc:
+      "當某個任務下載失敗時，自動跳過並繼續下載隊列中的後續任務。",
     autoStartDownloads: "解析 URL 後自動啟動下載",
-    autoStartDownloadsDesc: "解析就緒後立即將 URL 直接加入下載流中。"
-  }
+    autoStartDownloadsDesc: "解析就緒後立即將 URL 直接加入下載流中。",
+  },
 };
 
 const FEEDBACK_PAGE = {
   en: {
     communityDiscussionsTitle: "Community Discussions",
-    communityDiscussionsSubtitle: "Sign in with GitHub to post public feedback, report bugs, or request new features.",
-    poweredByGiscus: "Powered by Giscus"
+    communityDiscussionsSubtitle:
+      "Sign in with GitHub to post public feedback, report bugs, or request new features.",
+    poweredByGiscus: "Powered by Giscus",
   },
   vi: {
     communityDiscussionsTitle: "Thảo luận & Góp ý cộng đồng",
-    communityDiscussionsSubtitle: "Đăng nhập bằng GitHub để gửi phản hồi công khai, báo lỗi hoặc đề xuất tính năng mới.",
-    poweredByGiscus: "Hỗ trợ bởi Giscus"
+    communityDiscussionsSubtitle:
+      "Đăng nhập bằng GitHub để gửi phản hồi công khai, báo lỗi hoặc đề xuất tính năng mới.",
+    poweredByGiscus: "Hỗ trợ bởi Giscus",
   },
   es: {
     communityDiscussionsTitle: "Discusiones de la Comunidad",
-    communityDiscussionsSubtitle: "Inicia sesión con GitHub para enviar comentarios públicos, reportar errores o solicitar nuevas funciones.",
-    poweredByGiscus: "Impulsado por Giscus"
+    communityDiscussionsSubtitle:
+      "Inicia sesión con GitHub para enviar comentarios públicos, reportar errores o solicitar nuevas funciones.",
+    poweredByGiscus: "Impulsado por Giscus",
   },
   ja: {
     communityDiscussionsTitle: "コミュニティディスカッション",
-    communityDiscussionsSubtitle: "GitHubでサインインして、公開フィードバック、バグ報告、新機能のリクエストを投稿します。",
-    poweredByGiscus: "Giscus を使用"
+    communityDiscussionsSubtitle:
+      "GitHubでサインインして、公開フィードバック、バグ報告、新機能のリクエストを投稿します。",
+    poweredByGiscus: "Giscus を使用",
   },
   ru: {
     communityDiscussionsTitle: "Обсуждения сообщества",
-    communityDiscussionsSubtitle: "Войдите через GitHub, чтобы оставить публичный отзыв, сообщить об ошибке или предложить новую функцию.",
-    poweredByGiscus: "На базе Giscus"
+    communityDiscussionsSubtitle:
+      "Войдите через GitHub, чтобы оставить публичный отзыв, сообщить об ошибке или предложить новую функцию.",
+    poweredByGiscus: "На базе Giscus",
   },
   zh: {
     communityDiscussionsTitle: "社区讨论与反馈",
-    communityDiscussionsSubtitle: "使用 GitHub 登录以发布公开反馈、报告 Bug 或提出新功能需求。",
-    poweredByGiscus: "由 Giscus 提供支持"
+    communityDiscussionsSubtitle:
+      "使用 GitHub 登录以发布公开反馈、报告 Bug 或提出新功能需求。",
+    poweredByGiscus: "由 Giscus 提供支持",
   },
   "zh-tw": {
     communityDiscussionsTitle: "社群討論與回饋",
-    communityDiscussionsSubtitle: "使用 GitHub 登入以發布公開回饋、回報 Bug 或提出新功能需求。",
-    poweredByGiscus: "由 Giscus 提供支援"
-  }
+    communityDiscussionsSubtitle:
+      "使用 GitHub 登入以發布公開回饋、回報 Bug 或提出新功能需求。",
+    poweredByGiscus: "由 Giscus 提供支援",
+  },
 };
 
 function copyStructure(canonical, target, locale) {
-  if (canonical === null || typeof canonical !== 'object') {
+  if (canonical === null || typeof canonical !== "object") {
     return target !== undefined ? target : canonical;
   }
   if (Array.isArray(canonical)) {
     const targetArr = Array.isArray(target) ? target : [];
-    return canonical.map((item, i) => copyStructure(item, targetArr[i], locale));
+    return canonical.map((item, i) =>
+      copyStructure(item, targetArr[i], locale),
+    );
   }
   const result = {};
   for (const key of Object.keys(canonical)) {
@@ -1293,13 +1402,14 @@ function copyStructure(canonical, target, locale) {
       result[key] = copyStructure(canonical[key], target[key], locale);
     } else {
       // Fallback logic for missing blocks
-      if (key === 'supportedPlatformsModal') {
-        result[key] = SUPPORTED_PLATFORMS_MODAL[locale] || SUPPORTED_PLATFORMS_MODAL.en;
-      } else if (key === 'batchWorkspace') {
+      if (key === "supportedPlatformsModal") {
+        result[key] =
+          SUPPORTED_PLATFORMS_MODAL[locale] || SUPPORTED_PLATFORMS_MODAL.en;
+      } else if (key === "batchWorkspace") {
         result[key] = BATCH_WORKSPACE[locale] || BATCH_WORKSPACE.en;
-      } else if (key === 'settingsPage') {
+      } else if (key === "settingsPage") {
         result[key] = SETTINGS_PAGE[locale] || SETTINGS_PAGE.en;
-      } else if (key === 'aboutPage' && locale === 'ja') {
+      } else if (key === "aboutPage" && locale === "ja") {
         result[key] = JAPANESE_ABOUT_PAGE;
       } else {
         result[key] = copyStructure(canonical[key], undefined, locale);
@@ -1311,39 +1421,48 @@ function copyStructure(canonical, target, locale) {
 
 async function main() {
   const files = await readdir(DICT_DIR);
-  const jsonFiles = files.filter(f => f.endsWith('.json'));
+  const jsonFiles = files.filter((f) => f.endsWith(".json"));
 
   // Load canonical en.json
-  const enRaw = await readFile(join(DICT_DIR, 'en.json'), 'utf8');
+  const enRaw = await readFile(join(DICT_DIR, "en.json"), "utf8");
   let en = JSON.parse(enRaw);
   en.supportedPlatformsModal = SUPPORTED_PLATFORMS_MODAL.en;
   en.batchWorkspace = BATCH_WORKSPACE.en;
   en.settingsPage = SETTINGS_PAGE.en;
   en.feedbackPage = {
     ...en.feedbackPage,
-    ...FEEDBACK_PAGE.en
+    ...FEEDBACK_PAGE.en,
   };
-  await writeFile(join(DICT_DIR, 'en.json'), JSON.stringify(en, null, 4) + '\n', 'utf8');
+  await writeFile(
+    join(DICT_DIR, "en.json"),
+    JSON.stringify(en, null, 4) + "\n",
+    "utf8",
+  );
 
   for (const file of jsonFiles) {
-    if (file === 'en.json') continue;
-    const locale = file.replace('.json', '');
-    const raw = await readFile(join(DICT_DIR, file), 'utf8');
+    if (file === "en.json") continue;
+    const locale = file.replace(".json", "");
+    const raw = await readFile(join(DICT_DIR, file), "utf8");
     const dict = JSON.parse(raw);
 
-    dict.supportedPlatformsModal = SUPPORTED_PLATFORMS_MODAL[locale] || SUPPORTED_PLATFORMS_MODAL.en;
+    dict.supportedPlatformsModal =
+      SUPPORTED_PLATFORMS_MODAL[locale] || SUPPORTED_PLATFORMS_MODAL.en;
     dict.batchWorkspace = BATCH_WORKSPACE[locale] || BATCH_WORKSPACE.en;
     dict.settingsPage = SETTINGS_PAGE[locale] || SETTINGS_PAGE.en;
     dict.feedbackPage = {
       ...dict.feedbackPage,
-      ...(FEEDBACK_PAGE[locale] || FEEDBACK_PAGE.en)
+      ...(FEEDBACK_PAGE[locale] || FEEDBACK_PAGE.en),
     };
-    if (locale === 'ja' && !dict.aboutPage) {
+    if (locale === "ja" && !dict.aboutPage) {
       dict.aboutPage = JAPANESE_ABOUT_PAGE;
     }
 
     const synced = copyStructure(en, dict, locale);
-    await writeFile(join(DICT_DIR, file), JSON.stringify(synced, null, 4) + '\n', 'utf8');
+    await writeFile(
+      join(DICT_DIR, file),
+      JSON.stringify(synced, null, 4) + "\n",
+      "utf8",
+    );
     console.log(`Synced dictionary for locale: ${locale}`);
   }
 }

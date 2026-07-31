@@ -43,7 +43,7 @@ const AceternityGridBackground = ({
   return (
     <div className="absolute inset-0 -z-10 h-full w-full bg-slate-950">
       {/* Base Grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f1a_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f1a_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f1a_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f1a_1px,transparent_1px)] bg-size-[24px_24px] mask-[radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
 
       {/* Cover Image Blur Layer */}
       {coverUrl && (
@@ -63,16 +63,16 @@ const AceternityGridBackground = ({
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 2, ease: "easeOut" }}
-        className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] rounded-full bg-purple-500/10 blur-[100px]"
+        className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-purple-500/10 blur-[100px]"
       />
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 2.5, ease: "easeOut", delay: 0.2 }}
-        className="absolute top-[20%] -right-[10%] w-[40%] h-[60%] rounded-full bg-indigo-500/10 blur-[120px]"
+        className="absolute top-[20%] right-[-10%] w-[40%] h-[60%] rounded-full bg-indigo-500/10 blur-[120px]"
       />
 
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-white/10 to-transparent" />
     </div>
   );
 };
@@ -219,10 +219,10 @@ export function PlayPageClient() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ type: "spring", bounce: 0, duration: 0.5 }}
-          className="w-full max-w-5xl mx-auto bg-black/60 backdrop-blur-2xl border border-white/10 rounded-2xl md:rounded-[2rem] overflow-hidden shadow-2xl relative ring-1 ring-white/5"
+          className="w-full max-w-5xl mx-auto bg-black/60 backdrop-blur-2xl border border-white/10 rounded-2xl md:rounded-4xl overflow-hidden shadow-2xl relative ring-1 ring-white/5"
         >
           {/* Top Glow Edge */}
-          <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent opacity-80" />
+          <div className="absolute top-0 inset-x-0 h-px bg-linear-to-r from-transparent via-indigo-500/50 to-transparent opacity-80" />
 
           {loading ? (
             <div className="aspect-video max-h-[75dvh] flex items-center justify-center text-sm text-indigo-400/80">
@@ -236,7 +236,7 @@ export function PlayPageClient() {
           ) : canPlay && playbackUrl ? (
             <div className="relative aspect-video max-h-[75dvh] w-full flex items-center justify-center bg-black/90 group">
               {/* Inner Glow when playing */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/5 via-transparent to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none" />
+              <div className="absolute inset-0 bg-linear-to-tr from-indigo-500/5 via-transparent to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none" />
 
               {hlsPlaybackUrl ? (
                 <HlsVideoPlayer
@@ -297,7 +297,7 @@ export function PlayPageClient() {
             )}
 
             {!loading && !displayError && visibleParseResult && (
-              <div className="w-full space-y-4 p-6 md:p-8 rounded-[2rem] bg-slate-900/40 border border-white/5 backdrop-blur-2xl shadow-xl relative overflow-hidden group">
+              <div className="w-full space-y-4 p-6 md:p-8 rounded-4xl bg-slate-900/40 border border-white/5 backdrop-blur-2xl shadow-xl relative overflow-hidden group">
                 {/* Decorative Glow inside Card */}
                 <div className="absolute -top-24 -right-24 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 

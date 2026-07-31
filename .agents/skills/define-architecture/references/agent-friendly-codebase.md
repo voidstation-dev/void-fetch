@@ -30,12 +30,12 @@ A rule an agent must remember is a suggestion; an exit code is a contract. Anyth
 
 TypeScript-first tools per category (swap per ecosystem; the categories are language-agnostic):
 
-| Category | Tool | Catches |
-|---|---|---|
-| Dead code, unused exports and deps | `knip` | Orphaned helpers agents leave behind |
-| Copy-paste duplication | `jscpd` | Near-duplicate blocks that should share one implementation |
-| Import boundaries and cycles | `dependency-cruiser` or eslint `boundaries` | Layer violations (enforce the handler/service/dao contract) |
-| File size and complexity | eslint `max-lines` (~400), `complexity` | Files too big to read in one pass |
+| Category                           | Tool                                        | Catches                                                     |
+| ---------------------------------- | ------------------------------------------- | ----------------------------------------------------------- |
+| Dead code, unused exports and deps | `knip`                                      | Orphaned helpers agents leave behind                        |
+| Copy-paste duplication             | `jscpd`                                     | Near-duplicate blocks that should share one implementation  |
+| Import boundaries and cycles       | `dependency-cruiser` or eslint `boundaries` | Layer violations (enforce the handler/service/dao contract) |
+| File size and complexity           | eslint `max-lines` (~400), `complexity`     | Files too big to read in one pass                           |
 
 ## Bespoke invariant guards with a ratchet
 

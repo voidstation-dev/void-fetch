@@ -1,7 +1,7 @@
-'use client';
-import { useEffect, useRef } from 'react';
-import { cn } from '@/lib/utils';
-import { ADSENSE_CLIENT_ID, AD_MIN_HEIGHT } from '@/lib/constants';
+"use client";
+import { useEffect, useRef } from "react";
+import { cn } from "@/lib/utils";
+import { ADSENSE_CLIENT_ID, AD_MIN_HEIGHT } from "@/lib/constants";
 
 declare global {
   interface Window {
@@ -14,7 +14,7 @@ interface SideRailAdProps {
   className?: string;
   minHeight?: number;
   height?: number;
-  format?: 'auto' | 'rectangle';
+  format?: "auto" | "rectangle";
 }
 
 export function SideRailAd({
@@ -22,11 +22,11 @@ export function SideRailAd({
   className,
   minHeight = AD_MIN_HEIGHT,
   height,
-  format = 'auto',
+  format = "auto",
 }: SideRailAdProps) {
   const adRef = useRef<HTMLModElement | null>(null);
   const initializedRef = useRef(false);
-  const hasFixedHeight = typeof height === 'number';
+  const hasFixedHeight = typeof height === "number";
 
   useEffect(() => {
     if (initializedRef.current || !adRef.current) {
@@ -42,7 +42,7 @@ export function SideRailAd({
         return false;
       }
       const style = window.getComputedStyle(el);
-      if (style.display === 'none' || style.visibility === 'hidden') {
+      if (style.display === "none" || style.visibility === "hidden") {
         return false;
       }
       const rect = el.getBoundingClientRect();
@@ -53,7 +53,7 @@ export function SideRailAd({
       if (disposed || initializedRef.current || !hasRenderableSize()) {
         return;
       }
-      if (el.getAttribute('data-adsbygoogle-status') === 'done') {
+      if (el.getAttribute("data-adsbygoogle-status") === "done") {
         initializedRef.current = true;
         return;
       }
@@ -61,7 +61,7 @@ export function SideRailAd({
         (window.adsbygoogle = window.adsbygoogle || []).push({});
         initializedRef.current = true;
       } catch (error) {
-        console.error('AdSense error:', error);
+        console.error("AdSense error:", error);
       }
     };
 
@@ -89,7 +89,7 @@ export function SideRailAd({
     });
     intersectionObserver.observe(el);
 
-    window.addEventListener('resize', scheduleInit);
+    window.addEventListener("resize", scheduleInit);
     scheduleInit();
 
     return () => {
@@ -97,7 +97,7 @@ export function SideRailAd({
       if (rafId !== null) {
         cancelAnimationFrame(rafId);
       }
-      window.removeEventListener('resize', scheduleInit);
+      window.removeEventListener("resize", scheduleInit);
       resizeObserver.disconnect();
       intersectionObserver.disconnect();
     };
@@ -108,16 +108,19 @@ export function SideRailAd({
     : { minHeight: `${minHeight}px` };
 
   return (
-    <div className={cn('w-full overflow-hidden', className)} style={heightStyle}>
+    <div
+      className={cn("w-full overflow-hidden", className)}
+      style={heightStyle}
+    >
       <ins
         ref={adRef}
         className="adsbygoogle block"
-        style={{ display: 'block', width: '100%', ...heightStyle }}
+        style={{ display: "block", width: "100%", ...heightStyle }}
         data-ad-client={ADSENSE_CLIENT_ID}
         data-ad-slot={slot}
-        data-ad-format={hasFixedHeight ? 'rectangle' : format}
-        data-ad-test={process.env.NODE_ENV === 'development' ? 'on' : undefined}
-        data-full-width-responsive={hasFixedHeight ? undefined : 'true'}
+        data-ad-format={hasFixedHeight ? "rectangle" : format}
+        data-ad-test={process.env.NODE_ENV === "development" ? "on" : undefined}
+        data-full-width-responsive={hasFixedHeight ? undefined : "true"}
       />
     </div>
   );

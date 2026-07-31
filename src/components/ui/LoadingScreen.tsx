@@ -43,7 +43,7 @@ export function LoadingScreen({
     <div
       className={cn(
         "relative flex flex-col items-center justify-center h-[calc(100vh-5.5rem)] w-full overflow-hidden rounded-3xl border border-border/80 bg-card/90 backdrop-blur-2xl shadow-2xl p-8 transition-all duration-300 animate-in fade-in-50",
-        className
+        className,
       )}
     >
       {/* Background Radial Glow & Cyber Grid */}
@@ -52,7 +52,7 @@ export function LoadingScreen({
       <div className="absolute -bottom-32 -right-32 w-80 h-80 bg-purple-500/15 rounded-full blur-3xl pointer-events-none animate-pulse" />
 
       {/* Top Ambient Glow Line */}
-      <div className="absolute top-0 inset-x-12 h-px bg-gradient-to-r from-transparent via-primary/70 to-transparent" />
+      <div className="absolute top-0 inset-x-12 h-px bg-linear-to-r from-transparent via-primary/70 to-transparent" />
 
       {/* Main Animated Orb & Orbit Rings */}
       <div className="relative flex items-center justify-center my-6">
@@ -64,7 +64,7 @@ export function LoadingScreen({
         <div className="absolute w-20 h-20 rounded-full border border-dashed border-purple-500/50 animate-spin-reverse-slow" />
 
         {/* Glowing Center Badge */}
-        <div className="relative p-4 rounded-2xl bg-gradient-to-br from-card via-card/90 to-primary/20 border border-primary/40 text-primary shadow-[0_0_30px_rgba(16,185,129,0.35)] backdrop-blur-xl flex items-center justify-center">
+        <div className="relative p-4 rounded-2xl bg-linear-to-br from-card via-card/90 to-primary/20 border border-primary/40 text-primary shadow-[0_0_30px_rgba(16,185,129,0.35)] backdrop-blur-xl flex items-center justify-center">
           <Zap className="h-8 w-8 text-primary animate-pulse drop-shadow-[0_0_12px_rgba(16,185,129,0.8)]" />
         </div>
       </div>
@@ -84,7 +84,7 @@ export function LoadingScreen({
 
         {/* Neon Progress Bar */}
         <div className="relative w-64 h-1.5 rounded-full bg-muted/60 overflow-hidden border border-border/40 my-2">
-          <div className="absolute inset-y-0 left-0 w-full bg-gradient-to-r from-cyan-500 via-primary to-purple-500 rounded-full animate-shimmer" />
+          <div className="absolute inset-y-0 left-0 w-full bg-linear-to-r from-cyan-500 via-primary to-purple-500 rounded-full animate-shimmer" />
         </div>
 
         {/* Dynamic Stepper Text */}
@@ -100,7 +100,8 @@ export function LoadingScreen({
           variant="outline"
           className="text-[9px] font-mono font-bold bg-primary/10 text-primary border-primary/20 px-2.5 py-0.5 rounded-full flex items-center gap-1"
         >
-          <ShieldCheck className="h-3 w-3 text-emerald-400" /> 25+ PLATFORMS READY
+          <ShieldCheck className="h-3 w-3 text-emerald-400" /> 25+ PLATFORMS
+          READY
         </Badge>
         <Badge
           variant="outline"

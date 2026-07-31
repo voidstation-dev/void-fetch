@@ -6,17 +6,15 @@
 
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useBatchStore } from "@/features/batch-download/store/batch-store";
-import { WorkspaceLayout } from "@/features/batch-download/components/WorkspaceLayout";
 import { ExpandableJobCard } from "@/features/batch-download/components/ExpandableJobCard";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
   History,
   Trash2,
-  Loader2,
   Layers,
   Sparkles,
   Maximize2,
@@ -28,9 +26,11 @@ import {
   FileVideo,
 } from "lucide-react";
 import { toast } from "@/lib/deferred-toast";
-import type { DownloadJob, OutputType } from "@/features/batch-download/types/batch-download";
+import type {
+  DownloadJob,
+  OutputType,
+} from "@/features/batch-download/types/batch-download";
 import { getPlatformBadgeStyle } from "@/lib/platforms";
-import { LoadingScreen } from "@/components/ui/LoadingScreen";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 
@@ -52,10 +52,27 @@ function HistoryCardRow({
     ? new Date(job.completedAt).toLocaleString()
     : "Recently";
 
-  const rawData = (job.metadata?.rawParsedData || job.metadata) as Record<string, unknown> | undefined;
-  const videoUrl = typeof rawData?.downloadVideoUrl === "string" ? rawData.downloadVideoUrl : typeof rawData?.originDownloadVideoUrl === "string" ? rawData.originDownloadVideoUrl : typeof rawData?.videoUrl === "string" ? rawData.videoUrl : undefined;
-  const audioUrl = typeof rawData?.downloadAudioUrl === "string" ? rawData.downloadAudioUrl : typeof rawData?.originDownloadAudioUrl === "string" ? rawData.originDownloadAudioUrl : typeof rawData?.audioUrl === "string" ? rawData.audioUrl : undefined;
-  const images = job.metadata?.images || (Array.isArray(rawData?.images) ? (rawData.images as string[]) : undefined);
+  const rawData = (job.metadata?.rawParsedData || job.metadata) as
+    Record<string, unknown> | undefined;
+  const videoUrl =
+    typeof rawData?.downloadVideoUrl === "string"
+      ? rawData.downloadVideoUrl
+      : typeof rawData?.originDownloadVideoUrl === "string"
+        ? rawData.originDownloadVideoUrl
+        : typeof rawData?.videoUrl === "string"
+          ? rawData.videoUrl
+          : undefined;
+  const audioUrl =
+    typeof rawData?.downloadAudioUrl === "string"
+      ? rawData.downloadAudioUrl
+      : typeof rawData?.originDownloadAudioUrl === "string"
+        ? rawData.originDownloadAudioUrl
+        : typeof rawData?.audioUrl === "string"
+          ? rawData.audioUrl
+          : undefined;
+  const images =
+    job.metadata?.images ||
+    (Array.isArray(rawData?.images) ? (rawData.images as string[]) : undefined);
 
   const isImageOnly =
     job.config.outputType === "images" ||
@@ -63,9 +80,7 @@ function HistoryCardRow({
     (Boolean(images && images.length > 0) && !videoUrl && !audioUrl);
 
   return (
-    <motion.div
-      className="group relative flex flex-col md:flex-row items-start md:items-center justify-between p-4 rounded-2xl bg-card/90 backdrop-blur-2xl border border-border/80 hover:border-primary/50 shadow-md hover:shadow-xl transition-all duration-300 gap-4"
-    >
+    <motion.div className="group relative flex flex-col md:flex-row items-start md:items-center justify-between p-4 rounded-2xl bg-card/90 backdrop-blur-2xl border border-border/80 hover:border-primary/50 shadow-md hover:shadow-xl transition-all duration-300 gap-4">
       {/* Left: Thumbnail Cover & Title Info */}
       <div className="flex items-center gap-3.5 min-w-0 flex-1 w-full md:w-auto">
         {/* Media Thumbnail */}
@@ -92,9 +107,7 @@ function HistoryCardRow({
 
         {/* Info Column */}
         <div className="flex flex-col min-w-0 gap-1 flex-1">
-          <motion.div
-            className="flex items-center gap-2 flex-wrap"
-          >
+          <motion.div className="flex items-center gap-2 flex-wrap">
             <Badge
               variant="outline"
               className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded-md uppercase tracking-wider ${getPlatformBadgeStyle(
@@ -167,13 +180,20 @@ function HistoryCardRow({
               type="button"
               variant="outline"
               size="default"
-              onClick={() => onRedownload(job, images && images.length > 1 ? "zip_images" : "images")}
+              onClick={() =>
+                onRedownload(
+                  job,
+                  images && images.length > 1 ? "zip_images" : "images",
+                )
+              }
               className="h-8 text-xs font-semibold gap-1 px-2.5 rounded-xl border-cyan-500/40 bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/20 shadow-2xs transition-all"
               title="Redownload Image Pack"
             >
               <ImageIcon className="h-3.5 w-3.5 text-cyan-400" />
               <span className="hidden sm:inline">
-                {images && images.length > 1 ? tHistory("redownloadZip") : tHistory("redownloadSingleImage")}
+                {images && images.length > 1
+                  ? tHistory("redownloadZip")
+                  : tHistory("redownloadSingleImage")}
               </span>
             </Button>
           ) : (
@@ -188,7 +208,9 @@ function HistoryCardRow({
                 title="Redownload MP4 Video"
               >
                 <Video className="h-3.5 w-3.5 text-emerald-500" />
-                <span className="hidden sm:inline">{tHistory("redownloadMp4")}</span>
+                <span className="hidden sm:inline">
+                  {tHistory("redownloadMp4")}
+                </span>
               </Button>
 
               {/* Redownload MP3 */}
@@ -201,7 +223,9 @@ function HistoryCardRow({
                 title="Redownload MP3 Audio"
               >
                 <Music className="h-3.5 w-3.5 text-purple-400" />
-                <span className="hidden sm:inline">{tHistory("redownloadMp3")}</span>
+                <span className="hidden sm:inline">
+                  {tHistory("redownloadMp3")}
+                </span>
               </Button>
             </>
           )}
@@ -235,10 +259,7 @@ export default function HistoryPage() {
 
   const completedJobs = store.jobs.filter((j) => j.status === "completed");
 
-  const handleRedownload = async (
-    job: DownloadJob,
-    format?: OutputType,
-  ) => {
+  const handleRedownload = async (job: DownloadJob, format?: OutputType) => {
     if (format) {
       await store.updateJobConfig(job.id, {
         outputType: format,
@@ -246,7 +267,9 @@ export default function HistoryPage() {
       });
     }
     await store.updateJobStatus(job.id, "queued");
-    toast.success(tHistory("queuedForRedownload", { title: job.metadata?.title || "item" }));
+    toast.success(
+      tHistory("queuedForRedownload", { title: job.metadata?.title || "item" }),
+    );
   };
 
   const handleRemove = (id: string) => {
@@ -293,7 +316,7 @@ export default function HistoryPage() {
           <div className="absolute inset-0 bg-radial-glow from-primary/10 via-transparent to-transparent pointer-events-none opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
 
           {/* Animated Icon Badge */}
-          <div className="relative p-5 rounded-2xl bg-gradient-to-br from-primary/20 via-primary/10 to-transparent border border-primary/30 text-primary shadow-xl group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-300">
+          <div className="relative p-5 rounded-2xl bg-linear-to-br from-primary/20 via-primary/10 to-transparent border border-primary/30 text-primary shadow-xl group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-300">
             <Layers className="h-10 w-10 text-primary animate-pulse" />
           </div>
 
@@ -313,10 +336,12 @@ export default function HistoryPage() {
           {/* Micro Feature Badges */}
           <div className="flex flex-wrap items-center justify-center gap-2 z-10 pt-2">
             <span className="px-3 py-1 rounded-full bg-muted/30 border border-border/60 text-[10px] font-medium text-muted-foreground flex items-center gap-1.5 shadow-2xs">
-              <Sparkles className="h-3 w-3 text-amber-400" /> {tHistory("autoPersisted")}
+              <Sparkles className="h-3 w-3 text-amber-400" />{" "}
+              {tHistory("autoPersisted")}
             </span>
             <span className="px-3 py-1 rounded-full bg-muted/30 border border-border/60 text-[10px] font-medium text-muted-foreground flex items-center gap-1.5 shadow-2xs">
-              <Sparkles className="h-3 w-3 text-cyan-400" /> {tHistory("instantRedownloads")}
+              <Sparkles className="h-3 w-3 text-cyan-400" />{" "}
+              {tHistory("instantRedownloads")}
             </span>
           </div>
         </div>

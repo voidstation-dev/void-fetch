@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { History, Home, MessageSquare, Music, Zap } from "lucide-react";
+import { History, Home, Music } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DeferredLanguageSwitcher } from "@/components/deferred-language-switcher";
 import { ThemeSwitcher } from "@/components/theme-switcher";
@@ -41,7 +41,6 @@ export function AppTopBar({
   )
     ? firstSegment
     : i18n.defaultLocale;
-  const feedbackHref = `/${locale}/feedback`;
   const resolvedHomeHref = homeHref === "/" ? `/${locale}` : homeHref;
   const shouldShowHomeButton =
     showHomeButton || (pathname !== `/${locale}` && pathname !== `/${locale}/`);
@@ -65,8 +64,14 @@ export function AppTopBar({
               href={`/${locale}`}
               className="flex items-center gap-2 group cursor-pointer"
             >
-              <div className="relative flex items-center justify-center p-1 rounded-xl bg-gradient-to-br from-primary/20 via-primary/10 to-transparent border border-primary/30 shadow-md">
-                <Image src="/favicon.svg" alt="VoidFetch" width={24} height={24} className="rounded-lg" />
+              <div className="relative flex items-center justify-center p-1 rounded-xl bg-linear-to-br from-primary/20 via-primary/10 to-transparent border border-primary/30 shadow-md">
+                <Image
+                  src="/favicon.svg"
+                  alt="VoidFetch"
+                  width={24}
+                  height={24}
+                  className="rounded-lg"
+                />
                 <span className="absolute -top-0.5 -right-0.5 flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -119,7 +124,13 @@ export function AppTopBar({
               href={`/${locale}`}
               className="flex items-center gap-2.5 group cursor-pointer"
             >
-              <Image src="/favicon.svg" alt="VoidFetch" width={40} height={40} className="rounded-lg" />
+              <Image
+                src="/favicon.svg"
+                alt="VoidFetch"
+                width={40}
+                height={40}
+                className="rounded-lg"
+              />
               <div className="flex flex-col">
                 <div className="flex items-center gap-1.5">
                   <span className="font-extrabold text-sm tracking-wider text-foreground">
@@ -130,7 +141,7 @@ export function AppTopBar({
                   </span>
                 </div>
                 <span className="text-[10px] text-muted-foreground font-medium">
-                  {tModal('universalSub')}
+                  {tModal("universalSub")}
                 </span>
               </div>
             </Link>

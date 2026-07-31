@@ -21,12 +21,14 @@ Unlike test suite execution (structured tests against specific routes), explorat
 ## What to Look For
 
 ### First Impressions (30 seconds)
+
 - Is the purpose of this page immediately clear?
 - Is there a clear visual hierarchy?
 - Does anything look broken, misaligned, or out of place?
 - Are there any console errors? (`browse eval "JSON.stringify(window.__logs || [])"`)
 
 ### Navigation Test
+
 - Can you reach every major section from the current page?
 - Does the back button work?
 - Are breadcrumbs accurate?
@@ -34,6 +36,7 @@ Unlike test suite execution (structured tests against specific routes), explorat
 - Does the logo link to the homepage?
 
 ### Form Stress Test
+
 - Try submitting empty forms
 - Enter extremely long text (200+ characters)
 - Enter special characters: `<script>alert('xss')</script>`, `"quotes"`, `emoji 🎉`
@@ -42,18 +45,21 @@ Unlike test suite execution (structured tests against specific routes), explorat
 - What happens when validation fails? Is the error helpful?
 
 ### State Persistence
+
 - Fill a form halfway, navigate away, come back — is data preserved?
 - Create an item, refresh the page — does it still exist?
 - Apply filters, refresh — are filters preserved?
 - Open a modal, press Escape — does it close cleanly?
 
 ### Edge Cases
+
 - What does the page look like with no data (empty state)?
 - What happens when you navigate to a URL that doesn't exist (404)?
 - What happens with an expired session / no auth?
 - Resize the viewport to mobile — does it still work?
 
 ### Performance Perception
+
 - Does the page feel fast or sluggish?
 - Are there loading indicators for slow operations?
 - Does content pop in or load smoothly?
@@ -61,6 +67,7 @@ Unlike test suite execution (structured tests against specific routes), explorat
 ## Exploratory Testing Report Format
 
 For each finding:
+
 ```
 FINDING: [brief description]
 SEVERITY: critical / high / medium / low
@@ -70,6 +77,7 @@ RECOMMENDATION: [specific fix suggestion]
 ```
 
 Example:
+
 ```
 FINDING: Settings page — "Regenerate API Key" button has no confirmation dialog
 SEVERITY: high

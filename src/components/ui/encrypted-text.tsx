@@ -3,9 +3,9 @@
  * Copyright (c) 2026 VoidStation.
  */
 
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
 interface EncryptedTextProps {
   text: string;
@@ -13,11 +13,11 @@ interface EncryptedTextProps {
   scrambleSpeed?: number;
 }
 
-const CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ0123456789@#$%&*!<>~';
+const CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ0123456789@#$%&*!<>~";
 
 export function EncryptedText({
   text,
-  className = '',
+  className = "",
   scrambleSpeed = 30,
 }: EncryptedTextProps) {
   const [displayText, setDisplayText] = useState(text);
@@ -29,15 +29,15 @@ export function EncryptedText({
     const interval = setInterval(() => {
       setDisplayText(() => {
         return text
-          .split('')
+          .split("")
           .map((char, index) => {
-            if (char === ' ') return ' ';
+            if (char === " ") return " ";
             if (index < iteration) {
               return text[index];
             }
             return CHARS[Math.floor(Math.random() * CHARS.length)];
           })
-          .join('');
+          .join("");
       });
 
       iteration += 1 / 3;

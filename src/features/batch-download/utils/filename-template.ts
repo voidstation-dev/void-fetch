@@ -4,7 +4,7 @@
  * All rights reserved.
  */
 
-import { sanitizeFilename } from '@/lib/utils';
+import { sanitizeFilename } from "@/lib/utils";
 
 interface TemplateVariables {
   index: number;
@@ -21,23 +21,23 @@ interface TemplateVariables {
 export function renderFilename(
   template: string,
   variables: TemplateVariables,
-  extension: string
+  extension: string,
 ): string {
   const now = new Date();
-  const dateStr = now.toISOString().slice(0, 10).replace(/-/g, ''); // YYYYMMDD
+  const dateStr = now.toISOString().slice(0, 10).replace(/-/g, ""); // YYYYMMDD
   const timestampStr = String(now.getTime());
 
-  const indexPadded = String(variables.index).padStart(3, '0');
+  const indexPadded = String(variables.index).padStart(3, "0");
 
   const replacements: Record<string, string> = {
-    '{index}': indexPadded,
-    '{title}': variables.title,
-    '{creator}': variables.creator || 'unknown',
-    '{platform}': variables.platform,
-    '{mediaId}': variables.mediaId,
-    '{quality}': variables.quality,
-    '{date}': dateStr,
-    '{timestamp}': timestampStr,
+    "{index}": indexPadded,
+    "{title}": variables.title,
+    "{creator}": variables.creator || "unknown",
+    "{platform}": variables.platform,
+    "{mediaId}": variables.mediaId,
+    "{quality}": variables.quality,
+    "{date}": dateStr,
+    "{timestamp}": timestampStr,
   };
 
   let rendered = template;
@@ -52,7 +52,7 @@ export function renderFilename(
 
   // Sanitize the resulting filename (keeping extension separate to avoid stripping dot)
   const sanitizedBase = sanitizeFilename(rendered.trim());
-  const cleanExt = extension.startsWith('.') ? extension : `.${extension}`;
+  const cleanExt = extension.startsWith(".") ? extension : `.${extension}`;
 
   return `${sanitizedBase}${cleanExt}`;
 }

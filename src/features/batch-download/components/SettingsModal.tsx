@@ -86,11 +86,16 @@ export function SettingsModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
-      <DialogContent showCloseButton={false} className="sm:max-w-xl w-[calc(100vw-2rem)] max-h-[88vh] flex flex-col p-6 rounded-2xl border border-border/80 bg-card shadow-2xl backdrop-blur-xl transition-all duration-200 overflow-hidden">
+      <DialogContent
+        showCloseButton={false}
+        className="sm:max-w-xl w-[calc(100vw-2rem)] max-h-[88vh] flex flex-col p-6 rounded-2xl border border-border/80 bg-card shadow-2xl backdrop-blur-xl transition-all duration-200 overflow-hidden"
+      >
         <DialogTitle className="sr-only">{t("title")}</DialogTitle>
-        <DialogDescription className="sr-only">{t("description")}</DialogDescription>
+        <DialogDescription className="sr-only">
+          {t("description")}
+        </DialogDescription>
         {/* Glow Ambient Line Top */}
-        <div className="absolute -top-px inset-x-8 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+        <div className="absolute -top-px inset-x-8 h-px bg-linear-to-r from-transparent via-primary/50 to-transparent" />
 
         {/* Modal Header (Fixed Top) */}
         <div className="flex items-center justify-between pb-4 border-b border-border/60 shrink-0">
@@ -220,7 +225,9 @@ export function SettingsModal() {
                     className="h-8 text-xs gap-1.5 px-3 rounded-lg border-primary/40 bg-primary/10 text-primary font-bold hover:bg-primary/20"
                   >
                     <FolderSync className="h-3.5 w-3.5" />
-                    {customDirName ? t("changeFolder") : t("selectCustomFolder")}
+                    {customDirName
+                      ? t("changeFolder")
+                      : t("selectCustomFolder")}
                   </Button>
                 </div>
               </div>

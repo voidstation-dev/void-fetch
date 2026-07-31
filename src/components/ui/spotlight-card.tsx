@@ -3,10 +3,10 @@
  * Copyright (c) 2026 VoidStation.
  */
 
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { cn } from '@/lib/utils';
+import React, { useState } from "react";
+import { cn } from "@/lib/utils";
 
 interface SpotlightCardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
@@ -17,7 +17,7 @@ interface SpotlightCardProps extends React.HTMLAttributes<HTMLDivElement> {
 export function SpotlightCard({
   children,
   className,
-  spotlightColor = 'rgba(255, 255, 255, 0.08)',
+  spotlightColor = "rgba(255, 255, 255, 0.08)",
   ...props
 }: SpotlightCardProps) {
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -42,8 +42,8 @@ export function SpotlightCard({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className={cn(
-        'relative overflow-hidden rounded-xl border border-border/80 bg-card p-4 transition-colors duration-300',
-        className
+        "relative overflow-hidden rounded-xl border border-border/80 bg-card p-4 transition-colors duration-300",
+        className,
       )}
       {...props}
     >

@@ -20,8 +20,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "@/lib/deferred-toast";
 import {
-  Settings,
-  Save,
   RefreshCw,
   Loader2,
   Folder,

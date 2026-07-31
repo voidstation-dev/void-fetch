@@ -63,7 +63,8 @@ import { AsyncLocalStorage } from "node:async_hooks";
 type RequestContext = { tenantId: string; userId: string; traceId: string };
 const store = new AsyncLocalStorage<RequestContext>();
 export const getContext = () => store.getStore()!;
-export const runWithContext = (ctx: RequestContext, fn: () => void) => store.run(ctx, fn);
+export const runWithContext = (ctx: RequestContext, fn: () => void) =>
+  store.run(ctx, fn);
 ```
 
 Initialize it in every entrypoint: RPC, HTTP, jobs, and CLI. Forgetting jobs and CLI makes `getContext()` throw far from the cause.

@@ -35,15 +35,15 @@ Architecture progress:
 
 Load references only when the condition applies:
 
-| Reference | Read when |
-|-----------|-----------|
-| [references/stack-defaults.md](references/stack-defaults.md) | Choosing libraries, tooling, or deploy targets |
-| [references/api-design.md](references/api-design.md) | Designing endpoints, module contracts, or request context; reviewing API surface changes |
-| [references/distributed-correctness.md](references/distributed-correctness.md) | Designing flows that call external systems, consume webhooks, retry, need an audit trail, or move money (billing, credits, payouts) |
-| [references/deepening-existing.md](references/deepening-existing.md) | Running the Adoption workflow (domain mapping, opportunity patterns, output template) |
-| [references/craftsmanship.md](references/craftsmanship.md) | Writing the team-conventions, testing, or quality-bar sections |
+| Reference                                                                      | Read when                                                                                                                              |
+| ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
+| [references/stack-defaults.md](references/stack-defaults.md)                   | Choosing libraries, tooling, or deploy targets                                                                                         |
+| [references/api-design.md](references/api-design.md)                           | Designing endpoints, module contracts, or request context; reviewing API surface changes                                               |
+| [references/distributed-correctness.md](references/distributed-correctness.md) | Designing flows that call external systems, consume webhooks, retry, need an audit trail, or move money (billing, credits, payouts)    |
+| [references/deepening-existing.md](references/deepening-existing.md)           | Running the Adoption workflow (domain mapping, opportunity patterns, output template)                                                  |
+| [references/craftsmanship.md](references/craftsmanship.md)                     | Writing the team-conventions, testing, or quality-bar sections                                                                         |
 | [references/agent-friendly-codebase.md](references/agent-friendly-codebase.md) | Preparing a codebase for coding agents: guardrail tooling, invariant ratchets, legacy markers, generated contracts, verification tiers |
-| [references/shipping-practices.md](references/shipping-practices.md) | Writing the rollout and rollback section |
+| [references/shipping-practices.md](references/shipping-practices.md)           | Writing the rollout and rollback section                                                                                               |
 
 ## Setup workflow (new codebase)
 
@@ -100,13 +100,21 @@ Use this structure:
 # Architecture brief
 
 ## Context and constraints
+
 ## Repo shape
+
 ## Backend module contracts
+
 ## Request context and middleware policy
+
 ## Frontend boundaries
+
 ## Testing strategy
+
 ## Quality bar and surface-area budget
+
 ## Rollout and rollback plan
+
 ## Open risks and follow-ups
 ```
 
