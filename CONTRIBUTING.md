@@ -68,7 +68,13 @@ We welcome feature requests and new platform parsing additions:
 - **Transcoding**: Browser-side FFmpeg.wasm & JSZip
 
 ### Environment Variables
-Configure `.env.local` if testing custom backend endpoints:
+We use `.env.example` as a template for environment variables. To run the project locally, copy this file to `.env.local`:
+
+```bash
+cp .env.example .env.local
+```
+
+You can then configure `.env.local` with your custom backend endpoints or other settings as needed:
 ```env
 NEXT_PUBLIC_API_BASE_URL=https://downloader-api.bhwa233.com
 NEXT_PUBLIC_SITE_URL=http://localhost:3010
