@@ -4,11 +4,40 @@
  * All rights reserved.
  */
 
-import { useBatchStore } from '../store/batch-store';
-import { runJob } from './download-runner';
-import type { DownloadJob } from '../types/batch-download';
+import type {
+  DownloadJob,
+  BatchSettings,
+  DownloadProgress,
+  DownloadJobStatus,
+  DownloadError,
+} from "../types/batch-download";
+import type { RunnerContext } from "./download-runner";
+
+export interface SchedulerCallbacks {
+  getJobs: () => DownloadJob[];
+  getSettings: () => BatchSettings;
+  isQueueRunning: () => boolean;
+  checkQueueFinished: () => void;
+  updateJobStatus: (
+    id: string,
+    status: DownloadJobStatus,
+    extra?: Partial<DownloadJob>,
+  ) => Promise<void>;
+  updateJobProgress: (id: string, progress: Partial<DownloadProgress>) => void;
+  updateJobError: (
+    id: string,
+    error: DownloadError | undefined,
+  ) => Promise<void>;
+}
+import { runJob } from "./download-runner";
 
 class DownloadScheduler {
+  private callbacks: SchedulerCallbacks | null = null;
+
+  public init(callbacks: SchedulerCallbacks) {
+    this.callbacks = callbacks;
+    this.schedule();
+  }
   private activeJobs = new Map<string, AbortController>();
   private isProcessing = false;
 
@@ -20,15 +49,18 @@ class DownloadScheduler {
     this.isProcessing = true;
 
     try {
-      const store = useBatchStore.getState();
-      
-      // Stop scheduling if queue is paused
-      if (!store.isQueueRunning) {
+      if (!this.callbacks) {
         this.isProcessing = false;
         return;
       }
 
-      const maxActive = store.settings.downloadConcurrency || 3;
+      // Stop scheduling if queue is paused
+      if (!this.callbacks.isQueueRunning()) {
+        this.isProcessing = false;
+        return;
+      }
+
+      const maxActive = this.callbacks.getSettings().downloadConcurrency || 3;
       const activeCount = this.activeJobs.size;
       const availableSlots = maxActive - activeCount;
 
@@ -38,8 +70,9 @@ class DownloadScheduler {
       }
 
       // Grab ready/queued jobs and sort them by priority (higher priority first) then createdAt
-      const queuedJobs = store.jobs
-        .filter((job) => job.status === 'queued')
+      const queuedJobs = this.callbacks
+        .getJobs()
+        .filter((job) => job.status === "queued")
         .sort((a, b) => {
           if (b.priority !== a.priority) return b.priority - a.priority;
           return a.createdAt - b.createdAt;
@@ -47,9 +80,20 @@ class DownloadScheduler {
 
       const jobsToStart = queuedJobs.slice(0, availableSlots);
 
-      for (const job of jobsToStart) {
-        this.startJob(job);
-      }
+      // We make the schedule function async to allow staggering, but we don't want to block the caller.
+      // So we use an IIFE (Immediately Invoked Function Expression) to handle the staggering.
+      (async () => {
+        for (const job of jobsToStart) {
+          if (!this.callbacks?.isQueueRunning()) break;
+          this.startJob(job);
+          // 50ms stagger to avoid network/DNS spikes when starting multiple jobs simultaneously
+          await new Promise((r) => setTimeout(r, 50));
+        }
+
+        if (queuedJobs.length === 0 && this.activeJobs.size === 0) {
+          this.callbacks?.checkQueueFinished();
+        }
+      })();
     } finally {
       this.isProcessing = false;
     }
@@ -59,8 +103,8 @@ class DownloadScheduler {
    * Spawns a downloader for a specific job.
    */
   private async startJob(job: DownloadJob): Promise<void> {
-    const store = useBatchStore.getState();
-    
+    if (!this.callbacks) return;
+
     // Safety check: don't double start
     if (this.activeJobs.has(job.id)) return;
 
@@ -69,12 +113,23 @@ class DownloadScheduler {
 
     try {
       // Execute the job runner
-      await runJob(job, controller.signal);
+      const context: RunnerContext = {
+        settings: this.callbacks.getSettings(),
+        activeJobsCount: this.activeJobs.size,
+        jobIndex: this.callbacks.getJobs().findIndex((j) => j.id === job.id),
+        updateJobStatus: this.callbacks.updateJobStatus,
+        updateJobProgress: this.callbacks.updateJobProgress,
+        updateJobError: this.callbacks.updateJobError,
+      };
+      await runJob(job, controller.signal, context);
     } catch (error) {
-      console.error(`Scheduler caught runner exception for job ${job.id}:`, error);
+      console.error(
+        `Scheduler caught runner exception for job ${job.id}:`,
+        error,
+      );
     } finally {
       this.activeJobs.delete(job.id);
-      
+
       // Trigger next job in the queue
       this.schedule();
     }
@@ -90,11 +145,17 @@ class DownloadScheduler {
       this.activeJobs.delete(jobId);
     }
 
-    const store = useBatchStore.getState();
-    const job = store.jobs.find((j) => j.id === jobId);
+    if (!this.callbacks) return;
+    const job = this.callbacks.getJobs().find((j) => j.id === jobId);
     if (job) {
-      if (job.status === 'queued' || job.status === 'downloading' || job.status === 'resolving' || job.status === 'processing' || job.status === 'saving') {
-        store.updateJobStatus(jobId, 'cancelled');
+      if (
+        job.status === "queued" ||
+        job.status === "downloading" ||
+        job.status === "resolving" ||
+        job.status === "processing" ||
+        job.status === "saving"
+      ) {
+        this.callbacks.updateJobStatus(jobId, "cancelled");
       }
     }
     this.schedule();
@@ -110,10 +171,10 @@ class DownloadScheduler {
       this.activeJobs.delete(jobId);
     }
 
-    const store = useBatchStore.getState();
-    const job = store.jobs.find((j) => j.id === jobId);
+    if (!this.callbacks) return;
+    const job = this.callbacks.getJobs().find((j) => j.id === jobId);
     if (job) {
-      store.updateJobStatus(jobId, 'paused');
+      this.callbacks.updateJobStatus(jobId, "paused");
     }
     this.schedule();
   }
@@ -132,11 +193,4 @@ class DownloadScheduler {
 // Export a singleton scheduler instance
 export const downloadScheduler = new DownloadScheduler();
 
-// Subscribe to store changes to trigger scheduling when queue status changes
-if (typeof window !== 'undefined') {
-  useBatchStore.subscribe((state) => {
-    if (state.isQueueRunning && state.jobs.some((j) => j.status === 'queued')) {
-      downloadScheduler.schedule();
-    }
-  });
-}
+// Scheduler will be explicitly triggered by the store instead of subscribing directly.

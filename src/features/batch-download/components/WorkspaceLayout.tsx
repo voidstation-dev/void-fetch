@@ -22,12 +22,14 @@ import { i18n } from "@/lib/i18n/config";
 import { BackgroundGrid } from "@/components/ui/background-grid";
 import { useBatchStore } from "../store/batch-store";
 import { LoadingScreen } from "@/components/ui/LoadingScreen";
+import { useTranslations } from "next-intl";
 
 interface WorkspaceLayoutProps {
   children: ReactNode;
 }
 
 export function WorkspaceLayout({ children }: WorkspaceLayoutProps) {
+  const tNav = useTranslations("batchWorkspace.nav");
   const pathname = usePathname();
   const initializeStore = useBatchStore((s) => s.initializeStore);
 
@@ -45,25 +47,25 @@ export function WorkspaceLayout({ children }: WorkspaceLayoutProps) {
 
   const links = [
     {
-      label: "Queue Workspace",
+      label: tNav("queueWorkspace"),
       icon: Download,
       href: `/${locale}`,
       active: pathname === `/${locale}` || pathname === `/${locale}/`,
     },
     {
-      label: "Download History",
+      label: tNav("downloadHistory"),
       icon: History,
       href: `/${locale}/history`,
       active: pathname.includes("/history"),
     },
     {
-      label: "Preferences",
+      label: tNav("preferences"),
       icon: Settings,
       href: `/${locale}/settings`,
       active: pathname.includes("/settings"),
     },
     {
-      label: "About VoidFetch",
+      label: tNav("aboutVoidFetch"),
       icon: Info,
       href: `/${locale}/about`,
       active: pathname.includes("/about"),
@@ -140,7 +142,7 @@ export function WorkspaceLayout({ children }: WorkspaceLayoutProps) {
                   href={`/${locale}/privacy`}
                   className="hover:text-primary transition-colors font-medium"
                 >
-                  Privacy & Terms
+                  {tNav("privacyAndTerms")}
                 </Link>
               </div>
             </div>

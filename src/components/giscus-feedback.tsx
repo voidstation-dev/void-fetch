@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import { useTheme } from 'next-themes'
 import type { Locale } from '@/lib/i18n/config'
 
 const GISCUS_REPO = 'lxw15337674/galaxy-downloader'
@@ -25,6 +26,7 @@ interface GiscusFeedbackProps {
 
 export function GiscusFeedback({ locale }: GiscusFeedbackProps) {
     const containerRef = useRef<HTMLDivElement | null>(null)
+    const { resolvedTheme } = useTheme()
 
     useEffect(() => {
         const container = containerRef.current
@@ -33,6 +35,8 @@ export function GiscusFeedback({ locale }: GiscusFeedbackProps) {
         }
 
         container.textContent = ''
+
+        const giscusTheme = resolvedTheme === 'dark' ? 'transparent_dark' : 'light'
 
         const script = document.createElement('script')
         script.src = 'https://giscus.app/client.js'
@@ -48,15 +52,15 @@ export function GiscusFeedback({ locale }: GiscusFeedbackProps) {
         script.setAttribute('data-reactions-enabled', '1')
         script.setAttribute('data-emit-metadata', '0')
         script.setAttribute('data-input-position', 'top')
-        script.setAttribute('data-theme', 'preferred_color_scheme')
-        script.setAttribute('data-lang', GISCUS_LANG_BY_LOCALE[locale])
+        script.setAttribute('data-theme', giscusTheme)
+        script.setAttribute('data-lang', GISCUS_LANG_BY_LOCALE[locale] || 'en')
 
         container.appendChild(script)
 
         return () => {
             container.textContent = ''
         }
-    }, [locale])
+    }, [locale, resolvedTheme])
 
-    return <div ref={containerRef} />
+    return <div ref={containerRef} className="w-full min-h-[300px]" />
 }

@@ -2,10 +2,10 @@
 
 import dynamic from 'next/dynamic'
 
-import type { HlsDownloadDialogRequest } from '@/components/hls-download-dialog'
+import type { HlsDownloadDialogRequest } from './hls-download-dialog'
 
 const HlsDownloadDialog = dynamic(
-    () => import('@/components/hls-download-dialog').then((m) => m.HlsDownloadDialog),
+    () => import('./hls-download-dialog').then((m) => m.HlsDownloadDialog),
     { ssr: false }
 )
 

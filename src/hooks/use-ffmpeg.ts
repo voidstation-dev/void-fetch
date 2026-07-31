@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { terminateFFmpeg, type FFmpegStage, type ProgressInfo } from '@/lib/ffmpeg';
+import { terminateFFmpeg, type FFmpegStage, type ProgressInfo } from '@/infrastructure/ffmpeg';
 import { sanitizeFilename } from '@/lib/utils';
 
 export type FFmpegStatus =
@@ -123,7 +123,7 @@ export function useFFmpeg(): UseFFmpegReturn {
     const { taskId, signal } = beginTask();
 
     try {
-      const { extractAudioFromVideo, downloadBlob } = await import('@/lib/ffmpeg');
+      const { extractAudioFromVideo, downloadBlob } = await import('@/infrastructure/ffmpeg');
 
       const audioBlob = await extractAudioFromVideo({
         videoUrl,
@@ -167,7 +167,7 @@ export function useFFmpeg(): UseFFmpegReturn {
     const { taskId, signal } = beginTask();
 
     try {
-      const { extractAudioFromVideo, downloadBlob } = await import('@/lib/ffmpeg');
+      const { extractAudioFromVideo, downloadBlob } = await import('@/infrastructure/ffmpeg');
 
       const outputTitle = title || file.name.replace(/\.[^.]+$/, '') || 'output';
 
@@ -213,7 +213,7 @@ export function useFFmpeg(): UseFFmpegReturn {
     const { taskId, signal } = beginTask();
 
     try {
-      const { mergeVideoAudio, downloadBlob } = await import('@/lib/ffmpeg');
+      const { mergeVideoAudio, downloadBlob } = await import('@/infrastructure/ffmpeg');
       const outputTitle = title || videoFile.name.replace(/\.[^.]+$/, '') || 'merged-video';
 
       const mergedBlob = await mergeVideoAudio({

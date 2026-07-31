@@ -81,7 +81,7 @@ export default async function ContactPage({
                 </div>
                 <div className="rounded-md border bg-card p-5 space-y-2">
                     <a
-                        href="https://github.com/lxw15337674/galaxy-downloader/issues/new"
+                        href="https://github.com/voidstation-dev/void-fetch/issues/new"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-sm underline"

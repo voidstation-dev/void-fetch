@@ -8,7 +8,7 @@ import {
   requestUnifiedParse,
   type UnifiedParseSuccessResult,
 } from "@/lib/unified-parse";
-import { useBatchStore } from "../store/batch-store";
+// Removed useBatchStore to break circular dependency
 import type {
   DownloadJob,
   MediaMetadata,
@@ -21,26 +21,13 @@ import { normalizePlatform } from "@/lib/platforms";
 import type { PodcastEpisodeInfo } from "@/lib/types";
 import { parseMediaDuration } from "../utils/duration-helper";
 
-let activeParsersCount = 0;
-const parseQueue: string[] = [];
+import type { BatchSettings, DownloadJobStatus } from "../types/batch-download";
 
-/**
- * Starts processing the parse queue if there are slots available.
- */
-function processNextParseJobs() {
-  const { settings } = useBatchStore.getState();
-  const maxConcurrency = settings.parseConcurrency || 4;
-
-  while (activeParsersCount < maxConcurrency && parseQueue.length > 0) {
-    const jobId = parseQueue.shift();
-    if (jobId) {
-      activeParsersCount++;
-      parseJob(jobId).finally(() => {
-        activeParsersCount--;
-        processNextParseJobs();
-      });
-    }
-  }
+export interface ParseWorkerCallbacks {
+  getJob: (id: string) => DownloadJob | undefined;
+  getSettings: () => BatchSettings;
+  updateJobStatus: (id: string, status: DownloadJobStatus, extra?: Partial<DownloadJob>) => Promise<void>;
+  updateJobError: (id: string, error: DownloadError | undefined) => Promise<void>;
 }
 
 /**
@@ -80,310 +67,241 @@ function inferExtension(outputType: string, platform: string): string {
   return "mp4"; // default to mp4
 }
 
-/**
- * Builds smart fallback metadata if server parsing is temporarily down or 503
- */
-function buildFallbackMetadata(targetUrl: string): MediaMetadata | null {
-  try {
-    const urlObj = new URL(targetUrl);
-    const host = urlObj.hostname.toLowerCase();
-    const pathname = urlObj.pathname;
 
-    // Pinterest Pin Fallback
-    if (host.includes("pinterest.com") || host.includes("pin.it")) {
-      const pinMatch = pathname.match(/\/pin\/(\d+)/);
-      const pinId = pinMatch ? pinMatch[1] : "Media";
-      return {
-        title: `Pinterest Pin #${pinId}`,
-        desc: `Pinterest Pin Item (${targetUrl})`,
-        cover: null,
-        platform: "pinterest",
-        images: [targetUrl],
-        rawParsedData: {},
-      };
-    }
 
-    // Douyin Fallback
-    if (host.includes("douyin.com") || host.includes("iesdouyin.com")) {
-      return {
-        title: `Douyin Video / Post`,
-        desc: `Douyin Item (${targetUrl})`,
-        cover: null,
-        platform: "douyin",
-        rawParsedData: {
-          downloadVideoUrl: targetUrl,
-          videoUrl: targetUrl,
-        },
-      };
-    }
+class ParseWorkerPool {
+  private activeParsersCount = 0;
+  private parseQueue: string[] = [];
+  private callbacks: ParseWorkerCallbacks | null = null;
 
-    // Threads Fallback
-    if (host.includes("threads.com") || host.includes("threads.net")) {
-      return {
-        title: `Threads Post`,
-        desc: `Threads Media Item (${targetUrl})`,
-        cover: null,
-        platform: "threads",
-        rawParsedData: {
-          downloadVideoUrl: targetUrl,
-        },
-      };
-    }
-
-    // Generic URL fallback
-    const lastSegment = pathname.split("/").filter(Boolean).pop() || "Media Item";
-    return {
-      title: decodeURIComponent(lastSegment),
-      desc: targetUrl,
-      cover: null,
-      platform: normalizePlatform(host),
-      rawParsedData: {
-        downloadVideoUrl: targetUrl,
-      },
-    };
-  } catch {
-    return null;
+  public init(callbacks: ParseWorkerCallbacks) {
+    this.callbacks = callbacks;
   }
-}
 
-/**
- * Parses a single job, fetches metadata, and populates default download configuration.
- */
-async function parseJob(jobId: string): Promise<void> {
-  const store = useBatchStore.getState();
-  const job = store.jobs.find((j) => j.id === jobId);
-  if (!job) return;
+  private processNextParseJobs() {
+    if (!this.callbacks) return;
+    const settings = this.callbacks.getSettings();
+    const maxConcurrency = settings.parseConcurrency || 4;
 
-  // Set status to parsing
-  await store.updateJobStatus(jobId, "parsing");
-
-  try {
-    const apiResult = await requestWithRetry(
-      job.normalizedUrl || job.sourceUrl,
-    );
-
-    console.log(`[parseJob] API Response Received for job ${job.id} (${job.normalizedUrl || job.sourceUrl}):`, {
-      success: apiResult.success,
-      platform: apiResult.data?.platform,
-      title: apiResult.data?.title,
-      type: (apiResult.data as Record<string, unknown>)?.type,
-      kind: apiResult.data?.kind,
-      hasVideoUrl: Boolean(apiResult.data?.downloadVideoUrl),
-      hasAudioUrl: Boolean(apiResult.data?.downloadAudioUrl),
-      imagesCount: apiResult.data?.images?.length || 0,
-      fullResponseData: apiResult.data,
-    });
-
-    if (!apiResult.success || !apiResult.data) {
-      throw new Error("API parse result returned empty data");
+    while (this.activeParsersCount < maxConcurrency && this.parseQueue.length > 0) {
+      const jobId = this.parseQueue.shift();
+      if (jobId) {
+        this.activeParsersCount++;
+        this.parseJob(jobId).finally(() => {
+          this.activeParsersCount--;
+          this.processNextParseJobs();
+        });
+      }
     }
+  }
 
-    const parseData = apiResult.data;
+  private async parseJob(jobId: string): Promise<void> {
+    if (!this.callbacks) return;
+    
+    const job = this.callbacks.getJob(jobId);
+    if (!job) return;
 
-    // Check if it's an Apple Podcasts show or multi-episode picker
-    const episodes = parseData.episodes || [];
-    const isPicker = parseData.kind === "picker" || episodes.length > 0;
-    const defaultEpisode = isPicker
-      ? episodes.find(
-          (e: PodcastEpisodeInfo) =>
-            e.id === (parseData.currentEpisodeId || parseData.currentItemId),
-        ) || episodes[0]
-      : undefined;
+    await this.callbacks.updateJobStatus(jobId, "parsing");
 
-    const parseRecord = parseData as Record<string, unknown>;
-    const rawParsedData = parseRecord.rawParsedData as Record<string, unknown> | undefined;
-
-    // Construct metadata
-    const resolvedDuration = parseMediaDuration(
-      defaultEpisode?.duration ??
-        parseData.duration ??
-        parseRecord.videoDuration ??
-        parseRecord.video_duration ??
-        parseRecord.duration_seconds
-    );
-
-    const metadata: MediaMetadata = {
-      title: defaultEpisode
-        ? `${parseData.title || "Apple Podcasts"} · ${defaultEpisode.title}`
-        : parseData.title || parseData.desc || "Untitled Media",
-      desc: parseData.desc,
-      cover: defaultEpisode?.cover || parseData.cover,
-      platform: normalizePlatform(parseData.platform),
-      duration: resolvedDuration,
-      isMultiPart: parseData.isMultiPart,
-      images: parseData.images
-        ?.map((img: unknown) => (typeof img === "string" ? img : (img as { url?: string })?.url))
-        .filter((url): url is string => Boolean(url)),
-      pagesCount: parseData.pages?.length,
-      episodesCount: episodes.length,
-      rawParsedData: {
-        ...parseData,
-        downloadAudioUrl:
-          parseData.downloadAudioUrl ||
-          defaultEpisode?.downloadAudioUrl ||
-          defaultEpisode?.originDownloadAudioUrl ||
-          null,
-      },
-    };
-
-    // Construct default config
-    const settings = store.settings;
-    const targetSourceUrl = (job.sourceUrl || job.normalizedUrl || "").toLowerCase();
-    const isValidStreamUrl = (url?: unknown): boolean => {
-      if (typeof url !== "string" || !url.trim()) return false;
-      const lower = url.toLowerCase();
-      if (lower === targetSourceUrl || lower.includes("pinterest.com/pin/") || lower.includes("pin.it/")) return false;
-      return true;
-    };
-
-    const hasStream = Boolean(
-      isValidStreamUrl(parseData.downloadVideoUrl) ||
-      isValidStreamUrl(parseRecord.streamUrl) ||
-      isValidStreamUrl(parseData.downloadAudioUrl) ||
-      isValidStreamUrl(rawParsedData?.downloadVideoUrl) ||
-      isValidStreamUrl(rawParsedData?.downloadAudioUrl)
-    );
-    const isAudioItem =
-      metadata.platform === "soundcloud" ||
-      metadata.platform === "apple_podcasts" ||
-      parseRecord.type === "audio" ||
-      parseData.kind === "audio";
-
-    const isExplicitVideo =
-      parseRecord.type === "video" ||
-      parseData.kind === "video" ||
-      Boolean(parseData.downloadVideoUrl && !isAudioItem);
-
-    const isImageOnlyPost =
-      !isAudioItem &&
-      !isExplicitVideo &&
-      (
-        parseRecord.type === "image" ||
-        parseRecord.type === "images" ||
-        (metadata.platform === "pinterest" && !isExplicitVideo) ||
-        (Boolean(metadata.images && metadata.images.length > 0) && !hasStream)
+    try {
+      const apiResult = await requestWithRetry(
+        job.normalizedUrl || job.sourceUrl,
       );
 
-    const isAudioMode = isAudioItem || settings.defaultOutputType === "audio";
+      if (!apiResult.success || !apiResult.data) {
+        throw new Error("API parse result returned empty data");
+      }
 
-    const effectiveOutputType = isImageOnlyPost
-      ? metadata.images && metadata.images.length > 1
-        ? "zip_images"
-        : "images"
-      : isAudioMode
-      ? "audio"
-      : settings.defaultOutputType;
+      const parseData = apiResult.data;
+      const episodes = parseData.episodes || [];
+      const isPicker = parseData.kind === "picker" || episodes.length > 0;
+      const defaultEpisode = isPicker
+        ? episodes.find(
+            (e: PodcastEpisodeInfo) =>
+              e.id === (parseData.currentEpisodeId || parseData.currentItemId),
+          ) || episodes[0]
+        : undefined;
 
-    const extension = inferExtension(effectiveOutputType, metadata.platform);
+      const parseRecord = parseData as Record<string, unknown>;
+      const rawParsedData = parseRecord.rawParsedData as Record<string, unknown> | undefined;
 
-    // Initial filename template replacement
-    const initialFilename = settings.filenameTemplate
-      .replaceAll("{title}", metadata.title)
-      .replaceAll("{platform}", metadata.platform)
-      .replaceAll("{mediaId}", jobId.slice(0, 8)); // fallback id
+      const resolvedDuration = parseMediaDuration(
+        defaultEpisode?.duration ??
+          parseData.duration ??
+          parseRecord.videoDuration ??
+          parseRecord.video_duration ??
+          parseRecord.duration_seconds
+      );
 
-    const config: DownloadConfig = {
-      enabled: true,
-      outputType: effectiveOutputType,
-      quality: settings.defaultQuality,
-      filename: `${initialFilename}.${extension}`,
-      downloadThumbnail: true,
-      saveMetadata: false,
-      extractAudio: false,
-      packageImagesAsZip: effectiveOutputType === "zip_images" || isImageOnlyPost,
-    };
+      const metadata: MediaMetadata = {
+        title: defaultEpisode
+          ? `${parseData.title || "Apple Podcasts"} · ${defaultEpisode.title}`
+          : parseData.title || parseData.desc || "Untitled Media",
+        desc: parseData.desc,
+        cover: defaultEpisode?.cover || parseData.cover,
+        platform: normalizePlatform(parseData.platform),
+        duration: resolvedDuration,
+        isMultiPart: parseData.isMultiPart,
+        images: parseData.images
+          ?.map((img: unknown) => (typeof img === "string" ? img : (img as { url?: string })?.url))
+          .filter((url): url is string => Boolean(url)),
+        pagesCount: parseData.pages?.length,
+        episodesCount: episodes.length,
+        rawParsedData: {
+          ...parseData,
+          downloadAudioUrl:
+            parseData.downloadAudioUrl ||
+            defaultEpisode?.downloadAudioUrl ||
+            defaultEpisode?.originDownloadAudioUrl ||
+            null,
+        },
+      };
 
-    console.log(`[parseJob] Resolved Job Config for job ${job.id}:`, {
-      platform: metadata.platform,
-      isImageOnlyPost,
-      hasStream,
-      effectiveOutputType,
-      extension,
-      filename: config.filename,
-      imagesCount: metadata.images?.length || 0,
-    });
+      const settings = this.callbacks.getSettings();
+      const targetSourceUrl = (job.sourceUrl || job.normalizedUrl || "").toLowerCase();
+      const isValidStreamUrl = (url?: unknown): boolean => {
+        if (typeof url !== "string" || !url.trim()) return false;
+        const lower = url.toLowerCase();
+        if (lower === targetSourceUrl || lower.includes("pinterest.com/pin/") || lower.includes("pin.it/")) return false;
+        return true;
+      };
 
-    // Update job with parsed data
-    await store.updateJobStatus(jobId, "ready", {
-      metadata,
-      config,
-      platform: metadata.platform,
-    });
+      const hasStream = Boolean(
+        isValidStreamUrl(parseData.downloadVideoUrl) ||
+        isValidStreamUrl(parseRecord.streamUrl) ||
+        isValidStreamUrl(parseData.downloadAudioUrl) ||
+        isValidStreamUrl(rawParsedData?.downloadVideoUrl) ||
+        isValidStreamUrl(rawParsedData?.downloadAudioUrl)
+      );
+      const isAudioItem =
+        metadata.platform === "soundcloud" ||
+        metadata.platform === "apple_podcasts" ||
+        parseRecord.type === "audio" ||
+        parseData.kind === "audio";
 
-    // If auto-start is active, queue it up automatically
-    if (settings.autoStartDownloads) {
-      await store.updateJobStatus(jobId, "queued");
+      const isExplicitVideo =
+        parseRecord.type === "video" ||
+        parseData.kind === "video" ||
+        Boolean(parseData.downloadVideoUrl && !isAudioItem);
+
+      const isImageOnlyPost =
+        !isAudioItem &&
+        !isExplicitVideo &&
+        (
+          parseRecord.type === "image" ||
+          parseRecord.type === "images" ||
+          (metadata.platform === "pinterest" && !isExplicitVideo) ||
+          (Boolean(metadata.images && metadata.images.length > 0) && !hasStream)
+        );
+
+      const isAudioMode = isAudioItem || settings.defaultOutputType === "audio";
+
+      const effectiveOutputType = isImageOnlyPost
+        ? metadata.images && metadata.images.length > 1
+          ? "zip_images"
+          : "images"
+        : isAudioMode
+        ? "audio"
+        : settings.defaultOutputType;
+
+      const extension = inferExtension(effectiveOutputType, metadata.platform);
+
+      const initialFilename = settings.filenameTemplate
+        .replaceAll("{title}", metadata.title)
+        .replaceAll("{platform}", metadata.platform)
+        .replaceAll("{mediaId}", jobId.slice(0, 8)); // fallback id
+
+      const config: DownloadConfig = {
+        enabled: true,
+        outputType: effectiveOutputType,
+        quality: settings.defaultQuality,
+        filename: `${initialFilename}.${extension}`,
+        downloadThumbnail: true,
+        saveMetadata: false,
+        extractAudio: false,
+        packageImagesAsZip: effectiveOutputType === "zip_images" || isImageOnlyPost,
+      };
+
+      await this.callbacks.updateJobStatus(jobId, "ready", {
+        metadata,
+        config,
+        platform: metadata.platform,
+      });
+
+      if (settings.autoStartDownloads) {
+        await this.callbacks.updateJobStatus(jobId, "queued");
+      }
+    } catch (error: unknown) {
+      let errorCode: DownloadErrorCode = "PARSE_FAILED";
+      let errorMessage = "Failed to parse URL metadata";
+      let httpStatus: number | undefined = undefined;
+
+      if (isApiRequestError(error)) {
+        errorCode = (error.code as DownloadErrorCode) || "PARSE_FAILED";
+        errorMessage = error.fallbackMessage || errorMessage;
+        httpStatus = error.status;
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+
+      const downloadError: DownloadError = {
+        code: errorCode,
+        message: errorMessage,
+        retryable:
+          errorCode === "RATE_LIMITED" ||
+          errorCode === "NETWORK_ERROR" ||
+          (httpStatus ? httpStatus >= 500 : false),
+        httpStatus,
+      };
+
+      notifyApiErrorToast(downloadError);
+
+      await this.callbacks.updateJobStatus(jobId, errorCode === "RATE_LIMITED" || (httpStatus && httpStatus >= 500) ? "failed" : "failed");
+      await this.callbacks.updateJobError(jobId, downloadError);
     }
-  } catch (error: unknown) {
-    let errorCode: DownloadErrorCode = "PARSE_FAILED";
-    let errorMessage = "Failed to parse URL metadata";
-    let httpStatus: number | undefined = undefined;
+  }
 
-    if (isApiRequestError(error)) {
-      errorCode = (error.code as DownloadErrorCode) || "PARSE_FAILED";
-      errorMessage = error.fallbackMessage || errorMessage;
-      httpStatus = error.status;
-    } else if (error instanceof Error) {
-      errorMessage = error.message;
-    }
+  public parseJobs(jobIds?: string[], allJobs?: DownloadJob[]): void {
+    const targets = jobIds && allJobs
+      ? allJobs.filter((j) => jobIds.includes(j.id))
+      : (allJobs || []).filter((j) => j.status === "draft" || j.status === "failed");
 
-    const downloadError: DownloadError = {
-      code: errorCode,
-      message: errorMessage,
-      retryable:
-        errorCode === "RATE_LIMITED" ||
-        errorCode === "NETWORK_ERROR" ||
-        (httpStatus ? httpStatus >= 500 : false),
-      httpStatus,
-    };
-
-    console.error(`[parseJob] API Parse Failure for job ${jobId}:`, {
-      code: errorCode,
-      status: httpStatus,
-      message: errorMessage,
-      error,
+    targets.forEach((job) => {
+      if (
+        !this.parseQueue.includes(job.id) &&
+        (job.status === "draft" || job.status === "failed")
+      ) {
+        this.parseQueue.push(job.id);
+      }
     });
 
-    notifyApiErrorToast(downloadError);
+    this.processNextParseJobs();
+  }
 
-    await store.updateJobError(jobId, downloadError);
+  public cancelParseJob(jobId: string): void {
+    if (!this.callbacks) return;
+    
+    const index = this.parseQueue.indexOf(jobId);
+    if (index > -1) {
+      this.parseQueue.splice(index, 1);
+    }
+
+    const job = this.callbacks.getJob(jobId);
+    if (job && job.status === "parsing") {
+      this.callbacks.updateJobStatus(jobId, "cancelled");
+    }
   }
 }
 
-/**
- * Triggers concurrent parsing for a specific list of job IDs or all draft/failed jobs.
- */
+export const parseWorker = new ParseWorkerPool();
+
 export function parseJobs(jobIds?: string[]): void {
-  const store = useBatchStore.getState();
-  const targets = jobIds
-    ? store.jobs.filter((j) => jobIds.includes(j.id))
-    : store.jobs.filter((j) => j.status === "draft" || j.status === "failed");
-
-  targets.forEach((job) => {
-    // Only queue if not already in queue and status is eligible
-    if (
-      !parseQueue.includes(job.id) &&
-      (job.status === "draft" || job.status === "failed")
-    ) {
-      parseQueue.push(job.id);
-    }
+  import("../store/batch-store").then(({ useBatchStore }) => {
+    const jobs = useBatchStore.getState().jobs;
+    parseWorker.parseJobs(jobIds, jobs);
   });
-
-  processNextParseJobs();
 }
 
-/**
- * Cancels a pending or active parse job.
- */
 export function cancelParseJob(jobId: string): void {
-  const index = parseQueue.indexOf(jobId);
-  if (index > -1) {
-    parseQueue.splice(index, 1);
-  }
-
-  const store = useBatchStore.getState();
-  const job = store.jobs.find((j) => j.id === jobId);
-  if (job && job.status === "parsing") {
-    store.updateJobStatus(jobId, "cancelled");
-  }
+  parseWorker.cancelParseJob(jobId);
 }
