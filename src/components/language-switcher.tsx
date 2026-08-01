@@ -92,14 +92,14 @@ export function LanguageSwitcher({
   }, [isOpen]);
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className="relative select-none" ref={dropdownRef}>
       <Button
         variant="ghost"
         size="sm"
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
           "flex items-center gap-2 text-sm select-none",
-          compact && "h-9 max-w-[8rem] gap-1.5 px-2.5",
+          compact && "h-9 max-w-32 gap-1.5 px-2.5",
           iconOnly && "h-8 w-8 p-0",
           fullWidth && "w-full justify-between",
         )}
