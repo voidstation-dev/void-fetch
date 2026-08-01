@@ -536,9 +536,13 @@ export function ExpandableJobCard({
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => {
-                    handleClose();
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
                     onOpenConfig?.(currentJob);
+                    setTimeout(() => {
+                      handleClose();
+                    }, 100);
                   }}
                   className="h-8 text-xs gap-1.5"
                 >
