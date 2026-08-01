@@ -139,10 +139,10 @@
     "installAction": "Install"
   },
   "metadata": {
-    "title": "VoidFetch | The Ultimate Batch Media Downloader by VoidStation",
-    "description": "The fastest, most reliable online media downloader for 40+ platforms. Effortlessly download HD videos, MP3 audio, image galleries, and HLS streams in batches—free, no registration required.",
-    "ogTitle": "VoidFetch | Next-Gen Batch Media Downloader",
-    "ogDescription": "Lightning-fast batch downloads for YouTube, TikTok, Instagram, Bilibili, and 40+ other platforms. Extract HD videos, high-quality audio, and image galleries effortlessly.",
+    "title": "VoidFetch | Online Video, Audio, Image, HLS Batch Downloader by VoidStation",
+    "description": "Free online media downloader for Bilibili, Douyin, Telegram, Threads, WeChat, Weibo, Niconico, Instagram, Xiaohongshu, TikTok, X, Reddit, Streamable, SoundCloud, Twitch, VK, OK.ru, Pinterest, Tumblr, Newgrounds, and HLS/M3U8 streams.",
+    "ogTitle": "VoidFetch | Free Online Batch Media Downloader",
+    "ogDescription": "Auto-detect links from supported video, audio, image, and HLS/M3U8 sources, then download media online without registration.",
     "siteName": "VoidFetch"
   },
   "common": {
@@ -193,7 +193,10 @@
     "privateFeedbackTitle": "Feedback via Email",
     "privateFeedbackDescription": "You can also choose to submit your feedback by sending an email. To help us locate the issue faster, we recommend including the target URL, your device details, or relevant screenshots in your email.",
     "emailAction": "Send Email",
-    "emailTemplateBody": "[Description]\nPlease briefly describe the issue or suggestion:\n\n[Target URL]\n(If applicable, provide the link you are trying to download)\n\n[Environment]\n(e.g., Win 11 / Chrome 120 / iOS 17)\n"
+    "emailTemplateBody": "[Description]\nPlease briefly describe the issue or suggestion:\n\n[Target URL]\n(If applicable, provide the link you are trying to download)\n\n[Environment]\n(e.g., Win 11 / Chrome 120 / iOS 17)\n",
+    "communityDiscussionsTitle": "Community Discussions",
+    "communityDiscussionsSubtitle": "Sign in with GitHub to post public feedback, report bugs, or request new features.",
+    "poweredByGiscus": "Powered by Giscus"
   },
   "privacyPage": {
     "metaTitle": "Privacy Policy | VoidFetch",
@@ -353,205 +356,133 @@
       "bilibili": {
         "name": "Bilibili",
         "summary": "Video / Audio / Share Code",
-        "features": [
-          "Video",
-          "Audio",
-          "Share Code"
-        ]
+        "features": ["Video", "Audio", "Share Code"]
       },
       "bilibiliTv": {
         "name": "Bilibili TV",
         "summary": "Video / Audio",
-        "features": [
-          "Video",
-          "Audio"
-        ]
+        "features": ["Video", "Audio"]
       },
       "douyin": {
         "name": "Douyin",
         "summary": "Video / Image Post / Audio",
-        "features": [
-          "Video",
-          "Image Post",
-          "Audio"
-        ]
+        "features": ["Video", "Image Post", "Audio"]
       },
       "hls": {
         "name": "Video Sites",
         "summary": "Streaming / Replays",
-        "features": [
-          "Online Play",
-          "Download"
-        ]
+        "features": ["Online Play", "Download"]
       },
       "youtube": {
         "name": "YouTube",
         "summary": "Video / Audio",
-        "features": [
-          "Video",
-          "Audio"
-        ]
+        "features": ["Video", "Audio"]
       },
       "telegram": {
         "name": "Telegram",
         "summary": "Video / Message Link",
-        "features": [
-          "Video",
-          "Message Link"
-        ]
+        "features": ["Video", "Message Link"]
       },
       "wechat": {
         "name": "WeChat",
         "summary": "Article Videos / Multi-video",
-        "features": [
-          "Article Videos",
-          "Multi-video"
-        ]
+        "features": ["Article Videos", "Multi-video"]
       },
       "niconico": {
         "name": "Niconico",
         "summary": "Video / Audio",
-        "features": [
-          "Video",
-          "Audio"
-        ]
+        "features": ["Video", "Audio"]
       },
       "xiaohongshu": {
         "name": "Xiaohongshu",
         "summary": "Video / Image Post",
-        "features": [
-          "Video",
-          "Image Post"
-        ]
+        "features": ["Video", "Image Post"]
       },
       "tiktok": {
         "name": "TikTok",
         "summary": "Video / Audio",
-        "features": [
-          "Video",
-          "Audio"
-        ]
+        "features": ["Video", "Audio"]
       },
       "comingSoon": "More platforms coming soon",
       "instagram": {
         "name": "Instagram",
         "summary": "Video / Image Post / Carousel",
-        "features": [
-          "Video",
-          "Image Post",
-          "Carousel"
-        ]
+        "features": ["Video", "Image Post", "Carousel"]
       },
       "x": {
         "name": "X",
         "summary": "Video / Audio",
-        "features": [
-          "Video",
-          "Audio"
-        ]
+        "features": ["Video", "Audio"]
       },
       "threads": {
         "name": "Threads",
         "summary": "Video / Image Post",
-        "features": [
-          "Video",
-          "Image Post"
-        ]
+        "features": ["Video", "Image Post"]
       },
       "weibo": {
         "name": "Weibo",
         "summary": "Video / Image Post / Multi-video",
-        "features": [
-          "Video",
-          "Image Post",
-          "Multi-video"
-        ]
+        "features": ["Video", "Image Post", "Multi-video"]
       },
       "vimeo": {
         "name": "Vimeo",
         "summary": "Content Download",
-        "features": [
-          "Content Download"
-        ]
+        "features": ["Content Download"]
       },
       "dailymotion": {
         "name": "Dailymotion",
         "summary": "Content Download",
-        "features": [
-          "Content Download"
-        ]
+        "features": ["Content Download"]
       },
       "streamable": {
         "name": "Streamable",
         "summary": "Content Download",
-        "features": [
-          "Content Download"
-        ]
+        "features": ["Content Download"]
       },
       "reddit": {
         "name": "Reddit",
         "summary": "Content Download",
-        "features": [
-          "Content Download"
-        ]
+        "features": ["Content Download"]
       },
       "newgrounds": {
         "name": "Newgrounds",
         "summary": "Content Download",
-        "features": [
-          "Content Download"
-        ]
+        "features": ["Content Download"]
       },
       "tumblr": {
         "name": "Tumblr",
         "summary": "Content Download",
-        "features": [
-          "Content Download"
-        ]
+        "features": ["Content Download"]
       },
       "pinterest": {
         "name": "Pinterest",
         "summary": "Content Download",
-        "features": [
-          "Content Download"
-        ]
+        "features": ["Content Download"]
       },
       "vk": {
         "name": "VK",
         "summary": "Content Download",
-        "features": [
-          "Content Download"
-        ]
+        "features": ["Content Download"]
       },
       "okru": {
         "name": "OK.ru",
         "summary": "Content Download",
-        "features": [
-          "Content Download"
-        ]
+        "features": ["Content Download"]
       },
       "twitch": {
         "name": "Twitch",
         "summary": "Content Download",
-        "features": [
-          "Content Download"
-        ]
+        "features": ["Content Download"]
       },
       "soundcloud": {
         "name": "SoundCloud",
         "summary": "Content Download",
-        "features": [
-          "Content Download"
-        ]
+        "features": ["Content Download"]
       },
       "applePodcasts": {
         "name": "Apple Podcasts",
         "summary": "Public podcast audio / Episode playback and download",
-        "features": [
-          "Public audio",
-          "Episode playback",
-          "Download"
-        ]
+        "features": ["Public audio", "Episode playback", "Download"]
       }
     },
     "linkFormats": {
@@ -967,5 +898,161 @@
     "clickDetails": "Click to view details",
     "clickTitle": "Click to view all 25+ supported platforms",
     "universalSub": "Universal Batch Downloader"
+  },
+  "batchWorkspace": {
+    "title": "Untitled Batch Workspace",
+    "subtitle": "VoidFetch Queue Manager",
+    "queuePreferences": "Queue Preferences",
+    "nav": {
+      "queueWorkspace": "Queue Workspace",
+      "downloadHistory": "Download History",
+      "preferences": "Preferences",
+      "aboutVoidFetch": "About VoidFetch",
+      "privacyAndTerms": "Privacy & Terms"
+    },
+    "composer": {
+      "title": "BATCH URL COMPOSER",
+      "subtitlePrefix": "Paste video links from",
+      "platformsLink": "25+ supported platforms",
+      "subtitleSuffix": "or import a file",
+      "pasteClipboard": "Paste Clipboard",
+      "importFile": "Import File",
+      "placeholder": "Paste multiple URLs here (one per line, or raw text with embedded links)...",
+      "detectedSingle": "{count} New Link Detected",
+      "detectedPlural": "{count} New Links Detected",
+      "dupesCount": "({count} dupes)",
+      "dropFileHint": "Drop text or CSV file here to import links",
+      "copyrightWarning": "Copyrighted, paid, or member-only restricted content is not supported.",
+      "feedbackHint": "Feedback? Click \"Feedback\" in top-right.",
+      "supportedPlatformsBar": "Supported: YouTube, TikTok, Douyin, Bilibili, SoundCloud & 20+ more",
+      "clear": "Clear",
+      "addUrls": "Add URLs to Queue",
+      "addUrlsCount": "Add {count} URLs to Queue"
+    },
+    "toolbar": {
+      "searchPlaceholder": "Search title or URL...",
+      "allStatus": "All Status",
+      "allPlatforms": "All Platforms",
+      "parseAll": "Parse All ({count})",
+      "pauseQueue": "Pause Queue",
+      "startQueue": "Start Queue",
+      "retryFailed": "Retry Failed",
+      "clearCompleted": "Clear Completed ({count})",
+      "status": {
+        "all": "All Status",
+        "draft": "Draft",
+        "parsing": "Parsing",
+        "ready": "Ready",
+        "queued": "Queued",
+        "downloading": "Downloading",
+        "processing": "Processing",
+        "saving": "Saving",
+        "paused": "Paused",
+        "completed": "Completed",
+        "failed": "Failed",
+        "cancelled": "Cancelled"
+      }
+    },
+    "queue": {
+      "emptyTitle": "Empty Downloader Workspace",
+      "emptyBadge": "Ready",
+      "emptyDescription": "Paste video URLs (YouTube, TikTok, Douyin, SoundCloud...) or import a text file above to start batch downloading.",
+      "multiThreaded": "Multi-Threaded Engine",
+      "audioExtraction": "Audio Stream Extraction",
+      "upTo4k": "Up to 4K / 60FPS Video",
+      "itemsSelectedSingle": "{count} item selected",
+      "itemsSelectedPlural": "{count} items selected",
+      "bulkConfigure": "Bulk Configure",
+      "bulkConfigureCount": "Bulk Configure ({count})",
+      "removeSelected": "Remove Selected",
+      "selectAll": "Select All Queue Items",
+      "itemsCount": "{count} Items",
+      "noMatchingJobs": "No jobs match the active search or filters."
+    },
+    "configDrawer": {
+      "titleSingle": "CONFIGURE DOWNLOAD",
+      "titleBulk": "BULK CONFIGURATION",
+      "subtitle": "Customize output format, quality stream, and metadata preferences",
+      "outputFormat": "Output Format",
+      "videoQuality": "Video Quality Stream",
+      "selectVideoQuality": "Select video quality",
+      "qualityNote": "Note: If the source video does not support 4K/2K, system will automatically download the highest quality available.",
+      "audioQuality": "Audio Bitrate Quality",
+      "selectAudioQuality": "Select audio quality",
+      "filenameTemplate": "Filename Template",
+      "outputFilename": "Output Filename",
+      "clickTokenHint": "Click variable token to insert",
+      "hlsConcurrency": "HLS Segment Concurrency",
+      "advancedOptions": "Advanced Options",
+      "downloadThumbnail": "Download thumbnail / cover image",
+      "saveMetadataJson": "Save metadata JSON alongside media",
+      "forceAudioExtraction": "Force audio extraction (MP3)",
+      "applyChecked": "Apply Checked ({count})",
+      "applyAll": "Apply All ({count})",
+      "saveConfig": "Save Configuration"
+    },
+    "progress": {
+      "totalItems": "{count} items",
+      "running": "{count} running",
+      "queued": "{count} queued",
+      "completed": "{count} completed",
+      "failed": "{count} failed",
+      "speed": "Speed",
+      "eta": "ETA",
+      "queueActive": "QUEUE ACTIVE",
+      "queueIdle": "QUEUE IDLE"
+    },
+    "settingsModal": {
+      "title": "Workspace Preferences",
+      "description": "Configure global download defaults & network concurrency",
+      "defaultOutputAndQuality": "Default Output & Quality",
+      "defaultFormat": "Default Format",
+      "defaultQuality": "Default Quality",
+      "downloadDirectoryPath": "Download Directory Path",
+      "browserDefault": "Browser Default (Downloads Folder)",
+      "customFolder": "📁 Custom: {name}",
+      "customFolderDesc": "Files will be saved directly into this folder handle",
+      "browserDefaultDesc": "Files are automatically saved directly to your Downloads folder",
+      "resetDefault": "Reset Default",
+      "changeFolder": "Change Folder",
+      "selectCustomFolder": "Select Custom Folder",
+      "directoryTip": "💡 Tip: Browser security blocks picking the root Downloads folder directly. To organize inside Downloads, create or pick a subfolder (e.g. Downloads/VoidFetch).",
+      "networkConcurrency": "Network Concurrency",
+      "concurrentJobs": "Concurrent Jobs",
+      "hlsSegmentConcurrency": "HLS Segment Concurrency",
+      "savePreferences": "Save Preferences"
+    }
+  },
+  "settingsPage": {
+    "metaTitle": "Settings | VoidFetch",
+    "metaDescription": "Configure downloader defaults, concurrency caps, network budgets, and directory path preferences.",
+    "title": "Preferences",
+    "subtitle": "Configure default downloader behaviors",
+    "resetDefaults": "Reset Defaults",
+    "loading": "Loading settings...",
+    "downloaderDefaults": "Downloader Defaults",
+    "defaultOutputType": "Default Output Type",
+    "defaultQuality": "Default Quality",
+    "selectQuality": "Select quality",
+    "defaultFilenameTemplate": "Default Filename Template",
+    "placeholderTokens": "Placeholder tokens:",
+    "customDirectoryTitle": "Custom Download Directory Path",
+    "customDirName": "📁 Custom Directory: {name}",
+    "browserDefaultDir": "Browser Default (Downloads Folder)",
+    "customDirDesc": "All VoidFetch downloads will be written directly into this folder handle",
+    "browserDefaultDesc": "Files are handled by browser standard download manager",
+    "resetDefaultDir": "Reset Default",
+    "changeFolder": "Change Folder",
+    "selectCustomFolder": "Select Custom Folder",
+    "concurrencyTitle": "Concurrency & Performance Caps",
+    "parserConcurrency": "Parser Concurrency",
+    "downloadConcurrency": "Download Concurrency",
+    "networkBudget": "Global Network Request Budget",
+    "networkBudgetDesc": "Controls combined HLS chunks downloaded globally to avoid connection limits.",
+    "workflowsTitle": "Workflows & Flags",
+    "continueOnError": "Continue queue on error",
+    "continueOnErrorDesc": "Keep downloading subsequent jobs in the queue if one fails.",
+    "autoStartDownloads": "Auto-start queue on URL parse",
+    "autoStartDownloadsDesc": "Immediately append parsed ready URLs directly to the download stream."
   }
 }

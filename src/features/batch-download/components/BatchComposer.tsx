@@ -8,7 +8,18 @@ import React, { useState, useRef, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/lib/deferred-toast";
-import { Clipboard, Upload, Plus, Trash2, FileText, Sparkles, Link2, CheckCircle2, AlertTriangle, MessageSquare } from "lucide-react";
+import {
+  Clipboard,
+  Upload,
+  Plus,
+  Trash2,
+  FileText,
+  Sparkles,
+  Link2,
+  CheckCircle2,
+  AlertTriangle,
+  MessageSquare,
+} from "lucide-react";
 import { extractAndNormalizeUrls } from "../utils/normalize-url";
 import { useBatchStore } from "../store/batch-store";
 import { parseJobs } from "../services/parse-worker-pool";
@@ -17,11 +28,17 @@ import { PlatformMarquee } from "@/components/downloader/PlatformMarquee";
 import { SpotlightCard } from "@/components/ui/spotlight-card";
 
 const SupportedPlatformsModal = dynamic(
-  () => import("@/components/downloader/SupportedPlatformsModal").then((m) => m.SupportedPlatformsModal),
-  { ssr: false }
+  () =>
+    import("@/components/downloader/SupportedPlatformsModal").then(
+      (m) => m.SupportedPlatformsModal,
+    ),
+  { ssr: false },
 );
 
+import { useTranslations } from "next-intl";
+
 export function BatchComposer() {
+  const t = useTranslations("batchWorkspace.composer");
   const [inputText, setInputText] = useState("");
   const [dragActive, setDragActive] = useState(false);
   const [platformsModalOpen, setPlatformsModalOpen] = useState(false);
@@ -32,9 +49,11 @@ export function BatchComposer() {
   const settings = useBatchStore((s) => s.settings);
 
   // Single consolidated memoization for URL detection and counters
-  const { existingUrls, detectedResults, validDetectedCount, duplicateCount } = useMemo(() => {
+  const { existingUrls, validDetectedCount, duplicateCount } = useMemo(() => {
     const urls = jobs.map((j) => j.normalizedUrl);
-    const results = inputText.trim() ? extractAndNormalizeUrls(inputText, urls) : [];
+    const results = inputText.trim()
+      ? extractAndNormalizeUrls(inputText, urls)
+      : [];
     let validCount = 0;
     let dupCount = 0;
     for (const r of results) {
@@ -55,7 +74,9 @@ export function BatchComposer() {
     const results = extractAndNormalizeUrls(text, existingUrls);
     const validJobs = results.filter((r) => r.status === "valid");
     const dupCount = results.filter((r) => r.status === "duplicate").length;
-    const malformedCount = results.filter((r) => r.status === "malformed").length;
+    const malformedCount = results.filter(
+      (r) => r.status === "malformed",
+    ).length;
 
     if (results.length === 0) {
       toast.error("No valid URLs found in the input");
@@ -175,10 +196,11 @@ export function BatchComposer() {
 
   return (
     <SpotlightCard
-      className={`relative transition-colors duration-200 p-5 rounded-2xl border ${dragActive
+      className={`relative transition-colors duration-200 p-5 rounded-2xl border ${
+        dragActive
           ? "border-primary ring-2 ring-primary/20 bg-primary/5"
           : "border-border/80 bg-card/90 backdrop-blur-xl shadow-lg"
-        }`}
+      }`}
       onDragEnter={handleDrag}
       onDragOver={handleDrag}
       onDragLeave={handleDrag}
@@ -192,19 +214,22 @@ export function BatchComposer() {
               <Sparkles className="h-4 w-4 animate-pulse" aria-hidden="true" />
             </div>
             <div>
-              <label htmlFor="batch-url-composer-input" className="text-xs font-bold text-foreground/90 tracking-wider uppercase block">
-                BATCH URL COMPOSER
+              <label
+                htmlFor="batch-url-composer-input"
+                className="text-xs font-bold text-foreground/90 tracking-wider uppercase block"
+              >
+                {t("title")}
               </label>
               <span className="text-[10px] text-muted-foreground">
-                Paste video links from{' '}
+                {t("subtitlePrefix")}{" "}
                 <button
                   type="button"
                   onClick={() => setPlatformsModalOpen(true)}
                   className="inline-flex items-center gap-0.5 text-primary hover:underline font-semibold cursor-pointer"
                 >
-                  25+ supported platforms
-                </button>{' '}
-                or import a file
+                  {t("platformsLink")}
+                </button>{" "}
+                {t("subtitleSuffix")}
               </span>
             </div>
           </div>
@@ -217,8 +242,11 @@ export function BatchComposer() {
               className="h-8 text-xs gap-1.5 px-3 rounded-xl border-border/60 bg-muted/30 hover:bg-muted/80 shadow-2xs"
               onClick={handlePaste}
             >
-              <Clipboard className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
-              Paste Clipboard
+              <Clipboard
+                className="h-3.5 w-3.5 text-primary"
+                aria-hidden="true"
+              />
+              {t("pasteClipboard")}
             </Button>
             <Button
               type="button"
@@ -227,8 +255,11 @@ export function BatchComposer() {
               className="h-8 text-xs gap-1.5 px-3 rounded-xl border-border/60 bg-muted/30 hover:bg-muted/80 shadow-2xs"
               onClick={() => fileInputRef.current?.click()}
             >
-              <Upload className="h-3.5 w-3.5 text-emerald-500" aria-hidden="true" />
-              Import File
+              <Upload
+                className="h-3.5 w-3.5 text-emerald-500"
+                aria-hidden="true"
+              />
+              {t("importFile")}
             </Button>
             <input
               type="file"
@@ -249,23 +280,34 @@ export function BatchComposer() {
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             placeholder="Paste multiple URLs here (one per line, or raw text with embedded links)…"
-            className="min-h-[110px] max-h-[300px] font-mono text-xs resize-y bg-background/50 border-border/80 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all rounded-xl p-3 shadow-inner"
+            className="min-h-27.5 max-h-75 font-mono text-xs resize-y bg-background/50 border-border/80 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all rounded-xl p-3 shadow-inner"
           />
 
           {/* Live Link Counter Badge */}
           {validDetectedCount > 0 && (
             <div className="absolute bottom-2.5 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 text-[10px] font-semibold backdrop-blur-md animate-in fade-in duration-200">
               <CheckCircle2 className="h-3 w-3" aria-hidden="true" />
-              <span>{validDetectedCount} New Link{validDetectedCount > 1 ? 's' : ''} Detected</span>
-              {duplicateCount > 0 && <span className="opacity-75 font-normal">({duplicateCount} dupes)</span>}
+              <span>
+                {validDetectedCount > 1
+                  ? t("detectedPlural", { count: validDetectedCount })
+                  : t("detectedSingle", { count: validDetectedCount })}
+              </span>
+              {duplicateCount > 0 && (
+                <span className="opacity-75 font-normal">
+                  {t("dupesCount", { count: duplicateCount })}
+                </span>
+              )}
             </div>
           )}
 
           {dragActive && (
             <div className="absolute inset-0 rounded-xl bg-background/90 backdrop-blur-md flex flex-col items-center justify-center border-2 border-dashed border-primary gap-2 z-20">
-              <FileText className="h-8 w-8 text-primary animate-pulse" aria-hidden="true" />
+              <FileText
+                className="h-8 w-8 text-primary animate-pulse"
+                aria-hidden="true"
+              />
               <span className="text-sm font-bold text-primary">
-                Drop text or CSV file here to import links
+                {t("dropFileHint")}
               </span>
             </div>
           )}
@@ -277,20 +319,29 @@ export function BatchComposer() {
         {/* Sleek Integrated Warning & Feedback Notice Banner */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-2 py-2 px-3.5 rounded-xl border border-amber-500/25 bg-amber-500/5 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 text-[11px] font-medium shadow-2xs">
           <div className="flex items-center gap-2">
-            <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-amber-500" aria-hidden="true" />
-            <span>Copyrighted, paid, or member-only restricted content is not supported.</span>
+            <AlertTriangle
+              className="h-3.5 w-3.5 shrink-0 text-amber-500"
+              aria-hidden="true"
+            />
+            <span>{t("copyrightWarning")}</span>
           </div>
           <div className="flex items-center gap-1.5 text-muted-foreground/80 text-[10px] shrink-0">
-            <MessageSquare className="h-3 w-3 text-muted-foreground/60" aria-hidden="true" />
-            <span>Feedback? Click &quot;Feedback&quot; in top-right.</span>
+            <MessageSquare
+              className="h-3 w-3 text-muted-foreground/60"
+              aria-hidden="true"
+            />
+            <span>{t("feedbackHint")}</span>
           </div>
         </div>
 
         {/* Action buttons */}
         <div className="flex items-center justify-between pt-1 border-t border-border/40">
           <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
-            <Link2 className="h-3 w-3 text-muted-foreground/60" aria-hidden="true" />
-            <span>Supported: YouTube, TikTok, Douyin, Bilibili, SoundCloud & 20+ more</span>
+            <Link2
+              className="h-3 w-3 text-muted-foreground/60"
+              aria-hidden="true"
+            />
+            <span>{t("supportedPlatformsBar")}</span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -303,7 +354,7 @@ export function BatchComposer() {
                 className="h-9 px-3 text-xs gap-1.5 rounded-xl text-muted-foreground hover:text-foreground"
               >
                 <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
-                Clear
+                {t("clear")}
               </Button>
             )}
             <Button
@@ -313,7 +364,9 @@ export function BatchComposer() {
               className="h-10 px-5 text-xs font-bold gap-2 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 transition-all duration-300 transform active:scale-98 border-0"
             >
               <Plus className="h-4 w-4" aria-hidden="true" />
-              {validDetectedCount > 0 ? `Add ${validDetectedCount} URLs to Queue` : 'Add URLs to Queue'}
+              {validDetectedCount > 0
+                ? t("addUrlsCount", { count: validDetectedCount })
+                : t("addUrls")}
             </Button>
           </div>
         </div>

@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useCallback, useMemo, useRef, useSyncExternalStore } from 'react';
+import { useCallback, useMemo, useSyncExternalStore } from "react";
 
 type SetValue<T> = T | ((prev: T) => T);
 
@@ -9,13 +9,13 @@ interface UseLocalStorageStateOptions<T> {
 }
 
 function subscribe(callback: () => void) {
-  window.addEventListener('storage', callback);
-  return () => window.removeEventListener('storage', callback);
+  window.addEventListener("storage", callback);
+  return () => window.removeEventListener("storage", callback);
 }
 
 export function useLocalStorageState<T>(
   key: string,
-  options: UseLocalStorageStateOptions<T>
+  options: UseLocalStorageStateOptions<T>,
 ) {
   const { defaultValue } = options;
 
@@ -30,10 +30,14 @@ export function useLocalStorageState<T>(
 
   const getServerSnapshot = useCallback(
     () => JSON.stringify(defaultValue),
-    [defaultValue]
+    [defaultValue],
   );
 
-  const storeString = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const storeString = useSyncExternalStore(
+    subscribe,
+    getSnapshot,
+    getServerSnapshot,
+  );
 
   const value: T = useMemo(() => {
     try {
@@ -49,14 +53,14 @@ export function useLocalStorageState<T>(
         const raw = window.localStorage.getItem(key);
         const current: T = raw !== null ? (JSON.parse(raw) as T) : defaultValue;
         const nextValue =
-          typeof next === 'function' ? (next as (prev: T) => T)(current) : next;
+          typeof next === "function" ? (next as (prev: T) => T)(current) : next;
         window.localStorage.setItem(key, JSON.stringify(nextValue));
-        window.dispatchEvent(new Event('storage'));
+        window.dispatchEvent(new Event("storage"));
       } catch {
         // Ignore quota/serialization errors
       }
     },
-    [key, defaultValue]
+    [key, defaultValue],
   );
 
   return [value, updateValue, true] as const;

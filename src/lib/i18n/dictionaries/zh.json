@@ -139,10 +139,10 @@
     "installAction": "立即安装"
   },
   "metadata": {
-    "title": "VoidFetch | 终极批量媒体下载器 - 由 VoidStation 提供",
-    "description": "支持 40 多个平台的最快、最可靠的在线媒体下载器。轻松批量下载高清视频、MP3 音频、图片库和 HLS 流——免费，无需注册。",
-    "ogTitle": "VoidFetch | 下一代批量媒体下载器",
-    "ogDescription": "闪电般的批量下载，支持 YouTube、TikTok、Instagram、Bilibili 等 40 多个平台。轻松提取高清视频、高质量音频和图片库。",
+    "title": "VoidFetch｜在线视频、音频、图文、HLS 批量下载工具（VoidStation 出品）",
+    "description": "免费在线媒体下载工具，支持 Bilibili、抖音、Telegram、Threads、微信公众号、微博、Niconico、Instagram、小红书、TikTok、X、Reddit、Streamable、SoundCloud、Twitch、VK、OK.ru、Pinterest、Tumblr、Newgrounds 以及 HLS/M3U8 串流。",
+    "ogTitle": "VoidFetch｜免费在线批量媒体下载工具",
+    "ogDescription": "自动识别视频、音频、图文和 HLS/M3U8 链接，在线下载媒体内容，无需注册。",
     "siteName": "VoidFetch"
   },
   "common": {
@@ -193,7 +193,10 @@
     "privateFeedbackTitle": "通过邮件反馈",
     "privateFeedbackDescription": "您也可以选择通过发送邮件来提交您的反馈。为了让我们更快定位问题，建议在邮件中提供遇到问题的目标链接、设备信息或相关截图。",
     "emailAction": "发送邮件",
-    "emailTemplateBody": "【问题描述】\n请简要描述遇到的问题或建议：\n\n【目标链接】\n(如涉及解析失败，请提供原链接)\n\n【设备与环境】\n(例：Win 11 / Chrome 120 / iOS 17)\n"
+    "emailTemplateBody": "【问题描述】\n请简要描述遇到的问题或建议：\n\n【目标链接】\n(如涉及解析失败，请提供原链接)\n\n【设备与环境】\n(例：Win 11 / Chrome 120 / iOS 17)\n",
+    "communityDiscussionsTitle": "社区讨论与反馈",
+    "communityDiscussionsSubtitle": "使用 GitHub 登录以发布公开反馈、报告 Bug 或提出新功能需求。",
+    "poweredByGiscus": "由 Giscus 提供支持"
   },
   "privacyPage": {
     "metaTitle": "隐私政策｜VoidFetch",
@@ -353,205 +356,133 @@
       "bilibili": {
         "name": "哔哩哔哩",
         "summary": "视频 / 音频 / 口令",
-        "features": [
-          "视频",
-          "音频",
-          "口令"
-        ]
+        "features": ["视频", "音频", "口令"]
       },
       "bilibiliTv": {
         "name": "Bilibili TV",
         "summary": "视频 / 音频",
-        "features": [
-          "视频",
-          "音频"
-        ]
+        "features": ["视频", "音频"]
       },
       "douyin": {
         "name": "抖音",
         "summary": "视频 / 图文 / 音频",
-        "features": [
-          "视频",
-          "图文",
-          "音频"
-        ]
+        "features": ["视频", "图文", "音频"]
       },
       "hls": {
         "name": "视频网站",
         "summary": "网页流媒体视频",
-        "features": [
-          "在线播放",
-          "分片下载"
-        ]
+        "features": ["在线播放", "分片下载"]
       },
       "youtube": {
         "name": "YouTube",
         "summary": "视频 / 音频",
-        "features": [
-          "视频",
-          "音频"
-        ]
+        "features": ["视频", "音频"]
       },
       "telegram": {
         "name": "Telegram",
         "summary": "视频 / 消息链接",
-        "features": [
-          "视频",
-          "消息链接"
-        ]
+        "features": ["视频", "消息链接"]
       },
       "wechat": {
         "name": "微信公众号文章",
         "summary": "文章视频 / 多视频",
-        "features": [
-          "文章视频",
-          "多视频"
-        ]
+        "features": ["文章视频", "多视频"]
       },
       "niconico": {
         "name": "Niconico",
         "summary": "视频 / 音频",
-        "features": [
-          "视频",
-          "音频"
-        ]
+        "features": ["视频", "音频"]
       },
       "xiaohongshu": {
         "name": "小红书",
         "summary": "视频 / 图文",
-        "features": [
-          "视频",
-          "图文"
-        ]
+        "features": ["视频", "图文"]
       },
       "tiktok": {
         "name": "TikTok",
         "summary": "视频 / 音频",
-        "features": [
-          "视频",
-          "音频"
-        ]
+        "features": ["视频", "音频"]
       },
       "comingSoon": "更多平台敬请期待",
       "instagram": {
         "name": "Instagram",
         "summary": "视频 / 图文 / 轮播图",
-        "features": [
-          "视频",
-          "图文",
-          "轮播图"
-        ]
+        "features": ["视频", "图文", "轮播图"]
       },
       "x": {
         "name": "X",
         "summary": "视频 / 音频",
-        "features": [
-          "视频",
-          "音频"
-        ]
+        "features": ["视频", "音频"]
       },
       "threads": {
         "name": "Threads",
         "summary": "视频 / 图文",
-        "features": [
-          "视频",
-          "图文"
-        ]
+        "features": ["视频", "图文"]
       },
       "weibo": {
         "name": "微博",
         "summary": "视频 / 图文 / 多视频",
-        "features": [
-          "视频",
-          "图文",
-          "多视频"
-        ]
+        "features": ["视频", "图文", "多视频"]
       },
       "vimeo": {
         "name": "Vimeo",
         "summary": "内容下载",
-        "features": [
-          "内容下载"
-        ]
+        "features": ["内容下载"]
       },
       "dailymotion": {
         "name": "Dailymotion",
         "summary": "内容下载",
-        "features": [
-          "内容下载"
-        ]
+        "features": ["内容下载"]
       },
       "streamable": {
         "name": "Streamable",
         "summary": "内容下载",
-        "features": [
-          "内容下载"
-        ]
+        "features": ["内容下载"]
       },
       "reddit": {
         "name": "Reddit",
         "summary": "内容下载",
-        "features": [
-          "内容下载"
-        ]
+        "features": ["内容下载"]
       },
       "newgrounds": {
         "name": "Newgrounds",
         "summary": "内容下载",
-        "features": [
-          "内容下载"
-        ]
+        "features": ["内容下载"]
       },
       "tumblr": {
         "name": "Tumblr",
         "summary": "内容下载",
-        "features": [
-          "内容下载"
-        ]
+        "features": ["内容下载"]
       },
       "pinterest": {
         "name": "Pinterest",
         "summary": "内容下载",
-        "features": [
-          "内容下载"
-        ]
+        "features": ["内容下载"]
       },
       "vk": {
         "name": "VK",
         "summary": "内容下载",
-        "features": [
-          "内容下载"
-        ]
+        "features": ["内容下载"]
       },
       "okru": {
         "name": "OK.ru",
         "summary": "内容下载",
-        "features": [
-          "内容下载"
-        ]
+        "features": ["内容下载"]
       },
       "twitch": {
         "name": "Twitch",
         "summary": "内容下载",
-        "features": [
-          "内容下载"
-        ]
+        "features": ["内容下载"]
       },
       "soundcloud": {
         "name": "SoundCloud",
         "summary": "内容下载",
-        "features": [
-          "内容下载"
-        ]
+        "features": ["内容下载"]
       },
       "applePodcasts": {
         "name": "Apple Podcasts",
         "summary": "公开播客音频 / 逐集播放与下载",
-        "features": [
-          "公开音频",
-          "逐集播放",
-          "下载"
-        ]
+        "features": ["公开音频", "逐集播放", "下载"]
       }
     },
     "linkFormats": {
@@ -967,5 +898,161 @@
     "clickDetails": "点击查看详情",
     "clickTitle": "点击查看全部 25+ 支持的平台",
     "universalSub": "全能批量下载工具"
+  },
+  "batchWorkspace": {
+    "title": "未命名批量下载工作区",
+    "subtitle": "VoidFetch 队列管理器",
+    "queuePreferences": "队列偏好设置",
+    "nav": {
+      "queueWorkspace": "队列工作区",
+      "downloadHistory": "下载历史",
+      "preferences": "首选项",
+      "aboutVoidFetch": "关于 VoidFetch",
+      "privacyAndTerms": "隐私与条款"
+    },
+    "composer": {
+      "title": "批量 URL 解析器",
+      "subtitlePrefix": "粘贴来自",
+      "platformsLink": "25+ 支持平台",
+      "subtitleSuffix": "的视频链接或导入文件",
+      "pasteClipboard": "粘贴剪贴板",
+      "importFile": "导入文件",
+      "placeholder": "在此粘贴多个 URL（每行一个，或包含链接的文本）...",
+      "detectedSingle": "检测到 {count} 个新链接",
+      "detectedPlural": "检测到 {count} 个新链接",
+      "dupesCount": "({count} 个重复)",
+      "dropFileHint": "将文本或 CSV 文件拖放到此处以导入链接",
+      "copyrightWarning": "不支持受版权保护、付费或会员限定的内容。",
+      "feedbackHint": "有建议？点击右上角的“反馈”。",
+      "supportedPlatformsBar": "支持：YouTube, TikTok, 抖音, Bilibili, SoundCloud 等 20+ 平台",
+      "clear": "清空",
+      "addUrls": "添加 URL 到队列",
+      "addUrlsCount": "添加 {count} 个 URL 到队列"
+    },
+    "toolbar": {
+      "searchPlaceholder": "搜索标题或 URL...",
+      "allStatus": "所有状态",
+      "allPlatforms": "所有平台",
+      "parseAll": "全部解析 ({count})",
+      "pauseQueue": "暂停队列",
+      "startQueue": "启动队列",
+      "retryFailed": "重试失败项",
+      "clearCompleted": "清除已完成 ({count})",
+      "status": {
+        "all": "所有状态",
+        "draft": "草稿",
+        "parsing": "解析中",
+        "ready": "就绪",
+        "queued": "排队中",
+        "downloading": "下载中",
+        "processing": "处理中",
+        "saving": "保存中",
+        "paused": "已暂停",
+        "completed": "已完成",
+        "failed": "失败",
+        "cancelled": "已取消"
+      }
+    },
+    "queue": {
+      "emptyTitle": "工作区为空",
+      "emptyBadge": "就绪",
+      "emptyDescription": "粘贴视频 URL (YouTube, TikTok, 抖音, SoundCloud...) 或在上方导入文本文件以开始批量下载。",
+      "multiThreaded": "多线程解析引擎",
+      "audioExtraction": "音频流提取",
+      "upTo4k": "最高支持 4K / 60FPS 视频",
+      "itemsSelectedSingle": "已选择 {count} 项",
+      "itemsSelectedPlural": "已选择 {count} 项",
+      "bulkConfigure": "批量配置",
+      "bulkConfigureCount": "批量配置 ({count})",
+      "removeSelected": "删除所选项",
+      "selectAll": "全选队列项目",
+      "itemsCount": "{count} 项",
+      "noMatchingJobs": "没有匹配当前搜索或筛选条件的任务。"
+    },
+    "configDrawer": {
+      "titleSingle": "配置下载",
+      "titleBulk": "批量配置",
+      "subtitle": "自定义输出格式、画质音质及元数据偏好",
+      "outputFormat": "输出格式",
+      "videoQuality": "视频画质",
+      "selectVideoQuality": "选择视频画质",
+      "qualityNote": "注意：如果原视频不支持 4K/2K，系统将自动下载可用的最高画质。",
+      "audioQuality": "音频比特率",
+      "selectAudioQuality": "选择音频质量",
+      "filenameTemplate": "文件名模板",
+      "outputFilename": "输出文件名",
+      "clickTokenHint": "点击变量标签插入文件名",
+      "hlsConcurrency": "HLS 切片并发数",
+      "advancedOptions": "高级选项",
+      "downloadThumbnail": "下载封面 / 缩略图",
+      "saveMetadataJson": "同时保存元数据 JSON 文件",
+      "forceAudioExtraction": "强制提取音频 (MP3)",
+      "applyChecked": "应用到选中项 ({count})",
+      "applyAll": "应用到全部 ({count})",
+      "saveConfig": "保存配置"
+    },
+    "progress": {
+      "totalItems": "{count} 项",
+      "running": "{count} 运行中",
+      "queued": "{count} 排队中",
+      "completed": "{count} 已完成",
+      "failed": "{count} 失败",
+      "speed": "速度",
+      "eta": "剩余时间",
+      "queueActive": "队列运行中",
+      "queueIdle": "队列空闲"
+    },
+    "settingsModal": {
+      "title": "工作区首选项",
+      "description": "配置全局下载默认值与网络并发数",
+      "defaultOutputAndQuality": "默认格式与画质",
+      "defaultFormat": "默认格式",
+      "defaultQuality": "默认画质",
+      "downloadDirectoryPath": "下载保存目录路径",
+      "browserDefault": "浏览器默认（下载文件夹）",
+      "customFolder": "📁 自定义：{name}",
+      "customFolderDesc": "文件将直接保存到该文件夹句柄中",
+      "browserDefaultDesc": "文件会自动直接保存到您的“下载”文件夹",
+      "resetDefault": "恢复默认",
+      "changeFolder": "更改文件夹",
+      "selectCustomFolder": "选择自定义文件夹",
+      "directoryTip": "💡 提示：浏览器安全限制禁止直接选择“下载”根目录。如需在“下载”目录内归类，请创建或选择子文件夹（例如 Downloads/VoidFetch）。",
+      "networkConcurrency": "网络并发",
+      "concurrentJobs": "并发下载任务数",
+      "hlsSegmentConcurrency": "HLS 切片并发数",
+      "savePreferences": "保存偏好设置"
+    }
+  },
+  "settingsPage": {
+    "metaTitle": "设置 | VoidFetch",
+    "metaDescription": "配置下载默认值、并发上限、网络预算及保存目录偏好。",
+    "title": "首选项",
+    "subtitle": "配置默认下载行为",
+    "resetDefaults": "恢复默认设置",
+    "loading": "正在加载设置...",
+    "downloaderDefaults": "下载器默认设置",
+    "defaultOutputType": "默认输出类型",
+    "defaultQuality": "默认画质/音质",
+    "selectQuality": "选择质量",
+    "defaultFilenameTemplate": "默认文件名模板",
+    "placeholderTokens": "可用变量标签：",
+    "customDirectoryTitle": "自定义下载保存目录路径",
+    "customDirName": "📁 自定义目录：{name}",
+    "browserDefaultDir": "浏览器默认（下载文件夹）",
+    "customDirDesc": "所有 VoidFetch 下载的文件将直接写入该文件夹句柄中",
+    "browserDefaultDesc": "文件由浏览器标准下载管理器处理",
+    "resetDefaultDir": "恢复默认",
+    "changeFolder": "更改文件夹",
+    "selectCustomFolder": "选择自定义文件夹",
+    "concurrencyTitle": "并发数与性能上限",
+    "parserConcurrency": "解析器并发数",
+    "downloadConcurrency": "下载并发数",
+    "networkBudget": "全局网络请求预算",
+    "networkBudgetDesc": "控制全局同时下载的 HLS 切片总数，防止超出连接数限制。",
+    "workflowsTitle": "工作流与开关标志",
+    "continueOnError": "发生错误时继续执行队列",
+    "continueOnErrorDesc": "当某个任务下载失败时，自动跳过并继续下载队列中的后续任务。",
+    "autoStartDownloads": "解析 URL 后自动启动下载",
+    "autoStartDownloadsDesc": "解析就绪后立即将 URL 直接加入下载流中。"
   }
 }

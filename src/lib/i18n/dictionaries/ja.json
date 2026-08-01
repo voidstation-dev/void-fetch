@@ -139,10 +139,10 @@
     "installAction": "インストール"
   },
   "metadata": {
-    "title": "VoidFetch | VoidStationによる究極のバッチメディアダウンローダー",
-    "description": "40以上のプラットフォームに対応した最も速く信頼性の高いオンラインメディアダウンローダー。HD動画、MP3音声、画像ギャラリー、HLSストリームをバッチで簡単にダウンロード—無料、登録不要。",
-    "ogTitle": "VoidFetch | 次世代のバッチメディアダウンローダー",
-    "ogDescription": "YouTube、TikTok、Instagram、Bilibiliなど40以上のプラットフォームでの超高速バッチダウンロード。HD動画、高品質音声、画像ギャラリーを簡単に抽出。",
+    "title": "VoidFetch | 動画・音声・画像・HLS 一括ダウンローダー by VoidStation",
+    "description": "Bilibili、Douyin、Telegram、Threads、WeChat、Weibo、Niconico、Instagram、Xiaohongshu、TikTok、X、Reddit、Streamable、SoundCloud、Twitch、VK、OK.ru、Pinterest、Tumblr、Newgrounds、HLS/M3U8 に対応した無料オンラインメディアダウンローダー。",
+    "ogTitle": "VoidFetch | 無料オンライン一括メディアダウンローダー",
+    "ogDescription": "動画、音声、画像投稿、HLS/M3U8 リンクを自動判別し、登録不要でオンラインダウンロードできます。",
     "siteName": "VoidFetch"
   },
   "common": {
@@ -193,7 +193,10 @@
     "privateFeedbackTitle": "メールでのフィードバック",
     "privateFeedbackDescription": "メールでフィードバックを送信することもできます。問題の早期解決のため、メールには対象のURL、デバイス情報、または関連するスクリーンショットを含めることをお勧めします。",
     "emailAction": "メールを送信",
-    "emailTemplateBody": "【問題の概要】\n問題または提案を簡潔に説明してください：\n\n【対象URL】\n(該当する場合はリンクを記載してください)\n\n【利用環境】\n(例：Win 11 / Chrome 120 / iOS 17)\n"
+    "emailTemplateBody": "【問題の概要】\n問題または提案を簡潔に説明してください：\n\n【対象URL】\n(該当する場合はリンクを記載してください)\n\n【利用環境】\n(例：Win 11 / Chrome 120 / iOS 17)\n",
+    "communityDiscussionsTitle": "コミュニティディスカッション",
+    "communityDiscussionsSubtitle": "GitHubでサインインして、公開フィードバック、バグ報告、新機能のリクエストを投稿します。",
+    "poweredByGiscus": "Giscus を使用"
   },
   "privacyPage": {
     "metaTitle": "プライバシーポリシー | VoidFetch",
@@ -353,205 +356,133 @@
       "bilibili": {
         "name": "Bilibili",
         "summary": "動画 / 音声 / 共有コード",
-        "features": [
-          "動画",
-          "音声",
-          "共有コード"
-        ]
+        "features": ["動画", "音声", "共有コード"]
       },
       "bilibiliTv": {
         "name": "Bilibili TV",
         "summary": "動画 / 音声",
-        "features": [
-          "動画",
-          "音声"
-        ]
+        "features": ["動画", "音声"]
       },
       "douyin": {
         "name": "Douyin",
         "summary": "動画 / 画像投稿 / 音声",
-        "features": [
-          "動画",
-          "画像投稿",
-          "音声"
-        ]
+        "features": ["動画", "画像投稿", "音声"]
       },
       "hls": {
         "name": "動画サイト",
         "summary": "ストリーミング配信",
-        "features": [
-          "オンライン再生",
-          "ダウンロード"
-        ]
+        "features": ["オンライン再生", "ダウンロード"]
       },
       "youtube": {
         "name": "YouTube",
         "summary": "動画 / 音声",
-        "features": [
-          "動画",
-          "音声"
-        ]
+        "features": ["動画", "音声"]
       },
       "telegram": {
         "name": "Telegram",
         "summary": "動画 / メッセージリンク",
-        "features": [
-          "動画",
-          "メッセージリンク"
-        ]
+        "features": ["動画", "メッセージリンク"]
       },
       "wechat": {
         "name": "WeChat",
         "summary": "記事内動画 / 複数動画",
-        "features": [
-          "記事内動画",
-          "複数動画"
-        ]
+        "features": ["記事内動画", "複数動画"]
       },
       "niconico": {
         "name": "Niconico",
         "summary": "動画 / 音声",
-        "features": [
-          "動画",
-          "音声"
-        ]
+        "features": ["動画", "音声"]
       },
       "xiaohongshu": {
         "name": "Xiaohongshu",
         "summary": "動画 / 画像投稿",
-        "features": [
-          "動画",
-          "画像投稿"
-        ]
+        "features": ["動画", "画像投稿"]
       },
       "tiktok": {
         "name": "TikTok",
         "summary": "動画 / 音声",
-        "features": [
-          "動画",
-          "音声"
-        ]
+        "features": ["動画", "音声"]
       },
       "comingSoon": "対応プラットフォーム追加予定",
       "instagram": {
         "name": "Instagram",
         "summary": "動画 / 画像投稿 / カルーセル",
-        "features": [
-          "動画",
-          "画像投稿",
-          "カルーセル"
-        ]
+        "features": ["動画", "画像投稿", "カルーセル"]
       },
       "x": {
         "name": "X",
         "summary": "動画 / 音声",
-        "features": [
-          "動画",
-          "音声"
-        ]
+        "features": ["動画", "音声"]
       },
       "threads": {
         "name": "Threads",
         "summary": "動画 / 画像投稿",
-        "features": [
-          "動画",
-          "画像投稿"
-        ]
+        "features": ["動画", "画像投稿"]
       },
       "weibo": {
         "name": "Weibo",
         "summary": "動画 / 画像投稿 / 複数動画",
-        "features": [
-          "動画",
-          "画像投稿",
-          "複数動画"
-        ]
+        "features": ["動画", "画像投稿", "複数動画"]
       },
       "vimeo": {
         "name": "Vimeo",
         "summary": "コンテンツダウンロード",
-        "features": [
-          "コンテンツダウンロード"
-        ]
+        "features": ["コンテンツダウンロード"]
       },
       "dailymotion": {
         "name": "Dailymotion",
         "summary": "コンテンツダウンロード",
-        "features": [
-          "コンテンツダウンロード"
-        ]
+        "features": ["コンテンツダウンロード"]
       },
       "streamable": {
         "name": "Streamable",
         "summary": "コンテンツダウンロード",
-        "features": [
-          "コンテンツダウンロード"
-        ]
+        "features": ["コンテンツダウンロード"]
       },
       "reddit": {
         "name": "Reddit",
         "summary": "コンテンツダウンロード",
-        "features": [
-          "コンテンツダウンロード"
-        ]
+        "features": ["コンテンツダウンロード"]
       },
       "newgrounds": {
         "name": "Newgrounds",
         "summary": "コンテンツダウンロード",
-        "features": [
-          "コンテンツダウンロード"
-        ]
+        "features": ["コンテンツダウンロード"]
       },
       "tumblr": {
         "name": "Tumblr",
         "summary": "コンテンツダウンロード",
-        "features": [
-          "コンテンツダウンロード"
-        ]
+        "features": ["コンテンツダウンロード"]
       },
       "pinterest": {
         "name": "Pinterest",
         "summary": "コンテンツダウンロード",
-        "features": [
-          "コンテンツダウンロード"
-        ]
+        "features": ["コンテンツダウンロード"]
       },
       "vk": {
         "name": "VK",
         "summary": "コンテンツダウンロード",
-        "features": [
-          "コンテンツダウンロード"
-        ]
+        "features": ["コンテンツダウンロード"]
       },
       "okru": {
         "name": "OK.ru",
         "summary": "コンテンツダウンロード",
-        "features": [
-          "コンテンツダウンロード"
-        ]
+        "features": ["コンテンツダウンロード"]
       },
       "twitch": {
         "name": "Twitch",
         "summary": "コンテンツダウンロード",
-        "features": [
-          "コンテンツダウンロード"
-        ]
+        "features": ["コンテンツダウンロード"]
       },
       "soundcloud": {
         "name": "SoundCloud",
         "summary": "コンテンツダウンロード",
-        "features": [
-          "コンテンツダウンロード"
-        ]
+        "features": ["コンテンツダウンロード"]
       },
       "applePodcasts": {
         "name": "Apple Podcasts",
         "summary": "公開ポッドキャスト音声 / エピソード再生とダウンロード",
-        "features": [
-          "公開音声",
-          "エピソード再生",
-          "ダウンロード"
-        ]
+        "features": ["公開音声", "エピソード再生", "ダウンロード"]
       }
     },
     "linkFormats": {
@@ -967,5 +898,161 @@
     "clickDetails": "クリックして詳細を表示",
     "clickTitle": "クリックして対応する全25以上のプラットフォームを表示",
     "universalSub": "万能一括ダウンローダー"
+  },
+  "batchWorkspace": {
+    "title": "一括ダウンロードワークスペース",
+    "subtitle": "VoidFetch キューマネージャー",
+    "queuePreferences": "キュー設定",
+    "nav": {
+      "queueWorkspace": "キュー ワークスペース",
+      "downloadHistory": "ダウンロード履歴",
+      "preferences": "環境設定",
+      "aboutVoidFetch": "VoidFetch について",
+      "privacyAndTerms": "プライバシーと利用規約"
+    },
+    "composer": {
+      "title": "一括 URL コンポーザー",
+      "subtitlePrefix": "動画リンクを貼り付け:",
+      "platformsLink": "25以上の対応プラットフォーム",
+      "subtitleSuffix": "またはファイルをインポート",
+      "pasteClipboard": "クリップボードから貼り付け",
+      "importFile": "ファイルをインポート",
+      "placeholder": "複数のURLをここに貼り付け (1行に1つのURL、またはテキストから自動抽出)...",
+      "detectedSingle": "{count} 件の新しいリンクを検出",
+      "detectedPlural": "{count} 件の新しいリンクを検出",
+      "dupesCount": "({count} 件の重複)",
+      "dropFileHint": "テキストまたはCSVファイルをここにドロップしてインポート",
+      "copyrightWarning": "著作権で保護されたコンテンツ、有料コンテンツ、会員限定コンテンツには対応していません。",
+      "feedbackHint": "フィードバック？ 右上の「フィードバック」をクリックしてください。",
+      "supportedPlatformsBar": "対応: YouTube, TikTok, Douyin, Bilibili, SoundCloud およびその他20以上のサイト",
+      "clear": "クリア",
+      "addUrls": "URLをキューに追加",
+      "addUrlsCount": "{count} 件のURLをキューに追加"
+    },
+    "toolbar": {
+      "searchPlaceholder": "タイトルまたはURLを検索...",
+      "allStatus": "すべてのステータス",
+      "allPlatforms": "すべてのプラットフォーム",
+      "parseAll": "すべて解析 ({count})",
+      "pauseQueue": "キューを一時停止",
+      "startQueue": "キューを開始",
+      "retryFailed": "失敗したタスクを再試行",
+      "clearCompleted": "完了したタスクを消去 ({count})",
+      "status": {
+        "all": "すべてのステータス",
+        "draft": "下書き",
+        "parsing": "解析中",
+        "ready": "準備完了",
+        "queued": "キュー待機中",
+        "downloading": "ダウンロード中",
+        "processing": "処理中",
+        "saving": "保存中",
+        "paused": "一時停止中",
+        "completed": "完了",
+        "failed": "失敗",
+        "cancelled": "キャンセル済み"
+      }
+    },
+    "queue": {
+      "emptyTitle": "ワークスペースは空です",
+      "emptyBadge": "準備完了",
+      "emptyDescription": "動画URL (YouTube, TikTok, Douyin, SoundCloud...) を貼り付けるか、テキストファイルをインポートして一括ダウンロードを開始します。",
+      "multiThreaded": "マルチスレッドエンジン",
+      "audioExtraction": "音声ストリーム抽出",
+      "upTo4k": "最大 4K / 60FPS 動画",
+      "itemsSelectedSingle": "{count} 件選択中",
+      "itemsSelectedPlural": "{count} 件選択中",
+      "bulkConfigure": "一括設定",
+      "bulkConfigureCount": "一括設定 ({count})",
+      "removeSelected": "選択項目を削除",
+      "selectAll": "すべてのキュー項目を選択",
+      "itemsCount": "{count} 件",
+      "noMatchingJobs": "一致するタスクが見つかりません。"
+    },
+    "configDrawer": {
+      "titleSingle": "ダウンロード設定",
+      "titleBulk": "一括設定",
+      "subtitle": "出力フォーマット、画質ストリーム、メタデータの設定をカスタマイズ",
+      "outputFormat": "出力フォーマット",
+      "videoQuality": "画質ストリーム",
+      "selectVideoQuality": "画質を選択",
+      "qualityNote": "注: 元動画が4K/2Kに対応していない場合、自動的に利用可能な最高画質でダウンロードされます。",
+      "audioQuality": "音質 (ビットレート)",
+      "selectAudioQuality": "音質を選択",
+      "filenameTemplate": "ファイル名テンプレート",
+      "outputFilename": "出力ファイル名",
+      "clickTokenHint": "変数トークンをクリックして挿入",
+      "hlsConcurrency": "HLSセグメント並列数",
+      "advancedOptions": "詳細オプション",
+      "downloadThumbnail": "サムネイル / カバー画像をダウンロード",
+      "saveMetadataJson": "メタデータJSONを一緒に保存",
+      "forceAudioExtraction": "音声を強制抽出 (MP3)",
+      "applyChecked": "選択項目に適用 ({count})",
+      "applyAll": "すべてに適用 ({count})",
+      "saveConfig": "設定を保存"
+    },
+    "progress": {
+      "totalItems": "{count} 件",
+      "running": "{count} 実行中",
+      "queued": "{count} キュー待機中",
+      "completed": "{count} 完了",
+      "failed": "{count} 失敗",
+      "speed": "速度",
+      "eta": "残り時間",
+      "queueActive": "キュー稼働中",
+      "queueIdle": "キューアイドル"
+    },
+    "settingsModal": {
+      "title": "ワークスペース設定",
+      "description": "グローバルデフォルト設定とネットワーク並行数の管理",
+      "defaultOutputAndQuality": "デフォルトのフォーマットと画質",
+      "defaultFormat": "デフォルトフォーマット",
+      "defaultQuality": "デフォルト画質",
+      "downloadDirectoryPath": "ダウンロード保存先フォルダ",
+      "browserDefault": "ブラウザ標準 (ダウンロードフォルダ)",
+      "customFolder": "📁 カスタム: {name}",
+      "customFolderDesc": "ファイルはこのフォルダに直接保存されます",
+      "browserDefaultDesc": "ファイルは自動的にダウンロードフォルダに保存されます",
+      "resetDefault": "標準設定に戻す",
+      "changeFolder": "フォルダを変更",
+      "selectCustomFolder": "カスタムフォルダを選択",
+      "directoryTip": "💡 ヒント: ブラウザのセキュリティ仕様により、ルートのダウンロードフォルダを直接指定できません。サブフォルダを作成または選択してください（例: Downloads/VoidFetch）。",
+      "networkConcurrency": "ネットワーク並行処理数",
+      "concurrentJobs": "同時ダウンロードタスク数",
+      "hlsSegmentConcurrency": "HLSセグメント並列数",
+      "savePreferences": "設定を保存"
+    }
+  },
+  "settingsPage": {
+    "metaTitle": "設定 | VoidFetch",
+    "metaDescription": "ダウンロードのデフォルト設定、並列数上限、ネットワーク制限、保存先フォルダを設定します。",
+    "title": "環境設定",
+    "subtitle": "ダウンローダーのデフォルト動作を設定",
+    "resetDefaults": "初期設定に戻す",
+    "loading": "設定を読み込み中...",
+    "downloaderDefaults": "ダウンローダーのデフォルト設定",
+    "defaultOutputType": "デフォルト出力タイプ",
+    "defaultQuality": "デフォルト画質・音質",
+    "selectQuality": "品質を選択",
+    "defaultFilenameTemplate": "デフォルトのファイル名テンプレート",
+    "placeholderTokens": "利用可能な変数トークン:",
+    "customDirectoryTitle": "カスタム保存先フォルダのパス",
+    "customDirName": "📁 カスタムフォルダ: {name}",
+    "browserDefaultDir": "ブラウザ標準 (ダウンロードフォルダ)",
+    "customDirDesc": "すべての VoidFetch ダウンロードはこのフォルダに直接保存されます",
+    "browserDefaultDesc": "ファイルはブラウザの標準ダウンロードマネージャーで処理されます",
+    "resetDefaultDir": "標準に戻す",
+    "changeFolder": "フォルダを変更",
+    "selectCustomFolder": "カスタムフォルダを選択",
+    "concurrencyTitle": "並列数とパフォーマンス制限",
+    "parserConcurrency": "解析の並列数",
+    "downloadConcurrency": "ダウンロードの並列数",
+    "networkBudget": "グローバルネットワークリクエスト制限",
+    "networkBudgetDesc": "接続制限を防ぐため、全体で同時にダウンロードするHLSチャンク数を制御します。",
+    "workflowsTitle": "ワークフローと設定フラグ",
+    "continueOnError": "エラー発生時もキューを継続",
+    "continueOnErrorDesc": "1つのタスクが失敗しても、キュー内の後続タスクのダウンロードを継続します。",
+    "autoStartDownloads": "URL解析完了時に自動でダウンロードを開始",
+    "autoStartDownloadsDesc": "解析が完了したURLを直ちにダウンロードストリームに追加します。"
   }
 }

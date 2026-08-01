@@ -1,6 +1,6 @@
 # Contributing to VoidFetch
 
-First off, thank you for considering contributing to **VoidFetch**! 🎉 
+First off, thank you for considering contributing to **VoidFetch**! 🎉
 
 VoidFetch is an open-source, high-performance batch media downloader workspace built with Next.js, React 19, Vite, and Tailwind CSS. We welcome contributions from developers of all skill levels.
 
@@ -15,16 +15,21 @@ By participating in this project, you agree to maintain a respectful, inclusive,
 ## 🚀 How to Contribute
 
 ### 1. Reporting Bugs
+
 If you encounter a bug, broken platform parser, or UI issue:
+
 - Search existing [GitHub Issues](https://github.com/voidstation-dev/void-fetch/issues) to ensure it hasn't been reported yet.
 - Open a new issue with a clear title, reproduction steps, expected vs. actual behavior, browser version, and OS details.
 
 ### 2. Suggesting Enhancements & New Platforms
+
 We welcome feature requests and new platform parsing additions:
+
 - Open a feature request issue describing the proposed functionality and benefits.
 - Provide example public links or platform documentation if requesting a new platform media extractor.
 
 ### 3. Submitting Pull Requests (PRs)
+
 1. **Clone or Fork the Repository**:
    ```bash
    git clone https://github.com/voidstation-dev/void-fetch.git
@@ -68,6 +73,7 @@ We welcome feature requests and new platform parsing additions:
 - **Transcoding**: Browser-side FFmpeg.wasm & JSZip
 
 ### Environment Variables
+
 We use `.env.example` as a template for environment variables. To run the project locally, copy this file to `.env.local`:
 
 ```bash
@@ -75,6 +81,7 @@ cp .env.example .env.local
 ```
 
 You can then configure `.env.local` with your custom backend endpoints or other settings as needed:
+
 ```env
 NEXT_PUBLIC_API_BASE_URL=https://downloader-api.bhwa233.com
 NEXT_PUBLIC_SITE_URL=http://localhost:3010

@@ -38,12 +38,13 @@ import {
   getActiveDirectoryName,
   selectCustomDirectory,
   clearActiveDirectoryHandle,
-} from "@/lib/directory-picker";
+} from "@/infrastructure/directory-picker";
 
-import { cn } from "@/lib/utils";
 import type { OutputType } from "../types/batch-download";
+import { useTranslations } from "next-intl";
 
 export function SettingsModal() {
+  const t = useTranslations("batchWorkspace.settingsModal");
   const store = useBatchStore();
   const isOpen = store.isSettingsOpen;
   const settings = store.settings;
@@ -51,6 +52,8 @@ export function SettingsModal() {
   const [customDirName, setCustomDirName] = React.useState<string | null>(
     getActiveDirectoryName(),
   );
+
+  if (!isOpen) return null;
 
   const handleClose = () => {
     store.setIsSettingsOpen(false);
@@ -83,51 +86,55 @@ export function SettingsModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
-      <DialogContent showCloseButton={false} className="sm:max-w-xl w-[calc(100vw-2rem)] max-h-[85vh] overflow-x-hidden overflow-y-auto p-6 rounded-2xl border border-border/80 bg-card shadow-2xl backdrop-blur-xl transition-all duration-200">
-        <DialogTitle className="sr-only">Workspace Preferences</DialogTitle>
-        <DialogDescription className="sr-only">Configure global download defaults and network concurrency</DialogDescription>
+      <DialogContent
+        showCloseButton={false}
+        className="sm:max-w-xl w-[calc(100vw-2rem)] max-h-[88vh] flex flex-col p-6 rounded-2xl border border-border/80 bg-card shadow-2xl backdrop-blur-xl transition-all duration-200 overflow-hidden"
+      >
+        <DialogTitle className="sr-only">{t("title")}</DialogTitle>
+        <DialogDescription className="sr-only">
+          {t("description")}
+        </DialogDescription>
         {/* Glow Ambient Line Top */}
-        <div className="absolute -top-px inset-x-8 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+        <div className="absolute -top-px inset-x-8 h-px bg-linear-to-r from-transparent via-primary/50 to-transparent" />
 
-        {/* Modal Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-border/60">
+        {/* Modal Header (Fixed Top) */}
+        <div className="flex items-center justify-between pb-4 border-b border-border/60 shrink-0">
           <div className="flex items-center gap-2.5">
             <div className="p-2 rounded-xl bg-primary/10 border border-primary/20 text-primary">
               <Settings className="h-5 w-5 animate-spin-slow" />
             </div>
             <div>
               <h2 className="text-base font-bold text-foreground">
-                Workspace Preferences
+                {t("title")}
               </h2>
               <p className="text-[11px] text-muted-foreground">
-                Configure global download defaults & network concurrency
+                {t("description")}
               </p>
             </div>
           </div>
           <Button
-            aria-label="Close workspace preferences"
             variant="ghost"
             size="icon"
             onClick={handleClose}
             className="h-8 w-8 rounded-full text-muted-foreground hover:text-foreground"
           >
-            <X className="h-4 w-4" aria-hidden="true" />
+            <X className="h-4 w-4" />
           </Button>
         </div>
 
-        {/* Modal Body */}
-        <div className="flex flex-col gap-5 py-4">
+        {/* Modal Body (Scrollable Middle) */}
+        <div className="flex-1 overflow-y-auto overflow-x-hidden flex flex-col gap-5 py-4 pr-1 min-h-0">
           {/* Default Format & Quality */}
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground/90 uppercase tracking-wider">
               <Sliders className="h-3.5 w-3.5 text-primary" />
-              <span>Default Output & Quality</span>
+              <span>{t("defaultOutputAndQuality")}</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor="default-format-select" className="text-[11px] text-muted-foreground">
-                  Default Format
+                <Label className="text-[11px] text-muted-foreground">
+                  {t("defaultFormat")}
                 </Label>
                 <Select
                   value={settings.defaultOutputType}
@@ -135,7 +142,7 @@ export function SettingsModal() {
                     handleUpdate({ defaultOutputType: val as OutputType })
                   }
                 >
-                  <SelectTrigger id="default-format-select" aria-label="Default Format" className="h-9 text-xs">
+                  <SelectTrigger className="h-9 text-xs">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -150,14 +157,14 @@ export function SettingsModal() {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor="default-quality-select" className="text-[11px] text-muted-foreground">
-                  Default Quality
+                <Label className="text-[11px] text-muted-foreground">
+                  {t("defaultQuality")}
                 </Label>
                 <Select
                   value={settings.defaultQuality}
                   onValueChange={(val) => handleUpdate({ defaultQuality: val })}
                 >
-                  <SelectTrigger id="default-quality-select" aria-label="Default Quality" className="h-9 text-xs">
+                  <SelectTrigger className="h-9 text-xs">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -176,7 +183,7 @@ export function SettingsModal() {
           <div className="flex flex-col gap-3 pt-2 border-t border-border/40">
             <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground/90 uppercase tracking-wider">
               <Folder className="h-3.5 w-3.5 text-primary" />
-              <span>Download Directory Path</span>
+              <span>{t("downloadDirectoryPath")}</span>
             </div>
 
             <div className="flex flex-col gap-2 p-3.5 rounded-xl border border-border/60 bg-muted/20 backdrop-blur-md">
@@ -188,13 +195,13 @@ export function SettingsModal() {
                   <div className="flex flex-col min-w-0">
                     <span className="text-xs font-bold text-foreground truncate">
                       {customDirName
-                        ? `📁 Custom: ${customDirName}`
-                        : "Browser Default (Downloads Folder)"}
+                        ? t("customFolder", { name: customDirName })
+                        : t("browserDefault")}
                     </span>
                     <span className="text-[10px] text-muted-foreground truncate">
                       {customDirName
-                        ? "Files will be saved directly into this folder handle"
-                        : "Files are automatically saved directly to your Downloads folder"}
+                        ? t("customFolderDesc")
+                        : t("browserDefaultDesc")}
                     </span>
                   </div>
                 </div>
@@ -208,7 +215,7 @@ export function SettingsModal() {
                       className="h-8 text-xs px-2.5 rounded-lg text-muted-foreground hover:text-destructive"
                       title="Reset to default Downloads folder"
                     >
-                      Reset Default
+                      {t("resetDefault")}
                     </Button>
                   ) : null}
                   <Button
@@ -218,19 +225,15 @@ export function SettingsModal() {
                     className="h-8 text-xs gap-1.5 px-3 rounded-lg border-primary/40 bg-primary/10 text-primary font-bold hover:bg-primary/20"
                   >
                     <FolderSync className="h-3.5 w-3.5" />
-                    {customDirName ? "Change Folder" : "Select Custom Folder"}
+                    {customDirName
+                      ? t("changeFolder")
+                      : t("selectCustomFolder")}
                   </Button>
                 </div>
               </div>
 
               <span className="text-[10px] text-muted-foreground/80 leading-tight pt-1 border-t border-border/30">
-                💡 <strong>Tip:</strong> Browser security blocks picking the
-                root Downloads folder directly. To organize inside Downloads,
-                create or pick a subfolder (e.g.{" "}
-                <code className="bg-background px-1 py-0.5 rounded text-primary font-mono">
-                  Downloads/VoidFetch
-                </code>
-                ).
+                {t("directoryTip")}
               </span>
             </div>
           </div>
@@ -239,13 +242,13 @@ export function SettingsModal() {
           <div className="flex flex-col gap-3 pt-2 border-t border-border/40">
             <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground/90 uppercase tracking-wider">
               <Sparkles className="h-3.5 w-3.5 text-amber-500" />
-              <span>Network Concurrency</span>
+              <span>{t("networkConcurrency")}</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor="concurrent-jobs-select" className="text-[11px] text-muted-foreground">
-                  Concurrent Jobs
+                <Label className="text-[11px] text-muted-foreground">
+                  {t("concurrentJobs")}
                 </Label>
                 <Select
                   value={String(settings.downloadConcurrency)}
@@ -253,7 +256,7 @@ export function SettingsModal() {
                     handleUpdate({ downloadConcurrency: Number(val) })
                   }
                 >
-                  <SelectTrigger id="concurrent-jobs-select" aria-label="Concurrent Jobs" className="h-9 text-xs">
+                  <SelectTrigger className="h-9 text-xs">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -268,8 +271,8 @@ export function SettingsModal() {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor="hls-concurrency-select" className="text-[11px] text-muted-foreground">
-                  HLS Segment Concurrency
+                <Label className="text-[11px] text-muted-foreground">
+                  {t("hlsSegmentConcurrency")}
                 </Label>
                 <Select
                   value={String(settings.globalNetworkBudget)}
@@ -277,7 +280,7 @@ export function SettingsModal() {
                     handleUpdate({ globalNetworkBudget: Number(val) })
                   }
                 >
-                  <SelectTrigger id="hls-concurrency-select" aria-label="HLS Segment Concurrency" className="h-9 text-xs">
+                  <SelectTrigger className="h-9 text-xs">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -297,7 +300,7 @@ export function SettingsModal() {
               <span>Queue Behavior</span>
             </div>
 
-            <label className="flex items-center justify-between p-2.5 rounded-xl bg-muted/40 border border-border/60 cursor-pointer hover:bg-muted/60 transition-colors">
+            <div className="flex items-center justify-between p-2.5 rounded-xl bg-muted/40 border border-border/60">
               <div className="flex flex-col gap-0.5">
                 <span className="text-xs font-medium text-foreground">
                   Continue Queue on Error
@@ -312,14 +315,14 @@ export function SettingsModal() {
                 onChange={(e) =>
                   handleUpdate({ continueOnError: e.target.checked })
                 }
-                className="h-4 w-4 rounded border-borderAccent text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 cursor-pointer"
+                className="h-4 w-4 rounded border-borderAccent text-primary focus:ring-0 cursor-pointer"
               />
-            </label>
+            </div>
           </div>
         </div>
 
-        {/* Modal Footer */}
-        <div className="flex items-center justify-between pt-3 border-t border-border/60">
+        {/* Modal Footer (Fixed Bottom) */}
+        <div className="flex items-center justify-between pt-3 border-t border-border/60 shrink-0">
           <span className="text-[10px] text-muted-foreground flex items-center gap-1">
             <ShieldCheck className="h-3 w-3 text-emerald-500" />
             Changes saved to local workspace
@@ -329,7 +332,7 @@ export function SettingsModal() {
             onClick={handleClose}
             className="h-9 px-5 text-xs font-semibold rounded-xl bg-primary text-primary-foreground hover:bg-primary/90"
           >
-            Done
+            {t("savePreferences")}
           </Button>
         </div>
       </DialogContent>

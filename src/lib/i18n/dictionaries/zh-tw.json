@@ -139,10 +139,10 @@
     "installAction": "立即安裝"
   },
   "metadata": {
-    "title": "VoidFetch | 終極批量媒體下載器 - 由 VoidStation 提供",
-    "description": "支援 40 多個平台的最快、最可靠的在線媒體下載器。輕鬆批量下載高畫質影片、MP3 音訊、圖片庫和 HLS 串流——免費，無需註冊。",
-    "ogTitle": "VoidFetch | 下一代批量媒體下載器",
-    "ogDescription": "閃電般的批量下載，支援 YouTube、TikTok、Instagram、Bilibili 等 40 多個平台。輕鬆提取高畫質影片、高品質音訊和圖片庫。",
+    "title": "VoidFetch｜線上影片、音訊、圖文、HLS 批量下載工具（VoidStation 出品）",
+    "description": "免費線上媒體下載工具，支援 Bilibili、抖音、Telegram、Threads、微信公眾號、微博、Niconico、Instagram、小紅書、TikTok、X、Reddit、Streamable、SoundCloud、Twitch、VK、OK.ru、Pinterest、Tumblr、Newgrounds 與 HLS/M3U8 串流媒體內容。",
+    "ogTitle": "VoidFetch｜免費線上批量媒體下載工具",
+    "ogDescription": "自動識別影片、音訊、圖文和 HLS/M3U8 連結，線上下載媒體內容，無需註冊。",
     "siteName": "VoidFetch"
   },
   "common": {
@@ -193,7 +193,10 @@
     "privateFeedbackTitle": "透過郵件回饋",
     "privateFeedbackDescription": "您也可以選擇透過發送郵件來提交您的回饋。為了讓我們更快定位問題，建議在郵件中提供遇到問題的目標連結、設備資訊或相關截圖。",
     "emailAction": "發送郵件",
-    "emailTemplateBody": "【問題描述】\n請簡要描述遇到的問題或建議：\n\n【目標連結】\n(如涉及解析失敗，請提供原連結)\n\n【設備與環境】\n(例：Win 11 / Chrome 120 / iOS 17)\n"
+    "emailTemplateBody": "【問題描述】\n請簡要描述遇到的問題或建議：\n\n【目標連結】\n(如涉及解析失敗，請提供原連結)\n\n【設備與環境】\n(例：Win 11 / Chrome 120 / iOS 17)\n",
+    "communityDiscussionsTitle": "社群討論與回饋",
+    "communityDiscussionsSubtitle": "使用 GitHub 登入以發布公開回饋、回報 Bug 或提出新功能需求。",
+    "poweredByGiscus": "由 Giscus 提供支援"
   },
   "privacyPage": {
     "metaTitle": "隱私政策｜VoidFetch",
@@ -353,205 +356,133 @@
       "bilibili": {
         "name": "嗶哩嗶哩",
         "summary": "影片 / 音訊 / 口令",
-        "features": [
-          "影片",
-          "音訊",
-          "口令"
-        ]
+        "features": ["影片", "音訊", "口令"]
       },
       "bilibiliTv": {
         "name": "Bilibili TV",
         "summary": "影片 / 音訊",
-        "features": [
-          "影片",
-          "音訊"
-        ]
+        "features": ["影片", "音訊"]
       },
       "douyin": {
         "name": "抖音",
         "summary": "影片 / 圖文 / 音訊",
-        "features": [
-          "影片",
-          "圖文",
-          "音訊"
-        ]
+        "features": ["影片", "圖文", "音訊"]
       },
       "hls": {
         "name": "影片網站",
         "summary": "網頁串流媒體影片",
-        "features": [
-          "線上播放",
-          "分片下載"
-        ]
+        "features": ["線上播放", "分片下載"]
       },
       "youtube": {
         "name": "YouTube",
         "summary": "影片 / 音訊",
-        "features": [
-          "影片",
-          "音訊"
-        ]
+        "features": ["影片", "音訊"]
       },
       "telegram": {
         "name": "Telegram",
         "summary": "影片 / 訊息連結",
-        "features": [
-          "影片",
-          "訊息連結"
-        ]
+        "features": ["影片", "訊息連結"]
       },
       "wechat": {
         "name": "微信公眾號文章",
         "summary": "文章影片 / 多影片",
-        "features": [
-          "文章影片",
-          "多影片"
-        ]
+        "features": ["文章影片", "多影片"]
       },
       "niconico": {
         "name": "Niconico",
         "summary": "影片 / 音訊",
-        "features": [
-          "影片",
-          "音訊"
-        ]
+        "features": ["影片", "音訊"]
       },
       "xiaohongshu": {
         "name": "小紅書",
         "summary": "影片 / 圖文",
-        "features": [
-          "影片",
-          "圖文"
-        ]
+        "features": ["影片", "圖文"]
       },
       "tiktok": {
         "name": "TikTok",
         "summary": "影片 / 音訊",
-        "features": [
-          "影片",
-          "音訊"
-        ]
+        "features": ["影片", "音訊"]
       },
       "comingSoon": "更多平台敬請期待",
       "instagram": {
         "name": "Instagram",
         "summary": "影片 / 圖文 / 輪播圖",
-        "features": [
-          "影片",
-          "圖文",
-          "輪播圖"
-        ]
+        "features": ["影片", "圖文", "輪播圖"]
       },
       "x": {
         "name": "X",
         "summary": "影片 / 音訊",
-        "features": [
-          "影片",
-          "音訊"
-        ]
+        "features": ["影片", "音訊"]
       },
       "threads": {
         "name": "Threads",
         "summary": "影片 / 圖文",
-        "features": [
-          "影片",
-          "圖文"
-        ]
+        "features": ["影片", "圖文"]
       },
       "weibo": {
         "name": "微博",
         "summary": "影片 / 圖文 / 多影片",
-        "features": [
-          "影片",
-          "圖文",
-          "多影片"
-        ]
+        "features": ["影片", "圖文", "多影片"]
       },
       "vimeo": {
         "name": "Vimeo",
         "summary": "內容下載",
-        "features": [
-          "內容下載"
-        ]
+        "features": ["內容下載"]
       },
       "dailymotion": {
         "name": "Dailymotion",
         "summary": "內容下載",
-        "features": [
-          "內容下載"
-        ]
+        "features": ["內容下載"]
       },
       "streamable": {
         "name": "Streamable",
         "summary": "內容下載",
-        "features": [
-          "內容下載"
-        ]
+        "features": ["內容下載"]
       },
       "reddit": {
         "name": "Reddit",
         "summary": "內容下載",
-        "features": [
-          "內容下載"
-        ]
+        "features": ["內容下載"]
       },
       "newgrounds": {
         "name": "Newgrounds",
         "summary": "內容下載",
-        "features": [
-          "內容下載"
-        ]
+        "features": ["內容下載"]
       },
       "tumblr": {
         "name": "Tumblr",
         "summary": "內容下載",
-        "features": [
-          "內容下載"
-        ]
+        "features": ["內容下載"]
       },
       "pinterest": {
         "name": "Pinterest",
         "summary": "內容下載",
-        "features": [
-          "內容下載"
-        ]
+        "features": ["內容下載"]
       },
       "vk": {
         "name": "VK",
         "summary": "內容下載",
-        "features": [
-          "內容下載"
-        ]
+        "features": ["內容下載"]
       },
       "okru": {
         "name": "OK.ru",
         "summary": "內容下載",
-        "features": [
-          "內容下載"
-        ]
+        "features": ["內容下載"]
       },
       "twitch": {
         "name": "Twitch",
         "summary": "內容下載",
-        "features": [
-          "內容下載"
-        ]
+        "features": ["內容下載"]
       },
       "soundcloud": {
         "name": "SoundCloud",
         "summary": "內容下載",
-        "features": [
-          "內容下載"
-        ]
+        "features": ["內容下載"]
       },
       "applePodcasts": {
         "name": "Apple Podcasts",
         "summary": "公開 Podcast 音訊 / 逐集播放與下載",
-        "features": [
-          "公開音訊",
-          "逐集播放",
-          "下載"
-        ]
+        "features": ["公開音訊", "逐集播放", "下載"]
       }
     },
     "linkFormats": {
@@ -967,5 +898,161 @@
     "clickDetails": "點擊查看詳情",
     "clickTitle": "點擊查看全部 25+ 支援的平台",
     "universalSub": "全能批量下載工具"
+  },
+  "batchWorkspace": {
+    "title": "未命名批量下載工作區",
+    "subtitle": "VoidFetch 隊列管理器",
+    "queuePreferences": "隊列偏好設定",
+    "nav": {
+      "queueWorkspace": "隊列工作區",
+      "downloadHistory": "下載歷史",
+      "preferences": "偏好設定",
+      "aboutVoidFetch": "關於 VoidFetch",
+      "privacyAndTerms": "隱私與條款"
+    },
+    "composer": {
+      "title": "批量 URL 解析器",
+      "subtitlePrefix": "貼上來自",
+      "platformsLink": "25+ 支援平台",
+      "subtitleSuffix": "的影片連結或匯入檔案",
+      "pasteClipboard": "貼上剪貼簿",
+      "importFile": "匯入檔案",
+      "placeholder": "在此貼上多個 URL（每行一個，或包含連結的文字）...",
+      "detectedSingle": "偵測到 {count} 個新連結",
+      "detectedPlural": "偵測到 {count} 個新連結",
+      "dupesCount": "({count} 個重複)",
+      "dropFileHint": "將文字或 CSV 檔案拖放到此處以匯入連結",
+      "copyrightWarning": "不支援受版權保護、付費或會員限定的內容。",
+      "feedbackHint": "有建議？點擊右上角的「回饋」。",
+      "supportedPlatformsBar": "支援：YouTube, TikTok, 抖音, Bilibili, SoundCloud 等 20+ 平台",
+      "clear": "清空",
+      "addUrls": "新增 URL 到隊列",
+      "addUrlsCount": "新增 {count} 個 URL 到隊列"
+    },
+    "toolbar": {
+      "searchPlaceholder": "搜尋標題或 URL...",
+      "allStatus": "所有狀態",
+      "allPlatforms": "所有平台",
+      "parseAll": "全部解析 ({count})",
+      "pauseQueue": "暫停隊列",
+      "startQueue": "啟動隊列",
+      "retryFailed": "重試失敗項",
+      "clearCompleted": "清除已完成 ({count})",
+      "status": {
+        "all": "所有狀態",
+        "draft": "草稿",
+        "parsing": "解析中",
+        "ready": "就緒",
+        "queued": "排隊中",
+        "downloading": "下載中",
+        "processing": "處理中",
+        "saving": "儲存中",
+        "paused": "已暫停",
+        "completed": "已完成",
+        "failed": "失敗",
+        "cancelled": "已取消"
+      }
+    },
+    "queue": {
+      "emptyTitle": "工作區為空",
+      "emptyBadge": "就緒",
+      "emptyDescription": "貼上影片 URL (YouTube, TikTok, 抖音, SoundCloud...) 或在上方匯入文字檔案以開始批量下載。",
+      "multiThreaded": "多線程解析引擎",
+      "audioExtraction": "音訊流提取",
+      "upTo4k": "最高支援 4K / 60FPS 影片",
+      "itemsSelectedSingle": "已選擇 {count} 項",
+      "itemsSelectedPlural": "已選擇 {count} 項",
+      "bulkConfigure": "批量配置",
+      "bulkConfigureCount": "批量配置 ({count})",
+      "removeSelected": "刪除所選項",
+      "selectAll": "全選隊列項目",
+      "itemsCount": "{count} 項",
+      "noMatchingJobs": "沒有符合目前搜尋或篩選條件的任務。"
+    },
+    "configDrawer": {
+      "titleSingle": "配置下載",
+      "titleBulk": "批量配置",
+      "subtitle": "自訂輸出格式、畫質音質及元資料偏好",
+      "outputFormat": "輸出格式",
+      "videoQuality": "影片畫質",
+      "selectVideoQuality": "選擇影片畫質",
+      "qualityNote": "注意：如果原影片不支援 4K/2K，系統將自動下載可用的最高畫質。",
+      "audioQuality": "音訊位元率",
+      "selectAudioQuality": "選擇音訊品質",
+      "filenameTemplate": "檔名範本",
+      "outputFilename": "輸出檔名",
+      "clickTokenHint": "點擊變數標籤插入檔名",
+      "hlsConcurrency": "HLS 切片並發數",
+      "advancedOptions": "進階選項",
+      "downloadThumbnail": "下載封面 / 縮圖",
+      "saveMetadataJson": "同時儲存元資料 JSON 檔案",
+      "forceAudioExtraction": "強制提取音訊 (MP3)",
+      "applyChecked": "應用到選中項 ({count})",
+      "applyAll": "應用到全部 ({count})",
+      "saveConfig": "儲存配置"
+    },
+    "progress": {
+      "totalItems": "{count} 項",
+      "running": "{count} 運行中",
+      "queued": "{count} 排隊中",
+      "completed": "{count} 已完成",
+      "failed": "{count} 失敗",
+      "speed": "速度",
+      "eta": "剩餘時間",
+      "queueActive": "隊列運行中",
+      "queueIdle": "隊列空閒"
+    },
+    "settingsModal": {
+      "title": "工作區偏好設定",
+      "description": "配置全域下載預設值與網路並發數",
+      "defaultOutputAndQuality": "預設格式與畫質",
+      "defaultFormat": "預設格式",
+      "defaultQuality": "預設畫質",
+      "downloadDirectoryPath": "下載儲存目錄路徑",
+      "browserDefault": "瀏覽器預設（下載資料夾）",
+      "customFolder": "📁 自訂：{name}",
+      "customFolderDesc": "檔案將直接儲存到該資料夾控制代碼中",
+      "browserDefaultDesc": "檔案會自動簡單儲存到您的「下載」資料夾",
+      "resetDefault": "恢復預設",
+      "changeFolder": "變更資料夾",
+      "selectCustomFolder": "選擇自訂資料夾",
+      "directoryTip": "💡 提示：瀏覽器安全限制禁止直接選擇「下載」根目錄。如需在「下載」目錄內歸類，請建立或選擇子資料夾（例如 Downloads/VoidFetch）。",
+      "networkConcurrency": "網路並發",
+      "concurrentJobs": "並發下載任務數",
+      "hlsSegmentConcurrency": "HLS 切片並發數",
+      "savePreferences": "儲存偏好設定"
+    }
+  },
+  "settingsPage": {
+    "metaTitle": "設定 | VoidFetch",
+    "metaDescription": "配置下載預設值、並發上限、網路預算及儲存目錄偏好。",
+    "title": "偏好設定",
+    "subtitle": "配置預設下載行為",
+    "resetDefaults": "恢復預設設定",
+    "loading": "正在載入設定...",
+    "downloaderDefaults": "下載器預設設定",
+    "defaultOutputType": "預設輸出類型",
+    "defaultQuality": "預設畫質/音質",
+    "selectQuality": "選擇品質",
+    "defaultFilenameTemplate": "預設檔名範本",
+    "placeholderTokens": "可用變數標籤：",
+    "customDirectoryTitle": "自訂下載儲存目錄路徑",
+    "customDirName": "📁 自訂目錄：{name}",
+    "browserDefaultDir": "瀏覽器預設（下載資料夾）",
+    "customDirDesc": "所有 VoidFetch 下載的檔案將直接寫入該資料夾控制代碼中",
+    "browserDefaultDesc": "檔案由瀏覽器標準下載管理器處理",
+    "resetDefaultDir": "恢復預設",
+    "changeFolder": "變更資料夾",
+    "selectCustomFolder": "選擇自訂資料夾",
+    "concurrencyTitle": "並發數與效能上限",
+    "parserConcurrency": "解析器並發數",
+    "downloadConcurrency": "下載並發數",
+    "networkBudget": "全域網路請求預算",
+    "networkBudgetDesc": "控制全域同時下載的 HLS 切片總數，防止超出連線數限制。",
+    "workflowsTitle": "工作流程與開關標誌",
+    "continueOnError": "發生錯誤時繼續執行隊列",
+    "continueOnErrorDesc": "當某個任務下載失敗時，自動跳過並繼續下載隊列中的後續任務。",
+    "autoStartDownloads": "解析 URL 後自動啟動下載",
+    "autoStartDownloadsDesc": "解析就緒後立即將 URL 直接加入下載流中。"
   }
 }

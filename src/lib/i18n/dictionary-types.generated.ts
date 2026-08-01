@@ -42,7 +42,7 @@ export interface Dictionary {
     allImagesLoadFailed: string;
     packageFailed: string;
     confirmPartialDownload: string;
-    'continue': string;
+    continue: string;
     cancel: string;
     fileTooLarge: string;
     videoFileTooLarge: string;
@@ -84,6 +84,25 @@ export interface Dictionary {
     linkFilled: string;
     clickToRedownload: string;
     unknownTitle: string;
+    pageTitle: string;
+    logsCount: string;
+    clearHistory: string;
+    noRecordsTitle: string;
+    cleanBadge: string;
+    noRecordsDesc: string;
+    autoPersisted: string;
+    instantRedownloads: string;
+    completed: string;
+    details: string;
+    detailsTitle: string;
+    redownloadZip: string;
+    redownloadSingleImage: string;
+    redownloadMp4: string;
+    redownloadMp3: string;
+    removeFromHistory: string;
+    queuedForRedownload: string;
+    removedJobRecord: string;
+    clearedAllHistory: string;
     platforms: {
       bilibili: string;
       bilibiliTv: string;
@@ -149,6 +168,28 @@ export interface Dictionary {
     github: string;
     githubHint: string;
   };
+  aboutPage: {
+    metaTitle: string;
+    metaDescription: string;
+    title: string;
+    subtitle: string;
+    productInfo: string;
+    productName: string;
+    publisher: string;
+    appVersion: string;
+    targetRuntime: string;
+    compilationBuild: string;
+    thirdPartyLibraries: string;
+    thirdPartyDesc: string;
+    copyrightNotice: string;
+    copyrightTitle: string;
+    copyrightSub: string;
+    copyrightDesc: string;
+    privacyPolicy: string;
+    privacyDesc: string;
+    responsibleUse: string;
+    responsibleUseDesc: string;
+  };
   feedbackPage: {
     metaTitle: string;
     metaDescription: string;
@@ -157,6 +198,9 @@ export interface Dictionary {
     privateFeedbackDescription: string;
     emailAction: string;
     emailTemplateBody: string;
+    communityDiscussionsTitle: string;
+    communityDiscussionsSubtitle: string;
+    poweredByGiscus: string;
   };
   privacyPage: {
     metaTitle: string;
@@ -176,7 +220,7 @@ export interface Dictionary {
   };
   languages: {
     zh: string;
-    'zh-tw': string;
+    "zh-tw": string;
     en: string;
     ja: string;
     es: string;
@@ -287,9 +331,9 @@ export interface Dictionary {
     quickStart: {
       title: string;
       steps: Array<{
-          title: string;
-          description: string;
-        }>;
+        title: string;
+        description: string;
+      }>;
     };
     platformSupport: {
       title: string;
@@ -463,7 +507,7 @@ export interface Dictionary {
     features: {
       en: string[];
       zh: string[];
-      'zh-tw': string[];
+      "zh-tw": string[];
       ja: string[];
       es: string[];
       ru: string[];
@@ -472,36 +516,36 @@ export interface Dictionary {
       title: {
         en: string;
         zh: string;
-        'zh-tw': string;
+        "zh-tw": string;
         ja: string;
         es: string;
         ru: string;
       };
       steps: {
         en: Array<{
-            name: string;
-            text: string;
-          }>;
+          name: string;
+          text: string;
+        }>;
         zh: Array<{
-            name: string;
-            text: string;
-          }>;
-        'zh-tw': Array<{
-            name: string;
-            text: string;
-          }>;
+          name: string;
+          text: string;
+        }>;
+        "zh-tw": Array<{
+          name: string;
+          text: string;
+        }>;
         ja: Array<{
-            name: string;
-            text: string;
-          }>;
+          name: string;
+          text: string;
+        }>;
         es: Array<{
-            name: string;
-            text: string;
-          }>;
+          name: string;
+          text: string;
+        }>;
         ru: Array<{
-            name: string;
-            text: string;
-          }>;
+          name: string;
+          text: string;
+        }>;
       };
     };
   };
@@ -593,4 +637,176 @@ export interface Dictionary {
     toastSuccess: string;
     toastError: string;
   };
-};
+  supportedPlatformsModal: {
+    title: string;
+    badge: string;
+    description: string;
+    searchPlaceholder: string;
+    noSearchResults: string;
+    activeStreamer: string;
+    active: string;
+    fastExtract: string;
+    autoDetect: string;
+    showingCount: string;
+    close: string;
+    clickDetails: string;
+    clickTitle: string;
+    universalSub: string;
+  };
+  batchWorkspace: {
+    title: string;
+    subtitle: string;
+    queuePreferences: string;
+    nav: {
+      queueWorkspace: string;
+      downloadHistory: string;
+      preferences: string;
+      aboutVoidFetch: string;
+      privacyAndTerms: string;
+    };
+    composer: {
+      title: string;
+      subtitlePrefix: string;
+      platformsLink: string;
+      subtitleSuffix: string;
+      pasteClipboard: string;
+      importFile: string;
+      placeholder: string;
+      detectedSingle: string;
+      detectedPlural: string;
+      dupesCount: string;
+      dropFileHint: string;
+      copyrightWarning: string;
+      feedbackHint: string;
+      supportedPlatformsBar: string;
+      clear: string;
+      addUrls: string;
+      addUrlsCount: string;
+    };
+    toolbar: {
+      searchPlaceholder: string;
+      allStatus: string;
+      allPlatforms: string;
+      parseAll: string;
+      pauseQueue: string;
+      startQueue: string;
+      retryFailed: string;
+      clearCompleted: string;
+      status: {
+        all: string;
+        draft: string;
+        parsing: string;
+        ready: string;
+        queued: string;
+        downloading: string;
+        processing: string;
+        saving: string;
+        paused: string;
+        completed: string;
+        failed: string;
+        cancelled: string;
+      };
+    };
+    queue: {
+      emptyTitle: string;
+      emptyBadge: string;
+      emptyDescription: string;
+      multiThreaded: string;
+      audioExtraction: string;
+      upTo4k: string;
+      itemsSelectedSingle: string;
+      itemsSelectedPlural: string;
+      bulkConfigure: string;
+      bulkConfigureCount: string;
+      removeSelected: string;
+      selectAll: string;
+      itemsCount: string;
+      noMatchingJobs: string;
+    };
+    configDrawer: {
+      titleSingle: string;
+      titleBulk: string;
+      subtitle: string;
+      outputFormat: string;
+      videoQuality: string;
+      selectVideoQuality: string;
+      qualityNote: string;
+      audioQuality: string;
+      selectAudioQuality: string;
+      filenameTemplate: string;
+      outputFilename: string;
+      clickTokenHint: string;
+      hlsConcurrency: string;
+      advancedOptions: string;
+      downloadThumbnail: string;
+      saveMetadataJson: string;
+      forceAudioExtraction: string;
+      applyChecked: string;
+      applyAll: string;
+      saveConfig: string;
+    };
+    progress: {
+      totalItems: string;
+      running: string;
+      queued: string;
+      completed: string;
+      failed: string;
+      speed: string;
+      eta: string;
+      queueActive: string;
+      queueIdle: string;
+    };
+    settingsModal: {
+      title: string;
+      description: string;
+      defaultOutputAndQuality: string;
+      defaultFormat: string;
+      defaultQuality: string;
+      downloadDirectoryPath: string;
+      browserDefault: string;
+      customFolder: string;
+      customFolderDesc: string;
+      browserDefaultDesc: string;
+      resetDefault: string;
+      changeFolder: string;
+      selectCustomFolder: string;
+      directoryTip: string;
+      networkConcurrency: string;
+      concurrentJobs: string;
+      hlsSegmentConcurrency: string;
+      savePreferences: string;
+    };
+  };
+  settingsPage: {
+    metaTitle: string;
+    metaDescription: string;
+    title: string;
+    subtitle: string;
+    resetDefaults: string;
+    loading: string;
+    downloaderDefaults: string;
+    defaultOutputType: string;
+    defaultQuality: string;
+    selectQuality: string;
+    defaultFilenameTemplate: string;
+    placeholderTokens: string;
+    customDirectoryTitle: string;
+    customDirName: string;
+    browserDefaultDir: string;
+    customDirDesc: string;
+    browserDefaultDesc: string;
+    resetDefaultDir: string;
+    changeFolder: string;
+    selectCustomFolder: string;
+    concurrencyTitle: string;
+    parserConcurrency: string;
+    downloadConcurrency: string;
+    networkBudget: string;
+    networkBudgetDesc: string;
+    workflowsTitle: string;
+    continueOnError: string;
+    continueOnErrorDesc: string;
+    autoStartDownloads: string;
+    autoStartDownloadsDesc: string;
+  };
+}

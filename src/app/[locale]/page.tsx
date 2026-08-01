@@ -12,24 +12,24 @@ import type { Dictionary } from "@/lib/i18n/types";
 import { BatchWorkspaceClient } from "@/features/batch-download/components/BatchWorkspaceClient";
 
 export async function generateStaticParams() {
-    return i18n.locales.map((locale) => ({ locale }));
+  return i18n.locales.map((locale) => ({ locale }));
 }
 
 export const dynamic = "force-static";
 
 export default async function HomePage({
-    params,
+  params,
 }: {
-    params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: Locale }>;
 }) {
-    const { locale } = await params;
-    setRequestLocale(locale);
-    const dict = (await getMessages({ locale })) as Dictionary;
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const dict = (await getMessages({ locale })) as Dictionary;
 
-    return (
-        <>
-            <StructuredData locale={locale} dict={dict} />
-            <BatchWorkspaceClient />
-        </>
-    );
+  return (
+    <>
+      <StructuredData locale={locale} dict={dict} />
+      <BatchWorkspaceClient />
+    </>
+  );
 }

@@ -23,19 +23,32 @@ function normalizeVinextTreeshakePlugin(): Plugin {
   return {
     name: "app:normalize-vinext-treeshake",
     configResolved(config: ResolvedConfig) {
-      const normalizeRollupOptions = (rollupOptions?: Record<string, unknown>) => {
+      const normalizeRollupOptions = (
+        rollupOptions?: Record<string, unknown>,
+      ) => {
         if (!rollupOptions) {
           return;
         }
 
-        rollupOptions.treeshake = normalizeTreeshakePreset(rollupOptions.treeshake);
+        rollupOptions.treeshake = normalizeTreeshakePreset(
+          rollupOptions.treeshake,
+        );
       };
 
-      normalizeRollupOptions(config.build?.rollupOptions as Record<string, unknown> | undefined);
+      normalizeRollupOptions(
+        config.build?.rollupOptions as Record<string, unknown> | undefined,
+      );
 
-      for (const environment of Object.values((config as ResolvedConfig & {
-        environments?: Record<string, { build?: { rollupOptions?: Record<string, unknown> } }>;
-      }).environments ?? {})) {
+      for (const environment of Object.values(
+        (
+          config as ResolvedConfig & {
+            environments?: Record<
+              string,
+              { build?: { rollupOptions?: Record<string, unknown> } }
+            >;
+          }
+        ).environments ?? {},
+      )) {
         normalizeRollupOptions(environment.build?.rollupOptions);
       }
     },
@@ -56,7 +69,9 @@ export default defineConfig(({ command, mode }) => {
     },
     resolve: {
       alias: {
-        "next-intl/config": fileURLToPath(new URL("./src/i18n/request.ts", import.meta.url)),
+        "next-intl/config": fileURLToPath(
+          new URL("./src/i18n/request.ts", import.meta.url),
+        ),
       },
     },
     plugins: [

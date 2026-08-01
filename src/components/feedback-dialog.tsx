@@ -204,7 +204,9 @@ export function FeedbackDialog({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="bug">{tFeedback("types.bug")}</SelectItem>
-            <SelectItem value="feature">{tFeedback("types.feature")}</SelectItem>
+            <SelectItem value="feature">
+              {tFeedback("types.feature")}
+            </SelectItem>
             <SelectItem value="other">{tFeedback("types.other")}</SelectItem>
           </SelectContent>
         </Select>

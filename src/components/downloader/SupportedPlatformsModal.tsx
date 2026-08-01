@@ -4,22 +4,22 @@
  * All rights reserved.
  */
 
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import Image from 'next/image';
-import { AnimatePresence, motion } from 'framer-motion';
-import { useTranslations } from 'next-intl';
+import { useState } from "react";
+import Image from "next/image";
+import { AnimatePresence, motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Sparkles,
   Search,
@@ -27,11 +27,10 @@ import {
   ShieldCheck,
   Layers,
   Zap,
-  Globe
-} from 'lucide-react';
-import { getPlatformSupportItems } from '@/components/downloader/platform-support';
-import { PLATFORM_URLS } from '@/components/downloader/PlatformMarquee';
-import { cn } from '@/lib/utils';
+  Globe,
+} from "lucide-react";
+import { getPlatformSupportItems } from "@/components/downloader/platform-support";
+import { PLATFORM_URLS } from "@/components/downloader/PlatformMarquee";
 
 interface SupportedPlatformsModalProps {
   open: boolean;
@@ -42,16 +41,18 @@ export function SupportedPlatformsModal({
   open,
   onOpenChange,
 }: SupportedPlatformsModalProps) {
-  const t = useTranslations('supportedPlatformsModal');
+  const t = useTranslations("supportedPlatformsModal");
   const items = getPlatformSupportItems();
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
   const filteredItems = items.filter((item) => {
     if (!searchQuery.trim()) return true;
     const query = searchQuery.toLowerCase();
     const nameMatch = item.name.toLowerCase().includes(query);
-    const featureMatch = item.features.some((f) => f.toLowerCase().includes(query));
+    const featureMatch = item.features.some((f) =>
+      f.toLowerCase().includes(query),
+    );
     return nameMatch || featureMatch;
   });
 
@@ -59,7 +60,7 @@ export function SupportedPlatformsModal({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-3xl w-[calc(100vw-2rem)] max-h-[85vh] flex flex-col p-0 overflow-hidden bg-card/95 backdrop-blur-2xl border-border/80 shadow-2xl rounded-3xl">
         {/* Ambient Top Glow Line */}
-        <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-primary to-cyan-500" />
+        <div className="h-1.5 w-full bg-linear-to-r from-emerald-500 via-primary to-cyan-500" />
 
         {/* Modal Header */}
         <DialogHeader className="p-6 pb-3 flex flex-col gap-3">
@@ -70,13 +71,16 @@ export function SupportedPlatformsModal({
               </div>
               <div className="flex flex-col text-left">
                 <DialogTitle className="text-lg font-extrabold text-foreground flex items-center gap-2">
-                  <span>{t('title')}</span>
-                  <Badge variant="outline" className="text-[10px] font-mono font-bold bg-primary/10 text-primary border-primary/20 px-2 py-0.5 rounded-full">
-                    {t('badge')}
+                  <span>{t("title")}</span>
+                  <Badge
+                    variant="outline"
+                    className="text-[10px] font-mono font-bold bg-primary/10 text-primary border-primary/20 px-2 py-0.5 rounded-full"
+                  >
+                    {t("badge")}
                   </Badge>
                 </DialogTitle>
                 <DialogDescription className="text-xs text-muted-foreground">
-                  {t('description')}
+                  {t("description")}
                 </DialogDescription>
               </div>
             </div>
@@ -87,7 +91,7 @@ export function SupportedPlatformsModal({
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
             <Input
               type="text"
-              placeholder={t('searchPlaceholder')}
+              placeholder={t("searchPlaceholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10 h-10 text-xs rounded-xl bg-muted/30 border-border/70 focus-visible:ring-primary/40"
@@ -100,14 +104,15 @@ export function SupportedPlatformsModal({
           {filteredItems.length === 0 ? (
             <div className="flex flex-col items-center justify-center p-12 text-center text-muted-foreground gap-2">
               <Layers className="h-10 w-10 text-muted-foreground/40 stroke-1" />
-              <span className="text-xs font-semibold">{t('noSearchResults', { query: searchQuery })}</span>
+              <span className="text-xs font-semibold">
+                {t("noSearchResults", { query: searchQuery })}
+              </span>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
               {filteredItems.map((item, idx) => {
-                const targetUrl = PLATFORM_URLS[item.key] || '#';
+                const targetUrl = PLATFORM_URLS[item.key] || "#";
                 const visual = item.visual;
-                const isHovered = hoveredIdx === idx;
 
                 return (
                   <div
@@ -119,7 +124,7 @@ export function SupportedPlatformsModal({
                     <AnimatePresence>
                       {hoveredIdx === idx && (
                         <motion.span
-                          className="absolute inset-0 h-full w-full bg-neutral-200/80 dark:bg-slate-800/[0.8] block rounded-2xl"
+                          className="absolute inset-0 h-full w-full bg-neutral-200/80 dark:bg-slate-800/80 block rounded-2xl"
                           layoutId="hoverBackground"
                           initial={{ opacity: 0 }}
                           animate={{
@@ -139,7 +144,9 @@ export function SupportedPlatformsModal({
                         {/* Platform Icon & Title */}
                         <div className="flex items-center justify-between gap-2">
                           <div className="flex items-center gap-2.5">
-                            <div className={`relative w-8 h-8 rounded-xl border flex items-center justify-center overflow-hidden shrink-0 ${visual.frameClassName}`}>
+                            <div
+                              className={`relative w-8 h-8 rounded-xl border flex items-center justify-center overflow-hidden shrink-0 ${visual.frameClassName}`}
+                            >
                               {visual.darkSrc && visual.src ? (
                                 <>
                                   <Image
@@ -147,14 +154,14 @@ export function SupportedPlatformsModal({
                                     alt={item.name}
                                     width={20}
                                     height={20}
-                                    className={`object-contain dark:hidden ${visual.iconClassName || ''}`}
+                                    className={`object-contain dark:hidden ${visual.iconClassName || ""}`}
                                   />
                                   <Image
                                     src={visual.darkSrc}
                                     alt={item.name}
                                     width={20}
                                     height={20}
-                                    className={`object-contain hidden dark:block ${visual.iconClassName || ''}`}
+                                    className={`object-contain hidden dark:block ${visual.iconClassName || ""}`}
                                   />
                                 </>
                               ) : visual.src ? (
@@ -163,7 +170,7 @@ export function SupportedPlatformsModal({
                                   alt={item.name}
                                   width={20}
                                   height={20}
-                                  className={`object-contain ${visual.iconClassName || ''}`}
+                                  className={`object-contain ${visual.iconClassName || ""}`}
                                 />
                               ) : (
                                 <Globe className="h-4 w-4 text-muted-foreground" />
@@ -210,10 +217,11 @@ export function SupportedPlatformsModal({
                       <div className="flex items-center justify-between pt-3 mt-2 border-t border-border/40 text-[9px] text-muted-foreground font-mono">
                         <span className="flex items-center gap-1 text-emerald-500 font-semibold">
                           <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-ping"></span>
-                          {t('activeStreamer')}
+                          {t("activeStreamer")}
                         </span>
                         <span className="flex items-center gap-0.5 text-foreground/70">
-                          <Zap className="h-2.5 w-2.5 text-amber-400" /> {t('fastExtract')}
+                          <Zap className="h-2.5 w-2.5 text-amber-400" />{" "}
+                          {t("fastExtract")}
                         </span>
                       </div>
                     </div>
@@ -227,7 +235,10 @@ export function SupportedPlatformsModal({
         {/* Modal Footer */}
         <div className="p-4 border-t border-border/70 bg-muted/20 flex items-center justify-between text-xs px-6">
           <span className="text-[10px] text-muted-foreground font-mono">
-            {t('showingCount', { count: filteredItems.length, total: items.length })}
+            {t("showingCount", {
+              count: filteredItems.length,
+              total: items.length,
+            })}
           </span>
           <Button
             type="button"
@@ -236,7 +247,7 @@ export function SupportedPlatformsModal({
             onClick={() => onOpenChange(false)}
             className="h-8 text-xs px-4 rounded-xl border-border/80"
           >
-            {t('close')}
+            {t("close")}
           </Button>
         </div>
       </DialogContent>

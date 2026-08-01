@@ -1,244 +1,278 @@
-import { useState } from 'react';
-import { Download, ExternalLink, MonitorPlay, Headphones } from 'lucide-react';
+import { useState } from "react";
+import { Download, ExternalLink, MonitorPlay, Headphones } from "lucide-react";
 
-import type { AudioExtractTask } from '@/components/audio-tool/types';
-import type { HlsDownloadDialogRequest } from '@/components/hls-download-dialog';
-import type { MediaPreviewRequest } from '@/components/downloader/media-preview';
-import { Button } from '@/components/ui/button';
-import { useTranslations } from 'next-intl';
-import { isHlsPlaylistUrl } from '@/lib/hls-playback';
-import type { UnifiedParseResult } from '@/lib/types';
-import { downloadFile } from '@/lib/utils';
+import type { AudioExtractTask } from "@/features/audio/components/types";
+import type { HlsDownloadDialogRequest } from "@/features/hls/components/hls-download-dialog";
+import type { MediaPreviewRequest } from "@/components/downloader/media-preview";
+import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
+import { isHlsPlaylistUrl } from "@/lib/hls-playback";
+import type { UnifiedParseResult } from "@/lib/types";
+import { downloadFile } from "@/lib/utils";
 
-import { MediaActionIconButton } from './MediaActionIconButton';
-import { canPreviewResultAudio, canPreviewResultVideo } from './media-preview';
-import { getResultMediaActions } from './result-card-visibility';
-import { VideoDownloadIcon, AudioDownloadIcon } from './CustomIcons';
+import { MediaActionIconButton } from "./MediaActionIconButton";
+import { canPreviewResultAudio, canPreviewResultVideo } from "./media-preview";
+import { getResultMediaActions } from "./result-card-visibility";
+import { VideoDownloadIcon, AudioDownloadIcon } from "./CustomIcons";
 
 function getActionRowClass(actionCount: number) {
-    if (actionCount >= 4) {
-        return 'grid-cols-4';
-    }
+  if (actionCount >= 4) {
+    return "grid-cols-4";
+  }
 
-    if (actionCount === 3) {
-        return 'grid-cols-3';
-    }
+  if (actionCount === 3) {
+    return "grid-cols-3";
+  }
 
-    if (actionCount === 2) {
-        return 'grid-cols-2';
-    }
+  if (actionCount === 2) {
+    return "grid-cols-2";
+  }
 
-    return 'grid-cols-1';
+  return "grid-cols-1";
 }
 
 export function SinglePartButtons({
-    result,
-    previewItem,
-    onOpenExtractAudio,
-    onOpenHlsDownload,
-    onRequestPreview,
+  result,
+  previewItem,
+  onOpenExtractAudio,
+  onOpenHlsDownload,
+  onRequestPreview,
 }: {
-    result: NonNullable<UnifiedParseResult['data']>;
-    previewItem?: string;
-    onOpenExtractAudio: (task: AudioExtractTask) => void;
-    onOpenHlsDownload: (request: HlsDownloadDialogRequest) => void;
-    onRequestPreview: (request: MediaPreviewRequest) => void;
+  result: NonNullable<UnifiedParseResult["data"]>;
+  previewItem?: string;
+  onOpenExtractAudio: (task: AudioExtractTask) => void;
+  onOpenHlsDownload: (request: HlsDownloadDialogRequest) => void;
+  onRequestPreview: (request: MediaPreviewRequest) => void;
 }) {
-    const tResult = useTranslations('result');
-    const tExtractAudio = useTranslations('extractAudio');
-    const tHistory = useTranslations('history');
-    const [videoLoading, setVideoLoading] = useState(false);
-    const [audioLoading, setAudioLoading] = useState(false);
-    const previewSourceUrl = typeof result.url === 'string' ? result.url.trim() : '';
-    const videoDownloadUrl = result.downloadVideoUrl || result.originDownloadVideoUrl;
-    const audioDownloadUrl = result.downloadAudioUrl || result.originDownloadAudioUrl || null;
-    const { videoAction, audioAction } = getResultMediaActions({
-        videoAudioMode: result.videoAudioMode,
-        mediaActions: result.mediaActions,
-        videoDownloadUrl,
-        audioDownloadUrl,
-        originDownloadVideoUrl: result.originDownloadVideoUrl,
-        originDownloadAudioUrl: result.originDownloadAudioUrl,
+  const tResult = useTranslations("result");
+  const tExtractAudio = useTranslations("extractAudio");
+  const tHistory = useTranslations("history");
+  const [videoLoading, setVideoLoading] = useState(false);
+  const [audioLoading, setAudioLoading] = useState(false);
+  const previewSourceUrl =
+    typeof result.url === "string" ? result.url.trim() : "";
+  const videoDownloadUrl =
+    result.downloadVideoUrl || result.originDownloadVideoUrl;
+  const audioDownloadUrl =
+    result.downloadAudioUrl || result.originDownloadAudioUrl || null;
+  const { videoAction, audioAction } = getResultMediaActions({
+    videoAudioMode: result.videoAudioMode,
+    mediaActions: result.mediaActions,
+    videoDownloadUrl,
+    audioDownloadUrl,
+    originDownloadVideoUrl: result.originDownloadVideoUrl,
+    originDownloadAudioUrl: result.originDownloadAudioUrl,
+  });
+  const showVideoDownload =
+    videoAction === "direct-download" || videoAction === "merge-then-download";
+  const showBrowserHlsDownload =
+    videoAction === "browser-hls-download" ||
+    (videoAction === "hide" && isHlsPlaylistUrl(result.originDownloadVideoUrl));
+  const showAudioDownload = audioAction !== "hide";
+  const canSwitchPreview =
+    previewSourceUrl.length > 0 &&
+    canPreviewResultVideo(result) &&
+    canPreviewResultAudio(result);
+  const showVideoPreview = canSwitchPreview;
+  const showAudioPreview = canSwitchPreview;
+  const showOriginVideoLink =
+    typeof result.originDownloadVideoUrl === "string" &&
+    result.originDownloadVideoUrl.length > 0 &&
+    result.originDownloadVideoUrl !== videoDownloadUrl;
+  const showOriginAudioLink =
+    typeof result.originDownloadAudioUrl === "string" &&
+    result.originDownloadAudioUrl.length > 0 &&
+    result.originDownloadAudioUrl !== audioDownloadUrl;
+
+  const handleDownload = (
+    url: string,
+    setLoading: (value: boolean) => void,
+  ) => {
+    setLoading(true);
+    downloadFile(url);
+    setTimeout(() => setLoading(false), 1500);
+  };
+
+  const openBrowserHlsDownload = () => {
+    if (!result.originDownloadVideoUrl) {
+      return;
+    }
+
+    onOpenHlsDownload({
+      sourceUrl: result.originDownloadVideoUrl,
+      refererUrl: result.url || result.originDownloadVideoUrl,
+      title: result.title || result.desc || tHistory("unknownTitle"),
     });
-    const showVideoDownload = videoAction === 'direct-download' || videoAction === 'merge-then-download';
-    const showBrowserHlsDownload = videoAction === 'browser-hls-download' || (videoAction === 'hide' && isHlsPlaylistUrl(result.originDownloadVideoUrl));
-    const showAudioDownload = audioAction !== 'hide';
-    const canSwitchPreview = previewSourceUrl.length > 0
-        && canPreviewResultVideo(result)
-        && canPreviewResultAudio(result);
-    const showVideoPreview = canSwitchPreview;
-    const showAudioPreview = canSwitchPreview;
-    const showOriginVideoLink =
-        typeof result.originDownloadVideoUrl === 'string'
-        && result.originDownloadVideoUrl.length > 0
-        && result.originDownloadVideoUrl !== videoDownloadUrl;
-    const showOriginAudioLink =
-        typeof result.originDownloadAudioUrl === 'string'
-        && result.originDownloadAudioUrl.length > 0
-        && result.originDownloadAudioUrl !== audioDownloadUrl;
+  };
 
-    const handleDownload = (url: string, setLoading: (value: boolean) => void) => {
-        setLoading(true);
-        downloadFile(url);
-        setTimeout(() => setLoading(false), 1500);
-    };
+  const openResultTask = (action: AudioExtractTask["action"]) => {
+    onOpenExtractAudio({
+      action,
+      title: result.title || result.desc || undefined,
+      sourceUrl: result.url || null,
+      audioUrl: audioDownloadUrl,
+      videoUrl: videoDownloadUrl || null,
+      mediaActions: result.mediaActions,
+    });
+  };
+  const previewTitle = result.title || result.desc || tResult("title");
+  const previewActionCount =
+    Number(showVideoPreview) + Number(showAudioPreview);
+  const downloadActionCount =
+    Number(showVideoDownload) +
+    Number(showBrowserHlsDownload) +
+    Number(showAudioDownload);
+  const actionButtonClass = "w-full min-w-0";
 
-    const openBrowserHlsDownload = () => {
-        if (!result.originDownloadVideoUrl) {
-            return;
-        }
-
-        onOpenHlsDownload({
-            sourceUrl: result.originDownloadVideoUrl,
-            refererUrl: result.url || result.originDownloadVideoUrl,
-            title: result.title || result.desc || tHistory('unknownTitle'),
-        });
-    };
-
-    const openResultTask = (action: AudioExtractTask['action']) => {
-        onOpenExtractAudio({
-            action,
-            title: result.title || result.desc || undefined,
-            sourceUrl: result.url || null,
-            audioUrl: audioDownloadUrl,
-            videoUrl: videoDownloadUrl || null,
-            mediaActions: result.mediaActions,
-        });
-    };
-    const previewTitle = result.title || result.desc || tResult('title');
-    const previewActionCount = Number(showVideoPreview) + Number(showAudioPreview);
-    const downloadActionCount = Number(showVideoDownload)
-        + Number(showBrowserHlsDownload)
-        + Number(showAudioDownload);
-    const actionButtonClass = 'w-full min-w-0';
-
-    return (
-        <>
-            <div className="space-y-2">
-                {previewActionCount > 0 && (
-                    <div className={`grid ${getActionRowClass(previewActionCount)} gap-2`}>
-                        {showVideoPreview && (
-                            <MediaActionIconButton
-                                label={tResult('playVideo')}
-                                icon={MonitorPlay}
-                                variant="secondary"
-                                className={actionButtonClass}
-                                onClick={() => onRequestPreview({
-                                    mediaType: 'video',
-                                    sourceUrl: previewSourceUrl,
-                                    title: previewTitle,
-                                    item: previewItem,
-                                })}
-                            />
-                        )}
-                        {showAudioPreview && (
-                            <MediaActionIconButton
-                                label={tResult('playAudio')}
-                                icon={Headphones}
-                                variant="secondary"
-                                className={actionButtonClass}
-                                onClick={() => onRequestPreview({
-                                    mediaType: 'audio',
-                                    sourceUrl: previewSourceUrl,
-                                    title: previewTitle,
-                                    item: previewItem,
-                                })}
-                            />
-                        )}
-                    </div>
-                )}
-                {downloadActionCount > 0 && (
-                    <div className={`grid ${getActionRowClass(downloadActionCount)} gap-2`}>
-                        {showVideoDownload && (
-                            <MediaActionIconButton
-                                label={videoAction === 'merge-then-download'
-                                    ? tResult('mergeDownloadVideo')
-                                    : tResult('downloadVideo')}
-                                icon={VideoDownloadIcon}
-                                variant="default"
-                                className={actionButtonClass}
-                                disabled={videoLoading}
-                                loading={videoLoading}
-                                onClick={() => {
-                                    if (videoAction === 'merge-then-download') {
-                                        openResultTask('merge-video');
-                                        return;
-                                    }
-
-                                    handleDownload(videoDownloadUrl!, setVideoLoading);
-                                }}
-                            />
-                        )}
-                        {showBrowserHlsDownload && (
-                            <MediaActionIconButton
-                                label={tResult('browserDownloadVideo')}
-                                icon={Download}
-                                variant="outline"
-                                className={actionButtonClass}
-                                onClick={openBrowserHlsDownload}
-                            />
-                        )}
-                        {showAudioDownload && (
-                            <MediaActionIconButton
-                                label={audioAction === 'direct-download'
-                                    ? tResult('downloadAudio')
-                                    : tExtractAudio('button')}
-                                icon={AudioDownloadIcon}
-                                variant="default"
-                                className={actionButtonClass}
-                                disabled={audioLoading}
-                                loading={audioLoading && audioAction === 'direct-download'}
-                                onClick={() => {
-                                    if (audioAction === 'extract-audio') {
-                                        openResultTask('extract-audio');
-                                        return;
-                                    }
-
-                                    handleDownload(audioDownloadUrl!, setAudioLoading);
-                                }}
-                            />
-                        )}
-                    </div>
-                )}
-            </div>
-            {videoAction === 'merge-then-download' && (
-                <p className="text-xs text-muted-foreground">
-                    {tResult('mergeDownloadVideoHint')}
-                </p>
+  return (
+    <>
+      <div className="space-y-2">
+        {previewActionCount > 0 && (
+          <div
+            className={`grid ${getActionRowClass(previewActionCount)} gap-2`}
+          >
+            {showVideoPreview && (
+              <MediaActionIconButton
+                label={tResult("playVideo")}
+                icon={MonitorPlay}
+                variant="secondary"
+                className={actionButtonClass}
+                onClick={() =>
+                  onRequestPreview({
+                    mediaType: "video",
+                    sourceUrl: previewSourceUrl,
+                    title: previewTitle,
+                    item: previewItem,
+                  })
+                }
+              />
             )}
-            {result.noteType === 'audio' && (
-                <p className="text-xs text-muted-foreground">
-                    {tResult('pureMusicHint')}
-                </p>
+            {showAudioPreview && (
+              <MediaActionIconButton
+                label={tResult("playAudio")}
+                icon={Headphones}
+                variant="secondary"
+                className={actionButtonClass}
+                onClick={() =>
+                  onRequestPreview({
+                    mediaType: "audio",
+                    sourceUrl: previewSourceUrl,
+                    title: previewTitle,
+                    item: previewItem,
+                  })
+                }
+              />
             )}
-            {(showOriginVideoLink || showOriginAudioLink) && (
-                <div className="flex flex-wrap items-center gap-x-1 gap-y-0.5 text-xs text-muted-foreground">
-                    {showOriginVideoLink && (
-                        <Button variant="link" size="sm" className="h-auto px-0 py-0 text-xs" asChild>
-                            <a
-                                href={result.originDownloadVideoUrl!}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                <ExternalLink className="h-3.5 w-3.5" />
-                                {tResult('originDownloadVideo')}
-                            </a>
-                        </Button>
-                    )}
-                    {showOriginAudioLink && (
-                        <Button variant="link" size="sm" className="h-auto px-0 py-0 text-xs" asChild>
-                            <a
-                                href={result.originDownloadAudioUrl!}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                <ExternalLink className="h-3.5 w-3.5" />
-                                {tResult('originDownloadAudio')}
-                            </a>
-                        </Button>
-                    )}
-                </div>
+          </div>
+        )}
+        {downloadActionCount > 0 && (
+          <div
+            className={`grid ${getActionRowClass(downloadActionCount)} gap-2`}
+          >
+            {showVideoDownload && (
+              <MediaActionIconButton
+                label={
+                  videoAction === "merge-then-download"
+                    ? tResult("mergeDownloadVideo")
+                    : tResult("downloadVideo")
+                }
+                icon={VideoDownloadIcon}
+                variant="default"
+                className={actionButtonClass}
+                disabled={videoLoading}
+                loading={videoLoading}
+                onClick={() => {
+                  if (videoAction === "merge-then-download") {
+                    openResultTask("merge-video");
+                    return;
+                  }
+
+                  handleDownload(videoDownloadUrl!, setVideoLoading);
+                }}
+              />
             )}
-        </>
-    );
+            {showBrowserHlsDownload && (
+              <MediaActionIconButton
+                label={tResult("browserDownloadVideo")}
+                icon={Download}
+                variant="outline"
+                className={actionButtonClass}
+                onClick={openBrowserHlsDownload}
+              />
+            )}
+            {showAudioDownload && (
+              <MediaActionIconButton
+                label={
+                  audioAction === "direct-download"
+                    ? tResult("downloadAudio")
+                    : tExtractAudio("button")
+                }
+                icon={AudioDownloadIcon}
+                variant="default"
+                className={actionButtonClass}
+                disabled={audioLoading}
+                loading={audioLoading && audioAction === "direct-download"}
+                onClick={() => {
+                  if (audioAction === "extract-audio") {
+                    openResultTask("extract-audio");
+                    return;
+                  }
+
+                  handleDownload(audioDownloadUrl!, setAudioLoading);
+                }}
+              />
+            )}
+          </div>
+        )}
+      </div>
+      {videoAction === "merge-then-download" && (
+        <p className="text-xs text-muted-foreground">
+          {tResult("mergeDownloadVideoHint")}
+        </p>
+      )}
+      {result.noteType === "audio" && (
+        <p className="text-xs text-muted-foreground">
+          {tResult("pureMusicHint")}
+        </p>
+      )}
+      {(showOriginVideoLink || showOriginAudioLink) && (
+        <div className="flex flex-wrap items-center gap-x-1 gap-y-0.5 text-xs text-muted-foreground">
+          {showOriginVideoLink && (
+            <Button
+              variant="link"
+              size="sm"
+              className="h-auto px-0 py-0 text-xs"
+              asChild
+            >
+              <a
+                href={result.originDownloadVideoUrl!}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <ExternalLink className="h-3.5 w-3.5" />
+                {tResult("originDownloadVideo")}
+              </a>
+            </Button>
+          )}
+          {showOriginAudioLink && (
+            <Button
+              variant="link"
+              size="sm"
+              className="h-auto px-0 py-0 text-xs"
+              asChild
+            >
+              <a
+                href={result.originDownloadAudioUrl!}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <ExternalLink className="h-3.5 w-3.5" />
+                {tResult("originDownloadAudio")}
+              </a>
+            </Button>
+          )}
+        </div>
+      )}
+    </>
+  );
 }

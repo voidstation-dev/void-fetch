@@ -17,10 +17,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/lib/deferred-toast";
 import { DeferredAudioExtractDialog } from "@/components/deferred-audio-extract-dialog";
 import { useTopBarActions } from "@/components/layout/top-bar-actions";
-import type { AudioExtractTask } from "@/components/audio-tool/types";
+import type { AudioExtractTask } from "@/features/audio/components/types";
 import type { MediaPreviewRequest } from "@/components/downloader/media-preview";
 import { buildPrimaryResultPreview } from "@/components/downloader/media-preview";
-import { ArrowUp, Loader2, X } from "lucide-react";
+import { ArrowUp, Loader2 } from "lucide-react";
 
 import type { DownloadRecord } from "./download-history";
 import { useLocalStorageState } from "@/hooks/use-local-storage-state";
@@ -32,7 +32,11 @@ import {
   DOWNLOAD_HISTORY_STORAGE_KEY,
 } from "@/lib/constants";
 import { useTranslations } from "next-intl";
-import { isApiRequestError, notifyApiErrorToast, resolveApiErrorMessage } from "@/lib/api-errors";
+import {
+  isApiRequestError,
+  notifyApiErrorToast,
+  resolveApiErrorMessage,
+} from "@/lib/api-errors";
 import { getPlatformLabel, normalizePlatform } from "@/lib/platforms";
 import {
   UnifiedParseReloadError,
@@ -157,9 +161,7 @@ export function UnifiedDownloader({
       // Add to download history - use desc if title is empty
       // Use canonical URL returned by API to avoid tracking params/raw text inputs
       const displayTitle =
-        normalizedData.title ||
-        normalizedData.desc ||
-        tHistory("unknownTitle");
+        normalizedData.title || normalizedData.desc || tHistory("unknownTitle");
       const nextRecord: DownloadRecord = {
         url: normalizedData.url || videoUrl,
         title: displayTitle,
@@ -194,7 +196,15 @@ export function UnifiedDownloader({
       }
       return normalizedData;
     },
-    [addToHistory, canPrompt, dismiss, promptInstall, tHistory, tPlatforms, tToast],
+    [
+      addToHistory,
+      canPrompt,
+      dismiss,
+      promptInstall,
+      tHistory,
+      tPlatforms,
+      tToast,
+    ],
   );
 
   const closeParseResult = () => {
@@ -397,7 +407,12 @@ export function UnifiedDownloader({
     return () => {
       cancelled = true;
     };
-  }, [handleUnifiedParse, sharedAutoplayRequested, sharedPlaySourceUrl, tErrors]);
+  }, [
+    handleUnifiedParse,
+    sharedAutoplayRequested,
+    sharedPlaySourceUrl,
+    tErrors,
+  ]);
 
   useEffect(() => {
     let idleId: number | null = null;
@@ -486,7 +501,7 @@ export function UnifiedDownloader({
                   <h1 className="text-2xl text-center font-semibold tracking-tight">
                     {tUnified("pageTitle")}
                   </h1>
-                  <p className="text-xs sm:text-[13px] leading-relaxed text-foreground/60 text-center break-words">
+                  <p className="text-xs sm:text-[13px] leading-relaxed text-foreground/60 text-center wrap-break-word">
                     {tUnified("pageDescription")}
                   </p>
                 </CardHeader>
@@ -500,7 +515,7 @@ export function UnifiedDownloader({
                         onChange={(e) => setUrl(e.target.value)}
                         placeholder={tUnified("placeholder")}
                         required
-                        className="min-h-[120px] resize-none break-all"
+                        className="min-h-30 resize-none break-all"
                       />
                       <div className="flex gap-2">
                         <Button
@@ -546,7 +561,7 @@ export function UnifiedDownloader({
                     )}
 
                     <div className="pt-2 space-y-3">
-                      <div className="rounded-md border border-amber-500/20 bg-amber-500/10 px-3 py-2 text-center text-xs text-amber-600 dark:text-amber-400/90 break-words">
+                      <div className="rounded-md border border-amber-500/20 bg-amber-500/10 px-3 py-2 text-center text-xs text-amber-600 dark:text-amber-400/90 wrap-break-word">
                         {tPage("copyrightBilibiliRestriction")}
                       </div>
                       {heroMeta}

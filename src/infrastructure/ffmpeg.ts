@@ -1,10 +1,10 @@
-import { FFmpeg } from '@ffmpeg/ffmpeg';
+import { FFmpeg } from "@ffmpeg/ffmpeg";
 
 let ffmpegInstance: FFmpeg | null = null;
 let loadPromise: Promise<FFmpeg> | null = null;
 
 // Keep this aligned with the installed @ffmpeg/ffmpeg package's expected core build.
-const FFMPEG_CORE_VERSION = '0.12.9';
+const FFMPEG_CORE_VERSION = "0.12.9";
 const FFMPEG_SOURCE_TIMEOUT_MS = 3000;
 const FFMPEG_CORE_BASE_URLS = [
   `https://cdn.jsdelivr.net/npm/@ffmpeg/core@${FFMPEG_CORE_VERSION}/dist/esm`,
@@ -14,11 +14,11 @@ const FFMPEG_CORE_BASE_URLS = [
 async function fetchBlobURL(
   url: string,
   mimeType: string,
-  signal: AbortSignal
+  signal: AbortSignal,
 ): Promise<string> {
   const response = await fetch(url, {
-    method: 'GET',
-    cache: 'force-cache',
+    method: "GET",
+    cache: "force-cache",
     signal,
   });
 
@@ -34,7 +34,12 @@ async function fetchBlobURL(
 async function loadFFmpegCoreFromSource(ffmpeg: FFmpeg, baseURL: string) {
   const controller = new AbortController();
   const timeoutId = window.setTimeout(() => {
-    controller.abort(new DOMException(`Timed out after ${FFMPEG_SOURCE_TIMEOUT_MS}ms`, 'AbortError'));
+    controller.abort(
+      new DOMException(
+        `Timed out after ${FFMPEG_SOURCE_TIMEOUT_MS}ms`,
+        "AbortError",
+      ),
+    );
   }, FFMPEG_SOURCE_TIMEOUT_MS);
 
   let coreURL: string | null = null;
@@ -43,21 +48,24 @@ async function loadFFmpegCoreFromSource(ffmpeg: FFmpeg, baseURL: string) {
   try {
     coreURL = await fetchBlobURL(
       `${baseURL}/ffmpeg-core.js`,
-      'text/javascript',
-      controller.signal
+      "text/javascript",
+      controller.signal,
     );
     wasmURL = await fetchBlobURL(
       `${baseURL}/ffmpeg-core.wasm`,
-      'application/wasm',
-      controller.signal
+      "application/wasm",
+      controller.signal,
     );
 
-    await ffmpeg.load({
-      coreURL,
-      wasmURL,
-    }, {
-      signal: controller.signal,
-    });
+    await ffmpeg.load(
+      {
+        coreURL,
+        wasmURL,
+      },
+      {
+        signal: controller.signal,
+      },
+    );
   } finally {
     clearTimeout(timeoutId);
 
@@ -84,8 +92,8 @@ export async function getFFmpeg(): Promise<FFmpeg> {
   loadPromise = (async () => {
     const ffmpeg = new FFmpeg();
 
-    ffmpeg.on('log', ({ message }) => {
-      console.log('[FFmpeg]', message);
+    ffmpeg.on("log", ({ message }) => {
+      console.log("[FFmpeg]", message);
     });
 
     try {
@@ -96,12 +104,16 @@ export async function getFFmpeg(): Promise<FFmpeg> {
       for (const baseURL of FFMPEG_CORE_BASE_URLS) {
         try {
           await loadFFmpegCoreFromSource(ffmpeg, baseURL);
-          console.log('[FFmpeg] Loaded single-thread core from:', baseURL);
+          console.log("[FFmpeg] Loaded single-thread core from:", baseURL);
           lastError = null;
           break;
         } catch (candidateError) {
           lastError = candidateError;
-          console.warn('[FFmpeg] Failed to load core from:', baseURL, candidateError);
+          console.warn(
+            "[FFmpeg] Failed to load core from:",
+            baseURL,
+            candidateError,
+          );
         }
       }
 
@@ -110,7 +122,9 @@ export async function getFFmpeg(): Promise<FFmpeg> {
       }
     } catch (err) {
       loadPromise = null;
-      throw new Error(`Failed to load FFmpeg: ${err instanceof Error ? err.message : String(err)}`);
+      throw new Error(
+        `Failed to load FFmpeg: ${err instanceof Error ? err.message : String(err)}`,
+      );
     }
 
     ffmpegInstance = ffmpeg;
@@ -130,14 +144,13 @@ export function terminateFFmpeg() {
 }
 
 export type FFmpegStage =
-  | 'downloading'
-  | 'converting'
-  | 'reading-video'
-  | 'reading-audio'
-  | 'merging';
+  "downloading" | "converting" | "reading-video" | "reading-audio" | "merging";
 
-export type ExtractStage = Extract<FFmpegStage, 'downloading' | 'converting'>;
-export type MergeStage = Extract<FFmpegStage, 'reading-video' | 'reading-audio' | 'merging'>;
+export type ExtractStage = Extract<FFmpegStage, "downloading" | "converting">;
+export type MergeStage = Extract<
+  FFmpegStage,
+  "reading-video" | "reading-audio" | "merging"
+>;
 
 export interface ProgressInfo {
   loaded?: number;
@@ -148,14 +161,22 @@ export interface ExtractAudioOptions {
   videoUrl?: string;
   videoFile?: File;
   signal?: AbortSignal;
-  onProgress?: (progress: number, stage: ExtractStage, info?: ProgressInfo) => void;
+  onProgress?: (
+    progress: number,
+    stage: ExtractStage,
+    info?: ProgressInfo,
+  ) => void;
 }
 
 export interface MergeVideoAudioOptions {
   videoFile: File;
   audioFile: File;
   signal?: AbortSignal;
-  onProgress?: (progress: number, stage: MergeStage, info?: ProgressInfo) => void;
+  onProgress?: (
+    progress: number,
+    stage: MergeStage,
+    info?: ProgressInfo,
+  ) => void;
 }
 
 function getFileExtension(filename: string): string | null {
@@ -163,7 +184,11 @@ function getFileExtension(filename: string): string | null {
   return match ? match[1].toLowerCase() : null;
 }
 
-function buildTempFilename(prefix: string, file: File, fallbackExtension: string): string {
+function buildTempFilename(
+  prefix: string,
+  file: File,
+  fallbackExtension: string,
+): string {
   const extension = getFileExtension(file.name) ?? fallbackExtension;
   return `${prefix}.${extension}`;
 }
@@ -174,7 +199,7 @@ async function readLocalFile<TStage extends FFmpegStage>(
   signal?: AbortSignal,
   onProgress?: (progress: number, stage: TStage, info?: ProgressInfo) => void,
   progressStart = 0,
-  progressEnd = 100
+  progressEnd = 100,
 ): Promise<Uint8Array> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -183,7 +208,7 @@ async function readLocalFile<TStage extends FFmpegStage>(
     let settled = false;
 
     const cleanupAbort = () => {
-      signal?.removeEventListener('abort', handleAbort);
+      signal?.removeEventListener("abort", handleAbort);
     };
 
     const rejectOnce = (error: Error) => {
@@ -204,7 +229,7 @@ async function readLocalFile<TStage extends FFmpegStage>(
       if (reader.readyState === FileReader.LOADING) {
         reader.abort();
       }
-      rejectOnce(new DOMException('File read was aborted', 'AbortError'));
+      rejectOnce(new DOMException("File read was aborted", "AbortError"));
     };
 
     if (signal?.aborted) {
@@ -212,14 +237,14 @@ async function readLocalFile<TStage extends FFmpegStage>(
       return;
     }
 
-    signal?.addEventListener('abort', handleAbort, { once: true });
+    signal?.addEventListener("abort", handleAbort, { once: true });
 
     reader.onprogress = (event) => {
       if (settled) return;
       const loaded = event.loaded;
       const eventTotal = event.total || total;
       const ratio = eventTotal > 0 ? loaded / eventTotal : 0;
-      const progress = Math.round(progressStart + (ratio * range));
+      const progress = Math.round(progressStart + ratio * range);
       onProgress?.(progress, stage, { loaded, total: eventTotal });
     };
 
@@ -229,12 +254,16 @@ async function readLocalFile<TStage extends FFmpegStage>(
         onProgress?.(progressEnd, stage, { loaded: total, total });
         resolveOnce(new Uint8Array(result));
       } else {
-        rejectOnce(new Error('Failed to read file as ArrayBuffer'));
+        rejectOnce(new Error("Failed to read file as ArrayBuffer"));
       }
     };
 
     reader.onerror = () => {
-      rejectOnce(new Error(`File read error: ${reader.error?.message || 'unknown error'}`));
+      rejectOnce(
+        new Error(
+          `File read error: ${reader.error?.message || "unknown error"}`,
+        ),
+      );
     };
 
     reader.readAsArrayBuffer(file);
@@ -244,11 +273,15 @@ async function readLocalFile<TStage extends FFmpegStage>(
 async function downloadVideoData(
   videoUrl: string,
   signal?: AbortSignal,
-  onProgress?: (progress: number, stage: ExtractStage, info?: ProgressInfo) => void
+  onProgress?: (
+    progress: number,
+    stage: ExtractStage,
+    info?: ProgressInfo,
+  ) => void,
 ): Promise<Uint8Array> {
   const response = await fetch(videoUrl, {
-    method: 'GET',
-    cache: 'no-store',
+    method: "GET",
+    cache: "no-store",
     signal,
   });
 
@@ -256,11 +289,14 @@ async function downloadVideoData(
     throw new Error(`HTTP ${response.status}`);
   }
 
-  const total = Number(response.headers.get('content-length') || '0');
+  const total = Number(response.headers.get("content-length") || "0");
 
   if (!response.body) {
     const fallbackData = new Uint8Array(await response.arrayBuffer());
-    onProgress?.(100, 'downloading', { loaded: fallbackData.byteLength, total });
+    onProgress?.(100, "downloading", {
+      loaded: fallbackData.byteLength,
+      total,
+    });
     return fallbackData;
   }
 
@@ -271,7 +307,7 @@ async function downloadVideoData(
   while (true) {
     if (signal?.aborted) {
       await reader.cancel().catch(() => undefined);
-      throw new DOMException('Video download was aborted', 'AbortError');
+      throw new DOMException("Video download was aborted", "AbortError");
     }
 
     const { done, value } = await reader.read();
@@ -282,7 +318,7 @@ async function downloadVideoData(
     loaded += value.byteLength;
 
     const percentCompleted = total > 0 ? Math.round((loaded * 100) / total) : 0;
-    onProgress?.(percentCompleted, 'downloading', {
+    onProgress?.(percentCompleted, "downloading", {
       loaded,
       total,
     });
@@ -295,7 +331,7 @@ async function downloadVideoData(
     offset += chunk.byteLength;
   }
 
-  onProgress?.(100, 'downloading', { loaded, total });
+  onProgress?.(100, "downloading", { loaded, total });
   return combined;
 }
 
@@ -305,71 +341,91 @@ export async function extractAudioFromVideo({
   signal,
   onProgress,
 }: ExtractAudioOptions): Promise<Blob> {
-  console.log('[FFmpeg] Starting audio extraction from:', videoUrl || 'local file');
+  console.log(
+    "[FFmpeg] Starting audio extraction from:",
+    videoUrl || "local file",
+  );
 
   const ffmpeg = await getFFmpeg();
-  console.log('[FFmpeg] FFmpeg loaded successfully');
+  console.log("[FFmpeg] FFmpeg loaded successfully");
 
   // Download video file with progress tracking
-  onProgress?.(0, 'downloading');
-  console.log('[FFmpeg] Downloading video...');
+  onProgress?.(0, "downloading");
+  console.log("[FFmpeg] Downloading video...");
 
   let videoData: Uint8Array;
   try {
     if (videoFile) {
       // Read from local File object
-      videoData = await readLocalFile(videoFile, 'downloading', signal, onProgress);
+      videoData = await readLocalFile(
+        videoFile,
+        "downloading",
+        signal,
+        onProgress,
+      );
     } else if (videoUrl) {
       // Download from URL
       videoData = await downloadVideoData(videoUrl, signal, onProgress);
     } else {
-      throw new Error('Either videoUrl or videoFile must be provided');
+      throw new Error("Either videoUrl or videoFile must be provided");
     }
-    console.log('[FFmpeg] Video ready, size:', videoData.byteLength);
+    console.log("[FFmpeg] Video ready, size:", videoData.byteLength);
   } catch (err) {
-    throw new Error(`Failed to get video: ${err instanceof Error ? err.message : String(err)}`);
+    throw new Error(
+      `Failed to get video: ${err instanceof Error ? err.message : String(err)}`,
+    );
   }
 
-  onProgress?.(100, 'downloading');
+  onProgress?.(100, "downloading");
 
   // Write to virtual file system
-  await ffmpeg.writeFile('input.mp4', videoData, { signal });
-  console.log('[FFmpeg] Video written to virtual filesystem');
+  await ffmpeg.writeFile("input.mp4", videoData, { signal });
+  console.log("[FFmpeg] Video written to virtual filesystem");
 
   // Set conversion progress listener
   const handleProgress = ({ progress }: { progress: number }) => {
-    onProgress?.(Math.round(progress * 100), 'converting');
+    const percent = Math.max(0, Math.min(100, Math.round(progress * 100)));
+    onProgress?.(percent, "converting");
   };
-  ffmpeg.on('progress', handleProgress);
+  ffmpeg.on("progress", handleProgress);
 
   try {
     // Execute conversion: extract audio to MP3
-    console.log('[FFmpeg] Starting conversion...');
-    await ffmpeg.exec([
-      '-i', 'input.mp4',
-      '-vn',
-      '-acodec', 'libmp3lame',
-      '-q:a', '2',
-      'output.mp3'
-    ], undefined, { signal });
-    console.log('[FFmpeg] Conversion completed');
+    console.log("[FFmpeg] Starting conversion...");
+    await ffmpeg.exec(
+      [
+        "-i",
+        "input.mp4",
+        "-vn",
+        "-acodec",
+        "libmp3lame",
+        "-q:a",
+        "2",
+        "output.mp3",
+      ],
+      undefined,
+      { signal },
+    );
+    console.log("[FFmpeg] Conversion completed");
 
     // Read output file
-    const outputData = await ffmpeg.readFile('output.mp3', undefined, { signal });
+    const outputData = await ffmpeg.readFile("output.mp3", undefined, {
+      signal,
+    });
 
     // Create Blob (outputData is Uint8Array or string)
-    if (typeof outputData === 'string') {
-      throw new Error('Unexpected string output from ffmpeg');
+    if (typeof outputData === "string") {
+      throw new Error("Unexpected string output from ffmpeg");
     }
     // Copy to a new ArrayBuffer to avoid SharedArrayBuffer issues
     const buffer = new ArrayBuffer(outputData.byteLength);
     new Uint8Array(buffer).set(outputData);
-    console.log('[FFmpeg] Audio blob created, size:', buffer.byteLength);
-    return new Blob([buffer], { type: 'audio/mpeg' });
+    console.log("[FFmpeg] Audio blob created, size:", buffer.byteLength);
+    return new Blob([buffer], { type: "audio/mpeg" });
   } finally {
-    ffmpeg.off('progress', handleProgress);
-    await ffmpeg.deleteFile('input.mp4').catch(() => undefined);
-    await ffmpeg.deleteFile('output.mp3').catch(() => undefined);
+    ffmpeg.off("progress", handleProgress);
+    await ffmpeg.deleteFile("input.mp4").catch(() => undefined);
+    await ffmpeg.deleteFile("output.mp3").catch(() => undefined);
   }
 }
 
@@ -379,55 +435,89 @@ export async function mergeVideoAudio({
   signal,
   onProgress,
 }: MergeVideoAudioOptions): Promise<Blob> {
-  console.log('[FFmpeg] Starting merge with:', videoFile.name, audioFile.name);
+  console.log("[FFmpeg] Starting merge with:", videoFile.name, audioFile.name);
 
   const ffmpeg = await getFFmpeg();
-  console.log('[FFmpeg] FFmpeg loaded successfully for merge');
+  console.log("[FFmpeg] FFmpeg loaded successfully for merge");
 
-  const videoInputName = buildTempFilename('merge-input-video', videoFile, 'mp4');
-  const audioInputName = buildTempFilename('merge-input-audio', audioFile, 'mp3');
-  const outputName = 'merged-output.mp4';
+  const videoInputName = buildTempFilename(
+    "merge-input-video",
+    videoFile,
+    "mp4",
+  );
+  const audioInputName = buildTempFilename(
+    "merge-input-audio",
+    audioFile,
+    "mp3",
+  );
+  const outputName = "merged-output.mp4";
 
-  onProgress?.(10, 'reading-video', { loaded: 0, total: videoFile.size });
-  const videoData = await readLocalFile(videoFile, 'reading-video', signal, onProgress, 10, 40);
+  onProgress?.(10, "reading-video", { loaded: 0, total: videoFile.size });
+  const videoData = await readLocalFile(
+    videoFile,
+    "reading-video",
+    signal,
+    onProgress,
+    10,
+    40,
+  );
 
-  onProgress?.(40, 'reading-audio', { loaded: 0, total: audioFile.size });
-  const audioData = await readLocalFile(audioFile, 'reading-audio', signal, onProgress, 40, 50);
+  onProgress?.(40, "reading-audio", { loaded: 0, total: audioFile.size });
+  const audioData = await readLocalFile(
+    audioFile,
+    "reading-audio",
+    signal,
+    onProgress,
+    40,
+    50,
+  );
 
   await ffmpeg.writeFile(videoInputName, videoData, { signal });
   await ffmpeg.writeFile(audioInputName, audioData, { signal });
-  console.log('[FFmpeg] Merge inputs written to virtual filesystem');
+  console.log("[FFmpeg] Merge inputs written to virtual filesystem");
 
   const handleProgress = ({ progress }: { progress: number }) => {
-    onProgress?.(50 + Math.round(progress * 50), 'merging');
+    const percent = Math.max(0, Math.min(100, Math.round(progress * 100)));
+    onProgress?.(50 + Math.round(percent / 2), "merging");
   };
-  ffmpeg.on('progress', handleProgress);
+  ffmpeg.on("progress", handleProgress);
 
   try {
-    console.log('[FFmpeg] Starting merge...');
-    await ffmpeg.exec([
-      '-i', videoInputName,
-      '-i', audioInputName,
-      '-c:v', 'copy',
-      '-c:a', 'aac',
-      '-map', '0:v:0',
-      '-map', '1:a:0',
-      '-shortest',
-      '-movflags', '+faststart',
-      outputName,
-    ], undefined, { signal });
-    console.log('[FFmpeg] Merge completed');
+    console.log("[FFmpeg] Starting merge...");
+    await ffmpeg.exec(
+      [
+        "-i",
+        videoInputName,
+        "-i",
+        audioInputName,
+        "-c:v",
+        "copy",
+        "-c:a",
+        "aac",
+        "-map",
+        "0:v:0",
+        "-map",
+        "1:a:0",
+        "-shortest",
+        "-movflags",
+        "+faststart",
+        outputName,
+      ],
+      undefined,
+      { signal },
+    );
+    console.log("[FFmpeg] Merge completed");
 
     const outputData = await ffmpeg.readFile(outputName, undefined, { signal });
-    if (typeof outputData === 'string') {
-      throw new Error('Unexpected string output from ffmpeg during merge');
+    if (typeof outputData === "string") {
+      throw new Error("Unexpected string output from ffmpeg during merge");
     }
 
     const buffer = new ArrayBuffer(outputData.byteLength);
     new Uint8Array(buffer).set(outputData);
-    return new Blob([buffer], { type: 'video/mp4' });
+    return new Blob([buffer], { type: "video/mp4" });
   } finally {
-    ffmpeg.off('progress', handleProgress);
+    ffmpeg.off("progress", handleProgress);
     await ffmpeg.deleteFile(videoInputName).catch(() => undefined);
     await ffmpeg.deleteFile(audioInputName).catch(() => undefined);
     await ffmpeg.deleteFile(outputName).catch(() => undefined);
@@ -436,7 +526,7 @@ export async function mergeVideoAudio({
 
 export function downloadBlob(blob: Blob, filename: string) {
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
+  const a = document.createElement("a");
   a.href = url;
   a.download = filename;
   document.body.appendChild(a);

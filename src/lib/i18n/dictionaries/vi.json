@@ -139,10 +139,10 @@
     "installAction": "Cài đặt"
   },
   "metadata": {
-    "title": "VoidFetch | Trình tải Phương tiện Hàng loạt Tối thượng từ VoidStation",
-    "description": "Trình tải phương tiện trực tuyến siêu tốc và ổn định cho hơn 40 nền tảng. Dễ dàng tải xuống hàng loạt video HD, âm thanh MP3, bộ sưu tập ảnh và luồng HLS — hoàn toàn miễn phí, không cần đăng ký.",
-    "ogTitle": "VoidFetch | Trình tải Phương tiện Hàng loạt Thế hệ mới",
-    "ogDescription": "Tải xuống siêu tốc hàng loạt cho YouTube, TikTok, Instagram, Bilibili và hơn 40 nền tảng khác. Trích xuất video HD, âm thanh chất lượng cao và ảnh một cách dễ dàng.",
+    "title": "VoidFetch | Trình tải Video, Audio, Ảnh, HLS trực tuyến",
+    "description": "Trình tải phương tiện trực tuyến miễn phí cho Bilibili, Douyin, Telegram, Threads, WeChat, Weibo, Niconico, Instagram, Xiaohongshu, TikTok, X, Reddit, Streamable, SoundCloud, Twitch, VK, OK.ru, Pinterest, Tumblr, Newgrounds và các luồng HLS/M3U8.",
+    "ogTitle": "VoidFetch | Trình tải phương tiện trực tuyến miễn phí",
+    "ogDescription": "Tự động nhận diện liên kết từ các nguồn video, âm thanh, hình ảnh và HLS/M3U8 được hỗ trợ, tải về trực tuyến không cần đăng ký.",
     "siteName": "VoidFetch"
   },
   "common": {
@@ -193,7 +193,10 @@
     "privateFeedbackTitle": "Gửi phản hồi riêng tư qua Email",
     "privateFeedbackDescription": "Bạn cũng có thể lựa chọn gửi phản hồi riêng tư bằng cách gửi email cho chúng tôi. Để hỗ trợ chẩn đoán lỗi nhanh hơn, bạn nên đính kèm liên kết video lỗi, thông tin trình duyệt/hệ điều hành hoặc ảnh chụp màn hình lỗi.",
     "emailAction": "Gửi Email",
-    "emailTemplateBody": "[Mô tả lỗi hoặc góp ý]\nVui lòng viết mô tả ngắn gọn tại đây:\n\n[Liên kết bị lỗi]\n(Dán link video/bài viết bị lỗi tải tại đây)\n\n[Thông tin môi trường]\n(Ví dụ: Windows 11 / Chrome 120 / iOS 17)\n"
+    "emailTemplateBody": "[Mô tả lỗi hoặc góp ý]\nVui lòng viết mô tả ngắn gọn tại đây:\n\n[Liên kết bị lỗi]\n(Dán link video/bài viết bị lỗi tải tại đây)\n\n[Thông tin môi trường]\n(Ví dụ: Windows 11 / Chrome 120 / iOS 17)\n",
+    "communityDiscussionsTitle": "Thảo luận & Góp ý cộng đồng",
+    "communityDiscussionsSubtitle": "Đăng nhập bằng GitHub để gửi phản hồi công khai, báo lỗi hoặc đề xuất tính năng mới.",
+    "poweredByGiscus": "Hỗ trợ bởi Giscus"
   },
   "privacyPage": {
     "metaTitle": "Chính sách bảo mật | VoidFetch",
@@ -353,205 +356,133 @@
       "bilibili": {
         "name": "Bilibili",
         "summary": "Video / Audio / Mã chia sẻ",
-        "features": [
-          "Tải Video",
-          "Tải Audio",
-          "Mã chia sẻ"
-        ]
+        "features": ["Tải Video", "Tải Audio", "Mã chia sẻ"]
       },
       "bilibiliTv": {
         "name": "Bilibili TV",
         "summary": "Video / Audio",
-        "features": [
-          "Tải Video",
-          "Tải Audio"
-        ]
+        "features": ["Tải Video", "Tải Audio"]
       },
       "douyin": {
         "name": "Douyin",
         "summary": "Video / Bài viết ảnh / Audio",
-        "features": [
-          "Tải Video",
-          "Bài viết ảnh",
-          "Tải Audio"
-        ]
+        "features": ["Tải Video", "Bài viết ảnh", "Tải Audio"]
       },
       "hls": {
         "name": "Trang Web HLS",
         "summary": "Truyền trực tiếp / Phát lại",
-        "features": [
-          "Phát trực tuyến",
-          "Tải xuống"
-        ]
+        "features": ["Phát trực tuyến", "Tải xuống"]
       },
       "youtube": {
         "name": "YouTube",
         "summary": "Video / Audio",
-        "features": [
-          "Tải Video",
-          "Tải Audio"
-        ]
+        "features": ["Tải Video", "Tải Audio"]
       },
       "telegram": {
         "name": "Telegram",
         "summary": "Video / Tin nhắn công khai",
-        "features": [
-          "Tải Video",
-          "Tin nhắn công khai"
-        ]
+        "features": ["Tải Video", "Tin nhắn công khai"]
       },
       "wechat": {
         "name": "WeChat",
         "summary": "Video bài viết / Nhiều video",
-        "features": [
-          "Video bài viết",
-          "Nhiều video"
-        ]
+        "features": ["Video bài viết", "Nhiều video"]
       },
       "niconico": {
         "name": "Niconico",
         "summary": "Video / Audio",
-        "features": [
-          "Tải Video",
-          "Tải Audio"
-        ]
+        "features": ["Tải Video", "Tải Audio"]
       },
       "xiaohongshu": {
         "name": "Xiaohongshu",
         "summary": "Video / Bài viết ảnh",
-        "features": [
-          "Tải Video",
-          "Bài viết ảnh"
-        ]
+        "features": ["Tải Video", "Bài viết ảnh"]
       },
       "tiktok": {
         "name": "TikTok",
         "summary": "Video / Audio",
-        "features": [
-          "Tải Video",
-          "Tải Audio"
-        ]
+        "features": ["Tải Video", "Tải Audio"]
       },
       "comingSoon": "Nhiều nền tảng hơn sắp ra mắt",
       "instagram": {
         "name": "Instagram",
         "summary": "Reels / Bài đăng ảnh / Slide",
-        "features": [
-          "Tải Reels",
-          "Bài đăng ảnh",
-          "Slide ảnh"
-        ]
+        "features": ["Tải Reels", "Bài đăng ảnh", "Slide ảnh"]
       },
       "x": {
         "name": "X (Twitter)",
         "summary": "Video / Audio",
-        "features": [
-          "Tải Video",
-          "Tải Audio"
-        ]
+        "features": ["Tải Video", "Tải Audio"]
       },
       "threads": {
         "name": "Threads",
         "summary": "Video / Bài đăng ảnh",
-        "features": [
-          "Tải Video",
-          "Bài đăng ảnh"
-        ]
+        "features": ["Tải Video", "Bài đăng ảnh"]
       },
       "weibo": {
         "name": "Weibo",
         "summary": "Video / Ảnh / Hỗn hợp",
-        "features": [
-          "Tải Video",
-          "Bài đăng ảnh",
-          "Hỗn hợp"
-        ]
+        "features": ["Tải Video", "Bài đăng ảnh", "Hỗn hợp"]
       },
       "vimeo": {
         "name": "Vimeo",
         "summary": "Tải xuống nội dung",
-        "features": [
-          "Tải xuống video"
-        ]
+        "features": ["Tải xuống video"]
       },
       "dailymotion": {
         "name": "Dailymotion",
         "summary": "Tải xuống nội dung",
-        "features": [
-          "Tải xuống video"
-        ]
+        "features": ["Tải xuống video"]
       },
       "streamable": {
         "name": "Streamable",
         "summary": "Tải xuống nội dung",
-        "features": [
-          "Tải xuống video"
-        ]
+        "features": ["Tải xuống video"]
       },
       "reddit": {
         "name": "Reddit",
         "summary": "Tải xuống nội dung",
-        "features": [
-          "Tải xuống video"
-        ]
+        "features": ["Tải xuống video"]
       },
       "newgrounds": {
         "name": "Newgrounds",
         "summary": "Tải xuống nội dung",
-        "features": [
-          "Tải xuống phương tiện"
-        ]
+        "features": ["Tải xuống phương tiện"]
       },
       "tumblr": {
         "name": "Tumblr",
         "summary": "Tải xuống nội dung",
-        "features": [
-          "Tải xuống phương tiện"
-        ]
+        "features": ["Tải xuống phương tiện"]
       },
       "pinterest": {
         "name": "Pinterest",
         "summary": "Tải xuống nội dung",
-        "features": [
-          "Tải ảnh/video"
-        ]
+        "features": ["Tải ảnh/video"]
       },
       "vk": {
         "name": "VK",
         "summary": "Tải xuống nội dung",
-        "features": [
-          "Tải xuống video"
-        ]
+        "features": ["Tải xuống video"]
       },
       "okru": {
         "name": "OK.ru",
         "summary": "Tải xuống nội dung",
-        "features": [
-          "Tải xuống video"
-        ]
+        "features": ["Tải xuống video"]
       },
       "twitch": {
         "name": "Twitch",
         "summary": "Tải xuống nội dung",
-        "features": [
-          "Tải xuống stream/clip"
-        ]
+        "features": ["Tải xuống stream/clip"]
       },
       "soundcloud": {
         "name": "SoundCloud",
         "summary": "Tải nhạc bài hát",
-        "features": [
-          "Tải xuống nhạc"
-        ]
+        "features": ["Tải xuống nhạc"]
       },
       "applePodcasts": {
         "name": "Apple Podcasts",
         "summary": "Podcast âm thanh công khai / Phát và tải tập",
-        "features": [
-          "Audio công khai",
-          "Phát trực tuyến tập",
-          "Tải xuống tập"
-        ]
+        "features": ["Audio công khai", "Phát trực tuyến tập", "Tải xuống tập"]
       }
     },
     "linkFormats": {
@@ -967,5 +898,161 @@
     "clickDetails": "Nhấp để xem chi tiết",
     "clickTitle": "Nhấp để xem tất cả hơn 25 nền tảng được hỗ trợ",
     "universalSub": "Trình tải hàng loạt đa năng"
+  },
+  "batchWorkspace": {
+    "title": "Không gian làm việc hàng loạt",
+    "subtitle": "Trình quản lý hàng đợi VoidFetch",
+    "queuePreferences": "Tùy chọn hàng đợi",
+    "nav": {
+      "queueWorkspace": "Hàng đợi làm việc",
+      "downloadHistory": "Lịch sử tải xuống",
+      "preferences": "Tùy chỉnh",
+      "aboutVoidFetch": "Giới thiệu VoidFetch",
+      "privacyAndTerms": "Bảo mật & Điều khoản"
+    },
+    "composer": {
+      "title": "TRÌNH SOẠN THẢO URL HÀNG LOẠT",
+      "subtitlePrefix": "Dán liên kết video từ",
+      "platformsLink": "hơn 25 nền tảng được hỗ trợ",
+      "subtitleSuffix": "hoặc nhập từ tệp",
+      "pasteClipboard": "Dán từ Khay nhớ tạm",
+      "importFile": "Nhập từ tệp",
+      "placeholder": "Dán nhiều liên kết vào đây (mỗi liên kết một dòng, hoặc văn bản có chứa liên kết)...",
+      "detectedSingle": "Đã phát hiện {count} liên kết mới",
+      "detectedPlural": "Đã phát hiện {count} liên kết mới",
+      "dupesCount": "({count} trùng lặp)",
+      "dropFileHint": "Kéo thả tệp văn bản hoặc CSV vào đây để nhập liên kết",
+      "copyrightWarning": "Nội dung có bản quyền, trả phí hoặc giới hạn thành viên không được hỗ trợ.",
+      "feedbackHint": "Góp ý? Nhấp \"Góp ý\" ở góc trên bên phải.",
+      "supportedPlatformsBar": "Hỗ trợ: YouTube, TikTok, Douyin, Bilibili, SoundCloud & hơn 20 nền tảng khác",
+      "clear": "Xóa",
+      "addUrls": "Thêm liên kết vào hàng đợi",
+      "addUrlsCount": "Thêm {count} liên kết vào hàng đợi"
+    },
+    "toolbar": {
+      "searchPlaceholder": "Tìm kiếm tiêu đề hoặc URL...",
+      "allStatus": "Tất cả trạng thái",
+      "allPlatforms": "Tất cả nền tảng",
+      "parseAll": "Phân tích tất cả ({count})",
+      "pauseQueue": "Tạm dừng hàng đợi",
+      "startQueue": "Bắt đầu hàng đợi",
+      "retryFailed": "Thử lại lỗi",
+      "clearCompleted": "Xóa tệp đã hoàn thành ({count})",
+      "status": {
+        "all": "Tất cả trạng thái",
+        "draft": "Bản nháp",
+        "parsing": "Đang phân tích",
+        "ready": "Sẵn sàng",
+        "queued": "Đang chờ",
+        "downloading": "Đang tải xuống",
+        "processing": "Đang xử lý",
+        "saving": "Đang lưu",
+        "paused": "Đã tạm dừng",
+        "completed": "Đã hoàn thành",
+        "failed": "Thất bại",
+        "cancelled": "Đã hủy"
+      }
+    },
+    "queue": {
+      "emptyTitle": "Không gian làm việc trống",
+      "emptyBadge": "Sẵn sàng",
+      "emptyDescription": "Dán URL video (YouTube, TikTok, Douyin, SoundCloud...) hoặc nhập tệp văn bản ở trên để bắt đầu tải hàng loạt.",
+      "multiThreaded": "Động cơ đa luồng",
+      "audioExtraction": "Trích xuất luồng âm thanh",
+      "upTo4k": "Video lên đến 4K / 60FPS",
+      "itemsSelectedSingle": "Đã chọn {count} mục",
+      "itemsSelectedPlural": "Đã chọn {count} mục",
+      "bulkConfigure": "Cấu hình hàng loạt",
+      "bulkConfigureCount": "Cấu hình hàng loạt ({count})",
+      "removeSelected": "Xóa các mục đã chọn",
+      "selectAll": "Chọn tất cả mục trong hàng đợi",
+      "itemsCount": "{count} mục",
+      "noMatchingJobs": "Không có tác vụ nào khớp với tìm kiếm hoặc bộ lọc."
+    },
+    "configDrawer": {
+      "titleSingle": "CẤU HÌNH TẢI XUỐNG",
+      "titleBulk": "CẤU HÌNH HÀNG LOẠT",
+      "subtitle": "Tùy chỉnh định dạng đầu ra, chất lượng luồng và siêu dữ liệu",
+      "outputFormat": "Định dạng đầu ra",
+      "videoQuality": "Chất lượng video",
+      "selectVideoQuality": "Chọn chất lượng video",
+      "qualityNote": "Lưu ý: Nếu video gốc không hỗ trợ 4K/2K, hệ thống sẽ tự động tải chất lượng cao nhất có sẵn.",
+      "audioQuality": "Chất lượng âm thanh (Bitrate)",
+      "selectAudioQuality": "Chọn chất lượng âm thanh",
+      "filenameTemplate": "Mẫu tên tệp",
+      "outputFilename": "Tên tệp đầu ra",
+      "clickTokenHint": "Nhấp vào biến để chèn vào tên tệp",
+      "hlsConcurrency": "Luồng phân đoạn HLS",
+      "advancedOptions": "Tùy chọn nâng cao",
+      "downloadThumbnail": "Tải ảnh thu nhỏ / ảnh bìa",
+      "saveMetadataJson": "Lưu siêu dữ liệu JSON kèm theo",
+      "forceAudioExtraction": "Ép trích xuất âm thanh (MP3)",
+      "applyChecked": "Áp dụng mục đã chọn ({count})",
+      "applyAll": "Áp dụng tất cả ({count})",
+      "saveConfig": "Lưu cấu hình"
+    },
+    "progress": {
+      "totalItems": "{count} mục",
+      "running": "{count} đang chạy",
+      "queued": "{count} chờ xử lý",
+      "completed": "{count} hoàn thành",
+      "failed": "{count} thất bại",
+      "speed": "Tốc độ",
+      "eta": "Thời gian còn lại",
+      "queueActive": "HÀNG ĐỢI HOẠT ĐỘNG",
+      "queueIdle": "HÀNG ĐỢI RẢNH"
+    },
+    "settingsModal": {
+      "title": "Tùy chỉnh không gian làm việc",
+      "description": "Cấu hình mặc định tải xuống toàn cục & luồng mạng đồng thời",
+      "defaultOutputAndQuality": "Định dạng & Chất lượng mặc định",
+      "defaultFormat": "Định dạng mặc định",
+      "defaultQuality": "Chất lượng mặc định",
+      "downloadDirectoryPath": "Đường dẫn thư mục tải xuống",
+      "browserDefault": "Mặc định trình duyệt (Thư mục Downloads)",
+      "customFolder": "📁 Thư mục riêng: {name}",
+      "customFolderDesc": "Tệp sẽ được lưu trực tiếp vào thư mục này",
+      "browserDefaultDesc": "Tệp tự động được lưu trực tiếp vào thư mục Downloads của bạn",
+      "resetDefault": "Đặt lại mặc định",
+      "changeFolder": "Đổi thư mục",
+      "selectCustomFolder": "Chọn thư mục tùy chỉnh",
+      "directoryTip": "💡 Mẹo: Bảo mật trình duyệt ngăn chọn trực tiếp thư mục Downloads gốc. Để sắp xếp bên trong Downloads, hãy tạo hoặc chọn thư mục con (ví dụ: Downloads/VoidFetch).",
+      "networkConcurrency": "Số luồng mạng đồng thời",
+      "concurrentJobs": "Số tác vụ đồng thời",
+      "hlsSegmentConcurrency": "Số luồng phân đoạn HLS",
+      "savePreferences": "Lưu tùy chỉnh"
+    }
+  },
+  "settingsPage": {
+    "metaTitle": "Cài đặt | VoidFetch",
+    "metaDescription": "Cấu hình mặc định trình tải xuống, số luồng đồng thời, giới hạn mạng và tùy chọn đường dẫn thư mục.",
+    "title": "Tùy chỉnh",
+    "subtitle": "Cấu hình hành vi mặc định của trình tải xuống",
+    "resetDefaults": "Khôi phục mặc định",
+    "loading": "Đang tải cài đặt...",
+    "downloaderDefaults": "Mặc định trình tải xuống",
+    "defaultOutputType": "Định dạng đầu ra mặc định",
+    "defaultQuality": "Chất lượng mặc định",
+    "selectQuality": "Chọn chất lượng",
+    "defaultFilenameTemplate": "Mẫu tên tệp mặc định",
+    "placeholderTokens": "Các biến hỗ trợ:",
+    "customDirectoryTitle": "Đường dẫn thư mục tải xuống tùy chỉnh",
+    "customDirName": "📁 Thư mục tùy chỉnh: {name}",
+    "browserDefaultDir": "Mặc định trình duyệt (Thư mục Downloads)",
+    "customDirDesc": "Tất cả các bản tải xuống từ VoidFetch sẽ được ghi trực tiếp vào thư mục này",
+    "browserDefaultDesc": "Tệp được quản lý bởi trình quản lý tải xuống tiêu chuẩn của trình duyệt",
+    "resetDefaultDir": "Đặt lại mặc định",
+    "changeFolder": "Đổi thư mục",
+    "selectCustomFolder": "Chọn thư mục tùy chỉnh",
+    "concurrencyTitle": "Giới hạn luồng đồng thời & Hiệu năng",
+    "parserConcurrency": "Số luồng phân tích URL",
+    "downloadConcurrency": "Số tệp tải xuống đồng thời",
+    "networkBudget": "Giới hạn yêu cầu mạng toàn cục",
+    "networkBudgetDesc": "Kiểm soát tổng số phân đoạn HLS được tải xuống đồng thời để tránh vượt giới hạn kết nối.",
+    "workflowsTitle": "Quy trình & Cờ tính năng",
+    "continueOnError": "Tiếp tục hàng đợi khi gặp lỗi",
+    "continueOnErrorDesc": "Tiếp tục tải các tác vụ tiếp theo trong hàng đợi nếu một tác vụ bị lỗi.",
+    "autoStartDownloads": "Tự động bắt đầu tải khi phân tích xong URL",
+    "autoStartDownloadsDesc": "Tự động đưa các URL đã phân tích xong vào luồng tải xuống ngay lập tức."
   }
 }

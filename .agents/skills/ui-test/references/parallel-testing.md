@@ -27,12 +27,12 @@ Local mode variants follow the CLI contract:
 
 ### When to use parallel vs sequential
 
-| Scenario | Use |
-|----------|-----|
-| Tests on different pages/routes | **Parallel** — no shared state |
+| Scenario                                                  | Use                                         |
+| --------------------------------------------------------- | ------------------------------------------- |
+| Tests on different pages/routes                           | **Parallel** — no shared state              |
 | Tests within one page (fill form → submit → check result) | **Sequential** — steps depend on each other |
-| Accessibility audit + visual audit on same page | **Parallel** — independent checks |
-| Before/after comparison on one element | **Sequential** — ordering matters |
+| Accessibility audit + visual audit on same page           | **Parallel** — independent checks           |
+| Before/after comparison on one element                    | **Sequential** — ordering matters           |
 
 ### Phase 1: Group tests by independence
 
@@ -81,6 +81,7 @@ Agent 3 — prompt: "Run accessibility audit using BROWSE_SESSION=a11y.
 ```
 
 **Critical rules for parallel agents:**
+
 - Every `browse` command in the agent MUST be prefixed with `BROWSE_SESSION=<name>`
 - If the target URL is localhost/127.0.0.1, each agent should start with `browse open <url> --local` for clean/reproducible runs
 - Use `browse open <url> --auto-connect` only when the test explicitly needs existing local Chrome state

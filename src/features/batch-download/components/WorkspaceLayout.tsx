@@ -9,25 +9,19 @@
 import { ReactNode, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  Download,
-  History,
-  Settings,
-  Info,
-  Terminal,
-  Layers,
-} from "lucide-react";
+import { Download, History, Settings, Info, Terminal } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { i18n } from "@/lib/i18n/config";
 import { BackgroundGrid } from "@/components/ui/background-grid";
 import { useBatchStore } from "../store/batch-store";
-import { LoadingScreen } from "@/components/ui/LoadingScreen";
+import { useTranslations } from "next-intl";
 
 interface WorkspaceLayoutProps {
   children: ReactNode;
 }
 
 export function WorkspaceLayout({ children }: WorkspaceLayoutProps) {
+  const tNav = useTranslations("batchWorkspace.nav");
   const pathname = usePathname();
   const initializeStore = useBatchStore((s) => s.initializeStore);
 
@@ -45,25 +39,25 @@ export function WorkspaceLayout({ children }: WorkspaceLayoutProps) {
 
   const links = [
     {
-      label: "Queue Workspace",
+      label: tNav("queueWorkspace"),
       icon: Download,
       href: `/${locale}`,
       active: pathname === `/${locale}` || pathname === `/${locale}/`,
     },
     {
-      label: "Download History",
+      label: tNav("downloadHistory"),
       icon: History,
       href: `/${locale}/history`,
       active: pathname.includes("/history"),
     },
     {
-      label: "Preferences",
+      label: tNav("preferences"),
       icon: Settings,
       href: `/${locale}/settings`,
       active: pathname.includes("/settings"),
     },
     {
-      label: "About VoidFetch",
+      label: tNav("aboutVoidFetch"),
       icon: Info,
       href: `/${locale}/about`,
       active: pathname.includes("/about"),
@@ -81,11 +75,14 @@ export function WorkspaceLayout({ children }: WorkspaceLayoutProps) {
         </a>
         <div className="flex-1 flex max-w-7xl w-full mx-auto p-3 md:p-4 gap-4">
           {/* Left Sidebar - Desktop */}
-          <aside className="hidden lg:flex flex-col w-[220px] shrink-0 gap-4">
+          <aside className="hidden lg:flex flex-col w-55 shrink-0 gap-4">
             {/* Navigation box */}
             <div className="flex flex-col gap-1.5 p-4 border rounded-xl bg-card border-border/80">
               <div className="flex items-center gap-2 pb-3 mb-2 border-b border-border/60">
-                <Terminal className="h-4 w-4 text-primary animate-pulse" aria-hidden="true" />
+                <Terminal
+                  className="h-4 w-4 text-primary animate-pulse"
+                  aria-hidden="true"
+                />
                 <span className="font-bold text-xs tracking-widest text-foreground/90 uppercase">
                   VOIDFETCH
                 </span>
@@ -140,14 +137,17 @@ export function WorkspaceLayout({ children }: WorkspaceLayoutProps) {
                   href={`/${locale}/privacy`}
                   className="hover:text-primary transition-colors font-medium"
                 >
-                  Privacy & Terms
+                  {tNav("privacyAndTerms")}
                 </Link>
               </div>
             </div>
           </aside>
 
           {/* Main Content Pane */}
-          <main id="main-content" className="flex-1 flex flex-col min-w-0 gap-4">
+          <main
+            id="main-content"
+            className="flex-1 flex flex-col min-w-0 gap-4"
+          >
             {/* Mobile Navigation bar header */}
             <div className="flex lg:hidden items-center justify-between p-3 border rounded-xl bg-card border-border/80 shrink-0">
               <div className="flex items-center gap-2">

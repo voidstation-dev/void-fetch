@@ -139,10 +139,10 @@
     "installAction": "Установить"
   },
   "metadata": {
-    "title": "VoidFetch | Идеальный пакетный загрузчик медиа от VoidStation",
-    "description": "Самый быстрый и надежный онлайн-загрузчик медиа для 40+ платформ. Легко загружайте HD-видео, MP3-аудио, галереи изображений и HLS-потоки в пакетном режиме — бесплатно, без регистрации.",
-    "ogTitle": "VoidFetch | Пакетный загрузчик медиа нового поколения",
-    "ogDescription": "Молниеносная пакетная загрузка с YouTube, TikTok, Instagram, Bilibili и 40+ других платформ. Легко извлекайте HD-видео, высококачественное аудио и галереи изображений.",
+    "title": "VoidFetch | Пакетный загрузчик видео, аудио, изображений и HLS от VoidStation",
+    "description": "Бесплатный онлайн-загрузчик для Bilibili, Douyin, Telegram, Threads, WeChat, Weibo, Niconico, Instagram, Xiaohongshu, TikTok, X, Reddit, Streamable, SoundCloud, Twitch, VK, OK.ru, Pinterest, Tumblr, Newgrounds и потоков HLS/M3U8.",
+    "ogTitle": "VoidFetch | Бесплатный онлайн пакетный загрузчик медиа",
+    "ogDescription": "Автоматически распознает ссылки на видео, аудио, изображения и HLS/M3U8, чтобы скачать медиа онлайн без регистрации.",
     "siteName": "VoidFetch"
   },
   "common": {
@@ -193,7 +193,10 @@
     "privateFeedbackTitle": "Обратная связь по email",
     "privateFeedbackDescription": "Вы также можете отправить свой отзыв по электронной почте. Чтобы помочь нам быстрее найти проблему, рекомендуем включить в письмо целевую ссылку, данные устройства или соответствующие скриншоты.",
     "emailAction": "Отправить Email",
-    "emailTemplateBody": "[Описание]\nКратко опишите проблему или предложение:\n\n[Целевая ссылка]\n(Если применимо, укажите ссылку)\n\n[Окружение]\n(Например, Win 11 / Chrome 120 / iOS 17)\n"
+    "emailTemplateBody": "[Описание]\nКратко опишите проблему или предложение:\n\n[Целевая ссылка]\n(Если применимо, укажите ссылку)\n\n[Окружение]\n(Например, Win 11 / Chrome 120 / iOS 17)\n",
+    "communityDiscussionsTitle": "Обсуждения сообщества",
+    "communityDiscussionsSubtitle": "Войдите через GitHub, чтобы оставить публичный отзыв, сообщить об ошибке или предложить новую функцию.",
+    "poweredByGiscus": "На базе Giscus"
   },
   "privacyPage": {
     "metaTitle": "Политика конфиденциальности | VoidFetch",
@@ -353,205 +356,133 @@
       "bilibili": {
         "name": "Билибили",
         "summary": "Видео/Аудио/Поделиться кодом",
-        "features": [
-          "Видео",
-          "Аудио",
-          "Поделиться кодом"
-        ]
+        "features": ["Видео", "Аудио", "Поделиться кодом"]
       },
       "bilibiliTv": {
         "name": "Билибили ТВ",
         "summary": "Видео / Аудио",
-        "features": [
-          "Видео",
-          "Аудио"
-        ]
+        "features": ["Видео", "Аудио"]
       },
       "douyin": {
         "name": "Douyin",
         "summary": "Видео / Публикация с изображением / Аудио",
-        "features": [
-          "Видео",
-          "Публикация с изображением",
-          "Аудио"
-        ]
+        "features": ["Видео", "Публикация с изображением", "Аудио"]
       },
       "hls": {
         "name": "Видеосайты",
         "summary": "Потоки / Трансляции",
-        "features": [
-          "Смотреть",
-          "Скачать"
-        ]
+        "features": ["Смотреть", "Скачать"]
       },
       "youtube": {
         "name": "Ютуб",
         "summary": "Видео / Аудио",
-        "features": [
-          "Видео",
-          "Аудио"
-        ]
+        "features": ["Видео", "Аудио"]
       },
       "telegram": {
         "name": "Телеграмма",
         "summary": "Ссылка на видео/сообщение",
-        "features": [
-          "Видео",
-          "Ссылка на сообщение"
-        ]
+        "features": ["Видео", "Ссылка на сообщение"]
       },
       "wechat": {
         "name": "Вичат",
         "summary": "Статья Видео / Мульти-видео",
-        "features": [
-          "Видео статьи",
-          "Мульти-видео"
-        ]
+        "features": ["Видео статьи", "Мульти-видео"]
       },
       "niconico": {
         "name": "Никонико",
         "summary": "Видео / Аудио",
-        "features": [
-          "Видео",
-          "Аудио"
-        ]
+        "features": ["Видео", "Аудио"]
       },
       "xiaohongshu": {
         "name": "Сяохуншу",
         "summary": "Видео/изображение",
-        "features": [
-          "Видео",
-          "Сообщение с изображением"
-        ]
+        "features": ["Видео", "Сообщение с изображением"]
       },
       "tiktok": {
         "name": "ТикТок",
         "summary": "Видео / Аудио",
-        "features": [
-          "Видео",
-          "Аудио"
-        ]
+        "features": ["Видео", "Аудио"]
       },
       "comingSoon": "Скоро появятся новые платформы",
       "instagram": {
         "name": "Инстаграм",
         "summary": "Видео / Публикация с изображением / Карусель",
-        "features": [
-          "Видео",
-          "Сообщение с изображением",
-          "Карусель"
-        ]
+        "features": ["Видео", "Сообщение с изображением", "Карусель"]
       },
       "x": {
         "name": "Х",
         "summary": "Видео / Аудио",
-        "features": [
-          "Видео",
-          "Аудио"
-        ]
+        "features": ["Видео", "Аудио"]
       },
       "threads": {
         "name": "Темы",
         "summary": "Видео/изображение",
-        "features": [
-          "Видео",
-          "Сообщение с изображением"
-        ]
+        "features": ["Видео", "Сообщение с изображением"]
       },
       "weibo": {
         "name": "Вейбо",
         "summary": "Видео / Публикация изображений / Мульти-видео",
-        "features": [
-          "Видео",
-          "Сообщение с изображением",
-          "Мульти-видео"
-        ]
+        "features": ["Видео", "Сообщение с изображением", "Мульти-видео"]
       },
       "vimeo": {
         "name": "Вимео",
         "summary": "Загрузка контента",
-        "features": [
-          "Загрузка контента"
-        ]
+        "features": ["Загрузка контента"]
       },
       "dailymotion": {
         "name": "Ежедневное движение",
         "summary": "Загрузка контента",
-        "features": [
-          "Загрузка контента"
-        ]
+        "features": ["Загрузка контента"]
       },
       "streamable": {
         "name": "Потоковое",
         "summary": "Загрузка контента",
-        "features": [
-          "Загрузка контента"
-        ]
+        "features": ["Загрузка контента"]
       },
       "reddit": {
         "name": "Реддит",
         "summary": "Загрузка контента",
-        "features": [
-          "Загрузка контента"
-        ]
+        "features": ["Загрузка контента"]
       },
       "newgrounds": {
         "name": "Ньюграундс",
         "summary": "Загрузка контента",
-        "features": [
-          "Загрузка контента"
-        ]
+        "features": ["Загрузка контента"]
       },
       "tumblr": {
         "name": "Тамблер",
         "summary": "Загрузка контента",
-        "features": [
-          "Загрузка контента"
-        ]
+        "features": ["Загрузка контента"]
       },
       "pinterest": {
         "name": "Пинтерест",
         "summary": "Загрузка контента",
-        "features": [
-          "Загрузка контента"
-        ]
+        "features": ["Загрузка контента"]
       },
       "vk": {
         "name": "ВК",
         "summary": "Загрузка контента",
-        "features": [
-          "Загрузка контента"
-        ]
+        "features": ["Загрузка контента"]
       },
       "okru": {
         "name": "ОК.ру",
         "summary": "Загрузка контента",
-        "features": [
-          "Загрузка контента"
-        ]
+        "features": ["Загрузка контента"]
       },
       "twitch": {
         "name": "Твич",
         "summary": "Загрузка контента",
-        "features": [
-          "Загрузка контента"
-        ]
+        "features": ["Загрузка контента"]
       },
       "soundcloud": {
         "name": "Саундклауд",
         "summary": "Загрузка контента",
-        "features": [
-          "Загрузка контента"
-        ]
+        "features": ["Загрузка контента"]
       },
       "applePodcasts": {
         "name": "Apple Podcasts",
         "summary": "Открытое аудио подкастов / Воспроизведение и загрузка эпизодов",
-        "features": [
-          "Открытое аудио",
-          "Воспроизведение эпизодов",
-          "Загрузка"
-        ]
+        "features": ["Открытое аудио", "Воспроизведение эпизодов", "Загрузка"]
       }
     },
     "linkFormats": {
@@ -967,5 +898,161 @@
     "clickDetails": "Нажмите для подробностей",
     "clickTitle": "Нажмите, чтобы просмотреть все 25+ поддерживаемых платформ",
     "universalSub": "Универсальный пакетный загрузчик"
+  },
+  "batchWorkspace": {
+    "title": "Пакетная рабочей область",
+    "subtitle": "Менеджер очереди VoidFetch",
+    "queuePreferences": "Настройки очереди",
+    "nav": {
+      "queueWorkspace": "Рабочая область очереди",
+      "downloadHistory": "История загрузок",
+      "preferences": "Настройки",
+      "aboutVoidFetch": "О VoidFetch",
+      "privacyAndTerms": "Конфиденциальность и условия"
+    },
+    "composer": {
+      "title": "ПАКЕТНЫЙ СОСТАВИТЕЛЬ URL",
+      "subtitlePrefix": "Вставьте ссылки на видео из",
+      "platformsLink": "25+ поддерживаемых платформ",
+      "subtitleSuffix": "или импортируйте файл",
+      "pasteClipboard": "Вставить из буфера",
+      "importFile": "Импортировать файл",
+      "placeholder": "Вставьте несколько URL сюда (по одному на строку или текст со ссылками)...",
+      "detectedSingle": "Обнаружена {count} новая ссылка",
+      "detectedPlural": "Обнаружено {count} новых ссылок",
+      "dupesCount": "({count} дубликатов)",
+      "dropFileHint": "Перетащите текстовый файл или CSV сюда для импорта ссылок",
+      "copyrightWarning": "Защищенный авторским правом, платный или приватный контент не поддерживается.",
+      "feedbackHint": "Отзывы? Нажмите «Отзывы» вверху справа.",
+      "supportedPlatformsBar": "Поддерживаются: YouTube, TikTok, Douyin, Bilibili, SoundCloud и еще 20+",
+      "clear": "Очистить",
+      "addUrls": "Добавить URL в очередь",
+      "addUrlsCount": "Добавить {count} URL в очередь"
+    },
+    "toolbar": {
+      "searchPlaceholder": "Поиск названия или URL...",
+      "allStatus": "Все статусы",
+      "allPlatforms": "Все платформы",
+      "parseAll": "Анализировать все ({count})",
+      "pauseQueue": "Приостановить очередь",
+      "startQueue": "Запустить очередь",
+      "retryFailed": "Повторить ошибки",
+      "clearCompleted": "Очистить завершенные ({count})",
+      "status": {
+        "all": "Все статусы",
+        "draft": "Черновик",
+        "parsing": "Анализ",
+        "ready": "Готово",
+        "queued": "В очереди",
+        "downloading": "Загрузка",
+        "processing": "Обработка",
+        "saving": "Сохранение",
+        "paused": "Приостановлено",
+        "completed": "Завершено",
+        "failed": "Ошибка",
+        "cancelled": "Отменено"
+      }
+    },
+    "queue": {
+      "emptyTitle": "Пустая рабочая область",
+      "emptyBadge": "Готово",
+      "emptyDescription": "Вставьте URL видео (YouTube, TikTok, Douyin, SoundCloud...) или импортируйте текстовый файл выше для начала пакетной загрузки.",
+      "multiThreaded": "Многопоточный движок",
+      "audioExtraction": "Извлечение аудиопотока",
+      "upTo4k": "Видео до 4K / 60FPS",
+      "itemsSelectedSingle": "Выбран {count} элемент",
+      "itemsSelectedPlural": "Выбрано {count} элементов",
+      "bulkConfigure": "Пакетная настройка",
+      "bulkConfigureCount": "Пакетная настройка ({count})",
+      "removeSelected": "Удалить выбранные",
+      "selectAll": "Выбрать все элементы очереди",
+      "itemsCount": "{count} элементов",
+      "noMatchingJobs": "Нет задач, соответствующих фильтрам."
+    },
+    "configDrawer": {
+      "titleSingle": "НАСТРОЙКА ЗАГРУЗКИ",
+      "titleBulk": "ПАКЕТНАЯ НАСТРОЙКА",
+      "subtitle": "Настройте формат, качество и параметры метаданных",
+      "outputFormat": "Формат вывода",
+      "videoQuality": "Качество видео",
+      "selectVideoQuality": "Выберите качество видео",
+      "qualityNote": "Примечание: Если исходное видео не поддерживает 4K/2K, система автоматически загрузит максимально доступное качество.",
+      "audioQuality": "Качество аудио (битрейт)",
+      "selectAudioQuality": "Выберите качество аудио",
+      "filenameTemplate": "Шаблон имени файла",
+      "outputFilename": "Имя файла",
+      "clickTokenHint": "Нажмите на переменную для вставки",
+      "hlsConcurrency": "Потоки сегментов HLS",
+      "advancedOptions": "Расширенные опции",
+      "downloadThumbnail": "Скачивать обложку / миниатюру",
+      "saveMetadataJson": "Сохранять метаданные JSON",
+      "forceAudioExtraction": "Принудительное извлечение аудио (MP3)",
+      "applyChecked": "Применить к выбранным ({count})",
+      "applyAll": "Применить ко всем ({count})",
+      "saveConfig": "Сохранить настройки"
+    },
+    "progress": {
+      "totalItems": "{count} элементов",
+      "running": "{count} выполняется",
+      "queued": "{count} в очереди",
+      "completed": "{count} завершено",
+      "failed": "{count} с ошибкой",
+      "speed": "Скорость",
+      "eta": "Осталось",
+      "queueActive": "ОЧЕРЕДЬ АКТИВНА",
+      "queueIdle": "ОЧЕРЕДЬ СВОБОДНА"
+    },
+    "settingsModal": {
+      "title": "Настройки рабочей области",
+      "description": "Настройка глобальных параметров и потоков сети",
+      "defaultOutputAndQuality": "Формат и качество по умолчанию",
+      "defaultFormat": "Формат по умолчанию",
+      "defaultQuality": "Качество по умолчанию",
+      "downloadDirectoryPath": "Путь к папке загрузок",
+      "browserDefault": "По умолчанию в браузере (Загрузки)",
+      "customFolder": "📁 Своя папка: {name}",
+      "customFolderDesc": "Файлы будут сохраняться прямо в эту папку",
+      "browserDefaultDesc": "Файлы автоматически сохраняются в папку Загрузки",
+      "resetDefault": "Сбросить по умолчанию",
+      "changeFolder": "Сменить папку",
+      "selectCustomFolder": "Выбрать папку",
+      "directoryTip": "💡 Совет: Безопасность браузера запрещает выбирать корень Загрузок. Создайте подпапку (например, Downloads/VoidFetch).",
+      "networkConcurrency": "Сетевые потоки",
+      "concurrentJobs": "Одновременные загрузки",
+      "hlsSegmentConcurrency": "Потоки сегментов HLS",
+      "savePreferences": "Сохранить настройки"
+    }
+  },
+  "settingsPage": {
+    "metaTitle": "Настройки | VoidFetch",
+    "metaDescription": "Настройка параметров загрузки по умолчанию, лимитов параллельности и пути к папке.",
+    "title": "Предпочтения",
+    "subtitle": "Настройка стандартного поведения загрузчика",
+    "resetDefaults": "Сбросить настройки",
+    "loading": "Загрузка настроек...",
+    "downloaderDefaults": "Настройки загрузчика по умолчанию",
+    "defaultOutputType": "Тип вывода по умолчанию",
+    "defaultQuality": "Качество по умолчанию",
+    "selectQuality": "Выберите качество",
+    "defaultFilenameTemplate": "Шаблон имени файла по умолчанию",
+    "placeholderTokens": "Доступные переменные:",
+    "customDirectoryTitle": "Путь к пользовательской папке загрузок",
+    "customDirName": "📁 Пользовательская папка: {name}",
+    "browserDefaultDir": "По умолчанию в браузере (Загрузки)",
+    "customDirDesc": "Все загрузки VoidFetch будут сохраняться прямо в эту папку",
+    "browserDefaultDesc": "Файлы обрабатываются стандартным менеджером загрузок браузера",
+    "resetDefaultDir": "Сбросить по умолчанию",
+    "changeFolder": "Сменить папку",
+    "selectCustomFolder": "Выбрать папку",
+    "concurrencyTitle": "Лимиты параллельности и производительности",
+    "parserConcurrency": "Параллельность анализатора",
+    "downloadConcurrency": "Параллельность загрузки",
+    "networkBudget": "Глобальный лимит сетевых запросов",
+    "networkBudgetDesc": "Управляет суммарным количеством сегментов HLS для предотвращения блокировок.",
+    "workflowsTitle": "Рабочие процессы и флаги",
+    "continueOnError": "Продолжать очередь при ошибке",
+    "continueOnErrorDesc": "Продолжать загрузку следующих задач в очереди при сбое одной из них.",
+    "autoStartDownloads": "Автозапуск очереди после анализа URL",
+    "autoStartDownloadsDesc": "Сразу добавлять готовые URL в поток загрузки."
   }
 }

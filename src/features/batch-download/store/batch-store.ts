@@ -4,35 +4,35 @@
  * All rights reserved.
  */
 
-import { create } from 'zustand';
-import type { 
-  DownloadJob, 
-  DownloadConfig, 
-  DownloadProgress, 
-  DownloadError, 
-  BatchSettings, 
+import { create } from "zustand";
+import type {
+  DownloadJob,
+  DownloadConfig,
+  DownloadProgress,
+  DownloadError,
+  BatchSettings,
   DownloadJobStatus,
-  OutputType
-} from '../types/batch-download';
-import { 
-  saveJob, 
-  saveJobs, 
-  deleteJobs, 
-  getAllJobs, 
-  saveProject, 
-  getProject, 
-  clearJobs 
-} from '../services/job-persistence';
+} from "../types/batch-download";
+import {
+  saveJob,
+  saveJobs,
+  deleteJobs,
+  getAllJobs,
+  saveProject,
+  getProject,
+} from "../services/job-persistence";
+import { parseWorker } from "../services/parse-worker-pool";
+import { downloadScheduler } from "../services/download-scheduler";
 
 interface BatchStoreState {
   jobs: DownloadJob[];
   selectedJobIds: string[];
   isQueueRunning: boolean;
   isInitialized: boolean;
-  
+
   // Settings
   settings: BatchSettings;
-  
+
   // Filters
   searchQuery: string;
   statusFilter: string; // "all" or DownloadJobStatus
@@ -45,30 +45,47 @@ interface BatchStoreState {
 
 interface BatchStoreActions {
   initializeStore: () => Promise<void>;
-  addJobs: (jobsToAdd: Omit<DownloadJob, 'createdAt' | 'updatedAt' | 'progress' | 'retryCount'>[]) => Promise<void>;
+  addJobs: (
+    jobsToAdd: Omit<
+      DownloadJob,
+      "createdAt" | "updatedAt" | "progress" | "retryCount"
+    >[],
+  ) => Promise<void>;
   removeJobs: (ids: string[]) => Promise<void>;
   clearCompleted: () => Promise<void>;
-  updateJobConfig: (id: string, config: Partial<DownloadConfig>) => Promise<void>;
-  updateJobStatus: (id: string, status: DownloadJobStatus, extra?: Partial<DownloadJob>) => Promise<void>;
+  updateJobConfig: (
+    id: string,
+    config: Partial<DownloadConfig>,
+  ) => Promise<void>;
+  updateJobStatus: (
+    id: string,
+    status: DownloadJobStatus,
+    extra?: Partial<DownloadJob>,
+  ) => Promise<void>;
   updateJobProgress: (id: string, progress: Partial<DownloadProgress>) => void;
-  updateJobError: (id: string, error: DownloadError | undefined) => Promise<void>;
-  
+  updateJobError: (
+    id: string,
+    error: DownloadError | undefined,
+  ) => Promise<void>;
+
   // Selection
   toggleJobSelection: (id: string) => void;
   toggleAllSelection: (visibleJobIds: string[]) => void;
   clearSelection: () => void;
-  
+
   // Bulk configuration
   applyConfigToSelected: (config: Partial<DownloadConfig>) => Promise<void>;
   applyConfigToAll: (config: Partial<DownloadConfig>) => Promise<void>;
 
   // Queue Operations
   startQueue: () => void;
+  resumeQueue: () => void;
   startSelectedQueue: () => void;
   pauseQueue: () => void;
+  checkQueueFinished: () => void;
   retryFailedJobs: () => Promise<void>;
   retryJob: (id: string) => Promise<void>;
-  
+
   // Settings & Filters
   updateSettings: (settings: Partial<BatchSettings>) => Promise<void>;
   setSearchQuery: (query: string) => void;
@@ -84,17 +101,17 @@ const DEFAULT_SETTINGS: BatchSettings = {
   parseConcurrency: 4,
   downloadConcurrency: 3,
   globalNetworkBudget: 18,
-  defaultOutputType: 'mp4',
-  defaultQuality: '1080p',
-  filenameTemplate: '{index} - {title}',
+  defaultOutputType: "mp4",
+  defaultQuality: "1080p",
+  filenameTemplate: "{index} - {title}",
   continueOnError: true,
   autoStartDownloads: false,
 };
 
-const BATCH_SETTINGS_STORAGE_KEY = 'voidfetch_batch_settings_v1';
+const BATCH_SETTINGS_STORAGE_KEY = "voidfetch_batch_settings_v1";
 
 function getInitialSettings(): BatchSettings {
-  if (typeof window === 'undefined') {
+  if (typeof window === "undefined") {
     return DEFAULT_SETTINGS;
   }
   try {
@@ -104,17 +121,20 @@ function getInitialSettings(): BatchSettings {
       return { ...DEFAULT_SETTINGS, ...parsed };
     }
   } catch (error) {
-    console.warn('Failed to load batch settings from localStorage:', error);
+    console.warn("Failed to load batch settings from localStorage:", error);
   }
   return DEFAULT_SETTINGS;
 }
 
 function saveSettingsToLocalStorage(settings: BatchSettings): void {
-  if (typeof window === 'undefined') return;
+  if (typeof window === "undefined") return;
   try {
-    window.localStorage.setItem(BATCH_SETTINGS_STORAGE_KEY, JSON.stringify(settings));
+    window.localStorage.setItem(
+      BATCH_SETTINGS_STORAGE_KEY,
+      JSON.stringify(settings),
+    );
   } catch (error) {
-    console.warn('Failed to save batch settings to localStorage:', error);
+    console.warn("Failed to save batch settings to localStorage:", error);
   }
 }
 
@@ -124,9 +144,9 @@ export const useBatchStore = create<BatchStore>((set, get) => ({
   isQueueRunning: false,
   isInitialized: false,
   settings: getInitialSettings(),
-  searchQuery: '',
-  statusFilter: 'all',
-  platformFilter: 'all',
+  searchQuery: "",
+  statusFilter: "all",
+  platformFilter: "all",
   activeJobDrawerId: null,
   isSettingsOpen: false,
 
@@ -134,14 +154,15 @@ export const useBatchStore = create<BatchStore>((set, get) => ({
 
   initializeStore: async () => {
     if (get().isInitialized) return;
-    const start = Date.now();
     try {
       const loadedJobs = await getAllJobs();
-      
+
       // Load settings from localStorage first, fallback to project record
       let loadedSettings = getInitialSettings();
-      const projectRecord = await getProject('default-project');
-      const hasLocalStorage = typeof window !== 'undefined' && !!window.localStorage.getItem(BATCH_SETTINGS_STORAGE_KEY);
+      const projectRecord = await getProject("default-project");
+      const hasLocalStorage =
+        typeof window !== "undefined" &&
+        !!window.localStorage.getItem(BATCH_SETTINGS_STORAGE_KEY);
       if (projectRecord) {
         if (!hasLocalStorage && projectRecord.settings) {
           loadedSettings = projectRecord.settings;
@@ -150,12 +171,12 @@ export const useBatchStore = create<BatchStore>((set, get) => ({
       } else {
         // Save initial default project
         await saveProject({
-          id: 'default-project',
-          name: 'Default Workspace',
+          id: "default-project",
+          name: "Default Workspace",
           createdAt: Date.now(),
           updatedAt: Date.now(),
           settings: loadedSettings,
-          jobIds: loadedJobs.map(j => j.id),
+          jobIds: loadedJobs.map((j) => j.id),
         });
       }
 
@@ -165,7 +186,7 @@ export const useBatchStore = create<BatchStore>((set, get) => ({
         isInitialized: true,
       });
     } catch (error) {
-      console.error('Failed to initialize VoidFetch store:', error);
+      console.error("Failed to initialize VoidFetch store:", error);
       set({ isInitialized: true });
     }
   },
@@ -184,7 +205,7 @@ export const useBatchStore = create<BatchStore>((set, get) => ({
     }));
 
     await saveJobs(newJobs);
-    
+
     set((state) => ({
       jobs: [...state.jobs, ...newJobs],
     }));
@@ -199,14 +220,16 @@ export const useBatchStore = create<BatchStore>((set, get) => ({
   },
 
   clearCompleted: async () => {
-    const completedJobIds = get().jobs
-      .filter((job) => job.status === 'completed')
+    const completedJobIds = get()
+      .jobs.filter((job) => job.status === "completed")
       .map((job) => job.id);
-    
+
     await deleteJobs(completedJobIds);
     set((state) => ({
-      jobs: state.jobs.filter((job) => job.status !== 'completed'),
-      selectedJobIds: state.selectedJobIds.filter((id) => !completedJobIds.includes(id)),
+      jobs: state.jobs.filter((job) => job.status !== "completed"),
+      selectedJobIds: state.selectedJobIds.filter(
+        (id) => !completedJobIds.includes(id),
+      ),
     }));
   },
 
@@ -232,18 +255,29 @@ export const useBatchStore = create<BatchStore>((set, get) => ({
     const now = Date.now();
     const updatedJobs = get().jobs.map((job) => {
       if (job.id === id) {
+        if (status === "cancelled" && job.status === "paused") {
+          return job; // don't override paused status with cancelled from abort controller
+        }
         const updatedJob: DownloadJob = {
           ...job,
           ...extra,
           status,
           updatedAt: now,
         };
-        if (status === 'downloading' || status === 'resolving' || status === 'parsing') {
+        if (
+          status === "downloading" ||
+          status === "resolving" ||
+          status === "parsing"
+        ) {
           if (!updatedJob.startedAt) {
             updatedJob.startedAt = now;
           }
         }
-        if (status === 'completed' || status === 'failed' || status === 'cancelled') {
+        if (
+          status === "completed" ||
+          status === "failed" ||
+          status === "cancelled"
+        ) {
           updatedJob.completedAt = now;
         }
         saveJob(updatedJob); // fire & forget
@@ -265,7 +299,7 @@ export const useBatchStore = create<BatchStore>((set, get) => ({
       const newProgress = { ...targetJob.progress, ...progressUpdates };
       return {
         jobs: state.jobs.map((job) =>
-          job.id === id ? { ...job, progress: newProgress } : job
+          job.id === id ? { ...job, progress: newProgress } : job,
         ),
       };
     });
@@ -276,7 +310,7 @@ export const useBatchStore = create<BatchStore>((set, get) => ({
       if (job.id === id) {
         const updatedJob = {
           ...job,
-          status: error ? ('failed' as const) : job.status,
+          status: error ? ("failed" as const) : job.status,
           error,
           updatedAt: Date.now(),
         };
@@ -302,15 +336,21 @@ export const useBatchStore = create<BatchStore>((set, get) => ({
 
   toggleAllSelection: (visibleJobIds) => {
     set((state) => {
-      const allSelected = visibleJobIds.every((id) => state.selectedJobIds.includes(id));
+      const allSelected = visibleJobIds.every((id) =>
+        state.selectedJobIds.includes(id),
+      );
       if (allSelected) {
         // Deselect visible
         return {
-          selectedJobIds: state.selectedJobIds.filter((id) => !visibleJobIds.includes(id)),
+          selectedJobIds: state.selectedJobIds.filter(
+            (id) => !visibleJobIds.includes(id),
+          ),
         };
       } else {
         // Select all visible (union)
-        const newSelection = Array.from(new Set([...state.selectedJobIds, ...visibleJobIds]));
+        const newSelection = Array.from(
+          new Set([...state.selectedJobIds, ...visibleJobIds]),
+        );
         return {
           selectedJobIds: newSelection,
         };
@@ -332,9 +372,13 @@ export const useBatchStore = create<BatchStore>((set, get) => ({
     const updatedJobs = get().jobs.map((job) => {
       if (selectedIds.includes(job.id)) {
         const finalUpdates = { ...configUpdates };
-        const isAudioOnly = isAudioPlatform.includes(job.platform || '');
-        if (isAudioOnly && configUpdates.outputType && configUpdates.outputType !== 'audio') {
-          finalUpdates.outputType = 'audio';
+        const isAudioOnly = isAudioPlatform.includes(job.platform || "");
+        if (
+          isAudioOnly &&
+          configUpdates.outputType &&
+          configUpdates.outputType !== "audio"
+        ) {
+          finalUpdates.outputType = "audio";
           finalUpdates.extractAudio = true;
           overriddenCount++;
         }
@@ -354,13 +398,11 @@ export const useBatchStore = create<BatchStore>((set, get) => ({
     set({ jobs: updatedJobs });
 
     if (overriddenCount > 0) {
-      const { toast } = await import('@/lib/deferred-toast');
-      toast.warning(
-        `Auto-corrected ${overriddenCount} audio-only link(s)`,
-        {
-          description: "SoundCloud / Apple Podcasts were kept as Audio format to avoid download errors.",
-        }
-      );
+      const { toast } = await import("@/lib/deferred-toast");
+      toast.warning(`Auto-corrected ${overriddenCount} audio-only link(s)`, {
+        description:
+          "SoundCloud / Apple Podcasts were kept as Audio format to avoid download errors.",
+      });
     }
   },
 
@@ -370,9 +412,13 @@ export const useBatchStore = create<BatchStore>((set, get) => ({
 
     const updatedJobs = get().jobs.map((job) => {
       const finalUpdates = { ...configUpdates };
-      const isAudioOnly = isAudioPlatform.includes(job.platform || '');
-      if (isAudioOnly && configUpdates.outputType && configUpdates.outputType !== 'audio') {
-        finalUpdates.outputType = 'audio';
+      const isAudioOnly = isAudioPlatform.includes(job.platform || "");
+      if (
+        isAudioOnly &&
+        configUpdates.outputType &&
+        configUpdates.outputType !== "audio"
+      ) {
+        finalUpdates.outputType = "audio";
         finalUpdates.extractAudio = true;
         overriddenCount++;
       }
@@ -390,13 +436,11 @@ export const useBatchStore = create<BatchStore>((set, get) => ({
     set({ jobs: updatedJobs });
 
     if (overriddenCount > 0) {
-      const { toast } = await import('@/lib/deferred-toast');
-      toast.warning(
-        `Auto-corrected ${overriddenCount} audio-only link(s)`,
-        {
-          description: "SoundCloud / Apple Podcasts were kept as Audio format to avoid download errors.",
-        }
-      );
+      const { toast } = await import("@/lib/deferred-toast");
+      toast.warning(`Auto-corrected ${overriddenCount} audio-only link(s)`, {
+        description:
+          "SoundCloud / Apple Podcasts were kept as Audio format to avoid download errors.",
+      });
     }
   },
 
@@ -404,8 +448,12 @@ export const useBatchStore = create<BatchStore>((set, get) => ({
     // Transition all 'paused' or 'ready' states to 'queued'
     set((state) => {
       const updatedJobs = state.jobs.map((job) => {
-        if (job.status === 'paused' || job.status === 'ready') {
-          const updatedJob = { ...job, status: 'queued' as const, updatedAt: Date.now() };
+        if (job.status === "paused" || job.status === "ready") {
+          const updatedJob = {
+            ...job,
+            status: "queued" as const,
+            updatedAt: Date.now(),
+          };
           saveJob(updatedJob);
           return updatedJob;
         }
@@ -419,12 +467,26 @@ export const useBatchStore = create<BatchStore>((set, get) => ({
     });
   },
 
+  resumeQueue: () => {
+    set({ isQueueRunning: true });
+  },
+
   startSelectedQueue: () => {
     set((state) => {
       const selectedSet = new Set(state.selectedJobIds);
       const updatedJobs = state.jobs.map((job) => {
-        if (selectedSet.has(job.id) && (job.status === 'paused' || job.status === 'ready' || job.status === 'cancelled' || job.status === 'failed')) {
-          const updatedJob = { ...job, status: 'queued' as const, updatedAt: Date.now() };
+        if (
+          selectedSet.has(job.id) &&
+          (job.status === "paused" ||
+            job.status === "ready" ||
+            job.status === "cancelled" ||
+            job.status === "failed")
+        ) {
+          const updatedJob = {
+            ...job,
+            status: "queued" as const,
+            updatedAt: Date.now(),
+          };
           saveJob(updatedJob);
           return updatedJob;
         }
@@ -440,10 +502,20 @@ export const useBatchStore = create<BatchStore>((set, get) => ({
 
   pauseQueue: () => {
     set((state) => {
-      // Pause any queued jobs
+      // Pause any queued or active jobs
       const updatedJobs = state.jobs.map((job) => {
-        if (job.status === 'queued') {
-          const updatedJob = { ...job, status: 'paused' as const, updatedAt: Date.now() };
+        if (
+          job.status === "queued" ||
+          job.status === "downloading" ||
+          job.status === "processing" ||
+          job.status === "saving" ||
+          job.status === "resolving"
+        ) {
+          const updatedJob = {
+            ...job,
+            status: "paused" as const,
+            updatedAt: Date.now(),
+          };
           saveJob(updatedJob);
           return updatedJob;
         }
@@ -457,18 +529,38 @@ export const useBatchStore = create<BatchStore>((set, get) => ({
     });
   },
 
+  checkQueueFinished: () => {
+    set((state) => {
+      if (!state.isQueueRunning) return state;
+
+      const hasActiveJobs = state.jobs.some(
+        (j) =>
+          j.status === "queued" ||
+          j.status === "resolving" ||
+          j.status === "downloading" ||
+          j.status === "processing" ||
+          j.status === "saving",
+      );
+
+      if (!hasActiveJobs) {
+        return { isQueueRunning: false };
+      }
+      return state;
+    });
+  },
+
   retryFailedJobs: async () => {
     const parseJobIds: string[] = [];
     const downloadJobIds: string[] = [];
-    
+
     const updatedJobs = get().jobs.map((job) => {
-      if (job.status === 'failed' || job.status === 'cancelled') {
+      if (job.status === "failed" || job.status === "cancelled") {
         const hasMetadata = Boolean(job.metadata?.rawParsedData);
         if (!hasMetadata) {
           parseJobIds.push(job.id);
           const updatedJob = {
             ...job,
-            status: 'draft' as const,
+            status: "draft" as const,
             error: undefined,
             updatedAt: Date.now(),
           };
@@ -478,7 +570,7 @@ export const useBatchStore = create<BatchStore>((set, get) => ({
           downloadJobIds.push(job.id);
           const updatedJob = {
             ...job,
-            status: 'queued' as const,
+            status: "queued" as const,
             error: undefined,
             retryCount: 0,
             updatedAt: Date.now(),
@@ -496,7 +588,7 @@ export const useBatchStore = create<BatchStore>((set, get) => ({
     });
 
     if (parseJobIds.length > 0) {
-      const { parseJobs } = await import('../services/parse-worker-pool');
+      const { parseJobs } = await import("../services/parse-worker-pool");
       parseJobs(parseJobIds);
     }
   },
@@ -504,18 +596,18 @@ export const useBatchStore = create<BatchStore>((set, get) => ({
   retryJob: async (id) => {
     const job = get().jobs.find((j) => j.id === id);
     if (!job) return;
-    
+
     const hasMetadata = Boolean(job.metadata?.rawParsedData);
     if (!hasMetadata) {
-      await get().updateJobStatus(id, 'draft', { error: undefined });
-      const { parseJobs } = await import('../services/parse-worker-pool');
+      await get().updateJobStatus(id, "draft", { error: undefined });
+      const { parseJobs } = await import("../services/parse-worker-pool");
       parseJobs([id]);
     } else {
       const updatedJobs = get().jobs.map((j) => {
         if (j.id === id) {
           const updatedJob = {
             ...j,
-            status: 'queued' as const,
+            status: "queued" as const,
             error: undefined,
             retryCount: 0,
             updatedAt: Date.now(),
@@ -538,8 +630,8 @@ export const useBatchStore = create<BatchStore>((set, get) => ({
     saveSettingsToLocalStorage(newSettings);
 
     await saveProject({
-      id: 'default-project',
-      name: 'Default Workspace',
+      id: "default-project",
+      name: "Default Workspace",
       createdAt: Date.now(), // update time could be managed properly
       updatedAt: Date.now(),
       settings: newSettings,
@@ -552,3 +644,35 @@ export const useBatchStore = create<BatchStore>((set, get) => ({
   setPlatformFilter: (platformFilter) => set({ platformFilter }),
   setActiveJobDrawerId: (activeJobDrawerId) => set({ activeJobDrawerId }),
 }));
+
+// Initialize parse worker pool with store callbacks to avoid circular dependencies
+if (typeof window !== "undefined") {
+  parseWorker.init({
+    getJob: (id) => useBatchStore.getState().jobs.find((j) => j.id === id),
+    getSettings: () => useBatchStore.getState().settings,
+    updateJobStatus: (id, status, extra) =>
+      useBatchStore.getState().updateJobStatus(id, status, extra),
+    updateJobError: (id, error) =>
+      useBatchStore.getState().updateJobError(id, error),
+  });
+
+  downloadScheduler.init({
+    getJobs: () => useBatchStore.getState().jobs,
+    getSettings: () => useBatchStore.getState().settings,
+    isQueueRunning: () => useBatchStore.getState().isQueueRunning,
+    checkQueueFinished: () => useBatchStore.getState().checkQueueFinished(),
+    updateJobStatus: (id, status, extra) =>
+      useBatchStore.getState().updateJobStatus(id, status, extra),
+    updateJobProgress: (id, progress) =>
+      useBatchStore.getState().updateJobProgress(id, progress),
+    updateJobError: (id, error) =>
+      useBatchStore.getState().updateJobError(id, error),
+  });
+
+  // Subscribe to store changes to trigger scheduling when queue status changes
+  useBatchStore.subscribe((state) => {
+    if (state.isQueueRunning && state.jobs.some((j) => j.status === "queued")) {
+      downloadScheduler.schedule();
+    }
+  });
+}

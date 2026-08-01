@@ -7,8 +7,10 @@ These heuristics guide the LLM when evaluating screenshots and page interactions
 ## 1. Laws of UX (Behavioral & Cognitive)
 
 ### Fitts's Law
+
 **Principle:** The time to reach a target is a function of distance and size.
 **What to check:**
+
 - Primary CTAs should be the largest clickable elements in their section
 - Destructive actions (delete, cancel) should NOT be larger than constructive ones
 - Mobile tap targets must be at least 44x44px (Apple HIG) / 48x48px (Material)
@@ -17,8 +19,10 @@ These heuristics guide the LLM when evaluating screenshots and page interactions
 - Frequently used actions should be closer to the user's current focus area
 
 ### Hick's Law
+
 **Principle:** Decision time increases with the number and complexity of choices.
 **What to check:**
+
 - Navigation menus with more than 7±2 items should be grouped/categorized
 - Settings pages with many options should use sections/tabs, not a flat list
 - Modals should present one clear action, not multiple competing choices
@@ -27,8 +31,10 @@ These heuristics guide the LLM when evaluating screenshots and page interactions
 - Action menus (right-click, "more" menus) should be organized by frequency of use
 
 ### Miller's Law
+
 **Principle:** Working memory holds approximately 7±2 items at once.
 **What to check:**
+
 - Long lists should be chunked into groups of 5-9 items
 - Phone numbers, credit cards, and codes should be visually grouped
 - Dashboards should prioritize 3-5 key metrics, not show everything
@@ -36,8 +42,10 @@ These heuristics guide the LLM when evaluating screenshots and page interactions
 - Multi-step wizards should show no more than 5-7 steps
 
 ### Jakob's Law
+
 **Principle:** Users spend most of their time on OTHER sites and expect yours to work the same way.
 **What to check:**
+
 - Login forms should have email/username on top, password below, submit at bottom
 - Logo should link to homepage/dashboard
 - External links should be visually distinguished or open in new tab
@@ -48,8 +56,10 @@ These heuristics guide the LLM when evaluating screenshots and page interactions
 - Sidebar navigation on the left, content on the right
 
 ### Aesthetic-Usability Effect
+
 **Principle:** Users perceive aesthetically pleasing designs as more usable.
 **What to check:**
+
 - Consistent border radius across all components
 - Unified color palette (not more than 3-4 primary colors + neutrals)
 - Consistent spacing rhythm (multiples of 4px or 8px)
@@ -58,8 +68,10 @@ These heuristics guide the LLM when evaluating screenshots and page interactions
 - No orphaned elements floating without visual grouping
 
 ### Doherty Threshold
+
 **Principle:** Productivity soars when system response is <400ms.
 **What to check:**
+
 - System response time < 400ms for user actions
 - Loading indicators appear for operations > 1 second
 - Optimistic UI updates for common actions (toggle, like, save)
@@ -67,8 +79,10 @@ These heuristics guide the LLM when evaluating screenshots and page interactions
 - No full-page reloads for in-page actions
 
 ### Von Restorff Effect (Isolation Effect)
+
 **Principle:** Items that stand out from their peers are more memorable.
 **What to check:**
+
 - The most important element on each page is visually distinct
 - Pricing page highlights the recommended plan
 - Error messages stand out from surrounding content
@@ -76,8 +90,10 @@ These heuristics guide the LLM when evaluating screenshots and page interactions
 - Primary action is visually differentiated from secondary actions
 
 ### Zeigarnik Effect
+
 **Principle:** People remember incomplete tasks better than completed ones.
 **What to check:**
+
 - Multi-step forms show progress indicators
 - Onboarding flows show completion percentage
 - Profile/settings completion is shown if relevant
@@ -88,8 +104,10 @@ These heuristics guide the LLM when evaluating screenshots and page interactions
 ## 2. Nielsen's 10 Usability Heuristics
 
 ### H1: Visibility of System Status
+
 **Principle:** The system should always keep users informed about what's going on.
 **What to check:**
+
 - Current page/section is highlighted in navigation
 - Breadcrumbs show where the user is in the hierarchy
 - Form submissions show success/failure feedback
@@ -100,8 +118,10 @@ These heuristics guide the LLM when evaluating screenshots and page interactions
 - Timestamps show when data was last updated ("Updated 2 min ago")
 
 ### H2: Match Between System and Real World
+
 **Principle:** Use language and concepts familiar to the user, not system-oriented terms.
 **What to check:**
+
 - Error messages use plain language, not error codes or stack traces
 - Labels use domain terminology the user understands
 - Icons match real-world metaphors (trash can for delete, etc.)
@@ -110,8 +130,10 @@ These heuristics guide the LLM when evaluating screenshots and page interactions
 - Status labels are meaningful ("Processing payment" not "State: 3")
 
 ### H3: User Control and Freedom
+
 **Principle:** Users need a clearly marked "emergency exit" from unwanted states.
 **What to check:**
+
 - Undo is available for destructive actions
 - Cancel buttons exist on all forms and modals
 - Back navigation works and preserves state
@@ -121,8 +143,10 @@ These heuristics guide the LLM when evaluating screenshots and page interactions
 - Modal/dialog can be closed via Escape key AND clicking outside
 
 ### H4: Consistency and Standards
+
 **Principle:** Users should not have to wonder whether different words, situations, or actions mean the same thing.
 **What to check:**
+
 - Same action uses same button style everywhere (primary, secondary, destructive)
 - Terminology is consistent (don't mix "delete" and "remove" for the same action)
 - Icons mean the same thing across the app
@@ -132,8 +156,10 @@ These heuristics guide the LLM when evaluating screenshots and page interactions
 - Error message style is consistent (toast, inline, banner)
 
 ### H5: Error Prevention
+
 **Principle:** Even better than good error messages is preventing errors in the first place.
 **What to check:**
+
 - Destructive actions require confirmation ("Are you sure you want to delete?")
 - Form inputs have appropriate constraints (type=email, maxlength, pattern)
 - Disabled states prevent impossible actions (can't submit empty form)
@@ -143,8 +169,10 @@ These heuristics guide the LLM when evaluating screenshots and page interactions
 - Input fields show format hints before the user types (placeholder, helper text)
 
 ### H6: Recognition Rather Than Recall
+
 **Principle:** Minimize memory load by making objects, actions, and options visible.
 **What to check:**
+
 - Recently used items are shown (recent searches, recent files)
 - Form fields show current values, not empty fields requiring user to remember
 - Navigation labels are visible, not hidden behind icons only
@@ -153,8 +181,10 @@ These heuristics guide the LLM when evaluating screenshots and page interactions
 - Dashboard widgets show labels, not just numbers
 
 ### H7: Flexibility and Efficiency of Use
+
 **Principle:** Accelerators for expert users should not encumber novice users.
 **What to check:**
+
 - Keyboard shortcuts exist for power users (and are discoverable)
 - Bulk actions are available for repetitive tasks
 - Search/filter is available on long lists
@@ -163,8 +193,10 @@ These heuristics guide the LLM when evaluating screenshots and page interactions
 - Default values are sensible and save time
 
 ### H8: Aesthetic and Minimalist Design
+
 **Principle:** Every extra unit of information competes with relevant information.
 **What to check:**
+
 - No redundant information on the page
 - Above-the-fold content is the most important content
 - Visual noise is minimized (unnecessary borders, dividers, decorations)
@@ -173,8 +205,10 @@ These heuristics guide the LLM when evaluating screenshots and page interactions
 - Forms only ask for what's truly needed
 
 ### H9: Help Users Recognize, Diagnose, and Recover from Errors
+
 **Principle:** Error messages should be expressed in plain language, indicate the problem, and suggest a solution.
 **What to check:**
+
 - Error messages explain WHAT went wrong in plain language
 - Error messages suggest HOW to fix it
 - Form validation errors appear next to the relevant field, not just at the top
@@ -184,8 +218,10 @@ These heuristics guide the LLM when evaluating screenshots and page interactions
 - API errors don't leak technical details to the user (no stack traces, no raw JSON)
 
 ### H10: Help and Documentation
+
 **Principle:** Help should be easy to search, focused on the user's task, and concise.
 **What to check:**
+
 - Contextual help exists for complex features (tooltips, "?" icons, inline hints)
 - Onboarding/tour exists for new users
 - Empty states include guidance on what to do next
@@ -199,7 +235,9 @@ These heuristics guide the LLM when evaluating screenshots and page interactions
 SaaS applications spend 80% of development time on the happy path and 20% on everything else. These checks catch the 80% of user frustration that comes from the "everything else."
 
 ### Empty States
+
 **What to check:**
+
 - Every list/table has a designed empty state (not just blank space)
 - Empty states explain what this section is for
 - Empty states include a CTA to create the first item
@@ -208,7 +246,9 @@ SaaS applications spend 80% of development time on the happy path and 20% on eve
 - Filtered views with no matches say "No results match your filters" with a clear filter button
 
 ### Error Boundaries
+
 **What to check:**
+
 - JavaScript errors don't crash the entire page (error boundary catches them)
 - Failed API calls show a meaningful error, not a blank section
 - Network disconnection shows an offline indicator
@@ -217,7 +257,9 @@ SaaS applications spend 80% of development time on the happy path and 20% on eve
 - Partial data load doesn't leave the UI in a half-rendered state
 
 ### Form Edge Cases
+
 **What to check:**
+
 - Extremely long text input doesn't break layout (truncation or scroll)
 - Special characters in input don't cause errors (quotes, unicode, emoji)
 - Pasting content into fields works correctly
@@ -228,7 +270,9 @@ SaaS applications spend 80% of development time on the happy path and 20% on eve
 - Number inputs handle negative numbers, decimals, and zero
 
 ### Loading States
+
 **What to check:**
+
 - Initial page load has skeleton screens or loading indicators
 - Data refresh shows subtle loading indicator (not full-page spinner)
 - Long-running operations show progress (not just a spinner)
@@ -238,7 +282,9 @@ SaaS applications spend 80% of development time on the happy path and 20% on eve
 - Image loading uses blur-up, skeleton, or placeholder
 
 ### Permission & Auth Edge Cases
+
 **What to check:**
+
 - Unauthorized access shows a meaningful message, not a 403 page
 - Expired session redirects to login and returns user to where they were
 - Role-based UI hides actions the user can't perform (not just disables them)
@@ -252,7 +298,9 @@ SaaS applications spend 80% of development time on the happy path and 20% on eve
 SaaS apps are data-heavy. Tables, charts, dashboards, and lists are where users spend most of their time. These are the most common sources of visual bugs and usability issues.
 
 ### Tables
+
 **What to check:**
+
 - Column headers are clear and concise
 - Columns are appropriately sized (not all equal width)
 - Long cell content is truncated with tooltip/expand, not overflowing
@@ -267,7 +315,9 @@ SaaS apps are data-heavy. Tables, charts, dashboards, and lists are where users 
 - On mobile: table scrolls horizontally OR transforms to card layout
 
 ### Charts & Graphs
+
 **What to check:**
+
 - Charts have clear titles and axis labels
 - Legend is visible and matches chart colors
 - Tooltips show exact values on hover
@@ -278,7 +328,9 @@ SaaS apps are data-heavy. Tables, charts, dashboards, and lists are where users 
 - Charts are responsive (don't overflow on small screens)
 
 ### Dashboard Metrics
+
 **What to check:**
+
 - Key metrics have labels, values, AND context (trend, comparison period)
 - Large numbers use appropriate formatting (1.2K not 1200, $1.5M not $1500000)
 - Percentage changes show direction (up/down arrow or color)
@@ -287,7 +339,9 @@ SaaS apps are data-heavy. Tables, charts, dashboards, and lists are where users 
 - Too many metrics create cognitive overload — prioritize 3-5 key ones
 
 ### Filters & Search
+
 **What to check:**
+
 - Active filters are visible and individually removable
 - "Clear all filters" button exists when any filter is active
 - Filter state persists across page navigation
@@ -297,7 +351,9 @@ SaaS apps are data-heavy. Tables, charts, dashboards, and lists are where users 
 - Date range filters validate that start < end
 
 ### Pagination & Infinite Scroll
+
 **What to check:**
+
 - Total item count is shown
 - Current page/position is indicated
 - Page size selector exists for tables
@@ -307,7 +363,9 @@ SaaS apps are data-heavy. Tables, charts, dashboards, and lists are where users 
 - Loading more items doesn't jump the scroll position
 
 ### Numbers, Dates & Formatting
+
 **What to check:**
+
 - Dates use consistent format throughout the app
 - Relative dates where appropriate ("3 hours ago" vs "2026-03-24T16:30:00Z")
 - Currency values show appropriate symbol and decimal places
@@ -321,6 +379,7 @@ SaaS apps are data-heavy. Tables, charts, dashboards, and lists are where users 
 ## 5. Visual Design Checks
 
 ### Typography
+
 - Body text: 16px minimum on desktop, 14px minimum on mobile
 - Line height: 1.4-1.6 for body text
 - Heading scale: clear size difference between h1 → h2 → h3
@@ -330,6 +389,7 @@ SaaS apps are data-heavy. Tables, charts, dashboards, and lists are where users 
 - Monospace font used for code, IDs, and technical values
 
 ### Color & Contrast
+
 - WCAG AA: 4.5:1 contrast ratio for normal text
 - WCAG AA: 3:1 contrast ratio for large text (18px+ or 14px+ bold)
 - Interactive elements have distinct hover/active/focus states
@@ -341,6 +401,7 @@ SaaS apps are data-heavy. Tables, charts, dashboards, and lists are where users 
 - Status colors are consistent throughout the app (same green = same meaning)
 
 ### Spacing & Layout
+
 - Consistent gutters between grid columns
 - Section spacing follows a predictable rhythm
 - Related items are closer together than unrelated items (proximity principle)
@@ -350,6 +411,7 @@ SaaS apps are data-heavy. Tables, charts, dashboards, and lists are where users 
 - Sidebar width is appropriate (not too narrow to read, not too wide eating content)
 
 ### Interactive Elements
+
 - All buttons have visible hover states
 - All links are distinguishable from regular text
 - Form inputs have clear focus states (not just browser default outline)
@@ -364,6 +426,7 @@ SaaS apps are data-heavy. Tables, charts, dashboards, and lists are where users 
 ## 6. Accessibility Checks
 
 ### Keyboard Navigation
+
 - All interactive elements reachable via Tab
 - Tab order follows visual order (top-to-bottom, left-to-right)
 - Focus is visible on all elements (not just browser default — custom focus ring)
@@ -375,6 +438,7 @@ SaaS apps are data-heavy. Tables, charts, dashboards, and lists are where users 
 - Focus returns to trigger element when modal closes
 
 ### Screen Reader
+
 - All images have alt text (or aria-hidden if decorative)
 - Form inputs have associated labels (not just placeholder text)
 - Headings are hierarchical (no skipping from h1 to h4)
@@ -385,6 +449,7 @@ SaaS apps are data-heavy. Tables, charts, dashboards, and lists are where users 
 - Custom components (tabs, accordions, dropdowns) have correct ARIA roles
 
 ### Motion & Reduced Motion
+
 - Respects `prefers-reduced-motion` media query
 - No auto-playing animations that can't be paused
 - No flashing content (3 flashes per second max)
@@ -392,6 +457,7 @@ SaaS apps are data-heavy. Tables, charts, dashboards, and lists are where users 
 - Loading spinners are simple (no complex animations)
 
 ### Color Independence
+
 - Information is never conveyed by color alone
 - Error states have icons AND color (not just red text)
 - Charts use patterns/shapes in addition to color

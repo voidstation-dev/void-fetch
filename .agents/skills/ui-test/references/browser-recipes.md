@@ -23,6 +23,7 @@ browse eval "axe.run().then(r => JSON.stringify({ violations: r.violations.map(v
 ```
 
 Interpret results:
+
 - `impact: "critical"` or `"serious"` = must fix
 - `impact: "moderate"` or `"minor"` = should fix
 - Check `helpUrl` for remediation guidance
@@ -47,6 +48,7 @@ browse eval "
 ```
 
 Thresholds (Doherty Threshold + Web Vitals):
+
 - FCP < 1.8s = good, < 3s = needs improvement, > 3s = poor
 - Load complete < 3s = good for SaaS dashboards
 - DOM interactive < 400ms = feels instant (Doherty Threshold)
@@ -109,6 +111,7 @@ browse eval "JSON.stringify({tag: document.activeElement?.tagName, text: documen
 ```
 
 What to check in the results:
+
 - Every interactive element should appear in the tab order
 - Order should follow visual layout (top-to-bottom, left-to-right)
 - `hasFocus` should be true for every element (visible focus ring)
@@ -137,6 +140,7 @@ browse screenshot --path /tmp/desktop.png --full-page
 ```
 
 After capturing, read each screenshot with the Read tool and evaluate:
+
 - Mobile: is there a hamburger menu? Are touch targets ≥44px? Does content overflow?
 - Tablet: does the layout adapt or just shrink? Is the sidebar behavior correct?
 - Desktop: is content width reasonable? Not stretched edge-to-edge?

@@ -27,13 +27,13 @@ brand-white:   #F9F6F4   (Warm off-white backgrounds)
 
 ### Semantic Color Usage
 
-| State | Color | Hex |
-|-------|-------|-----|
-| Success/Completed | brand-green | #90C94D |
-| Running/Active | brand-blue | #4DA9E4 |
-| Warning/Timed Out | brand-yellow | #F4BA41 |
-| Error/Failed | brand-primary | #F03603 |
-| Neutral | brand-gray | #514F4F |
+| State             | Color         | Hex     |
+| ----------------- | ------------- | ------- |
+| Success/Completed | brand-green   | #90C94D |
+| Running/Active    | brand-blue    | #4DA9E4 |
+| Warning/Timed Out | brand-yellow  | #F4BA41 |
+| Error/Failed      | brand-primary | #F03603 |
+| Neutral           | brand-gray    | #514F4F |
 
 ### UI Elements
 
@@ -56,14 +56,14 @@ brand-white:   #F9F6F4   (Warm off-white backgrounds)
 
 Tiered system based on `--radius: 6px`:
 
-| Token | Size | Usage |
-|-------|------|-------|
-| `rounded-none` | 0px | Brand-forward buttons (browserbase variant) |
-| `rounded-[2px]` | 2px | Badges, small indicators |
-| `rounded-sm` | 4px | **Most common** — buttons, inputs, cards |
-| `rounded-md` | 6px | Medium containers |
-| `rounded-lg` | 8px | Alerts, large modals |
-| `rounded-full` | 100% | Status dots, avatars |
+| Token           | Size | Usage                                       |
+| --------------- | ---- | ------------------------------------------- |
+| `rounded-none`  | 0px  | Brand-forward buttons (browserbase variant) |
+| `rounded-[2px]` | 2px  | Badges, small indicators                    |
+| `rounded-sm`    | 4px  | **Most common** — buttons, inputs, cards    |
+| `rounded-md`    | 6px  | Medium containers                           |
+| `rounded-lg`    | 8px  | Alerts, large modals                        |
+| `rounded-full`  | 100% | Status dots, avatars                        |
 
 ## Spacing
 
@@ -78,13 +78,13 @@ Tiered system based on `--radius: 6px`:
 
 ### Buttons
 
-| Variant | Background | Hover | Border radius |
-|---------|-----------|-------|---------------|
-| `browserbase` | #F03603 | #100D0D | `rounded-none` |
-| `default` | primary bg | darker | `rounded-sm` |
-| `destructive` | red | darker red | `rounded-sm` |
-| `outline` | transparent | gray-100 | `rounded-sm` |
-| `ghost` | transparent | accent bg | `rounded-sm` |
+| Variant       | Background  | Hover      | Border radius  |
+| ------------- | ----------- | ---------- | -------------- |
+| `browserbase` | #F03603     | #100D0D    | `rounded-none` |
+| `default`     | primary bg  | darker     | `rounded-sm`   |
+| `destructive` | red         | darker red | `rounded-sm`   |
+| `outline`     | transparent | gray-100   | `rounded-sm`   |
+| `ghost`       | transparent | accent bg  | `rounded-sm`   |
 
 **Sizes**: default=40px (h-10), sm=36px (h-9), lg=44px (h-11), icon=40x40
 
@@ -117,6 +117,7 @@ Tiered system based on `--radius: 6px`:
 ## Focus States
 
 All interactive elements:
+
 ```
 focus-visible:outline-none
 focus-visible:ring-2

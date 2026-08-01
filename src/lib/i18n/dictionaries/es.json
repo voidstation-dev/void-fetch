@@ -139,10 +139,10 @@
     "installAction": "Instalar"
   },
   "metadata": {
-    "title": "VoidFetch | El Descargador Multimedia por Lotes Definitivo de VoidStation",
-    "description": "El descargador de medios en línea más rápido y confiable para más de 40 plataformas. Descarga videos HD, audio MP3, galerías de imágenes y transmisiones HLS en lotes sin esfuerzo: gratis, sin registro.",
-    "ogTitle": "VoidFetch | Descargador Multimedia por Lotes de Próxima Generación",
-    "ogDescription": "Descargas rápidas por lotes para YouTube, TikTok, Instagram, Bilibili y más de 40 plataformas. Extraiga videos HD, audio de alta calidad y galerías de imágenes sin esfuerzo.",
+    "title": "VoidFetch | Descargador en línea de Vídeo, Audio, Imágenes, HLS",
+    "description": "Descargador gratuito en línea de medios para Bilibili, Douyin, Telegram, Threads, WeChat, Weibo, Niconico, Instagram, Xiaohongshu, TikTok, X, Reddit, Streamable, SoundCloud, Twitch, VK, OK.ru, Pinterest, Tumblr, Newgrounds y transmisiones HLS/M3U8.",
+    "ogTitle": "VoidFetch | Descargador de medios en línea gratuito",
+    "ogDescription": "Detecta automáticamente enlaces de fuentes compatibles y descarga contenido en línea sin registro.",
     "siteName": "VoidFetch"
   },
   "common": {
@@ -193,7 +193,10 @@
     "privateFeedbackTitle": "Comentarios por correo electrónico",
     "privateFeedbackDescription": "También puede optar por enviar sus comentarios por correo electrónico. Para ayudarnos a localizar el problema más rápido, recomendamos incluir la URL de destino, los detalles de su dispositivo o capturas de pantalla relevantes.",
     "emailAction": "Enviar Correo",
-    "emailTemplateBody": "[Descripción]\nDescriba brevemente el problema o sugerencia:\n\n[URL de Destino]\n(Si aplica, proporcione el enlace que intenta descargar)\n\n[Entorno]\n(ej. Win 11 / Chrome 120 / iOS 17)\n"
+    "emailTemplateBody": "[Descripción]\nDescriba brevemente el problema o sugerencia:\n\n[URL de Destino]\n(Si aplica, proporcione el enlace que intenta descargar)\n\n[Entorno]\n(ej. Win 11 / Chrome 120 / iOS 17)\n",
+    "communityDiscussionsTitle": "Discusiones de la Comunidad",
+    "communityDiscussionsSubtitle": "Inicia sesión con GitHub para enviar comentarios públicos, reportar errores o solicitar nuevas funciones.",
+    "poweredByGiscus": "Impulsado por Giscus"
   },
   "privacyPage": {
     "metaTitle": "Política de privacidad | VoidFetch",
@@ -353,205 +356,133 @@
       "bilibili": {
         "name": "Bilibili",
         "summary": "Vídeo/Audio/Compartir código",
-        "features": [
-          "Video",
-          "Audio",
-          "Compartir código"
-        ]
+        "features": ["Video", "Audio", "Compartir código"]
       },
       "bilibiliTv": {
         "name": "Bilibili TV",
         "summary": "Vídeo/Audio",
-        "features": [
-          "Video",
-          "Audio"
-        ]
+        "features": ["Video", "Audio"]
       },
       "douyin": {
         "name": "Douyin",
         "summary": "Video / Publicación de imagen / Audio",
-        "features": [
-          "Video",
-          "Publicación de imagen",
-          "Audio"
-        ]
+        "features": ["Video", "Publicación de imagen", "Audio"]
       },
       "hls": {
         "name": "Sitios de Video",
         "summary": "Streaming / Replays",
-        "features": [
-          "Reproducir",
-          "Descargar"
-        ]
+        "features": ["Reproducir", "Descargar"]
       },
       "youtube": {
         "name": "YouTube",
         "summary": "Vídeo/Audio",
-        "features": [
-          "Video",
-          "Audio"
-        ]
+        "features": ["Video", "Audio"]
       },
       "telegram": {
         "name": "Telegrama",
         "summary": "Enlace de vídeo/mensaje",
-        "features": [
-          "Video",
-          "Enlace de mensaje"
-        ]
+        "features": ["Video", "Enlace de mensaje"]
       },
       "wechat": {
         "name": "WeChat",
         "summary": "Vídeos del artículo / Vídeo múltiple",
-        "features": [
-          "Vídeos del artículo",
-          "multivideo"
-        ]
+        "features": ["Vídeos del artículo", "multivideo"]
       },
       "niconico": {
         "name": "Niconico",
         "summary": "Vídeo/Audio",
-        "features": [
-          "Video",
-          "Audio"
-        ]
+        "features": ["Video", "Audio"]
       },
       "xiaohongshu": {
         "name": "Xiaohongshu",
         "summary": "Publicación de vídeo/imagen",
-        "features": [
-          "Video",
-          "Publicación de imagen"
-        ]
+        "features": ["Video", "Publicación de imagen"]
       },
       "tiktok": {
         "name": "tiktok",
         "summary": "Vídeo/Audio",
-        "features": [
-          "Video",
-          "Audio"
-        ]
+        "features": ["Video", "Audio"]
       },
       "comingSoon": "Más plataformas próximamente",
       "instagram": {
         "name": "Instagram",
         "summary": "Video / Publicación de imagen / Carrusel",
-        "features": [
-          "Video",
-          "Publicación de imagen",
-          "Carrusel"
-        ]
+        "features": ["Video", "Publicación de imagen", "Carrusel"]
       },
       "x": {
         "name": "incógnita",
         "summary": "Vídeo/Audio",
-        "features": [
-          "Video",
-          "Audio"
-        ]
+        "features": ["Video", "Audio"]
       },
       "threads": {
         "name": "Trapos",
         "summary": "Publicación de vídeo/imagen",
-        "features": [
-          "Video",
-          "Publicación de imagen"
-        ]
+        "features": ["Video", "Publicación de imagen"]
       },
       "weibo": {
         "name": "Weibo",
         "summary": "Video / Publicación de imagen / Multivideo",
-        "features": [
-          "Video",
-          "Publicación de imagen",
-          "multivideo"
-        ]
+        "features": ["Video", "Publicación de imagen", "multivideo"]
       },
       "vimeo": {
         "name": "Vimeo",
         "summary": "Descarga de contenido",
-        "features": [
-          "Descarga de contenido"
-        ]
+        "features": ["Descarga de contenido"]
       },
       "dailymotion": {
         "name": "movimiento diario",
         "summary": "Descarga de contenido",
-        "features": [
-          "Descarga de contenido"
-        ]
+        "features": ["Descarga de contenido"]
       },
       "streamable": {
         "name": "Transmitible",
         "summary": "Descarga de contenido",
-        "features": [
-          "Descarga de contenido"
-        ]
+        "features": ["Descarga de contenido"]
       },
       "reddit": {
         "name": "Reddit",
         "summary": "Descarga de contenido",
-        "features": [
-          "Descarga de contenido"
-        ]
+        "features": ["Descarga de contenido"]
       },
       "newgrounds": {
         "name": "Nuevos terrenos",
         "summary": "Descarga de contenido",
-        "features": [
-          "Descarga de contenido"
-        ]
+        "features": ["Descarga de contenido"]
       },
       "tumblr": {
         "name": "tumblr",
         "summary": "Descarga de contenido",
-        "features": [
-          "Descarga de contenido"
-        ]
+        "features": ["Descarga de contenido"]
       },
       "pinterest": {
         "name": "Pinterest",
         "summary": "Descarga de contenido",
-        "features": [
-          "Descarga de contenido"
-        ]
+        "features": ["Descarga de contenido"]
       },
       "vk": {
         "name": "VK",
         "summary": "Descarga de contenido",
-        "features": [
-          "Descarga de contenido"
-        ]
+        "features": ["Descarga de contenido"]
       },
       "okru": {
         "name": "OK.ru",
         "summary": "Descarga de contenido",
-        "features": [
-          "Descarga de contenido"
-        ]
+        "features": ["Descarga de contenido"]
       },
       "twitch": {
         "name": "Contracción nerviosa",
         "summary": "Descarga de contenido",
-        "features": [
-          "Descarga de contenido"
-        ]
+        "features": ["Descarga de contenido"]
       },
       "soundcloud": {
         "name": "Nube de sonido",
         "summary": "Descarga de contenido",
-        "features": [
-          "Descarga de contenido"
-        ]
+        "features": ["Descarga de contenido"]
       },
       "applePodcasts": {
         "name": "Apple Podcasts",
         "summary": "Audio público de podcast / Reproducción y descarga por episodio",
-        "features": [
-          "Audio público",
-          "Reproducción por episodio",
-          "Descarga"
-        ]
+        "features": ["Audio público", "Reproducción por episodio", "Descarga"]
       }
     },
     "linkFormats": {
@@ -967,5 +898,161 @@
     "clickDetails": "Haz clic para ver detalles",
     "clickTitle": "Haz clic para ver las 25+ plataformas compatibles",
     "universalSub": "Descargador masivo universal"
+  },
+  "batchWorkspace": {
+    "title": "Espacio de trabajo masivo",
+    "subtitle": "Gestor de cola de VoidFetch",
+    "queuePreferences": "Preferencias de Cola",
+    "nav": {
+      "queueWorkspace": "Espacio de Cola",
+      "downloadHistory": "Historial de Descargas",
+      "preferences": "Preferencias",
+      "aboutVoidFetch": "Acerca de VoidFetch",
+      "privacyAndTerms": "Privacidad y Términos"
+    },
+    "composer": {
+      "title": "COMPOSITOR DE URL MASIVO",
+      "subtitlePrefix": "Pega enlaces de video de",
+      "platformsLink": "25+ plataformas compatibles",
+      "subtitleSuffix": "o importa un archivo",
+      "pasteClipboard": "Pegar Portapapeles",
+      "importFile": "Importar Archivo",
+      "placeholder": "Pega múltiples URLs aquí (una por línea, o texto con enlaces)...",
+      "detectedSingle": "{count} nuevo enlace detectado",
+      "detectedPlural": "{count} nuevos enlaces detectados",
+      "dupesCount": "({count} duplicados)",
+      "dropFileHint": "Arrastra un archivo de texto o CSV aquí para importar enlaces",
+      "copyrightWarning": "El contenido con derechos de autor, de pago o restringido a miembros no es compatible.",
+      "feedbackHint": "¿Comentarios? Haz clic en \"Comentarios\" arriba a la derecha.",
+      "supportedPlatformsBar": "Compatibles: YouTube, TikTok, Douyin, Bilibili, SoundCloud y 20+ más",
+      "clear": "Limpiar",
+      "addUrls": "Añadir URLs a la Cola",
+      "addUrlsCount": "Añadir {count} URLs a la Cola"
+    },
+    "toolbar": {
+      "searchPlaceholder": "Buscar título o URL...",
+      "allStatus": "Todos los Estados",
+      "allPlatforms": "Todas las Plataformas",
+      "parseAll": "Analizar Todo ({count})",
+      "pauseQueue": "Pausar Cola",
+      "startQueue": "Iniciar Cola",
+      "retryFailed": "Reintentar fallidos",
+      "clearCompleted": "Limpiar completados ({count})",
+      "status": {
+        "all": "Todos los Estados",
+        "draft": "Borrador",
+        "parsing": "Analizando",
+        "ready": "Listo",
+        "queued": "En cola",
+        "downloading": "Descargando",
+        "processing": "Procesando",
+        "saving": "Guardando",
+        "paused": "Pausado",
+        "completed": "Completado",
+        "failed": "Fallido",
+        "cancelled": "Cancelado"
+      }
+    },
+    "queue": {
+      "emptyTitle": "Espacio de trabajo vacío",
+      "emptyBadge": "Listo",
+      "emptyDescription": "Pega URLs de video (YouTube, TikTok, Douyin, SoundCloud...) o importa un archivo de texto arriba para iniciar la descarga masiva.",
+      "multiThreaded": "Motor Multihilo",
+      "audioExtraction": "Extracción de Audio",
+      "upTo4k": "Video hasta 4K / 60FPS",
+      "itemsSelectedSingle": "{count} elemento seleccionado",
+      "itemsSelectedPlural": "{count} elementos seleccionados",
+      "bulkConfigure": "Configuración Masiva",
+      "bulkConfigureCount": "Configuración Masiva ({count})",
+      "removeSelected": "Eliminar Seleccionados",
+      "selectAll": "Seleccionar Todos los Elementos",
+      "itemsCount": "{count} Elementos",
+      "noMatchingJobs": "No hay tareas que coincidan con los filtros activos."
+    },
+    "configDrawer": {
+      "titleSingle": "CONFIGURAR DESCARGA",
+      "titleBulk": "CONFIGURACIÓN MASIVA",
+      "subtitle": "Personaliza el formato de salida, la calidad y las preferencias de metadatos",
+      "outputFormat": "Formato de Salida",
+      "videoQuality": "Calidad de Video",
+      "selectVideoQuality": "Seleccionar calidad de video",
+      "qualityNote": "Nota: Si el video de origen no admite 4K/2K, se descargará automáticamente la mayor calidad disponible.",
+      "audioQuality": "Calidad de Audio (Bitrate)",
+      "selectAudioQuality": "Seleccionar calidad de audio",
+      "filenameTemplate": "Plantilla de Nombre de Archivo",
+      "outputFilename": "Nombre de Archivo de Salida",
+      "clickTokenHint": "Haz clic en una variable para insertarla",
+      "hlsConcurrency": "Concurrencia de Segmentos HLS",
+      "advancedOptions": "Opciones Avanzadas",
+      "downloadThumbnail": "Descargar miniatura / portada",
+      "saveMetadataJson": "Guardar JSON de metadatos",
+      "forceAudioExtraction": "Forzar extracción de audio (MP3)",
+      "applyChecked": "Aplicar a Seleccionados ({count})",
+      "applyAll": "Aplicar a Todos ({count})",
+      "saveConfig": "Guardar Configuración"
+    },
+    "progress": {
+      "totalItems": "{count} elementos",
+      "running": "{count} en ejecución",
+      "queued": "{count} en cola",
+      "completed": "{count} completados",
+      "failed": "{count} fallidos",
+      "speed": "Velocidad",
+      "eta": "ETA",
+      "queueActive": "COLA ACTIVA",
+      "queueIdle": "COLA INACTIVA"
+    },
+    "settingsModal": {
+      "title": "Preferencias del espacio de trabajo",
+      "description": "Configura valores globales y concurrencia de red",
+      "defaultOutputAndQuality": "Formato y Calidad por Defecto",
+      "defaultFormat": "Formato por defecto",
+      "defaultQuality": "Calidad por defecto",
+      "downloadDirectoryPath": "Ruta de Carpeta de Descargas",
+      "browserDefault": "Predeterminado del navegador (Carpeta Descargas)",
+      "customFolder": "📁 Personalizada: {name}",
+      "customFolderDesc": "Los archivos se guardarán directamente en esta carpeta",
+      "browserDefaultDesc": "Los archivos se guardan automáticamente en tu carpeta de Descargas",
+      "resetDefault": "Restablecer por defecto",
+      "changeFolder": "Cambiar carpeta",
+      "selectCustomFolder": "Seleccionar carpeta personalizada",
+      "directoryTip": "💡 Consejo: La seguridad del navegador impide elegir directamente la carpeta raíz de Descargas. Para organizar dentro de Descargas, crea una subcarpeta (ej. Descargas/VoidFetch).",
+      "networkConcurrency": "Concurrencia de Red",
+      "concurrentJobs": "Tareas simultáneas",
+      "hlsSegmentConcurrency": "Segmentos HLS simultáneos",
+      "savePreferences": "Guardar Preferencias"
+    }
+  },
+  "settingsPage": {
+    "metaTitle": "Configuración | VoidFetch",
+    "metaDescription": "Configura valores predeterminados de descarga, límites de concurrencia y preferencias de ruta.",
+    "title": "Preferencias",
+    "subtitle": "Configura comportamientos predeterminados del descargador",
+    "resetDefaults": "Restablecer Valores",
+    "loading": "Cargando configuración...",
+    "downloaderDefaults": "Valores Predeterminados del Descargador",
+    "defaultOutputType": "Tipo de Salida Predeterminado",
+    "defaultQuality": "Calidad Predeterminada",
+    "selectQuality": "Seleccionar calidad",
+    "defaultFilenameTemplate": "Plantilla de Nombre de Archivo Predeterminada",
+    "placeholderTokens": "Variables disponibles:",
+    "customDirectoryTitle": "Ruta de Carpeta de Descargas Personalizada",
+    "customDirName": "📁 Carpeta Personalizada: {name}",
+    "browserDefaultDir": "Predeterminado del Navegador (Descargas)",
+    "customDirDesc": "Todas las descargas de VoidFetch se guardarán directamente en esta carpeta",
+    "browserDefaultDesc": "Los archivos son gestionados por el administrador de descargas estándar",
+    "resetDefaultDir": "Restablecer por Defecto",
+    "changeFolder": "Cambiar Carpeta",
+    "selectCustomFolder": "Seleccionar Carpeta Personalizada",
+    "concurrencyTitle": "Límites de Concurrencia y Rendimiento",
+    "parserConcurrency": "Concurrencia de Analizador",
+    "downloadConcurrency": "Concurrencia de Descarga",
+    "networkBudget": "Presupuesto Global de Solicitudes de Red",
+    "networkBudgetDesc": "Controla los fragmentos HLS descargados globalmente para evitar límites de conexión.",
+    "workflowsTitle": "Flujos de Trabajo y Opciones",
+    "continueOnError": "Continuar cola en caso de error",
+    "continueOnErrorDesc": "Seguir descargando las siguientes tareas de la cola si una falla.",
+    "autoStartDownloads": "Iniciar cola automáticamente al analizar URL",
+    "autoStartDownloadsDesc": "Añadir inmediatamente las URLs analizadas al flujo de descarga."
   }
 }

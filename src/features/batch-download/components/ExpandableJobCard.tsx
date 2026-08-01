@@ -25,9 +25,8 @@ import {
   Volume2,
   Share2,
 } from "lucide-react";
-import { cn, downloadFile } from "@/lib/utils";
+import { downloadFile } from "@/lib/utils";
 import { toast } from "@/lib/deferred-toast";
-import { buildMediaPreviewUrl } from "@/components/downloader/media-preview";
 
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -100,9 +99,8 @@ export function ExpandableJobCard({
 
   const title = currentJob?.metadata?.title || currentJob?.sourceUrl || "";
   const coverUrl = currentJob?.metadata?.cover;
-  const rawData = (currentJob?.metadata?.rawParsedData || currentJob?.metadata) as
-    | Record<string, unknown>
-    | undefined;
+  const rawData = (currentJob?.metadata?.rawParsedData ||
+    currentJob?.metadata) as Record<string, unknown> | undefined;
   const videoUrl =
     typeof rawData?.downloadVideoUrl === "string"
       ? rawData.downloadVideoUrl
@@ -172,14 +170,17 @@ export function ExpandableJobCard({
   const handleSharePlay = async () => {
     if (!currentJob?.sourceUrl) return;
     try {
-      const pathnameSegments = window.location.pathname.split('/').filter((s) => s.length > 0);
-      const localePrefix = pathnameSegments[0] ? `/${pathnameSegments[0]}` : '';
+      const pathnameSegments = window.location.pathname
+        .split("/")
+        .filter((s) => s.length > 0);
+      const localePrefix = pathnameSegments[0] ? `/${pathnameSegments[0]}` : "";
       const shareUrl = new URL(`${window.location.origin}${localePrefix}/play`);
-      shareUrl.searchParams.set('play', currentJob.sourceUrl);
-      shareUrl.searchParams.set('autoplay', '1');
+      shareUrl.searchParams.set("play", currentJob.sourceUrl);
+      shareUrl.searchParams.set("autoplay", "1");
       await navigator.clipboard.writeText(shareUrl.toString());
       toast.success("Đã copy link Share to Play (Copied Share Link)");
     } catch (error) {
+      console.log("handleSharePlay error: ", error);
       toast.error("Không thể copy link");
     }
   };
@@ -223,7 +224,7 @@ export function ExpandableJobCard({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
-            className="fixed inset-0 grid place-items-center z-[51] p-4 overflow-y-auto pointer-events-none"
+            className="fixed inset-0 grid place-items-center z-51 p-4 overflow-y-auto pointer-events-none"
           >
             <motion.div
               initial={{ scale: 0.95, y: 20 }}
@@ -234,7 +235,7 @@ export function ExpandableJobCard({
               className="w-full max-w-2xl p-0 overflow-hidden bg-card border border-border/80 rounded-2xl shadow-2xl backdrop-blur-xl max-h-[90vh] flex flex-col pointer-events-auto relative"
             >
               {/* Glow Ambient Line Top */}
-              <div className="absolute -top-px inset-x-12 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent z-20" />
+              <div className="absolute -top-px inset-x-12 h-px bg-linear-to-r from-transparent via-primary/60 to-transparent z-20" />
 
               {/* Independent Top-Right Close Button (No layoutId) */}
               <button
@@ -247,9 +248,7 @@ export function ExpandableJobCard({
               </button>
 
               {/* Hero Cover / Media Header */}
-              <div
-                className="relative w-full h-56 md:h-64 bg-slate-950 flex items-center justify-center overflow-hidden shrink-0"
-              >
+              <div className="relative w-full h-56 md:h-64 bg-slate-950 flex items-center justify-center overflow-hidden shrink-0">
                 {coverUrl ? (
                   <Image
                     src={coverUrl}
@@ -257,14 +256,20 @@ export function ExpandableJobCard({
                     width={640}
                     height={256}
                     unoptimized
-                    className="w-full h-full object-cover opacity-90 transition-transform duration-700 hover:scale-105"
+                    className="w-full h-full object-contain opacity-90 transition-transform duration-700 hover:scale-105"
                   />
                 ) : (
                   <div className="flex flex-col items-center gap-2 text-muted-foreground/60">
                     {isImagePost ? (
-                      <ImageIcon className="h-12 w-12 stroke-[1.5] text-cyan-400" aria-hidden="true" />
+                      <ImageIcon
+                        className="h-12 w-12 stroke-[1.5] text-cyan-400"
+                        aria-hidden="true"
+                      />
                     ) : (
-                      <Video className="h-12 w-12 stroke-[1.5]" aria-hidden="true" />
+                      <Video
+                        className="h-12 w-12 stroke-[1.5]"
+                        aria-hidden="true"
+                      />
                     )}
                     <span className="text-xs uppercase tracking-wider">
                       No Preview Available
@@ -273,11 +278,11 @@ export function ExpandableJobCard({
                 )}
 
                 {/* Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-card via-card/15 to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-card via-card/15 to-transparent" />
               </div>
 
               {/* Title & Description Below Image (Aceternity UI Standard) */}
-              <div className="flex items-start justify-between px-6 pt-5 pb-3 gap-4 border-b border-border/40">
+              <div className="flex items-start justify-between px-6 pt-5 pb-3 gap-4 border-b border-border/40 shrink-0">
                 <div className="flex flex-col gap-1.5 min-w-0 flex-1">
                   <div className="flex items-center gap-2">
                     <Badge className="bg-primary/10 text-primary border border-primary/20 text-[10px] px-2.5 py-0.5 uppercase tracking-wider font-mono">
@@ -288,250 +293,257 @@ export function ExpandableJobCard({
                       <span>Expanded Media Detail</span>
                     </div>
                   </div>
-                  <h3
-                    className="text-base md:text-lg font-bold text-foreground leading-tight break-words"
-                  >
+                  <h3 className="text-base md:text-lg font-bold text-foreground leading-tight wrap-break-word">
                     {title}
                   </h3>
                 </div>
               </div>
 
-        {/* Card Details Body */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 10 }}
-          transition={{ duration: 0.2 }}
-          className="p-5 flex flex-col gap-4 overflow-y-auto"
-        >
-          {/* Status & Metadata Badges Row */}
-          <div className="flex flex-wrap items-center gap-2 text-xs">
-            {isImagePost ? (
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 font-medium">
-                <ImageIcon className="h-3.5 w-3.5 text-cyan-400" />
-                <span>
-                  {images?.length || 1}{" "}
-                  {images && images.length > 1 ? "Images" : "Image"}
-                </span>
-              </div>
-            ) : (
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-muted/60 border border-border/40 text-foreground font-medium">
-                <Clock className="h-3.5 w-3.5 text-muted-foreground" />
-                <span>
-                  {formatDuration(currentJob.metadata?.duration) ||
-                    (videoUrl ? "HD Video Stream" : "Audio Stream")}
-                </span>
-              </div>
-            )}
-
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-muted/60 border border-border/40 text-foreground font-medium">
-              <Badge
-                variant="outline"
-                className={`text-[9px] uppercase ${
-                  isImagePost
-                    ? "bg-cyan-500/15 text-cyan-400 border-cyan-500/30 font-bold"
-                    : currentJob.config.outputType === "audio"
-                      ? "bg-purple-500/15 text-purple-400 border-purple-500/30 font-bold"
-                      : "bg-primary/15 text-primary border-primary/30 font-bold"
-                }`}
+              {/* Card Details Body */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ duration: 0.2 }}
+                className="p-5 flex flex-col gap-4 overflow-y-auto flex-1 min-h-0"
               >
-                {isImagePost
-                  ? images && images.length > 1
-                    ? "ZIP IMAGES"
-                    : "HD IMAGE"
-                  : currentJob.config.outputType === "audio"
-                    ? "AUDIO MP3"
-                    : "MP4 VIDEO"}
-              </Badge>
-              <span>{currentJob.config.quality || "1080p"}</span>
-            </div>
-
-            <div className="ml-auto flex items-center gap-1.5">
-              {currentJob.status === "completed" && (
-                <span className="flex items-center gap-1 text-[11px] font-semibold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
-                  <CheckCircle2 className="h-3 w-3" /> Ready
-                </span>
-              )}
-              {currentJob.status === "failed" && (
-                <span className="flex items-center gap-1 text-[11px] font-semibold text-destructive bg-destructive/10 px-2 py-0.5 rounded-full border border-destructive/20">
-                  <AlertCircle className="h-3 w-3" /> Failed
-                </span>
-              )}
-            </div>
-          </div>
-
-          {/* Glassmorphic Audio Preview Player (Only rendered when valid audio track exists) */}
-          {hasAudioTrack && (
-            <div className="flex flex-col gap-2 p-3 rounded-xl bg-muted/40 border border-border/60">
-              <div className="flex items-center justify-between text-xs font-semibold text-foreground/90">
-                <div className="flex items-center gap-1.5">
-                  <Volume2 className="h-4 w-4 text-emerald-500 animate-pulse shrink-0" />
-                  <span>Phát nghe thử Âm thanh (Audio Stream Preview)</span>
-                </div>
-                <span className="text-[10px] text-muted-foreground font-mono">
-                  Live Stream
-                </span>
-              </div>
-
-              <audio
-                key={audioUrl}
-                src={audioUrl}
-                controls
-                preload="none"
-                className="w-full h-8 rounded-lg"
-              />
-            </div>
-          )}
-
-          {/* Source Link Bar */}
-          <div className="flex items-center justify-between p-2.5 rounded-xl bg-muted/40 border border-border/60 gap-2">
-            <span className="text-xs font-mono text-muted-foreground truncate flex-1">
-              {currentJob.sourceUrl}
-            </span>
-            <div className="flex items-center gap-1.5 shrink-0">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => handleCopyLink(currentJob.sourceUrl)}
-                className="h-7 text-[10px] gap-1 px-2 hover:bg-background"
-              >
-                <Copy className="h-3 w-3" /> Copy
-              </Button>
-              <a href={currentJob.sourceUrl} target="_blank" rel="noopener noreferrer">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-7 text-[10px] gap-1 px-2 hover:bg-background"
-                >
-                  <ExternalLink className="h-3 w-3" /> Visit
-                </Button>
-              </a>
-              <div className="w-px h-4 bg-border mx-1" />
-              <Button
-                onClick={handleSharePlay}
-                size="sm"
-                className="h-7 text-[10px] font-semibold gap-1.5 px-3 bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20 border border-indigo-500/30 shadow-sm transition-all"
-              >
-                <Share2 className="h-3 w-3" /> Share Play
-              </Button>
-            </div>
-          </div>
-
-          {/* Quick Download Actions Grid */}
-          <div className="flex flex-col gap-2 pt-2 border-t border-border/40">
-            <span className="text-[11px] font-bold text-foreground/80 uppercase tracking-wider flex items-center gap-1.5">
-              <Download className="h-3.5 w-3.5 text-primary" />
-              Thao tác tải nhanh (Quick Downloads)
-            </span>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
-              {videoUrl && (
-                <Button
-                  onClick={() => handleDownload(videoUrl, `${title}.mp4`)}
-                  className="h-10 text-xs font-semibold gap-2 bg-primary text-primary-foreground hover:bg-primary/90 shadow-md"
-                >
-                  <Video className="h-4 w-4" /> Tải Video (MP4)
-                </Button>
-              )}
-
-              {audioUrl && (
-                <Button
-                  variant="outline"
-                  onClick={() => handleDownload(audioUrl, `${title}.mp3`)}
-                  className="h-10 text-xs font-semibold gap-2 border-border/80 hover:bg-muted/60"
-                >
-                  <Music className="h-4 w-4 text-emerald-500" /> Tách Nhạc (MP3)
-                </Button>
-              )}
-
-              {coverUrl && (
-                <Button
-                  variant="outline"
-                  onClick={() => handleDownload(coverUrl, `${title}-cover.jpg`)}
-                  className="h-10 text-xs font-semibold gap-2 border-border/80 hover:bg-muted/60"
-                >
-                  <ImageIcon className="h-4 w-4 text-amber-500" /> Tải Ảnh (HD
-                  Image / Cover)
-                </Button>
-              )}
-            </div>
-
-            {images && images.length > 0 && (
-              <div className="flex flex-col gap-2 pt-2">
-                <span className="text-[11px] font-bold text-foreground/80 uppercase tracking-wider flex items-center gap-1.5">
-                  <ImageIcon className="h-3.5 w-3.5 text-cyan-400" />
-                  Danh sách ảnh trích xuất ({images.length} Ảnh)
-                </span>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                  {images.map((imgUrl, idx) => (
-                    <div
-                      key={idx}
-                      className="group relative rounded-lg overflow-hidden border border-border/60 bg-muted/40 aspect-square"
-                    >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={imgUrl}
-                        alt={`Image ${idx + 1}`}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                      />
-                      <Button
-                        size="default"
-                        variant="secondary"
-                        onClick={() =>
-                          handleDownload(
-                            imgUrl,
-                            `${title}-image-${idx + 1}.jpg`,
-                          )
-                        }
-                        className="absolute bottom-1 right-1 h-6 text-[9px] px-1.5 bg-background/90 backdrop-blur-md opacity-90 group-hover:opacity-100"
-                      >
-                        Tải #{idx + 1}
-                      </Button>
+                {/* Status & Metadata Badges Row */}
+                <div className="flex flex-wrap items-center gap-2 text-xs">
+                  {isImagePost ? (
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 font-medium">
+                      <ImageIcon className="h-3.5 w-3.5 text-cyan-400" />
+                      <span>
+                        {images?.length || 1}{" "}
+                        {images && images.length > 1 ? "Images" : "Image"}
+                      </span>
                     </div>
-                  ))}
+                  ) : (
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-muted/60 border border-border/40 text-foreground font-medium">
+                      <Clock className="h-3.5 w-3.5 text-muted-foreground" />
+                      <span>
+                        {formatDuration(currentJob.metadata?.duration) ||
+                          (videoUrl ? "HD Video Stream" : "Audio Stream")}
+                      </span>
+                    </div>
+                  )}
+
+                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-muted/60 border border-border/40 text-foreground font-medium">
+                    <Badge
+                      variant="outline"
+                      className={`text-[9px] uppercase ${
+                        isImagePost
+                          ? "bg-cyan-500/15 text-cyan-400 border-cyan-500/30 font-bold"
+                          : currentJob.config.outputType === "audio"
+                            ? "bg-purple-500/15 text-purple-400 border-purple-500/30 font-bold"
+                            : "bg-primary/15 text-primary border-primary/30 font-bold"
+                      }`}
+                    >
+                      {isImagePost
+                        ? images && images.length > 1
+                          ? "ZIP IMAGES"
+                          : "HD IMAGE"
+                        : currentJob.config.outputType === "audio"
+                          ? "AUDIO MP3"
+                          : "MP4 VIDEO"}
+                    </Badge>
+                    <span>{currentJob.config.quality || "1080p"}</span>
+                  </div>
+
+                  <div className="ml-auto flex items-center gap-1.5">
+                    {currentJob.status === "completed" && (
+                      <span className="flex items-center gap-1 text-[11px] font-semibold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                        <CheckCircle2 className="h-3 w-3" /> Ready
+                      </span>
+                    )}
+                    {currentJob.status === "failed" && (
+                      <span className="flex items-center gap-1 text-[11px] font-semibold text-destructive bg-destructive/10 px-2 py-0.5 rounded-full border border-destructive/20">
+                        <AlertCircle className="h-3 w-3" /> Failed
+                      </span>
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
 
-            {!videoUrl &&
-              !audioUrl &&
-              !coverUrl &&
-              (!images || images.length === 0) && (
-                <p className="text-[10px] text-muted-foreground bg-muted/30 p-2 rounded-lg border border-border/40">
-                  💡 Nút tải MP4 / MP3 / Ảnh sẽ xuất hiện đầy đủ tại đây sau khi
-                  hệ thống hoàn tất phân tích link (Parse Link).
-                </p>
-              )}
-          </div>
-        </motion.div>
+                {/* Glassmorphic Audio Preview Player (Only rendered when valid audio track exists) */}
+                {hasAudioTrack && (
+                  <div className="flex flex-col gap-2 p-3 rounded-xl bg-muted/40 border border-border/60">
+                    <div className="flex items-center justify-between text-xs font-semibold text-foreground/90">
+                      <div className="flex items-center gap-1.5">
+                        <Volume2 className="h-4 w-4 text-emerald-500 animate-pulse shrink-0" />
+                        <span>
+                          Phát nghe thử Âm thanh (Audio Stream Preview)
+                        </span>
+                      </div>
+                      <span className="text-[10px] text-muted-foreground font-mono">
+                        Live Stream
+                      </span>
+                    </div>
 
-        {/* Modal Footer */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="flex items-center justify-between p-4 bg-muted/20 border-t border-border/60"
-        >
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              handleClose();
-              onOpenConfig?.(currentJob);
-            }}
-            className="h-8 text-xs gap-1.5"
-          >
-            Configure Stream Options
-          </Button>
+                    <audio
+                      key={audioUrl}
+                      src={audioUrl}
+                      controls
+                      preload="none"
+                      className="w-full h-8 rounded-lg"
+                    />
+                  </div>
+                )}
 
-          <Button
-            size="sm"
-            onClick={handleClose}
-            className="h-8 px-4 text-xs font-medium"
-          >
-            Close Preview
-          </Button>
-        </motion.div>
+                {/* Source Link Bar */}
+                <div className="flex items-center justify-between p-2.5 rounded-xl bg-muted/40 border border-border/60 gap-2">
+                  <span className="text-xs font-mono text-muted-foreground truncate flex-1">
+                    {currentJob.sourceUrl}
+                  </span>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleCopyLink(currentJob.sourceUrl)}
+                      className="h-7 text-[10px] gap-1 px-2 hover:bg-background"
+                    >
+                      <Copy className="h-3 w-3" /> Copy
+                    </Button>
+                    <a
+                      href={currentJob.sourceUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-7 text-[10px] gap-1 px-2 hover:bg-background"
+                      >
+                        <ExternalLink className="h-3 w-3" /> Visit
+                      </Button>
+                    </a>
+                    <div className="w-px h-4 bg-border mx-1" />
+                    <Button
+                      onClick={handleSharePlay}
+                      size="sm"
+                      className="h-7 text-[10px] font-semibold gap-1.5 px-3 bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20 border border-indigo-500/30 shadow-sm transition-all"
+                    >
+                      <Share2 className="h-3 w-3" /> Share Play
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Quick Download Actions Grid */}
+                <div className="flex flex-col gap-2 pt-2 border-t border-border/40">
+                  <span className="text-[11px] font-bold text-foreground/80 uppercase tracking-wider flex items-center gap-1.5">
+                    <Download className="h-3.5 w-3.5 text-primary" />
+                    Thao tác tải nhanh (Quick Downloads)
+                  </span>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                    {videoUrl && (
+                      <Button
+                        onClick={() => handleDownload(videoUrl, `${title}.mp4`)}
+                        className="h-10 text-xs font-semibold gap-2 bg-primary text-primary-foreground hover:bg-primary/90 shadow-md"
+                      >
+                        <Video className="h-4 w-4" /> Tải Video (MP4)
+                      </Button>
+                    )}
+
+                    {audioUrl && (
+                      <Button
+                        variant="outline"
+                        onClick={() => handleDownload(audioUrl, `${title}.mp3`)}
+                        className="h-10 text-xs font-semibold gap-2 border-border/80 hover:bg-muted/60"
+                      >
+                        <Music className="h-4 w-4 text-emerald-500" /> Tách Nhạc
+                        (MP3)
+                      </Button>
+                    )}
+
+                    {coverUrl && (
+                      <Button
+                        variant="outline"
+                        onClick={() =>
+                          handleDownload(coverUrl, `${title}-cover.jpg`)
+                        }
+                        className="h-10 text-xs font-semibold gap-2 border-border/80 hover:bg-muted/60"
+                      >
+                        <ImageIcon className="h-4 w-4 text-amber-500" /> Tải Ảnh
+                        (HD Image / Cover)
+                      </Button>
+                    )}
+                  </div>
+
+                  {images && images.length > 0 && (
+                    <div className="flex flex-col gap-2 pt-2">
+                      <span className="text-[11px] font-bold text-foreground/80 uppercase tracking-wider flex items-center gap-1.5">
+                        <ImageIcon className="h-3.5 w-3.5 text-cyan-400" />
+                        Danh sách ảnh trích xuất ({images.length} Ảnh)
+                      </span>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        {images.map((imgUrl, idx) => (
+                          <div
+                            key={idx}
+                            className="group relative rounded-lg overflow-hidden border border-border/60 bg-muted/40 aspect-square"
+                          >
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={imgUrl}
+                              alt={`Image ${idx + 1}`}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                            />
+                            <Button
+                              size="default"
+                              variant="secondary"
+                              onClick={() =>
+                                handleDownload(
+                                  imgUrl,
+                                  `${title}-image-${idx + 1}.jpg`,
+                                )
+                              }
+                              className="absolute bottom-1 right-1 h-6 text-[9px] px-1.5 bg-background/90 backdrop-blur-md opacity-90 group-hover:opacity-100"
+                            >
+                              Tải #{idx + 1}
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {!videoUrl &&
+                    !audioUrl &&
+                    !coverUrl &&
+                    (!images || images.length === 0) && (
+                      <p className="text-[10px] text-muted-foreground bg-muted/30 p-2 rounded-lg border border-border/40">
+                        💡 Nút tải MP4 / MP3 / Ảnh sẽ xuất hiện đầy đủ tại đây
+                        sau khi hệ thống hoàn tất phân tích link (Parse Link).
+                      </p>
+                    )}
+                </div>
+              </motion.div>
+
+              {/* Modal Footer */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex items-center justify-between p-4 bg-muted/20 border-t border-border/60"
+              >
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    handleClose();
+                    onOpenConfig?.(currentJob);
+                  }}
+                  className="h-8 text-xs gap-1.5"
+                >
+                  Configure Stream Options
+                </Button>
+
+                <Button
+                  size="sm"
+                  onClick={handleClose}
+                  className="h-8 px-4 text-xs font-medium"
+                >
+                  Close Preview
+                </Button>
+              </motion.div>
             </motion.div>
           </motion.div>
         )}

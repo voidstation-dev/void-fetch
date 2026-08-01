@@ -10,7 +10,7 @@ const SW_BYPASS_HOSTS = new Set([
 type ServiceWorkerFetchEvent = Event & {
   request: Request;
   stopImmediatePropagation(): void;
-}
+};
 
 declare global {
   interface ServiceWorkerGlobalScope extends SerwistGlobalConfig {
@@ -28,18 +28,19 @@ const serwist = new Serwist({
   runtimeCaching: [
     ...defaultCache,
     {
-        // Cache FFmpeg WASM files from CDN
-        matcher: ({ url }) => url.hostname === "unpkg.com" || url.hostname === "cdn.jsdelivr.net",
-        handler: new CacheFirst({
-            cacheName: "ffmpeg-wasm-cache",
-            plugins: [
-                new ExpirationPlugin({
-                    maxEntries: 10,
-                    maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
-                }),
-            ],
-        }),
-    }
+      // Cache FFmpeg WASM files from CDN
+      matcher: ({ url }) =>
+        url.hostname === "unpkg.com" || url.hostname === "cdn.jsdelivr.net",
+      handler: new CacheFirst({
+        cacheName: "ffmpeg-wasm-cache",
+        plugins: [
+          new ExpirationPlugin({
+            maxEntries: 10,
+            maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
+          }),
+        ],
+      }),
+    },
   ],
 });
 
