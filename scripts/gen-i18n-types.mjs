@@ -6,22 +6,71 @@
  * Output: src/lib/i18n/dictionary-types.generated.ts
  * Usage: node scripts/gen-i18n-types.mjs
  */
-import { readFile, writeFile } from 'node:fs/promises';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { readFile, writeFile } from "node:fs/promises";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const DICT_DIR = join(__dirname, '..', 'src', 'lib', 'i18n', 'dictionaries');
-const OUT_FILE = join(__dirname, '..', 'src', 'lib', 'i18n', 'dictionary-types.generated.ts');
+const DICT_DIR = join(__dirname, "..", "src", "lib", "i18n", "dictionaries");
+const OUT_FILE = join(
+  __dirname,
+  "..",
+  "src",
+  "lib",
+  "i18n",
+  "dictionary-types.generated.ts",
+);
 
 // Reserved TS words that need quoting when used as property names.
 const RESERVED = new Set([
-  'break', 'case', 'catch', 'class', 'const', 'continue', 'debugger', 'default',
-  'delete', 'do', 'else', 'enum', 'export', 'extends', 'false', 'finally', 'for',
-  'function', 'if', 'import', 'in', 'instanceof', 'new', 'null', 'return', 'super',
-  'switch', 'this', 'throw', 'true', 'try', 'typeof', 'var', 'void', 'while', 'with',
-  'as', 'implements', 'interface', 'let', 'package', 'private', 'protected', 'public',
-  'static', 'yield', 'type', 'namespace',
+  "break",
+  "case",
+  "catch",
+  "class",
+  "const",
+  "continue",
+  "debugger",
+  "default",
+  "delete",
+  "do",
+  "else",
+  "enum",
+  "export",
+  "extends",
+  "false",
+  "finally",
+  "for",
+  "function",
+  "if",
+  "import",
+  "in",
+  "instanceof",
+  "new",
+  "null",
+  "return",
+  "super",
+  "switch",
+  "this",
+  "throw",
+  "true",
+  "try",
+  "typeof",
+  "var",
+  "void",
+  "while",
+  "with",
+  "as",
+  "implements",
+  "interface",
+  "let",
+  "package",
+  "private",
+  "protected",
+  "public",
+  "static",
+  "yield",
+  "type",
+  "namespace",
 ]);
 
 function needsQuote(key) {
@@ -29,32 +78,32 @@ function needsQuote(key) {
 }
 
 function tsType(value, indent) {
-  const pad = '  '.repeat(indent);
-  if (value === null) return 'null';
+  const pad = "  ".repeat(indent);
+  if (value === null) return "null";
   if (Array.isArray(value)) {
-    if (value.length === 0) return 'string[]';
+    if (value.length === 0) return "string[]";
     const elemType = tsType(value[0], indent + 1);
     // Arrays of primitives → primitive[]; arrays of objects → inline.
-    if (typeof value[0] === 'object' && value[0] !== null) {
+    if (typeof value[0] === "object" && value[0] !== null) {
       return `Array<${elemType}>`;
     }
     return `${elemType}[]`;
   }
-  if (typeof value === 'object') {
+  if (typeof value === "object") {
     const inner = [];
     for (const key of Object.keys(value)) {
       const name = needsQuote(key) ? `'${key}'` : key;
       const child = tsType(value[key], indent + 1);
       inner.push(`${pad}  ${name}: ${child};`);
     }
-    return `{\n${inner.join('\n')}\n${pad}}`;
+    return `{\n${inner.join("\n")}\n${pad}}`;
   }
   // primitive
-  return typeof value === 'number' ? 'number' : 'string';
+  return typeof value === "number" ? "number" : "string";
 }
 
 async function main() {
-  const raw = await readFile(join(DICT_DIR, 'en.json'), 'utf8');
+  const raw = await readFile(join(DICT_DIR, "en.json"), "utf8");
   const en = JSON.parse(raw);
   const body = tsType(en, 0);
   const header = `/**
@@ -63,7 +112,7 @@ async function main() {
  */
 `;
   const content = `${header}export interface Dictionary ${body};\n`;
-  await writeFile(OUT_FILE, content, 'utf8');
+  await writeFile(OUT_FILE, content, "utf8");
   console.log(`[i18n] Generated ${OUT_FILE}`);
 }
 

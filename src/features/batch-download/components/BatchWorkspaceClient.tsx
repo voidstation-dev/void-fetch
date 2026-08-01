@@ -17,7 +17,7 @@ import { QueuePreferencesButton } from "./QueuePreferencesButton";
 
 import { useTranslations } from "next-intl";
 
-const emptySubscribe = () => () => { };
+const emptySubscribe = () => () => {};
 
 export function BatchWorkspaceClient() {
   const t = useTranslations("batchWorkspace");
@@ -31,9 +31,7 @@ export function BatchWorkspaceClient() {
       {/* Workspace Header */}
       <div className="flex items-center justify-between p-4 border rounded-xl bg-card border-border/80 shrink-0">
         <div className="flex flex-col gap-0.5">
-          <h1 className="text-sm font-bold text-foreground">
-            {t("title")}
-          </h1>
+          <h1 className="text-sm font-bold text-foreground">{t("title")}</h1>
           <span className="text-[10px] text-muted-foreground uppercase">
             {t("subtitle")}
           </span>

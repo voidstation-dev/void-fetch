@@ -1,19 +1,23 @@
-'use client';
+"use client";
 
-import { useState, useCallback, useRef, useEffect } from 'react';
-import { terminateFFmpeg, type FFmpegStage, type ProgressInfo } from '@/infrastructure/ffmpeg';
-import { sanitizeFilename } from '@/lib/utils';
+import { useState, useCallback, useRef, useEffect } from "react";
+import {
+  terminateFFmpeg,
+  type FFmpegStage,
+  type ProgressInfo,
+} from "@/infrastructure/ffmpeg";
+import { sanitizeFilename } from "@/lib/utils";
 
 export type FFmpegStatus =
-  | 'idle'
-  | 'loading'
-  | 'downloading'
-  | 'converting'
-  | 'reading-video'
-  | 'reading-audio'
-  | 'merging'
-  | 'completed'
-  | 'error';
+  | "idle"
+  | "loading"
+  | "downloading"
+  | "converting"
+  | "reading-video"
+  | "reading-audio"
+  | "merging"
+  | "completed"
+  | "error";
 
 export interface UseFFmpegReturn {
   status: FFmpegStatus;
@@ -22,13 +26,17 @@ export interface UseFFmpegReturn {
   error: string | null;
   extractAudio: (videoUrl: string, title: string) => Promise<void>;
   extractAudioFromFile: (file: File, title?: string) => Promise<void>;
-  mergeVideoAndAudio: (videoFile: File, audioFile: File, title?: string) => Promise<void>;
+  mergeVideoAndAudio: (
+    videoFile: File,
+    audioFile: File,
+    title?: string,
+  ) => Promise<void>;
   reset: () => void;
   cancel: () => void;
 }
 
 export function useFFmpeg(): UseFFmpegReturn {
-  const [status, setStatus] = useState<FFmpegStatus>('idle');
+  const [status, setStatus] = useState<FFmpegStatus>("idle");
   const [progress, setProgress] = useState(0);
   const [progressInfo, setProgressInfo] = useState<ProgressInfo | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -44,22 +52,28 @@ export function useFFmpeg(): UseFFmpegReturn {
   }, []);
 
   const clearViewState = useCallback(() => {
-    setStatus('idle');
+    setStatus("idle");
     setProgress(0);
     setProgressInfo(null);
     setError(null);
   }, []);
 
-  const isTaskActive = useCallback((taskId: number) => activeTaskIdRef.current === taskId, []);
+  const isTaskActive = useCallback(
+    (taskId: number) => activeTaskIdRef.current === taskId,
+    [],
+  );
 
-  const applyIfActive = useCallback((taskId: number, update: () => void) => {
-    if (!isTaskActive(taskId)) {
-      return false;
-    }
+  const applyIfActive = useCallback(
+    (taskId: number, update: () => void) => {
+      if (!isTaskActive(taskId)) {
+        return false;
+      }
 
-    update();
-    return true;
-  }, [isTaskActive]);
+      update();
+      return true;
+    },
+    [isTaskActive],
+  );
 
   const invalidateActiveTask = useCallback(() => {
     activeTaskIdRef.current += 1;
@@ -75,7 +89,7 @@ export function useFFmpeg(): UseFFmpegReturn {
 
     activeAbortControllerRef.current = abortController;
     clearViewState();
-    setStatus('loading');
+    setStatus("loading");
     setProgress(5);
 
     return {
@@ -84,22 +98,27 @@ export function useFFmpeg(): UseFFmpegReturn {
     };
   }, [clearViewState, invalidateActiveTask]);
 
-  const completeWithReset = useCallback((taskId: number) => {
-    if (!applyIfActive(taskId, () => {
-      activeAbortControllerRef.current = null;
-      setStatus('completed');
-    })) {
-      return;
-    }
+  const completeWithReset = useCallback(
+    (taskId: number) => {
+      if (
+        !applyIfActive(taskId, () => {
+          activeAbortControllerRef.current = null;
+          setStatus("completed");
+        })
+      ) {
+        return;
+      }
 
-    clearCompletionTimer();
-    completionTimerRef.current = setTimeout(() => {
-      applyIfActive(taskId, () => {
-        activeAbortControllerRef.current = null;
-        clearViewState();
-      });
-    }, 2000);
-  }, [applyIfActive, clearCompletionTimer, clearViewState]);
+      clearCompletionTimer();
+      completionTimerRef.current = setTimeout(() => {
+        applyIfActive(taskId, () => {
+          activeAbortControllerRef.current = null;
+          clearViewState();
+        });
+      }, 2000);
+    },
+    [applyIfActive, clearCompletionTimer, clearViewState],
+  );
 
   const cancel = useCallback(() => {
     invalidateActiveTask();
@@ -113,145 +132,182 @@ export function useFFmpeg(): UseFFmpegReturn {
     clearViewState();
   }, [clearViewState, invalidateActiveTask]);
 
-  useEffect(() => () => {
-    invalidateActiveTask();
-    clearCompletionTimer();
-    terminateFFmpeg();
-  }, [clearCompletionTimer, invalidateActiveTask]);
+  useEffect(
+    () => () => {
+      invalidateActiveTask();
+      clearCompletionTimer();
+      terminateFFmpeg();
+    },
+    [clearCompletionTimer, invalidateActiveTask],
+  );
 
-  const extractAudio = useCallback(async (videoUrl: string, title: string) => {
-    const { taskId, signal } = beginTask();
+  const extractAudio = useCallback(
+    async (videoUrl: string, title: string) => {
+      const { taskId, signal } = beginTask();
 
-    try {
-      const { extractAudioFromVideo, downloadBlob } = await import('@/infrastructure/ffmpeg');
+      try {
+        const { extractAudioFromVideo, downloadBlob } =
+          await import("@/infrastructure/ffmpeg");
 
-      const audioBlob = await extractAudioFromVideo({
-        videoUrl,
-        signal,
-        onProgress: (prog: number, stage: FFmpegStage, info?: ProgressInfo) => {
-          applyIfActive(taskId, () => {
-            setStatus(stage);
-            setProgress(prog);
-            if (info) {
-              setProgressInfo(info);
-            }
-          });
-        },
-      });
+        const audioBlob = await extractAudioFromVideo({
+          videoUrl,
+          signal,
+          onProgress: (
+            prog: number,
+            stage: FFmpegStage,
+            info?: ProgressInfo,
+          ) => {
+            applyIfActive(taskId, () => {
+              setStatus(stage);
+              setProgress(prog);
+              if (info) {
+                setProgressInfo(info);
+              }
+            });
+          },
+        });
 
-      if (!isTaskActive(taskId)) {
-        return;
+        if (!isTaskActive(taskId)) {
+          return;
+        }
+
+        // Trigger download
+        downloadBlob(audioBlob, `${sanitizeFilename(title)}.mp3`);
+        completeWithReset(taskId);
+      } catch (err) {
+        if (err instanceof DOMException && err.name === "AbortError") {
+          return;
+        }
+
+        if (!isTaskActive(taskId)) {
+          return;
+        }
+
+        console.error("Extract audio error:", err);
+        setStatus("error");
+        const errorMessage = err instanceof Error ? err.message : String(err);
+        setError(errorMessage || "Unknown error");
       }
+    },
+    [applyIfActive, beginTask, completeWithReset, isTaskActive],
+  );
 
-      // Trigger download
-      downloadBlob(audioBlob, `${sanitizeFilename(title)}.mp3`);
-      completeWithReset(taskId);
+  const extractAudioFromFile = useCallback(
+    async (file: File, title?: string) => {
+      const { taskId, signal } = beginTask();
 
-    } catch (err) {
-      if (err instanceof DOMException && err.name === 'AbortError') {
-        return;
+      try {
+        const { extractAudioFromVideo, downloadBlob } =
+          await import("@/infrastructure/ffmpeg");
+
+        const outputTitle =
+          title || file.name.replace(/\.[^.]+$/, "") || "output";
+
+        const audioBlob = await extractAudioFromVideo({
+          videoFile: file,
+          signal,
+          onProgress: (
+            prog: number,
+            stage: FFmpegStage,
+            info?: ProgressInfo,
+          ) => {
+            applyIfActive(taskId, () => {
+              setStatus(stage);
+              setProgress(prog);
+              if (info) {
+                setProgressInfo(info);
+              }
+            });
+          },
+        });
+
+        if (!isTaskActive(taskId)) {
+          return;
+        }
+
+        // Trigger download
+        downloadBlob(audioBlob, `${sanitizeFilename(outputTitle)}.mp3`);
+        completeWithReset(taskId);
+      } catch (err) {
+        if (err instanceof DOMException && err.name === "AbortError") {
+          return;
+        }
+
+        if (!isTaskActive(taskId)) {
+          return;
+        }
+
+        console.error("Extract audio from file error:", err);
+        setStatus("error");
+        const errorMessage = err instanceof Error ? err.message : String(err);
+        setError(errorMessage || "Unknown error");
       }
+    },
+    [applyIfActive, beginTask, completeWithReset, isTaskActive],
+  );
 
-      if (!isTaskActive(taskId)) {
-        return;
+  const mergeVideoAndAudio = useCallback(
+    async (videoFile: File, audioFile: File, title?: string) => {
+      const { taskId, signal } = beginTask();
+
+      try {
+        const { mergeVideoAudio, downloadBlob } =
+          await import("@/infrastructure/ffmpeg");
+        const outputTitle =
+          title || videoFile.name.replace(/\.[^.]+$/, "") || "merged-video";
+
+        const mergedBlob = await mergeVideoAudio({
+          videoFile,
+          audioFile,
+          signal,
+          onProgress: (
+            prog: number,
+            stage: FFmpegStage,
+            info?: ProgressInfo,
+          ) => {
+            applyIfActive(taskId, () => {
+              setStatus(stage);
+              setProgress(prog);
+              if (info) {
+                setProgressInfo(info);
+              }
+            });
+          },
+        });
+
+        if (!isTaskActive(taskId)) {
+          return;
+        }
+
+        downloadBlob(mergedBlob, `${sanitizeFilename(outputTitle)}.mp4`);
+        completeWithReset(taskId);
+      } catch (err) {
+        if (err instanceof DOMException && err.name === "AbortError") {
+          return;
+        }
+
+        if (!isTaskActive(taskId)) {
+          return;
+        }
+
+        console.error("Merge video and audio error:", err);
+        setStatus("error");
+        const errorMessage = err instanceof Error ? err.message : String(err);
+        setError(errorMessage || "Unknown error");
       }
+    },
+    [applyIfActive, beginTask, completeWithReset, isTaskActive],
+  );
 
-      console.error('Extract audio error:', err);
-      setStatus('error');
-      const errorMessage = err instanceof Error ? err.message : String(err);
-      setError(errorMessage || 'Unknown error');
-    }
-  }, [applyIfActive, beginTask, completeWithReset, isTaskActive]);
-
-  const extractAudioFromFile = useCallback(async (file: File, title?: string) => {
-    const { taskId, signal } = beginTask();
-
-    try {
-      const { extractAudioFromVideo, downloadBlob } = await import('@/infrastructure/ffmpeg');
-
-      const outputTitle = title || file.name.replace(/\.[^.]+$/, '') || 'output';
-
-      const audioBlob = await extractAudioFromVideo({
-        videoFile: file,
-        signal,
-        onProgress: (prog: number, stage: FFmpegStage, info?: ProgressInfo) => {
-          applyIfActive(taskId, () => {
-            setStatus(stage);
-            setProgress(prog);
-            if (info) {
-              setProgressInfo(info);
-            }
-          });
-        },
-      });
-
-      if (!isTaskActive(taskId)) {
-        return;
-      }
-
-      // Trigger download
-      downloadBlob(audioBlob, `${sanitizeFilename(outputTitle)}.mp3`);
-      completeWithReset(taskId);
-
-    } catch (err) {
-      if (err instanceof DOMException && err.name === 'AbortError') {
-        return;
-      }
-
-      if (!isTaskActive(taskId)) {
-        return;
-      }
-
-      console.error('Extract audio from file error:', err);
-      setStatus('error');
-      const errorMessage = err instanceof Error ? err.message : String(err);
-      setError(errorMessage || 'Unknown error');
-    }
-  }, [applyIfActive, beginTask, completeWithReset, isTaskActive]);
-
-  const mergeVideoAndAudio = useCallback(async (videoFile: File, audioFile: File, title?: string) => {
-    const { taskId, signal } = beginTask();
-
-    try {
-      const { mergeVideoAudio, downloadBlob } = await import('@/infrastructure/ffmpeg');
-      const outputTitle = title || videoFile.name.replace(/\.[^.]+$/, '') || 'merged-video';
-
-      const mergedBlob = await mergeVideoAudio({
-        videoFile,
-        audioFile,
-        signal,
-        onProgress: (prog: number, stage: FFmpegStage, info?: ProgressInfo) => {
-          applyIfActive(taskId, () => {
-            setStatus(stage);
-            setProgress(prog);
-            if (info) {
-              setProgressInfo(info);
-            }
-          });
-        },
-      });
-
-      if (!isTaskActive(taskId)) {
-        return;
-      }
-
-      downloadBlob(mergedBlob, `${sanitizeFilename(outputTitle)}.mp4`);
-      completeWithReset(taskId);
-    } catch (err) {
-      if (err instanceof DOMException && err.name === 'AbortError') {
-        return;
-      }
-
-      if (!isTaskActive(taskId)) {
-        return;
-      }
-
-      console.error('Merge video and audio error:', err);
-      setStatus('error');
-      const errorMessage = err instanceof Error ? err.message : String(err);
-      setError(errorMessage || 'Unknown error');
-    }
-  }, [applyIfActive, beginTask, completeWithReset, isTaskActive]);
-
-  return { status, progress, progressInfo, error, extractAudio, extractAudioFromFile, mergeVideoAndAudio, reset, cancel };
+  return {
+    status,
+    progress,
+    progressInfo,
+    error,
+    extractAudio,
+    extractAudioFromFile,
+    mergeVideoAndAudio,
+    reset,
+    cancel,
+  };
 }

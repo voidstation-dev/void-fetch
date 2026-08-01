@@ -1,34 +1,34 @@
-'use client'
+"use client";
 
-import dynamic from 'next/dynamic'
+import dynamic from "next/dynamic";
 
-import type { HlsDownloadDialogRequest } from './hls-download-dialog'
+import type { HlsDownloadDialogRequest } from "./hls-download-dialog";
 
 const HlsDownloadDialog = dynamic(
-    () => import('./hls-download-dialog').then((m) => m.HlsDownloadDialog),
-    { ssr: false }
-)
+  () => import("./hls-download-dialog").then((m) => m.HlsDownloadDialog),
+  { ssr: false },
+);
 
 interface DeferredHlsDownloadDialogProps {
-    open: boolean
-    onOpenChange: (open: boolean) => void
-    request: HlsDownloadDialogRequest | null
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  request: HlsDownloadDialogRequest | null;
 }
 
 export function DeferredHlsDownloadDialog({
-    open,
-    onOpenChange,
-    request,
+  open,
+  onOpenChange,
+  request,
 }: DeferredHlsDownloadDialogProps) {
-    if (!open || !request) {
-        return null
-    }
+  if (!open || !request) {
+    return null;
+  }
 
-    return (
-        <HlsDownloadDialog
-            open={open}
-            onOpenChange={onOpenChange}
-            request={request}
-        />
-    )
+  return (
+    <HlsDownloadDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      request={request}
+    />
+  );
 }

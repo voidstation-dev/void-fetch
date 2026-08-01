@@ -4,18 +4,18 @@
  * All rights reserved.
  */
 
-import React from 'react';
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogDescription, 
-  DialogHeader, 
-  DialogTitle 
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { toast } from '@/lib/deferred-toast';
-import { Copy, Terminal } from 'lucide-react';
-import type { DownloadJob } from '../types/batch-download';
+import React from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { toast } from "@/lib/deferred-toast";
+import { Copy, Terminal } from "lucide-react";
+import type { DownloadJob } from "../types/batch-download";
 
 interface JobErrorDialogProps {
   job: DownloadJob | null;
@@ -23,27 +23,35 @@ interface JobErrorDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export function JobErrorDialog({ job, open, onOpenChange }: JobErrorDialogProps) {
+export function JobErrorDialog({
+  job,
+  open,
+  onOpenChange,
+}: JobErrorDialogProps) {
   if (!job || !job.error) return null;
 
   const error = job.error;
 
   const handleCopy = async () => {
-    const errorDetails = JSON.stringify({
-      jobId: job.id,
-      url: job.sourceUrl,
-      errorCode: error.code,
-      message: error.message,
-      httpStatus: error.httpStatus,
-      requestId: error.requestId,
-      details: error.details,
-    }, null, 2);
+    const errorDetails = JSON.stringify(
+      {
+        jobId: job.id,
+        url: job.sourceUrl,
+        errorCode: error.code,
+        message: error.message,
+        httpStatus: error.httpStatus,
+        requestId: error.requestId,
+        details: error.details,
+      },
+      null,
+      2,
+    );
 
     try {
       await navigator.clipboard.writeText(errorDetails);
-      toast.success('Error logs copied to clipboard');
+      toast.success("Error logs copied to clipboard");
     } catch {
-      toast.error('Failed to copy error logs');
+      toast.error("Failed to copy error logs");
     }
   };
 
@@ -56,14 +64,17 @@ export function JobErrorDialog({ job, open, onOpenChange }: JobErrorDialogProps)
             JOB FAILURE DETAILS
           </DialogTitle>
           <DialogDescription className="text-xs text-muted-foreground">
-            Error details for download job: {job.metadata?.title || job.sourceUrl}
+            Error details for download job:{" "}
+            {job.metadata?.title || job.sourceUrl}
           </DialogDescription>
         </DialogHeader>
 
         <div className="flex flex-col gap-3 my-2 text-xs">
           <div className="grid grid-cols-3 border-b border-border/50 pb-2">
             <span className="text-muted-foreground">Error Code</span>
-            <span className="col-span-2 font-mono font-bold text-destructive">{error.code}</span>
+            <span className="col-span-2 font-mono font-bold text-destructive">
+              {error.code}
+            </span>
           </div>
 
           {error.httpStatus && (

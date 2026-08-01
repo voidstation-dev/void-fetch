@@ -29,15 +29,15 @@ Capture a short glossary so opportunities reference real names, not invented one
 
 Each is a concrete, nameable issue, not a vague "this could be cleaner".
 
-| Pattern | What it looks like | Why it matters |
-|---|---|---|
-| Anemic domain concept | Data in one place, its rules scattered across handlers/services | Changing the rule means hunting every call site; the model doesn't own its invariants |
-| Shallow module | Public interface nearly matches the implementation, or callers must know internal ordering/invariants | The module adds little leverage; tests and callers still carry the complexity |
-| Leaking boundary | One context reaches into another's tables, internals, or private helpers | Couples contexts; a change in one silently breaks the other |
-| Naming divergence | Same concept, different names per module, or one name for several concepts | Names can't be trusted; refactors miss instances |
-| Duplicated concept | Same domain idea reimplemented in parallel | Fixes and rules drift between copies |
-| Primitive obsession | Core concepts as bare strings/numbers (a `string` userId everywhere) | Nowhere to centralize validation; easy to mix up arguments |
-| Misplaced logic | Business rule in a transport/handler/UI layer | Untestable without the transport; not reusable |
+| Pattern               | What it looks like                                                                                    | Why it matters                                                                        |
+| --------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| Anemic domain concept | Data in one place, its rules scattered across handlers/services                                       | Changing the rule means hunting every call site; the model doesn't own its invariants |
+| Shallow module        | Public interface nearly matches the implementation, or callers must know internal ordering/invariants | The module adds little leverage; tests and callers still carry the complexity         |
+| Leaking boundary      | One context reaches into another's tables, internals, or private helpers                              | Couples contexts; a change in one silently breaks the other                           |
+| Naming divergence     | Same concept, different names per module, or one name for several concepts                            | Names can't be trusted; refactors miss instances                                      |
+| Duplicated concept    | Same domain idea reimplemented in parallel                                                            | Fixes and rules drift between copies                                                  |
+| Primitive obsession   | Core concepts as bare strings/numbers (a `string` userId everywhere)                                  | Nowhere to centralize validation; easy to mix up arguments                            |
+| Misplaced logic       | Business rule in a transport/handler/UI layer                                                         | Untestable without the transport; not reusable                                        |
 
 ## Module-depth screen
 
@@ -52,12 +52,12 @@ Use this screen to keep the review from becoming generic cleanup advice:
 
 Classify dependencies before suggesting the new shape:
 
-| Dependency | Good move | Test shape |
-|---|---|---|
-| In-process | Collapse shallow modules and expose one smaller interface | Test directly through the new interface |
-| Local stand-in exists | Keep the dependency behind an internal seam | Run the stand-in in the test suite |
-| Owned remote system | Define a port at the network seam | Production adapter plus in-memory test adapter |
-| True external system | Inject the provider behind a port | Fake or mock adapter, with idempotency and reconciliation for effects |
+| Dependency            | Good move                                                 | Test shape                                                            |
+| --------------------- | --------------------------------------------------------- | --------------------------------------------------------------------- |
+| In-process            | Collapse shallow modules and expose one smaller interface | Test directly through the new interface                               |
+| Local stand-in exists | Keep the dependency behind an internal seam               | Run the stand-in in the test suite                                    |
+| Owned remote system   | Define a port at the network seam                         | Production adapter plus in-memory test adapter                        |
+| True external system  | Inject the provider behind a port                         | Fake or mock adapter, with idempotency and reconciliation for effects |
 
 Testing rule: the deepened interface is the test surface. Keep old shallow-module tests until replacement coverage is green, then delete the tests that only preserve the old structure. Do not expose internal seams just because tests use them.
 
@@ -81,9 +81,11 @@ Record every dropped or deferred opportunity in the output's "Out of scope (defe
 # Deepening opportunities
 
 ## Domain glossary
+
 - <concept>: <where it lives, what names it goes by>
 
 ## Opportunities (ranked by leverage)
+
 1. [<pattern>] <concept/module>
    - Observation: <what the code does today, with file paths>
    - Domain rationale: <how this diverges from the domain model>
@@ -93,6 +95,7 @@ Record every dropped or deferred opportunity in the output's "Out of scope (defe
    - Suggested move: <the smallest change that fixes it; name the slice to migrate first>
 
 ## Out of scope (deferred)
+
 - <opportunity>: <why deferred: speculative / low leverage / no current requirement>
 ```
 

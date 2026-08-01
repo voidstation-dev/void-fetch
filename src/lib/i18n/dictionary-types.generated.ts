@@ -42,7 +42,7 @@ export interface Dictionary {
     allImagesLoadFailed: string;
     packageFailed: string;
     confirmPartialDownload: string;
-    'continue': string;
+    continue: string;
     cancel: string;
     fileTooLarge: string;
     videoFileTooLarge: string;
@@ -220,7 +220,7 @@ export interface Dictionary {
   };
   languages: {
     zh: string;
-    'zh-tw': string;
+    "zh-tw": string;
     en: string;
     ja: string;
     es: string;
@@ -331,9 +331,9 @@ export interface Dictionary {
     quickStart: {
       title: string;
       steps: Array<{
-          title: string;
-          description: string;
-        }>;
+        title: string;
+        description: string;
+      }>;
     };
     platformSupport: {
       title: string;
@@ -507,7 +507,7 @@ export interface Dictionary {
     features: {
       en: string[];
       zh: string[];
-      'zh-tw': string[];
+      "zh-tw": string[];
       ja: string[];
       es: string[];
       ru: string[];
@@ -516,36 +516,36 @@ export interface Dictionary {
       title: {
         en: string;
         zh: string;
-        'zh-tw': string;
+        "zh-tw": string;
         ja: string;
         es: string;
         ru: string;
       };
       steps: {
         en: Array<{
-            name: string;
-            text: string;
-          }>;
+          name: string;
+          text: string;
+        }>;
         zh: Array<{
-            name: string;
-            text: string;
-          }>;
-        'zh-tw': Array<{
-            name: string;
-            text: string;
-          }>;
+          name: string;
+          text: string;
+        }>;
+        "zh-tw": Array<{
+          name: string;
+          text: string;
+        }>;
         ja: Array<{
-            name: string;
-            text: string;
-          }>;
+          name: string;
+          text: string;
+        }>;
         es: Array<{
-            name: string;
-            text: string;
-          }>;
+          name: string;
+          text: string;
+        }>;
         ru: Array<{
-            name: string;
-            text: string;
-          }>;
+          name: string;
+          text: string;
+        }>;
       };
     };
   };
@@ -809,4 +809,4 @@ export interface Dictionary {
     autoStartDownloads: string;
     autoStartDownloadsDesc: string;
   };
-};
+}

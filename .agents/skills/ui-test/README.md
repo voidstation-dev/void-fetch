@@ -27,15 +27,15 @@ npx skills add browserbase/ui-test
 
 ## What It Tests
 
-| Category | How | What Playwright Misses |
-|----------|-----|----------------------|
-| Accessibility | axe-core + keyboard nav | WCAG violations, focus rings, screen reader semantics |
-| Visual Quality | Screenshot + Claude judgment | Layout balance, typography, spacing, empty states |
-| Responsive | Viewport sweep (375px, 768px, 1440px) | Mobile overflow, touch targets, content reflow |
-| Console Health | `browse eval` injection | Hydration errors, failed requests, runtime exceptions |
-| Error States | Navigate to empty/error states | Missing empty states, broken error recovery |
-| Adversarial | XSS, empty submit, rapid click, long input | Edge cases developers don't write tests for |
-| Exploratory | Navigate freely, try to break things | Bugs you didn't think to test for |
+| Category       | How                                        | What Playwright Misses                                |
+| -------------- | ------------------------------------------ | ----------------------------------------------------- |
+| Accessibility  | axe-core + keyboard nav                    | WCAG violations, focus rings, screen reader semantics |
+| Visual Quality | Screenshot + Claude judgment               | Layout balance, typography, spacing, empty states     |
+| Responsive     | Viewport sweep (375px, 768px, 1440px)      | Mobile overflow, touch targets, content reflow        |
+| Console Health | `browse eval` injection                    | Hydration errors, failed requests, runtime exceptions |
+| Error States   | Navigate to empty/error states             | Missing empty states, broken error recovery           |
+| Adversarial    | XSS, empty submit, rapid click, long input | Edge cases developers don't write tests for           |
+| Exploratory    | Navigate freely, try to break things       | Bugs you didn't think to test for                     |
 
 ## Browser Execution
 

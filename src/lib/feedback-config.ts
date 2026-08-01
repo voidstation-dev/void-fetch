@@ -1,4 +1,4 @@
-import { API_ENDPOINTS } from './config'
+import { API_ENDPOINTS } from "./config";
 
 // Feedback API configuration
 export const FEEDBACK_CONFIG = {
@@ -10,16 +10,16 @@ export const FEEDBACK_CONFIG = {
     contentMinLength: 5,
     contentMaxLength: 1000,
     emailRegex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-  }
-} as const
+  },
+} as const;
 
 // Feedback type
-export type FeedbackType = 'bug' | 'feature' | 'other'
+export type FeedbackType = "bug" | "feature" | "other";
 
 // Feedback data interface
 export interface FeedbackData {
-  type: FeedbackType
-  content: string
-  contact?: string
-  metadata?: Record<string, unknown>
+  type: FeedbackType;
+  content: string;
+  contact?: string;
+  metadata?: Record<string, unknown>;
 }

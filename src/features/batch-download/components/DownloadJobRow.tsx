@@ -10,14 +10,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import {
-  Play,
   Trash2,
   Settings,
   AlertCircle,
   CheckCircle2,
   FileVideo,
   Loader2,
-  XSquare,
   Maximize2,
   ExternalLink,
   Video,
@@ -64,52 +62,41 @@ export function DownloadJobRowComponent({
     cancelParseJob(job.id);
   };
 
-  const handleStart = async () => {
-    await updateJobStatus(job.id, "queued");
-    if (!isQueueRunning) {
-      resumeQueue();
-    }
-    // We must call schedule() because isQueueRunning state update is batched
-    downloadScheduler.schedule();
-  };
+  const { videoUrl, audioUrl, images, isImageOnly } = React.useMemo(() => {
+    const raw = (job.metadata?.rawParsedData || job.metadata) as
+      Record<string, unknown> | undefined;
+    const vUrl =
+      typeof raw?.downloadVideoUrl === "string"
+        ? raw.downloadVideoUrl
+        : typeof raw?.originDownloadVideoUrl === "string"
+          ? raw.originDownloadVideoUrl
+          : typeof raw?.videoUrl === "string"
+            ? raw.videoUrl
+            : undefined;
+    const aUrl =
+      typeof raw?.downloadAudioUrl === "string"
+        ? raw.downloadAudioUrl
+        : typeof raw?.originDownloadAudioUrl === "string"
+          ? raw.originDownloadAudioUrl
+          : typeof raw?.audioUrl === "string"
+            ? raw.audioUrl
+            : undefined;
+    const imgs =
+      job.metadata?.images ||
+      (Array.isArray(raw?.images) ? (raw.images as string[]) : undefined);
+    const imgOnly =
+      job.config.outputType === "images" ||
+      job.config.outputType === "zip_images" ||
+      (Boolean(imgs && imgs.length > 0) && !vUrl && !aUrl);
 
-  const { rawData, videoUrl, audioUrl, images, isImageOnly } =
-    React.useMemo(() => {
-      const raw = (job.metadata?.rawParsedData || job.metadata) as
-        | Record<string, unknown>
-        | undefined;
-      const vUrl =
-        typeof raw?.downloadVideoUrl === "string"
-          ? raw.downloadVideoUrl
-          : typeof raw?.originDownloadVideoUrl === "string"
-            ? raw.originDownloadVideoUrl
-            : typeof raw?.videoUrl === "string"
-              ? raw.videoUrl
-              : undefined;
-      const aUrl =
-        typeof raw?.downloadAudioUrl === "string"
-          ? raw.downloadAudioUrl
-          : typeof raw?.originDownloadAudioUrl === "string"
-            ? raw.originDownloadAudioUrl
-            : typeof raw?.audioUrl === "string"
-              ? raw.audioUrl
-              : undefined;
-      const imgs =
-        job.metadata?.images ||
-        (Array.isArray(raw?.images) ? (raw.images as string[]) : undefined);
-      const imgOnly =
-        job.config.outputType === "images" ||
-        job.config.outputType === "zip_images" ||
-        (Boolean(imgs && imgs.length > 0) && !vUrl && !aUrl);
-
-      return {
-        rawData: raw,
-        videoUrl: vUrl,
-        audioUrl: aUrl,
-        images: imgs,
-        isImageOnly: imgOnly,
-      };
-    }, [job.metadata, job.config.outputType]);
+    return {
+      rawData: raw,
+      videoUrl: vUrl,
+      audioUrl: aUrl,
+      images: imgs,
+      isImageOnly: imgOnly,
+    };
+  }, [job.metadata, job.config.outputType]);
 
   // Background media duration probe if initial API response lacked duration
   React.useEffect(() => {
@@ -158,10 +145,6 @@ export function DownloadJobRowComponent({
     }
     // Force schedule in case state hasn't flushed yet
     downloadScheduler.schedule();
-  };
-
-  const handlePause = () => {
-    downloadScheduler.pauseJob(job.id);
   };
 
   const handleCancel = () => {
@@ -251,7 +234,7 @@ export function DownloadJobRowComponent({
         );
       case "downloading":
         return (
-          <div className="flex flex-col gap-1 w-full min-w-[160px] max-w-[220px]">
+          <div className="flex flex-col gap-1 w-full min-w-40 max-w-55">
             <div className="flex items-center justify-between text-[10px] font-bold text-foreground">
               <span className="text-primary font-mono">
                 {job.progress.percent}%

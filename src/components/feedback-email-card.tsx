@@ -1,16 +1,16 @@
-'use client'
+"use client";
 
-import React, { useState } from 'react'
-import { Mail, Copy, Check } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { toast } from '@/lib/deferred-toast'
+import React, { useState } from "react";
+import { Mail, Copy, Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { toast } from "@/lib/deferred-toast";
 
 interface FeedbackEmailCardProps {
-  email: string
-  title: string
-  description: string
-  emailAction: string
-  mailtoUrl: string
+  email: string;
+  title: string;
+  description: string;
+  emailAction: string;
+  mailtoUrl: string;
 }
 
 export function FeedbackEmailCard({
@@ -20,19 +20,19 @@ export function FeedbackEmailCard({
   emailAction,
   mailtoUrl,
 }: FeedbackEmailCardProps) {
-  const [copied, setCopied] = useState(false)
+  const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(email)
-    setCopied(true)
-    toast.success('Email copied to clipboard')
-    setTimeout(() => setCopied(false), 2000)
-  }
+    navigator.clipboard.writeText(email);
+    setCopied(true);
+    toast.success("Email copied to clipboard");
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <div className="relative overflow-hidden rounded-2xl border border-border/80 bg-card/80 backdrop-blur-xl p-6 sm:p-8 shadow-2xl transition-all duration-300 hover:border-primary/40 group">
       {/* Top Ambient Glow Line */}
-      <div className="absolute -top-px inset-x-8 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+      <div className="absolute -top-px inset-x-8 h-px bg-linear-to-r from-transparent via-primary/50 to-transparent" />
 
       <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
         {/* Left Column: Title & Description */}
@@ -99,5 +99,5 @@ export function FeedbackEmailCard({
         </div>
       </div>
     </div>
-  )
+  );
 }

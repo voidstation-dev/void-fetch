@@ -43,7 +43,9 @@ export default async function AboutPage({
     <>
       <div className="flex items-center justify-between p-4 border rounded-xl bg-card border-border/80">
         <div className="flex flex-col gap-0.5">
-          <h1 className="text-sm font-bold text-foreground">{tAbout("title")}</h1>
+          <h1 className="text-sm font-bold text-foreground">
+            {tAbout("title")}
+          </h1>
           <span className="text-[10px] text-muted-foreground uppercase">
             {tAbout("subtitle")}
           </span>
@@ -61,21 +63,29 @@ export default async function AboutPage({
           </div>
 
           <div className="grid grid-cols-3 gap-2">
-            <span className="text-muted-foreground">{tAbout("productName")}</span>
+            <span className="text-muted-foreground">
+              {tAbout("productName")}
+            </span>
             <span className="col-span-2 font-semibold">VoidFetch</span>
 
             <span className="text-muted-foreground">{tAbout("publisher")}</span>
             <span className="col-span-2 font-semibold">VoidStation</span>
 
-            <span className="text-muted-foreground">{tAbout("appVersion")}</span>
+            <span className="text-muted-foreground">
+              {tAbout("appVersion")}
+            </span>
             <span className="col-span-2 font-mono">v1.0.0-release</span>
 
-            <span className="text-muted-foreground">{tAbout("targetRuntime")}</span>
+            <span className="text-muted-foreground">
+              {tAbout("targetRuntime")}
+            </span>
             <span className="col-span-2 font-mono">
               Next.js App Router (SPA compatible)
             </span>
 
-            <span className="text-muted-foreground">{tAbout("compilationBuild")}</span>
+            <span className="text-muted-foreground">
+              {tAbout("compilationBuild")}
+            </span>
             <span className="col-span-2 font-mono">main-b3917a2</span>
           </div>
 

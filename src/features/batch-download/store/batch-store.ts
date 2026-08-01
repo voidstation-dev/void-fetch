@@ -12,7 +12,6 @@ import type {
   DownloadError,
   BatchSettings,
   DownloadJobStatus,
-  OutputType,
 } from "../types/batch-download";
 import {
   saveJob,
@@ -21,7 +20,6 @@ import {
   getAllJobs,
   saveProject,
   getProject,
-  clearJobs,
 } from "../services/job-persistence";
 import { parseWorker } from "../services/parse-worker-pool";
 import { downloadScheduler } from "../services/download-scheduler";
@@ -156,7 +154,6 @@ export const useBatchStore = create<BatchStore>((set, get) => ({
 
   initializeStore: async () => {
     if (get().isInitialized) return;
-    const start = Date.now();
     try {
       const loadedJobs = await getAllJobs();
 

@@ -1,4 +1,4 @@
-type RouterNavigationType = 'push' | 'replace' | 'traverse';
+type RouterNavigationType = "push" | "replace" | "traverse";
 
 declare global {
   interface Window {
@@ -8,15 +8,15 @@ declare global {
 
 export function onRouterTransitionStart(
   url: string,
-  navigationType: RouterNavigationType
+  navigationType: RouterNavigationType,
 ) {
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== "production") {
     return;
   }
 
   const dataLayer = (window.dataLayer = window.dataLayer || []);
   dataLayer.push({
-    event: 'router_transition_start',
+    event: "router_transition_start",
     navigation_type: navigationType,
     destination: url,
   });

@@ -7,13 +7,13 @@
  *
  * Usage: node scripts/validate-i18n.mjs
  */
-import { readdir, readFile } from 'node:fs/promises';
-import { join, basename } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { dirname } from 'node:path';
+import { readdir, readFile } from "node:fs/promises";
+import { join, basename } from "node:path";
+import { fileURLToPath } from "node:url";
+import { dirname } from "node:path";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const DICT_DIR = join(__dirname, '..', 'src', 'lib', 'i18n', 'dictionaries');
+const DICT_DIR = join(__dirname, "..", "src", "lib", "i18n", "dictionaries");
 
 /**
  * Recursively collect dotted key paths from a nested object.
@@ -21,7 +21,7 @@ const DICT_DIR = join(__dirname, '..', 'src', 'lib', 'i18n', 'dictionaries');
  * (e.g. seo.features.<locale>) stay comparable across locales.
  */
 function collectKeys(value, prefix, out) {
-  if (value === null || typeof value !== 'object') {
+  if (value === null || typeof value !== "object") {
     if (prefix) out.add(prefix);
     return;
   }
@@ -41,17 +41,17 @@ function collectKeys(value, prefix, out) {
 
 function keysOf(obj) {
   const set = new Set();
-  collectKeys(obj, '', set);
+  collectKeys(obj, "", set);
   return set;
 }
 
 async function loadDictionaries() {
   const files = await readdir(DICT_DIR);
-  const jsonFiles = files.filter((f) => f.endsWith('.json'));
+  const jsonFiles = files.filter((f) => f.endsWith(".json"));
   const byLocale = {};
   for (const file of jsonFiles) {
-    const locale = basename(file, '.json');
-    const raw = await readFile(join(DICT_DIR, file), 'utf8');
+    const locale = basename(file, ".json");
+    const raw = await readFile(join(DICT_DIR, file), "utf8");
     byLocale[locale] = JSON.parse(raw);
   }
   return byLocale;
@@ -61,14 +61,14 @@ async function main() {
   const byLocale = await loadDictionaries();
   const en = byLocale.en;
   if (!en) {
-    console.error('[i18n] en.json not found — cannot use as canonical source.');
+    console.error("[i18n] en.json not found — cannot use as canonical source.");
     process.exit(1);
   }
   const canonical = keysOf(en);
   let failed = false;
 
   const locales = Object.keys(byLocale)
-    .filter((l) => l !== 'en')
+    .filter((l) => l !== "en")
     .sort();
 
   for (const locale of locales) {
@@ -81,7 +81,9 @@ async function main() {
     }
     failed = true;
     if (missing.length) {
-      console.error(`[i18n] ${locale}: missing ${missing.length} keys vs en.json`);
+      console.error(
+        `[i18n] ${locale}: missing ${missing.length} keys vs en.json`,
+      );
       for (const k of missing) console.error(`  - ${k}`);
     }
     if (extra.length) {
@@ -91,10 +93,12 @@ async function main() {
   }
 
   if (failed) {
-    console.error('[i18n] Locale key parity check FAILED.');
+    console.error("[i18n] Locale key parity check FAILED.");
     process.exit(1);
   }
-  console.log(`[i18n] All ${locales.length + 1} locales in parity with en.json.`);
+  console.log(
+    `[i18n] All ${locales.length + 1} locales in parity with en.json.`,
+  );
 }
 
 main();

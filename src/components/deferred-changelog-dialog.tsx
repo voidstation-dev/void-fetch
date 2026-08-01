@@ -1,50 +1,50 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import dynamic from 'next/dynamic'
-import { ScrollText } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
-import { useTranslations } from 'next-intl'
+import { useState } from "react";
+import dynamic from "next/dynamic";
+import { ScrollText } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 const ChangelogDialog = dynamic(
-    () => import('@/components/changelog-dialog').then((m) => m.ChangelogDialog),
-    { ssr: false }
-)
+  () => import("@/components/changelog-dialog").then((m) => m.ChangelogDialog),
+  { ssr: false },
+);
 
 interface DeferredChangelogDialogProps {
-    triggerClassName?: string
-    triggerIconOnly?: boolean
+  triggerClassName?: string;
+  triggerIconOnly?: boolean;
 }
 
 export function DeferredChangelogDialog({
-    triggerClassName,
-    triggerIconOnly = false,
+  triggerClassName,
+  triggerIconOnly = false,
 }: DeferredChangelogDialogProps) {
-    const t = useTranslations('changelog')
-    const [mounted, setMounted] = useState(false)
-    const title = t('title')
+  const t = useTranslations("changelog");
+  const [mounted, setMounted] = useState(false);
+  const title = t("title");
 
-    if (mounted) {
-        return (
-            <ChangelogDialog
-                triggerClassName={triggerClassName}
-                triggerIconOnly={triggerIconOnly}
-                defaultOpen
-            />
-        )
-    }
-
+  if (mounted) {
     return (
-        <Button
-            variant="ghost"
-            size={triggerIconOnly ? 'icon' : 'sm'}
-            className={cn('text-sm', triggerClassName)}
-            onClick={() => setMounted(true)}
-            aria-label={title}
-        >
-            <ScrollText className={cn('h-4 w-4', !triggerIconOnly && 'mr-1')} />
-            {triggerIconOnly ? <span className="sr-only">{title}</span> : title}
-        </Button>
-    )
+      <ChangelogDialog
+        triggerClassName={triggerClassName}
+        triggerIconOnly={triggerIconOnly}
+        defaultOpen
+      />
+    );
+  }
+
+  return (
+    <Button
+      variant="ghost"
+      size={triggerIconOnly ? "icon" : "sm"}
+      className={cn("text-sm", triggerClassName)}
+      onClick={() => setMounted(true)}
+      aria-label={title}
+    >
+      <ScrollText className={cn("h-4 w-4", !triggerIconOnly && "mr-1")} />
+      {triggerIconOnly ? <span className="sr-only">{title}</span> : title}
+    </Button>
+  );
 }

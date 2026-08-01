@@ -3,10 +3,10 @@
  * Copyright (c) 2026 VoidStation.
  */
 
-'use client';
+"use client";
 
-import React from 'react';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { cn } from "@/lib/utils";
 
 interface BackgroundGridProps {
   children?: React.ReactNode;
@@ -15,7 +15,12 @@ interface BackgroundGridProps {
 
 export function BackgroundGrid({ children, className }: BackgroundGridProps) {
   return (
-    <div className={cn('relative min-h-screen w-full bg-background overflow-hidden', className)}>
+    <div
+      className={cn(
+        "relative min-h-screen w-full bg-background overflow-hidden",
+        className,
+      )}
+    >
       {/* Radial Gradient Ambient Light Beam Top */}
       <div className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-primary/10 rounded-full blur-[140px] opacity-50 dark:opacity-40" />
 

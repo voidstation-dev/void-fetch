@@ -4,7 +4,7 @@
  * All rights reserved.
  */
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -65,7 +65,6 @@ const insertToken = (
   setter(current ? `${current} ${token}` : token);
 };
 
-import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 
 export function JobConfigDrawer() {
@@ -84,9 +83,6 @@ export function JobConfigDrawer() {
   const [saveMetadata, setSaveMetadata] = useState(false);
   const [extractAudio, setExtractAudio] = useState(false);
   const [segmentConcurrency, setSegmentConcurrency] = useState("auto");
-
-  // Exit animation state
-  const [isClosing, setIsClosing] = useState(false);
 
   // State synchronization on selection change
   const [prevActiveJobId, setPrevActiveJobId] = useState<string | null>(null);
@@ -118,16 +114,13 @@ export function JobConfigDrawer() {
   if (!activeJobId) return null;
 
   const handleCloseDrawer = () => {
-    setIsClosing(true);
     setTimeout(() => {
       store.setActiveJobDrawerId(null);
-      setIsClosing(false);
     }, 200);
   };
 
   const rawData = activeJob?.metadata?.rawParsedData as
-    | ParsedDataRecord
-    | undefined;
+    ParsedDataRecord | undefined;
   const sourceUrl = activeJob?.sourceUrl || "";
   const videoUrl = rawData?.downloadVideoUrl || rawData?.originDownloadVideoUrl;
   const audioUrl = rawData?.downloadAudioUrl || rawData?.originDownloadAudioUrl;
@@ -213,12 +206,22 @@ export function JobConfigDrawer() {
   };
 
   return (
-    <Dialog open={Boolean(activeJobId)} onOpenChange={(open) => !open && handleCloseDrawer()}>
-      <DialogContent showCloseButton={false} className="sm:max-w-[560px] bg-card/95 border border-border/80 rounded-2xl shadow-2xl flex flex-col p-6 text-foreground max-h-[90vh] overflow-hidden backdrop-blur-2xl">
-        <DialogTitle className="sr-only">{isBulk ? t("titleBulk") : t("titleSingle")}</DialogTitle>
-        <DialogDescription className="sr-only">{t("subtitle")}</DialogDescription>
+    <Dialog
+      open={Boolean(activeJobId)}
+      onOpenChange={(open) => !open && handleCloseDrawer()}
+    >
+      <DialogContent
+        showCloseButton={false}
+        className="sm:max-w-140 bg-card/95 border border-border/80 rounded-2xl shadow-2xl flex flex-col p-6 text-foreground max-h-[90vh] overflow-hidden backdrop-blur-2xl"
+      >
+        <DialogTitle className="sr-only">
+          {isBulk ? t("titleBulk") : t("titleSingle")}
+        </DialogTitle>
+        <DialogDescription className="sr-only">
+          {t("subtitle")}
+        </DialogDescription>
         {/* Glow Ambient Line Top */}
-        <div className="absolute -top-px inset-x-8 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
+        <div className="absolute -top-px inset-x-8 h-px bg-linear-to-r from-transparent via-primary/60 to-transparent" />
 
         {/* Header */}
         <div className="flex items-center justify-between pb-3.5 border-b border-border/60">
@@ -292,7 +295,7 @@ export function JobConfigDrawer() {
                       controls
                       playsInline
                       preload="none"
-                      className="w-full aspect-video max-h-[220px] rounded-lg bg-black object-contain"
+                      className="w-full aspect-video max-h-55 rounded-lg bg-black object-contain"
                     />
                   ) : (
                     <video
@@ -301,7 +304,7 @@ export function JobConfigDrawer() {
                       controls
                       playsInline
                       preload="none"
-                      className="w-full aspect-video max-h-[220px] rounded-lg bg-black object-contain"
+                      className="w-full aspect-video max-h-55 rounded-lg bg-black object-contain"
                     />
                   )}
                 </div>
@@ -370,9 +373,7 @@ export function JobConfigDrawer() {
               {(quality === "2160p" || quality === "1440p") && (
                 <div className="flex items-center gap-1.5 p-2 rounded-lg bg-amber-500/10 border border-amber-500/20 text-[10px] text-amber-500 font-medium">
                   <Info className="h-3.5 w-3.5 shrink-0" />
-                  <span>
-                    {t("qualityNote")}
-                  </span>
+                  <span>{t("qualityNote")}</span>
                 </div>
               )}
             </div>

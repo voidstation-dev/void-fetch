@@ -8,9 +8,15 @@
  * Safely parses duration from various formats (seconds, milliseconds, ISO/time strings)
  */
 export function parseMediaDuration(rawDuration: unknown): number | undefined {
-  if (typeof rawDuration === "number" && !isNaN(rawDuration) && rawDuration > 0) {
+  if (
+    typeof rawDuration === "number" &&
+    !isNaN(rawDuration) &&
+    rawDuration > 0
+  ) {
     // If greater than 100,000, it's in milliseconds
-    return rawDuration > 100000 ? Math.round(rawDuration / 1000) : Math.round(rawDuration);
+    return rawDuration > 100000
+      ? Math.round(rawDuration / 1000)
+      : Math.round(rawDuration);
   }
   if (typeof rawDuration === "string" && rawDuration.trim().length > 0) {
     const str = rawDuration.trim();
@@ -19,7 +25,12 @@ export function parseMediaDuration(rawDuration: unknown): number | undefined {
       if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
         return parts[0] * 60 + parts[1];
       }
-      if (parts.length === 3 && !isNaN(parts[0]) && !isNaN(parts[1]) && !isNaN(parts[2])) {
+      if (
+        parts.length === 3 &&
+        !isNaN(parts[0]) &&
+        !isNaN(parts[1]) &&
+        !isNaN(parts[2])
+      ) {
         return parts[0] * 3600 + parts[1] * 60 + parts[2];
       }
     }
@@ -34,7 +45,10 @@ export function parseMediaDuration(rawDuration: unknown): number | undefined {
 /**
  * Probes HTML5 media duration dynamically in browser when initial API response lacks duration metadata
  */
-export function probeMediaDuration(url: string, isVideo = true): Promise<number | undefined> {
+export function probeMediaDuration(
+  url: string,
+  isVideo = true,
+): Promise<number | undefined> {
   return new Promise((resolve) => {
     if (!url || typeof window === "undefined") {
       resolve(undefined);

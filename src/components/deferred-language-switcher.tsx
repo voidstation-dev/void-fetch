@@ -1,64 +1,68 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { LanguageSwitcher } from '@/components/language-switcher'
-import { Globe, ChevronDown } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
-import { useLocale, useTranslations } from 'next-intl'
-import type { Locale } from '@/lib/i18n/config'
-import { getLocaleLabel } from '@/lib/i18n/locale-meta'
+import { useState } from "react";
+import { LanguageSwitcher } from "@/components/language-switcher";
+import { Globe, ChevronDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { useLocale, useTranslations } from "next-intl";
+import type { Locale } from "@/lib/i18n/config";
+import { getLocaleLabel } from "@/lib/i18n/locale-meta";
 
 interface DeferredLanguageSwitcherProps {
-    compact?: boolean
-    fullWidth?: boolean
-    iconOnly?: boolean
+  compact?: boolean;
+  fullWidth?: boolean;
+  iconOnly?: boolean;
 }
 
 export function DeferredLanguageSwitcher({
-    compact = false,
-    fullWidth = false,
-    iconOnly = false,
+  compact = false,
+  fullWidth = false,
+  iconOnly = false,
 }: DeferredLanguageSwitcherProps) {
-    const currentLocale = useLocale() as Locale
-    const t = useTranslations('page')
-    const [mounted, setMounted] = useState(false)
+  const currentLocale = useLocale() as Locale;
+  const t = useTranslations("page");
+  const [mounted, setMounted] = useState(false);
 
-    if (mounted) {
-        return (
-            <LanguageSwitcher
-                compact={compact}
-                fullWidth={fullWidth}
-                iconOnly={iconOnly}
-                defaultOpen
-            />
-        )
-    }
-
+  if (mounted) {
     return (
-        <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setMounted(true)}
-            className={cn(
-                'flex items-center gap-2 text-sm',
-                compact && 'h-9 max-w-[8rem] gap-1.5 px-2.5',
-                iconOnly && 'h-8 w-8 p-0',
-                fullWidth && 'w-full justify-between'
-            )}
-            aria-label={iconOnly ? t('switchLanguageLabel') : getLocaleLabel(currentLocale)}
-        >
-            <Globe className="h-4 w-4" />
-            {iconOnly ? (
-                <span className="sr-only">{t('switchLanguageLabel')}</span>
-            ) : compact ? (
-                <span className="max-w-[5.5rem] truncate">{getLocaleLabel(currentLocale)}</span>
-            ) : (
-                <>
-                    <span>{getLocaleLabel(currentLocale)}</span>
-                    <ChevronDown className="h-4 w-4" />
-                </>
-            )}
-        </Button>
-    )
+      <LanguageSwitcher
+        compact={compact}
+        fullWidth={fullWidth}
+        iconOnly={iconOnly}
+        defaultOpen
+      />
+    );
+  }
+
+  return (
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={() => setMounted(true)}
+      className={cn(
+        "flex items-center gap-2 text-sm",
+        compact && "h-9 max-w-[8rem] gap-1.5 px-2.5",
+        iconOnly && "h-8 w-8 p-0",
+        fullWidth && "w-full justify-between",
+      )}
+      aria-label={
+        iconOnly ? t("switchLanguageLabel") : getLocaleLabel(currentLocale)
+      }
+    >
+      <Globe className="h-4 w-4" />
+      {iconOnly ? (
+        <span className="sr-only">{t("switchLanguageLabel")}</span>
+      ) : compact ? (
+        <span className="max-w-[5.5rem] truncate">
+          {getLocaleLabel(currentLocale)}
+        </span>
+      ) : (
+        <>
+          <span>{getLocaleLabel(currentLocale)}</span>
+          <ChevronDown className="h-4 w-4" />
+        </>
+      )}
+    </Button>
+  );
 }

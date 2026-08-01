@@ -17,6 +17,7 @@ browse screenshot
 ```
 
 Flag any deviation from the documented system as a `STEP_FAIL`:
+
 ```
 STEP_FAIL|design-spacing|design system specifies 8px grid → new modal uses 6px gap
 STEP_FAIL|design-button|design system: destructive buttons use outline style → new delete button uses filled red
@@ -43,6 +44,7 @@ browse screenshot
 ```
 
 Look for:
+
 - **Spacing rhythm** — does the new UI use the same gaps/padding as existing pages?
 - **Border radius** — rounded-sm vs rounded-md vs rounded-lg consistency
 - **Button styles** — same primary/secondary/destructive patterns?
@@ -51,6 +53,7 @@ Look for:
 - **Component patterns** — if other pages use inline confirms, does the new page use a modal instead?
 
 Report as structured findings:
+
 ```
 STEP_PASS|design-consistency|new sidebar uses same border-l, bg-white, and shadow pattern as existing sidebar on /sessions
 STEP_FAIL|design-inconsistency|existing pages use rounded-lg on cards → new component uses rounded-sm
