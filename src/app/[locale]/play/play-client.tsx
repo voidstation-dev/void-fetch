@@ -14,7 +14,6 @@ import {
 import { HlsVideoPlayer } from "@/features/hls/components/hls-video-player";
 import { Button } from "@/components/ui/button";
 import { PlatformBadge } from "@/components/platform-badge";
-import { ViewportSideRailAd } from "@/components/ads/viewport-side-rail-ad";
 import {
   buildMediaPreviewUrl,
   canSharePlayResult,
@@ -127,6 +126,21 @@ export function PlayPageClient() {
   const visibleParseResult = sourceUrl ? parseResult : null;
   const displayError = sourceUrl ? error : tErrors("emptyUrl");
   const canonicalSourceUrl = (visibleParseResult?.url || sourceUrl).trim();
+  const isVideo = Boolean(
+    visibleParseResult?.downloadVideoUrl ||
+    visibleParseResult?.originDownloadVideoUrl,
+  );
+  const isAudio = Boolean(
+    (visibleParseResult?.downloadAudioUrl ||
+      visibleParseResult?.originDownloadAudioUrl) &&
+    !isVideo,
+  );
+  const images = visibleParseResult?.images;
+  const isImagePost = Boolean(
+    images && images.length > 0 && !isVideo && !isAudio,
+  );
+  const resolvedMediaType = isAudio ? "audio" : "video";
+
   const hlsPlaybackUrl = useMemo(() => {
     const playlistUrl = visibleParseResult?.originDownloadVideoUrl?.trim();
     if (!playlistUrl || !isHlsPlaylistUrl(playlistUrl)) {
@@ -139,24 +153,31 @@ export function PlayPageClient() {
       HLS_PLAYLIST_ACCEPT,
     );
   }, [canonicalSourceUrl, visibleParseResult]);
+
   const playbackUrl = useMemo(() => {
     if (hlsPlaybackUrl) {
       return hlsPlaybackUrl;
     }
 
-    if (!canonicalSourceUrl || !visibleParseResult) {
+    if (!canonicalSourceUrl || !visibleParseResult || isImagePost) {
       return null;
     }
 
     return buildMediaPreviewUrl({
-      mediaType: "video",
+      mediaType: resolvedMediaType,
       sourceUrl: canonicalSourceUrl,
       title: visibleParseResult.title,
     });
-  }, [canonicalSourceUrl, hlsPlaybackUrl, visibleParseResult]);
+  }, [
+    canonicalSourceUrl,
+    hlsPlaybackUrl,
+    visibleParseResult,
+    isImagePost,
+    resolvedMediaType,
+  ]);
 
   const canPlay = visibleParseResult
-    ? canSharePlayResult(visibleParseResult)
+    ? canSharePlayResult(visibleParseResult) || isImagePost
     : false;
 
   return (
@@ -195,18 +216,56 @@ export function PlayPageClient() {
               <Link href={`/${locale}`}>{tCommon("home")}</Link>
             </Button>
           </div>
-        ) : canPlay && playbackUrl ? (
-          <div className="border rounded-xl bg-black border-border/80 overflow-hidden shadow-sm aspect-video flex items-center justify-center relative">
-            {hlsPlaybackUrl ? (
+        ) : canPlay ? (
+          <div className="border rounded-xl bg-black border-border/80 overflow-hidden shadow-sm aspect-video flex flex-col items-center justify-center relative">
+            {isImagePost ? (
+              <div className="w-full h-full overflow-y-auto flex flex-col gap-4 items-center bg-muted/20 p-4">
+                {images?.map((img, i) => {
+                  const url = typeof img === "string" ? img : img.url;
+                  if (!url) return null;
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  return (
+                    <img
+                      key={i}
+                      src={url}
+                      alt="Shared Image"
+                      className="max-w-full rounded-md shadow-md object-contain"
+                      loading="lazy"
+                    />
+                  );
+                })}
+              </div>
+            ) : isAudio ? (
+              <div className="w-full h-full flex flex-col items-center justify-center gap-6 p-6">
+                {visibleParseResult?.cover ? (
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img
+                    src={visibleParseResult.cover}
+                    alt="Cover"
+                    className="w-40 h-40 object-cover rounded-xl shadow-lg ring-1 ring-white/10"
+                  />
+                ) : (
+                  <div className="w-40 h-40 rounded-xl bg-muted/50 flex items-center justify-center">
+                    <PlaySquare className="h-10 w-10 text-muted-foreground/50" />
+                  </div>
+                )}
+                <audio
+                  src={playbackUrl || undefined}
+                  controls
+                  autoPlay={autoplay}
+                  className="w-full max-w-sm"
+                />
+              </div>
+            ) : hlsPlaybackUrl ? (
               <HlsVideoPlayer
-                src={playbackUrl}
+                src={playbackUrl!}
                 controls
                 autoPlay={autoplay}
                 playsInline
                 preload="metadata"
                 className="block w-full h-full object-contain relative z-10"
               />
-            ) : (
+            ) : playbackUrl ? (
               <video
                 src={playbackUrl}
                 controls
@@ -215,7 +274,7 @@ export function PlayPageClient() {
                 preload="metadata"
                 className="block w-full h-full object-contain relative z-10"
               />
-            )}
+            ) : null}
           </div>
         ) : visibleParseResult ? (
           <div className="border rounded-xl bg-card border-border/80 p-12 flex flex-col items-center justify-center gap-4 text-muted-foreground shadow-sm">
@@ -296,15 +355,11 @@ export function PlayPageClient() {
             </div>
 
             <div className="pt-4 mt-2 border-t border-border/40 flex flex-col md:flex-row justify-between items-center gap-4">
-              <div className="w-full">
-                <ViewportSideRailAd slot="5740014745" showOn="mobile" />
-                <ViewportSideRailAd slot="6380909506" showOn="desktop" />
-              </div>
               <Button
                 asChild
                 variant="ghost"
                 size="sm"
-                className="text-muted-foreground hover:text-foreground shrink-0 text-xs"
+                className="text-muted-foreground hover:text-foreground shrink-0 text-xs ml-auto"
               >
                 <Link href={`/${locale}`}>Return to {tCommon("home")}</Link>
               </Button>
