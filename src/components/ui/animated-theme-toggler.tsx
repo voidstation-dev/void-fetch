@@ -301,7 +301,7 @@ export const AnimatedThemeToggler = ({
       type="button"
       ref={buttonRef}
       onClick={toggleTheme}
-      className={cn(className)}
+      className={cn("select-none", className)}
       {...props}
     >
       {props.children ?? (isDark ? <Sun /> : <Moon />)}

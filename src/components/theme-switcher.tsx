@@ -76,7 +76,7 @@ export function ThemeSwitcher({
       onThemeChange={setTheme}
       className={cn(
         "border-0 shadow-none bg-transparent hover:bg-accent hover:text-accent-foreground",
-        "flex items-center gap-2 text-sm rounded-xl transition-all cursor-pointer h-auto w-auto px-3 py-2",
+        "flex items-center gap-2 text-sm rounded-xl transition-all cursor-pointer h-auto w-auto px-3 py-2 select-none",
         compact && "h-9 w-9 p-0 justify-center",
         fullWidth && "w-full justify-between",
       )}
