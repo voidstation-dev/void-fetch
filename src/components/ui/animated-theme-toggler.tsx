@@ -208,7 +208,6 @@ export const AnimatedThemeToggler = ({
     )
       return;
 
-    lastClickTimeRef.current = now;
     // innerWidth/innerHeight (not visualViewport): percentages must resolve
     // against the snapshot reference box, which includes classic scrollbars.
     const viewportWidth = window.innerWidth;
