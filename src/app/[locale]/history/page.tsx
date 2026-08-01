@@ -32,7 +32,7 @@ import type {
 } from "@/features/batch-download/types/batch-download";
 import { getPlatformBadgeStyle } from "@/lib/platforms";
 import { useTranslations } from "next-intl";
-import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 interface HistoryCardRowProps {
   job: DownloadJob;
@@ -80,13 +80,13 @@ function HistoryCardRow({
     (Boolean(images && images.length > 0) && !videoUrl && !audioUrl);
 
   return (
-    <motion.div className="group relative flex flex-col md:flex-row items-start md:items-center justify-between p-4 rounded-2xl bg-card/90 backdrop-blur-2xl border border-border/80 hover:border-primary/50 shadow-md hover:shadow-xl transition-all duration-300 gap-4">
+    <div className="flex flex-col md:flex-row items-start md:items-center justify-between p-4 rounded-xl bg-card border border-border/80 gap-4">
       {/* Left: Thumbnail Cover & Title Info */}
       <div className="flex items-center gap-3.5 min-w-0 flex-1 w-full md:w-auto">
         {/* Media Thumbnail */}
-        <motion.div
+        <div
           onClick={() => onExpand(job)}
-          className="relative w-13 h-13 sm:w-14 sm:h-14 shrink-0 bg-muted rounded-xl border border-border/60 flex items-center justify-center overflow-hidden shadow-md cursor-pointer group/thumb hover:border-primary/80 transition-all duration-300"
+          className="relative w-13 h-13 sm:w-14 sm:h-14 shrink-0 bg-muted rounded-xl border border-border/60 flex items-center justify-center overflow-hidden cursor-pointer group/thumb transition-colors duration-200 hover:border-primary/50"
         >
           {job.metadata?.cover ? (
             <Image
@@ -95,7 +95,7 @@ function HistoryCardRow({
               width={56}
               height={56}
               unoptimized
-              className="w-full h-full object-cover group-hover/thumb:scale-110 transition-transform duration-300"
+              className="w-full h-full object-cover transition-transform duration-200 group-hover/thumb:scale-105"
             />
           ) : (
             <FileVideo className="h-6 w-6 text-muted-foreground/60" />
@@ -103,11 +103,11 @@ function HistoryCardRow({
           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center">
             <Maximize2 className="h-4 w-4 text-white" />
           </div>
-        </motion.div>
+        </div>
 
         {/* Info Column */}
         <div className="flex flex-col min-w-0 gap-1 flex-1">
-          <motion.div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-2 flex-wrap">
             <Badge
               variant="outline"
               className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded-md uppercase tracking-wider ${getPlatformBadgeStyle(
@@ -128,15 +128,15 @@ function HistoryCardRow({
             <span className="text-[9px] font-mono text-muted-foreground/70">
               Completed: {completedDate}
             </span>
-          </motion.div>
+          </div>
 
-          <motion.h4
+          <h4
             onClick={() => onExpand(job)}
             className="text-sm font-bold text-foreground hover:text-primary transition-colors cursor-pointer line-clamp-1 leading-snug tracking-tight"
             title={job.metadata?.title || job.sourceUrl}
           >
             {job.metadata?.title || job.sourceUrl}
-          </motion.h4>
+          </h4>
 
           <a
             href={job.sourceUrl}
@@ -243,7 +243,7 @@ function HistoryCardRow({
           </Button>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -311,13 +311,9 @@ export default function HistoryPage() {
 
       {/* History Items List or Glassmorphic Empty State */}
       {completedJobs.length === 0 ? (
-        <div className="relative overflow-hidden rounded-3xl border-2 border-dashed border-primary/30 bg-card/85 backdrop-blur-2xl p-12 text-center shadow-2xl flex flex-col items-center justify-center gap-6 group hover:border-primary/60 transition-all duration-500 my-2">
-          {/* Ambient Radial Spotlight Glow */}
-          <div className="absolute inset-0 bg-radial-glow from-primary/10 via-transparent to-transparent pointer-events-none opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
-
-          {/* Animated Icon Badge */}
-          <div className="relative p-5 rounded-2xl bg-linear-to-br from-primary/20 via-primary/10 to-transparent border border-primary/30 text-primary shadow-xl group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-300">
-            <Layers className="h-10 w-10 text-primary animate-pulse" />
+        <div className="rounded-xl border border-dashed border-border bg-card p-12 text-center flex flex-col items-center justify-center gap-6 mt-4">
+          <div className="p-4 rounded-xl bg-muted/50 text-muted-foreground">
+            <Layers className="h-8 w-8" />
           </div>
 
           {/* Text Area */}
@@ -334,13 +330,13 @@ export default function HistoryPage() {
           </div>
 
           {/* Micro Feature Badges */}
-          <div className="flex flex-wrap items-center justify-center gap-2 z-10 pt-2">
-            <span className="px-3 py-1 rounded-full bg-muted/30 border border-border/60 text-[10px] font-medium text-muted-foreground flex items-center gap-1.5 shadow-2xs">
-              <Sparkles className="h-3 w-3 text-amber-400" />{" "}
+          <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+            <span className="px-3 py-1 rounded-full bg-muted border border-border/60 text-[10px] font-medium text-muted-foreground flex items-center gap-1.5">
+              <Sparkles className="h-3 w-3 text-muted-foreground" />{" "}
               {tHistory("autoPersisted")}
             </span>
-            <span className="px-3 py-1 rounded-full bg-muted/30 border border-border/60 text-[10px] font-medium text-muted-foreground flex items-center gap-1.5 shadow-2xs">
-              <Sparkles className="h-3 w-3 text-cyan-400" />{" "}
+            <span className="px-3 py-1 rounded-full bg-muted border border-border/60 text-[10px] font-medium text-muted-foreground flex items-center gap-1.5">
+              <Sparkles className="h-3 w-3 text-muted-foreground" />{" "}
               {tHistory("instantRedownloads")}
             </span>
           </div>
