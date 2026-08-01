@@ -12,6 +12,7 @@ import {
   Info,
 } from "lucide-react";
 import { HlsVideoPlayer } from "@/features/hls/components/hls-video-player";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { PlatformBadge } from "@/components/platform-badge";
 import {
@@ -223,14 +224,15 @@ export function PlayPageClient() {
                 {images?.map((img, i) => {
                   const url = typeof img === "string" ? img : img.url;
                   if (!url) return null;
-                  /* eslint-disable-next-line @next/next/no-img-element */
                   return (
-                    <img
+                    <Image
                       key={i}
                       src={url}
                       alt="Shared Image"
-                      className="max-w-full rounded-md shadow-md object-contain"
-                      loading="lazy"
+                      width={800}
+                      height={800}
+                      unoptimized
+                      className="max-w-full h-auto rounded-md shadow-md object-contain"
                     />
                   );
                 })}
@@ -238,10 +240,12 @@ export function PlayPageClient() {
             ) : isAudio ? (
               <div className="w-full h-full flex flex-col items-center justify-center gap-6 p-6">
                 {visibleParseResult?.cover ? (
-                  /* eslint-disable-next-line @next/next/no-img-element */
-                  <img
+                  <Image
                     src={visibleParseResult.cover}
                     alt="Cover"
+                    width={160}
+                    height={160}
+                    unoptimized
                     className="w-40 h-40 object-cover rounded-xl shadow-lg ring-1 ring-white/10"
                   />
                 ) : (
