@@ -32,7 +32,6 @@ import type {
 } from "@/features/batch-download/types/batch-download";
 import { getPlatformBadgeStyle } from "@/lib/platforms";
 import { useTranslations } from "next-intl";
-import { useTranslations } from "next-intl";
 
 interface HistoryCardRowProps {
   job: DownloadJob;

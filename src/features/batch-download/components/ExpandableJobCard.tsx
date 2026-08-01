@@ -282,7 +282,7 @@ export function ExpandableJobCard({
               </div>
 
               {/* Title & Description Below Image (Aceternity UI Standard) */}
-              <div className="flex items-start justify-between px-6 pt-5 pb-3 gap-4 border-b border-border/40">
+              <div className="flex items-start justify-between px-6 pt-5 pb-3 gap-4 border-b border-border/40 shrink-0">
                 <div className="flex flex-col gap-1.5 min-w-0 flex-1">
                   <div className="flex items-center gap-2">
                     <Badge className="bg-primary/10 text-primary border border-primary/20 text-[10px] px-2.5 py-0.5 uppercase tracking-wider font-mono">
@@ -305,7 +305,7 @@ export function ExpandableJobCard({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
                 transition={{ duration: 0.2 }}
-                className="p-5 flex flex-col gap-4 overflow-y-auto"
+                className="p-5 flex flex-col gap-4 overflow-y-auto flex-1 min-h-0"
               >
                 {/* Status & Metadata Badges Row */}
                 <div className="flex flex-wrap items-center gap-2 text-xs">
