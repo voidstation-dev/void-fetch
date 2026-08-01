@@ -184,7 +184,13 @@ export const AnimatedThemeToggler = ({
     return () => observer.disconnect();
   }, [isControlled]);
 
+  const lastClickTimeRef = useRef(0);
+
   const toggleTheme = useCallback(() => {
+    const now = Date.now();
+    // Throttle clicks to prevent Chromium View Transitions crash (Aw, Snap!)
+    if (now - lastClickTimeRef.current < duration + 100) return;
+
     const button = buttonRef.current;
     if (
       !button ||
@@ -193,6 +199,7 @@ export const AnimatedThemeToggler = ({
     )
       return;
 
+    lastClickTimeRef.current = now;
     // innerWidth/innerHeight (not visualViewport): percentages must resolve
     // against the snapshot reference box, which includes classic scrollbars.
     const viewportWidth = window.innerWidth;
