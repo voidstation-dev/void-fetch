@@ -4,7 +4,6 @@
  * All rights reserved.
  */
 
-import React from "react";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { i18n } from "@/lib/i18n/config";

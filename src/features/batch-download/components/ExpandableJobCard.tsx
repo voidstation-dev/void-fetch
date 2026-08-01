@@ -29,6 +29,7 @@ import { downloadFile } from "@/lib/utils";
 import { toast } from "@/lib/deferred-toast";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { createPortal } from "react-dom";
 
 import { formatDuration, probeMediaDuration } from "../utils/duration-helper";
 import { useBatchStore } from "../store/batch-store";
@@ -47,6 +48,12 @@ export function ExpandableJobCard({
   const store = useBatchStore();
   const [prevJob, setPrevJob] = React.useState<DownloadJob | null>(job);
   const [activeJob, setActiveJob] = React.useState<DownloadJob | null>(job);
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
 
   if (job !== prevJob) {
     setPrevJob(job);
@@ -198,7 +205,9 @@ export function ExpandableJobCard({
     );
   };
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal(
     <>
       {/* Backdrop Overlay */}
       <AnimatePresence>
@@ -548,6 +557,7 @@ export function ExpandableJobCard({
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </>,
+    document.body,
   );
 }
