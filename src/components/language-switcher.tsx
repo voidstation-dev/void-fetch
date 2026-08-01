@@ -98,7 +98,7 @@ export function LanguageSwitcher({
         size="sm"
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "flex items-center gap-2 text-sm",
+          "flex items-center gap-2 text-sm select-none",
           compact && "h-9 max-w-[8rem] gap-1.5 px-2.5",
           iconOnly && "h-8 w-8 p-0",
           fullWidth && "w-full justify-between",
@@ -131,7 +131,7 @@ export function LanguageSwitcher({
               <button
                 key={locale}
                 onClick={() => handleLanguageChange(locale)}
-                className="w-full px-3 py-2 text-left text-sm hover:bg-muted/50 flex items-center justify-between transition-colors"
+                className="w-full px-3 py-2 text-left text-sm hover:bg-muted/50 flex items-center justify-between transition-colors select-none"
               >
                 <span>{getLocaleLabel(locale)}</span>
                 {locale === currentLocale && (

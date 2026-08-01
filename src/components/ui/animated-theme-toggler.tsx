@@ -248,61 +248,59 @@ export const AnimatedThemeToggler = ({
       viewportHeight,
     );
 
-    setTimeout(() => {
-      const root = document.documentElement;
-      root.dataset.magicuiThemeVt = "active";
-      root.style.setProperty(
-        "--magicui-theme-toggle-vt-duration",
-        `${duration}ms`,
-      );
-      // Pin the collapsed clip-path via CSS so Firefox does not paint the new
-      // theme unclipped between snapshot and the ready.then() JS animation.
-      root.style.setProperty("--magicui-theme-vt-clip-from", clipPath[0]);
-      const cleanup = () => {
-        isTransitioningRef.current = false;
-        delete root.dataset.magicuiThemeVt;
-        root.style.removeProperty("--magicui-theme-toggle-vt-duration");
-        root.style.removeProperty("--magicui-theme-vt-clip-from");
-      };
+    const root = document.documentElement;
+    root.dataset.magicuiThemeVt = "active";
+    root.style.setProperty(
+      "--magicui-theme-toggle-vt-duration",
+      `${duration}ms`,
+    );
+    // Pin the collapsed clip-path via CSS so Firefox does not paint the new
+    // theme unclipped between snapshot and the ready.then() JS animation.
+    root.style.setProperty("--magicui-theme-vt-clip-from", clipPath[0]);
+    const cleanup = () => {
+      isTransitioningRef.current = false;
+      delete root.dataset.magicuiThemeVt;
+      root.style.removeProperty("--magicui-theme-toggle-vt-duration");
+      root.style.removeProperty("--magicui-theme-vt-clip-from");
+    };
 
-      isTransitioningRef.current = true;
-      let transition: ViewTransition | undefined;
-      try {
-        transition = document.startViewTransition(() => {
-          flushSync(applyTheme);
-        });
-      } catch (_e) {
-        applyTheme();
-        cleanup();
-        return;
-      }
+    isTransitioningRef.current = true;
+    let transition: ViewTransition | undefined;
+    try {
+      transition = document.startViewTransition(() => {
+        flushSync(applyTheme);
+      });
+    } catch (_e) {
+      applyTheme();
+      cleanup();
+      return;
+    }
 
-      if (typeof transition?.finished?.finally === "function") {
-        transition.finished.finally(cleanup).catch(() => {});
-      } else {
-        cleanup();
-      }
+    if (typeof transition?.finished?.finally === "function") {
+      transition.finished.finally(cleanup).catch(() => {});
+    } else {
+      cleanup();
+    }
 
-      const ready = transition?.ready;
-      if (ready && typeof ready.then === "function") {
-        ready
-          .then(() => {
-            document.documentElement.animate(
-              {
-                clipPath,
-              },
-              {
-                duration,
-                // Star: linear avoids easing overshoot that fights polygon interpolation at t→1; VT group duration is synced above.
-                easing: shape === "star" ? "linear" : "ease-in-out",
-                fill: "forwards",
-                pseudoElement: "::view-transition-new(root)",
-              },
-            );
-          })
-          .catch(() => {});
-      }
-    }, 50);
+    const ready = transition?.ready;
+    if (ready && typeof ready.then === "function") {
+      ready
+        .then(() => {
+          document.documentElement.animate(
+            {
+              clipPath,
+            },
+            {
+              duration,
+              // Star: linear avoids easing overshoot that fights polygon interpolation at t→1; VT group duration is synced above.
+              easing: shape === "star" ? "linear" : "ease-in-out",
+              fill: "forwards",
+              pseudoElement: "::view-transition-new(root)",
+            },
+          );
+        })
+        .catch(() => {});
+    }
   }, [shape, fromCenter, duration, isDark, isControlled, onThemeChange]);
 
   return (
