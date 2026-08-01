@@ -3,14 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import {
-  Loader2,
-  ExternalLink,
-  PlaySquare,
-  AlignLeft,
-  Clock,
-  Info,
-} from "lucide-react";
+import { Loader2, ExternalLink, PlaySquare, Clock, Info } from "lucide-react";
 import { HlsVideoPlayer } from "@/features/hls/components/hls-video-player";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -314,82 +307,73 @@ export function PlayPageClient() {
 
         {/* Details Section */}
         {!loading && !displayError && visibleParseResult && (
-          <div className="border rounded-xl bg-card border-border/80 p-5 flex flex-col gap-4 shadow-sm">
-            <div className="flex items-center gap-2">
-              <PlatformBadge platform={visibleParseResult.platform} />
-              <span className="text-[10px] uppercase tracking-wider font-mono text-muted-foreground font-bold">
-                Shared Media
-              </span>
-            </div>
-
-            <h2 className="text-sm md:text-base font-bold text-foreground leading-snug wrap-break-word">
-              {visibleParseResult.title}
-            </h2>
-
-            {(visibleParseResult.duration || visibleParseResult.desc) && (
-              <div className="flex flex-col gap-3 pt-2">
+          <div className="border rounded-xl bg-card border-border/80 p-5 md:p-6 flex flex-col gap-6 shadow-sm">
+            {/* Header: Platform + Source Link */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <PlatformBadge platform={visibleParseResult.platform} />
                 {visibleParseResult.duration ? (
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <Clock className="h-3.5 w-3.5" />
-                    <span>
-                      {Math.floor(visibleParseResult.duration / 60)}:
-                      {String(
-                        Math.floor(visibleParseResult.duration % 60),
-                      ).padStart(2, "0")}
-                    </span>
-                  </div>
-                ) : null}
-
-                {visibleParseResult.desc ? (
-                  <div className="flex items-start gap-2 text-xs text-muted-foreground bg-muted/30 p-3 rounded-lg border border-border/40">
-                    <AlignLeft className="h-3.5 w-3.5 shrink-0 mt-0.5 opacity-70" />
-                    <p className="whitespace-pre-wrap leading-relaxed line-clamp-4">
-                      {visibleParseResult.desc}
-                    </p>
-                  </div>
+                  <>
+                    <span className="text-muted-foreground/30 text-xs">•</span>
+                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-medium">
+                      <Clock className="h-3.5 w-3.5" />
+                      <span>
+                        {Math.floor(visibleParseResult.duration / 60)}:
+                        {String(
+                          Math.floor(visibleParseResult.duration % 60),
+                        ).padStart(2, "0")}
+                      </span>
+                    </div>
+                  </>
                 ) : null}
               </div>
-            )}
 
-            {canonicalSourceUrl && (
-              <div className="flex items-center gap-3 pt-2">
+              {canonicalSourceUrl && (
                 <a
                   href={canonicalSourceUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-primary hover:underline underline-offset-2 transition-colors"
+                  className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-primary transition-colors"
                 >
-                  <ExternalLink className="h-3.5 w-3.5" />
                   <span>{tHistory("viewSource")}</span>
+                  <ExternalLink className="h-3.5 w-3.5" />
                 </a>
-              </div>
-            )}
-
-            {/* Informational Box */}
-            <div className="mt-2 border rounded-xl bg-primary/5 border-primary/20 p-4 flex gap-3">
-              <Info className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-              <div className="flex flex-col gap-1 text-xs">
-                <span className="font-semibold text-primary">
-                  Về Shared Playback
-                </span>
-                <span className="text-muted-foreground leading-relaxed">
-                  Đây là trang xem trước nội dung được chia sẻ từ VoidFetch. Tốc
-                  độ tải tuỳ thuộc vào máy chủ gốc của nền tảng. Để trải nghiệm
-                  tốt nhất và lưu video/âm thanh về máy, bạn có thể tải nội dung
-                  trực tiếp trên ứng dụng VoidFetch.
-                </span>
-              </div>
+              )}
             </div>
 
-            <div className="pt-4 mt-2 border-t border-border/40 flex flex-col md:flex-row justify-between items-center gap-4">
-              <Button
-                asChild
-                variant="ghost"
-                size="sm"
-                className="text-muted-foreground hover:text-foreground shrink-0 text-xs ml-auto"
-              >
-                <Link href={`/${locale}`}>Return to {tCommon("home")}</Link>
-              </Button>
+            {/* Title & Description */}
+            <div className="flex flex-col gap-2.5">
+              <h2 className="text-lg md:text-xl font-bold text-foreground leading-snug wrap-break-word">
+                {visibleParseResult.title}
+              </h2>
+              {visibleParseResult.desc && (
+                <p className="text-sm text-muted-foreground whitespace-pre-wrap leading-relaxed line-clamp-4">
+                  {visibleParseResult.desc}
+                </p>
+              )}
+            </div>
+
+            {/* Info Box & Actions */}
+            <div className="pt-5 border-t border-border/40 flex flex-col gap-4">
+              <div className="flex gap-3 items-start p-3 md:p-4 rounded-xl bg-muted/30 border border-border/50 text-xs text-muted-foreground leading-relaxed">
+                <Info className="h-4 w-4 shrink-0 mt-0.5 text-muted-foreground/70" />
+                <p>
+                  Đây là trang xem trước nội dung từ VoidFetch. Tốc độ tải tuỳ
+                  thuộc vào máy chủ gốc của nền tảng. Để có trải nghiệm tốt nhất
+                  và tải media về máy, hãy sử dụng ứng dụng VoidFetch.
+                </p>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <Button
+                  asChild
+                  variant="outline"
+                  size="sm"
+                  className="h-8 text-xs font-medium shrink-0"
+                >
+                  <Link href={`/${locale}`}>Quay về {tCommon("home")}</Link>
+                </Button>
+              </div>
             </div>
           </div>
         )}
