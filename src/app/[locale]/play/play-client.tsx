@@ -8,6 +8,7 @@ import { HlsVideoPlayer } from "@/features/hls/components/hls-video-player";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { PlatformBadge } from "@/components/platform-badge";
+import { GlowingEffect } from "@/components/ui/glowing-effect";
 import {
   buildMediaPreviewUrl,
   canSharePlayResult,
@@ -213,7 +214,14 @@ export function PlayPageClient() {
         ) : canPlay ? (
           <>
             {isImagePost ? (
-              <div className="border rounded-xl bg-muted/10 border-border/80 overflow-hidden shadow-sm max-h-[80vh] overflow-y-auto flex flex-col gap-4 items-center p-4">
+              <div className="relative border rounded-xl bg-muted/10 border-border/80 overflow-hidden shadow-sm max-h-[80vh] overflow-y-auto flex flex-col gap-4 items-center p-4">
+                <GlowingEffect
+                  spread={40}
+                  glow={true}
+                  disabled={false}
+                  proximity={64}
+                  inactiveZone={0.01}
+                />
                 {images?.map((img, i) => {
                   const url = typeof img === "string" ? img : img.url;
                   if (!url) return null;
@@ -234,6 +242,13 @@ export function PlayPageClient() {
               </div>
             ) : isAudio ? (
               <div className="border rounded-xl bg-card border-border/80 shadow-sm relative overflow-hidden flex flex-col md:flex-row items-center gap-6 p-6 md:p-8">
+                <GlowingEffect
+                  spread={40}
+                  glow={true}
+                  disabled={false}
+                  proximity={64}
+                  inactiveZone={0.01}
+                />
                 {/* Background Blur */}
                 {visibleParseResult?.cover && (
                   <div className="absolute inset-0 z-0 pointer-events-none opacity-30 dark:opacity-20">
@@ -276,6 +291,13 @@ export function PlayPageClient() {
               </div>
             ) : (
               <div className="border rounded-xl bg-black border-border/80 overflow-hidden shadow-sm aspect-video flex items-center justify-center relative">
+                <GlowingEffect
+                  spread={40}
+                  glow={true}
+                  disabled={false}
+                  proximity={64}
+                  inactiveZone={0.01}
+                />
                 {hlsPlaybackUrl ? (
                   <HlsVideoPlayer
                     src={playbackUrl!}
@@ -371,7 +393,7 @@ export function PlayPageClient() {
                   asChild
                   variant="outline"
                   size="sm"
-                  className="h-8 text-xs font-medium shrink-0"
+                  className="h-8 text-xs font-medium shrink-0 ml-auto"
                 >
                   <Link href={`/${locale}`}>Quay về {tCommon("home")}</Link>
                 </Button>
