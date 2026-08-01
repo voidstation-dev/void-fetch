@@ -218,9 +218,9 @@ export function PlayPageClient() {
             </Button>
           </div>
         ) : canPlay ? (
-          <div className="border rounded-xl bg-black border-border/80 overflow-hidden shadow-sm aspect-video flex flex-col items-center justify-center relative">
+          <>
             {isImagePost ? (
-              <div className="w-full h-full overflow-y-auto flex flex-col gap-4 items-center bg-muted/20 p-4">
+              <div className="border rounded-xl bg-muted/10 border-border/80 overflow-hidden shadow-sm max-h-[80vh] overflow-y-auto flex flex-col gap-4 items-center p-4">
                 {images?.map((img, i) => {
                   const url = typeof img === "string" ? img : img.url;
                   if (!url) return null;
@@ -238,48 +238,71 @@ export function PlayPageClient() {
                 })}
               </div>
             ) : isAudio ? (
-              <div className="w-full h-full flex flex-col items-center justify-center gap-6 p-6">
-                {visibleParseResult?.cover ? (
-                  <Image
-                    src={visibleParseResult.cover}
-                    alt="Cover"
-                    width={160}
-                    height={160}
-                    unoptimized
-                    className="w-40 h-40 object-cover rounded-xl shadow-lg ring-1 ring-white/10"
-                  />
-                ) : (
-                  <div className="w-40 h-40 rounded-xl bg-muted/50 flex items-center justify-center">
-                    <PlaySquare className="h-10 w-10 text-muted-foreground/50" />
+              <div className="border rounded-xl bg-card border-border/80 shadow-sm relative overflow-hidden flex flex-col md:flex-row items-center gap-6 p-6 md:p-8">
+                {/* Background Blur */}
+                {visibleParseResult?.cover && (
+                  <div className="absolute inset-0 z-0 pointer-events-none opacity-30 dark:opacity-20">
+                    <Image
+                      src={visibleParseResult.cover}
+                      alt=""
+                      fill
+                      unoptimized
+                      className="object-cover blur-3xl saturate-200"
+                    />
+                    <div className="absolute inset-0 bg-background/60" />
                   </div>
                 )}
-                <audio
-                  src={playbackUrl || undefined}
-                  controls
-                  autoPlay={autoplay}
-                  className="w-full max-w-sm"
-                />
+
+                <div className="relative z-10 shrink-0">
+                  {visibleParseResult?.cover ? (
+                    <Image
+                      src={visibleParseResult.cover}
+                      alt="Cover"
+                      width={160}
+                      height={160}
+                      unoptimized
+                      className="w-32 h-32 md:w-48 md:h-48 object-cover rounded-2xl shadow-xl ring-1 ring-border/50"
+                    />
+                  ) : (
+                    <div className="w-32 h-32 md:w-48 md:h-48 rounded-2xl bg-muted/50 flex items-center justify-center shadow-inner">
+                      <PlaySquare className="h-10 w-10 text-muted-foreground/30" />
+                    </div>
+                  )}
+                </div>
+
+                <div className="relative z-10 flex flex-col items-center md:items-start justify-center w-full max-w-md">
+                  <audio
+                    src={playbackUrl || undefined}
+                    controls
+                    autoPlay={autoplay}
+                    className="w-full h-12"
+                  />
+                </div>
               </div>
-            ) : hlsPlaybackUrl ? (
-              <HlsVideoPlayer
-                src={playbackUrl!}
-                controls
-                autoPlay={autoplay}
-                playsInline
-                preload="metadata"
-                className="block w-full h-full object-contain relative z-10"
-              />
-            ) : playbackUrl ? (
-              <video
-                src={playbackUrl}
-                controls
-                autoPlay={autoplay}
-                playsInline
-                preload="metadata"
-                className="block w-full h-full object-contain relative z-10"
-              />
-            ) : null}
-          </div>
+            ) : (
+              <div className="border rounded-xl bg-black border-border/80 overflow-hidden shadow-sm aspect-video flex items-center justify-center relative">
+                {hlsPlaybackUrl ? (
+                  <HlsVideoPlayer
+                    src={playbackUrl!}
+                    controls
+                    autoPlay={autoplay}
+                    playsInline
+                    preload="metadata"
+                    className="block w-full h-full object-contain relative z-10"
+                  />
+                ) : playbackUrl ? (
+                  <video
+                    src={playbackUrl}
+                    controls
+                    autoPlay={autoplay}
+                    playsInline
+                    preload="metadata"
+                    className="block w-full h-full object-contain relative z-10"
+                  />
+                ) : null}
+              </div>
+            )}
+          </>
         ) : visibleParseResult ? (
           <div className="border rounded-xl bg-card border-border/80 p-12 flex flex-col items-center justify-center gap-4 text-muted-foreground shadow-sm">
             <span className="text-3xl grayscale opacity-80">⚠️</span>
