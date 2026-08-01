@@ -70,7 +70,14 @@ import { useTranslations } from "next-intl";
 export function JobConfigDrawer() {
   const t = useTranslations("batchWorkspace.configDrawer");
   const store = useBatchStore();
-  const activeJobId = store.activeJobDrawerId;
+  const rawActiveJobId = store.activeJobDrawerId;
+  const [lastActiveJobId, setLastActiveJobId] = useState<string | null>(null);
+
+  if (rawActiveJobId && rawActiveJobId !== lastActiveJobId) {
+    setLastActiveJobId(rawActiveJobId);
+  }
+
+  const activeJobId = rawActiveJobId || lastActiveJobId;
   const isBulk = activeJobId === "bulk";
 
   const activeJob = store.jobs.find((j) => j.id === activeJobId);
@@ -111,12 +118,8 @@ export function JobConfigDrawer() {
     }
   }
 
-  if (!activeJobId) return null;
-
   const handleCloseDrawer = () => {
-    setTimeout(() => {
-      store.setActiveJobDrawerId(null);
-    }, 200);
+    store.setActiveJobDrawerId(null);
   };
 
   const rawData = activeJob?.metadata?.rawParsedData as
@@ -207,7 +210,7 @@ export function JobConfigDrawer() {
 
   return (
     <Dialog
-      open={Boolean(activeJobId)}
+      open={Boolean(rawActiveJobId)}
       onOpenChange={(open) => !open && handleCloseDrawer()}
     >
       <DialogContent
