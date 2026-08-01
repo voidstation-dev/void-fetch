@@ -3,6 +3,7 @@
 import { useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
+import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
 import { Moon, Sun } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLocale } from "next-intl";
@@ -50,10 +51,6 @@ export function ThemeSwitcher({
 
   const isDark = mounted ? resolvedTheme === "dark" : false;
 
-  const toggleTheme = () => {
-    setTheme(isDark ? "light" : "dark");
-  };
-
   if (!mounted) {
     return (
       <Button
@@ -74,13 +71,13 @@ export function ThemeSwitcher({
   }
 
   return (
-    <Button
-      variant="ghost"
-      size={compact ? "icon" : "sm"}
-      onClick={toggleTheme}
+    <AnimatedThemeToggler
+      theme={isDark ? "dark" : "light"}
+      onThemeChange={setTheme}
       className={cn(
-        "flex items-center gap-2 text-sm rounded-xl transition-all cursor-pointer",
-        compact && "h-9 w-9 p-0",
+        "border-0 shadow-none bg-transparent hover:bg-accent hover:text-accent-foreground",
+        "flex items-center gap-2 text-sm rounded-xl transition-all cursor-pointer h-auto w-auto px-3 py-2",
+        compact && "h-9 w-9 p-0 justify-center",
         fullWidth && "w-full justify-between",
       )}
       aria-label={labels.title}
@@ -97,6 +94,6 @@ export function ThemeSwitcher({
           {!compact && <span>{labels.dark}</span>}
         </>
       )}
-    </Button>
+    </AnimatedThemeToggler>
   );
 }
