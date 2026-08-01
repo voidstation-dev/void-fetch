@@ -111,7 +111,7 @@ export function LanguageSwitcher({
         {iconOnly ? (
           <span className="sr-only">{t("switchLanguageLabel")}</span>
         ) : compact ? (
-          <span className="max-w-[5.5rem] truncate">
+          <span className="max-w-22 truncate">
             {getLocaleLabel(currentLocale)}
           </span>
         ) : (

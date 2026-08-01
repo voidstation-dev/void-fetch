@@ -52,7 +52,7 @@ export function AppTopBar({
 
   return (
     <div
-      className="sticky top-0 z-20 border-b border-border/80 bg-background/90 backdrop-blur-md shadow-2xs"
+      className="sticky top-0 z-20 border-b border-border/80 bg-background/90 backdrop-blur-md shadow-2xs select-none"
       style={{ paddingTop: "env(safe-area-inset-top)" }}
     >
       {/* Mobile Navigation */}
