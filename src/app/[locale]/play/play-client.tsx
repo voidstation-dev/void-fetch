@@ -3,7 +3,14 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Loader2, ExternalLink, PlaySquare } from "lucide-react";
+import {
+  Loader2,
+  ExternalLink,
+  PlaySquare,
+  AlignLeft,
+  Clock,
+  Info,
+} from "lucide-react";
 import { HlsVideoPlayer } from "@/features/hls/components/hls-video-player";
 import { Button } from "@/components/ui/button";
 import { PlatformBadge } from "@/components/platform-badge";
@@ -233,6 +240,31 @@ export function PlayPageClient() {
               {visibleParseResult.title}
             </h2>
 
+            {(visibleParseResult.duration || visibleParseResult.desc) && (
+              <div className="flex flex-col gap-3 pt-2">
+                {visibleParseResult.duration ? (
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <Clock className="h-3.5 w-3.5" />
+                    <span>
+                      {Math.floor(visibleParseResult.duration / 60)}:
+                      {String(
+                        Math.floor(visibleParseResult.duration % 60),
+                      ).padStart(2, "0")}
+                    </span>
+                  </div>
+                ) : null}
+
+                {visibleParseResult.desc ? (
+                  <div className="flex items-start gap-2 text-xs text-muted-foreground bg-muted/30 p-3 rounded-lg border border-border/40">
+                    <AlignLeft className="h-3.5 w-3.5 shrink-0 mt-0.5 opacity-70" />
+                    <p className="whitespace-pre-wrap leading-relaxed line-clamp-4">
+                      {visibleParseResult.desc}
+                    </p>
+                  </div>
+                ) : null}
+              </div>
+            )}
+
             {canonicalSourceUrl && (
               <div className="flex items-center gap-3 pt-2">
                 <a
@@ -246,6 +278,22 @@ export function PlayPageClient() {
                 </a>
               </div>
             )}
+
+            {/* Informational Box */}
+            <div className="mt-2 border rounded-xl bg-primary/5 border-primary/20 p-4 flex gap-3">
+              <Info className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+              <div className="flex flex-col gap-1 text-xs">
+                <span className="font-semibold text-primary">
+                  Về Shared Playback
+                </span>
+                <span className="text-muted-foreground leading-relaxed">
+                  Đây là trang xem trước nội dung được chia sẻ từ VoidFetch. Tốc
+                  độ tải tuỳ thuộc vào máy chủ gốc của nền tảng. Để trải nghiệm
+                  tốt nhất và lưu video/âm thanh về máy, bạn có thể tải nội dung
+                  trực tiếp trên ứng dụng VoidFetch.
+                </span>
+              </div>
+            </div>
 
             <div className="pt-4 mt-2 border-t border-border/40 flex flex-col md:flex-row justify-between items-center gap-4">
               <div className="w-full">
