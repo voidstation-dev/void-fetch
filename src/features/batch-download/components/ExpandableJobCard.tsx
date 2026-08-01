@@ -256,7 +256,7 @@ export function ExpandableJobCard({
                     width={640}
                     height={256}
                     unoptimized
-                    className="w-full h-full object-cover opacity-90 transition-transform duration-700 hover:scale-105"
+                    className="w-full h-full object-contain opacity-90 transition-transform duration-700 hover:scale-105"
                   />
                 ) : (
                   <div className="flex flex-col items-center gap-2 text-muted-foreground/60">

@@ -134,7 +134,7 @@ export function DownloadQueue() {
           <span className="text-xs font-bold text-foreground flex items-center gap-1.5">
             <span>{t("selectAll")}</span>
             <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-bold">
-              {t("itemsCount", { count: filteredJobs.length })}
+              {t("itemsCount", { count: selectedJobIds.length })}
             </span>
           </span>
         </label>
