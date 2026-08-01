@@ -258,9 +258,17 @@ export const AnimatedThemeToggler = ({
     };
 
     isTransitioningRef.current = true;
-    const transition = document.startViewTransition(() => {
-      flushSync(applyTheme);
-    });
+    let transition: ViewTransition | undefined;
+    try {
+      transition = document.startViewTransition(() => {
+        flushSync(applyTheme);
+      });
+    } catch (_e) {
+      applyTheme();
+      cleanup();
+      return;
+    }
+
     if (typeof transition?.finished?.finally === "function") {
       transition.finished.finally(cleanup).catch(() => {});
     } else {
