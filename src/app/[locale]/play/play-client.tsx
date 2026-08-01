@@ -222,10 +222,12 @@ export function PlayPageClient() {
                       key={i}
                       src={url}
                       alt="Shared Image"
-                      width={800}
-                      height={800}
+                      width={0}
+                      height={0}
+                      sizes="100vw"
+                      style={{ width: "100%", height: "auto" }}
                       unoptimized
-                      className="max-w-full h-auto rounded-md shadow-md object-contain"
+                      className="max-w-full rounded-md shadow-md"
                     />
                   );
                 })}
@@ -251,8 +253,8 @@ export function PlayPageClient() {
                     <Image
                       src={visibleParseResult.cover}
                       alt="Cover"
-                      width={160}
-                      height={160}
+                      width={500}
+                      height={500}
                       unoptimized
                       className="w-32 h-32 md:w-48 md:h-48 object-cover rounded-2xl shadow-xl ring-1 ring-border/50"
                     />
