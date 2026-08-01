@@ -184,12 +184,21 @@ export const AnimatedThemeToggler = ({
     return () => observer.disconnect();
   }, [isControlled]);
 
-  const lastClickTimeRef = useRef(0);
+  const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const toggleTheme = useCallback(() => {
-    const now = Date.now();
-    // Throttle clicks to prevent Chromium View Transitions crash (Aw, Snap!)
-    if (now - lastClickTimeRef.current < duration + 100) return;
+    // Leading-edge debounce: reset timer if spam clicked
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+      debounceTimeoutRef.current = setTimeout(() => {
+        debounceTimeoutRef.current = null;
+      }, duration + 100);
+      return;
+    }
+
+    debounceTimeoutRef.current = setTimeout(() => {
+      debounceTimeoutRef.current = null;
+    }, duration + 100);
 
     const button = buttonRef.current;
     if (
