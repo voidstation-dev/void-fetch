@@ -1,7 +1,9 @@
 {
   "name": "void-fetch",
   "version": "1.0.0",
+  "packageManager": "pnpm@11.1.2",
   "scripts": {
+    "vercel-build": "next build",
     "dev": "vinext dev --port 3010",
     "build": "vinext build",
     "start": "vinext start",
