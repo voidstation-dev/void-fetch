@@ -11,6 +11,9 @@ import { useTranslations } from "next-intl";
 import { i18n } from "@/lib/i18n/config";
 import { useTopBarActions } from "./top-bar-actions";
 import Image from "next/image";
+import { useTourStore } from "@/stores/tour-store";
+import { AppTour } from "@/components/ui/app-tour";
+import { HelpCircle } from "lucide-react";
 
 interface AppTopBarProps {
   showHistoryShortcut?: boolean;
@@ -49,6 +52,7 @@ export function AppTopBar({
   const effectiveHistoryClick = onHistoryClick ?? actions.onHistoryClick;
   const effectiveShowAudioTool = showAudioTool || actions.showAudioTool;
   const effectiveAudioToolClick = onAudioToolClick ?? actions.onAudioToolClick;
+  const { startTour } = useTourStore();
 
   return (
     <div
@@ -97,17 +101,15 @@ export function AppTopBar({
           </div>
 
           <div className="flex items-center gap-1 shrink-0">
-            {/* Feedback button (hidden/commented out)
-            <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
-              <Link
-                href={feedbackHref}
-                aria-label={dict.feedback.triggerButton}
-              >
-                <MessageSquare className="h-4 w-4" />
-                <span className="sr-only">{dict.feedback.triggerButton}</span>
-              </Link>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8"
+              onClick={startTour}
+              aria-label="Help"
+            >
+              <HelpCircle className="h-4 w-4" />
             </Button>
-            */}
             <DeferredLanguageSwitcher iconOnly />
             <ThemeSwitcher />
             <DeferredMobileNavMenu />
@@ -186,19 +188,21 @@ export function AppTopBar({
           </div>
 
           <div className="flex items-center gap-1.5">
-            {/* Feedback button (hidden/commented out)
-            <Button variant="ghost" size="sm" className="rounded-xl" asChild>
-              <Link href={feedbackHref} className="flex items-center gap-1.5">
-                <MessageSquare className="h-4 w-4" />
-                <span>{dict.feedback.triggerButton}</span>
-              </Link>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="rounded-xl"
+              onClick={startTour}
+            >
+              <HelpCircle className="h-4 w-4 mr-1.5" />
+              <span>Guide</span>
             </Button>
-            */}
             <ThemeSwitcher />
             <DeferredLanguageSwitcher />
           </div>
         </div>
       </div>
+      <AppTour />
     </div>
   );
 }

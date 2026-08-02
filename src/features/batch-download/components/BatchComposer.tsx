@@ -215,7 +215,7 @@ export function BatchComposer() {
             </div>
             <div>
               <label
-                htmlFor="batch-url-composer-input"
+                htmlFor="tour-url-input"
                 className="text-xs font-bold text-foreground/90 tracking-wider uppercase block"
               >
                 {t("title")}
@@ -275,7 +275,7 @@ export function BatchComposer() {
         {/* Textarea Input Container */}
         <div className="relative">
           <Textarea
-            id="batch-url-composer-input"
+            id="tour-url-input"
             aria-label="Paste multiple video URLs here"
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
@@ -358,6 +358,7 @@ export function BatchComposer() {
               </Button>
             )}
             <Button
+              id="tour-parse-btn"
               type="button"
               disabled={!inputText.trim()}
               onClick={() => handleProcessInput(inputText)}

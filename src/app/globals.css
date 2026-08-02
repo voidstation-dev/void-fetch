@@ -3,6 +3,7 @@
 
 html {
   height: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -10,6 +11,7 @@ body {
   min-height: 100%;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
 }
 
 @layer base {
@@ -94,4 +96,57 @@ body {
 
 .animate-marquee:hover {
   animation-play-state: paused;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* driver.js custom dark glassmorphism theme for VoidFetch */
+.driver-popover {
+  @apply bg-card/95 backdrop-blur-xl border border-border/80 shadow-2xl rounded-2xl p-5 text-foreground;
+  font-family: inherit;
+  max-width: 350px !important;
+}
+
+.driver-popover-close-btn {
+  @apply text-muted-foreground hover:text-foreground transition-colors top-3 right-3;
+}
+
+.driver-popover-title {
+  @apply text-lg font-extrabold tracking-tight mb-2 flex items-center gap-2;
+}
+
+.driver-popover-description {
+  @apply text-sm text-muted-foreground leading-relaxed mb-5;
+}
+
+.driver-popover-footer {
+  @apply mt-4 pt-4 border-t border-border/40 flex items-center justify-between;
+}
+
+.driver-popover-progress-text {
+  @apply text-xs font-mono font-medium text-muted-foreground/70;
+}
+
+.driver-popover-navigation-btns {
+  @apply flex items-center gap-2;
+}
+
+.driver-popover-navigation-btns button {
+  @apply text-xs font-semibold px-3 py-1.5 rounded-lg transition-all duration-200 cursor-pointer text-shadow-none;
+  text-shadow: none !important;
+}
+
+.driver-popover-prev-btn {
+  @apply bg-muted/30 border border-border/60 text-muted-foreground hover:bg-muted/80 hover:text-foreground;
+}
+
+.driver-popover-next-btn {
+  @apply bg-primary text-primary-foreground border border-transparent shadow-md hover:bg-primary/90 hover:shadow-lg hover:-translate-y-px;
+}
+
+div#driver-highlighted-element-stage {
+  @apply bg-transparent ring-2 ring-primary ring-offset-2 ring-offset-background rounded-xl;
 }
