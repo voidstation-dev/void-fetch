@@ -76,7 +76,10 @@ export function DownloadQueue() {
   // Render Aceternity Glassmorphic Empty State
   if (jobs.length === 0) {
     return (
-      <div className="relative overflow-hidden rounded-3xl border-2 border-dashed border-primary/30 bg-card/85 backdrop-blur-2xl p-12 text-center shadow-2xl flex flex-col items-center justify-center gap-6 group hover:border-primary/60 transition-colors duration-200 my-2">
+      <div
+        id="tour-batch-queue"
+        className="relative overflow-hidden rounded-3xl border-2 border-dashed border-primary/30 bg-card/85 backdrop-blur-2xl p-12 text-center shadow-2xl flex flex-col items-center justify-center gap-6 group hover:border-primary/60 transition-colors duration-200 my-2"
+      >
         {/* Ambient Radial Spotlight Glow */}
         <div className="absolute inset-0 bg-radial-glow from-primary/10 via-transparent to-transparent pointer-events-none opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
 
@@ -120,7 +123,7 @@ export function DownloadQueue() {
     );
   }
   return (
-    <div className="flex flex-col gap-3 pb-20 md:pb-24">
+    <div id="tour-batch-queue" className="flex flex-col gap-3 pb-20 md:pb-24">
       {/* Select All & List Header Bar */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3.5 border rounded-2xl bg-card/80 border-border/80 backdrop-blur-xl shadow-xs gap-3 sm:gap-2">
         <label className="flex items-center gap-2.5 cursor-pointer select-none">
