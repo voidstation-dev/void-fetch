@@ -145,6 +145,7 @@ export function BatchToolbar() {
           </Button>
         ) : (
           <Button
+            id="tour-download-all"
             type="button"
             size="sm"
             disabled={
